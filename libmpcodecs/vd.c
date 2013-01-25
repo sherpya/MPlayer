@@ -41,6 +41,7 @@ extern const vd_functions_t mpcodecs_vd_black;
 extern const vd_functions_t mpcodecs_vd_ffmpeg;
 extern const vd_functions_t mpcodecs_vd_theora;
 extern const vd_functions_t mpcodecs_vd_dshow;
+extern const vd_functions_t mpcodecs_vd_dsnative;
 extern const vd_functions_t mpcodecs_vd_dmo;
 extern const vd_functions_t mpcodecs_vd_vfw;
 extern const vd_functions_t mpcodecs_vd_vfwex;
@@ -75,6 +76,7 @@ const vd_functions_t * const mpcodecs_vd_drivers[] = {
 #endif
 #ifdef CONFIG_WIN32DLL
     &mpcodecs_vd_dshow,
+    &mpcodecs_vd_dsnative,
     &mpcodecs_vd_dmo,
     &mpcodecs_vd_vfw,
     &mpcodecs_vd_vfwex,

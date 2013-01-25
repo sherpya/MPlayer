@@ -221,6 +221,7 @@ SRCS_COMMON-$(WIN32DLL)              += libmpcodecs/ad_acm.c            \
                                         libmpcodecs/ad_twin.c           \
                                         libmpcodecs/vd_dmo.c            \
                                         libmpcodecs/vd_dshow.c          \
+                                        libmpcodecs/vd_dsnative.c       \
                                         libmpcodecs/vd_vfw.c            \
                                         libmpcodecs/vd_vfwex.c          \
                                         libmpdemux/demux_avs.c          \

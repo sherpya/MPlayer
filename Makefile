@@ -289,6 +289,7 @@ SRCS_COMMON = asxparser.c                       \
               libaf/af_tools.c                  \
               libaf/af_volnorm.c                \
               libaf/af_volume.c                 \
+              libaf/af_wadsp.c                  \
               libaf/filter.c                    \
               libaf/format.c                    \
               libaf/reorder_ch.c                \

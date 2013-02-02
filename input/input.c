@@ -221,6 +221,33 @@ static const mp_cmd_t mp_cmds[] = {
 /// If you add some new keys, you also need to add them here
 
 static const mp_key_name_t key_names[] = {
+
+  { CTRL_A,     "CTRL_A" },
+  { CTRL_B,     "CTRL_B" },
+  { CTRL_C,     "CTRL_C" },
+  { CTRL_D,     "CTRL_D" },
+  { CTRL_E,     "CTRL_E" },
+  { CTRL_F,     "CTRL_F" },
+  { CTRL_G,     "CTRL_G" },
+  { CTRL_J,     "CTRL_J" },
+  { CTRL_K,     "CTRL_K" },
+  { CTRL_N,     "CTRL_N" },
+  { CTRL_O,     "CTRL_O" },
+  { CTRL_P,     "CTRL_P" },
+  { CTRL_Q,     "CTRL_Q" },
+  { CTRL_L,     "CTRL_L" },
+  { CTRL_V,     "CTRL_V" },
+  { CTRL_W,     "CTRL_W" },
+  { CTRL_R,     "CTRL_R" },
+  { CTRL_S,     "CTRL_S" },
+  { CTRL_Z,     "CTRL_Z" },
+  { CTRL_SO,    "CTRL_[" },
+  { CTRL_BSL,   "CTRL_\\"},
+  { CTRL_SC,    "CTRL_]" },
+  { CTRL_T,     "CTRL_T" },
+  { CTRL_U,     "CTRL_U" },
+  { CTRL_Y,     "CTRL_Y" },
+
   { ' ', "SPACE" },
   { '#', "SHARP" },
   { KEY_ENTER, "ENTER" },

@@ -2,6 +2,8 @@
 #define MPLAYER_COMPONENTS_H
 
 #include <inttypes.h>
+#include "mp_msg.h"
+#define printf(...) mp_msg(MSGT_CPLAYER, MSGL_V, __VA_ARGS__)
 
 #include "mppacked.h"
 
@@ -797,5 +799,5 @@ static inline void dump_CodecDecompressParams(void* xxx){
 
 
 }
-
+#undef printf
 #endif /* MPLAYER_COMPONENTS_H */

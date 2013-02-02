@@ -193,6 +193,25 @@ int use_gui;
 int enqueue;
 #endif
 
+#ifdef _WIN32
+#include <io.h>
+static void term_osd_eraseline(void)
+{
+    DWORD wr;
+    COORD pos;
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO cinfo;
+    GetConsoleScreenBufferInfo(hOut, &cinfo);
+    pos.X = 0;
+    pos.Y = cinfo.dwCursorPosition.Y - 1;
+    FillConsoleOutputCharacter(hOut, ' ', cinfo.dwSize.X, pos, &wr);
+    FillConsoleOutputAttribute(hOut, cinfo.wAttributes, cinfo.dwSize.X, pos, &wr);
+    SetConsoleCursorPosition(hOut, pos);
+}
+#else
+#define term_osd_eraseline() printf("%s", term_osd_esc)
+#endif
+
 static int list_properties;
 
 int osd_level = 1;
@@ -1571,8 +1590,10 @@ static void update_osd_msg(void)
             strncpy((char *)osd_text, msg->msg, 127);
             if (mpctx->sh_video)
                 vo_osd_changed(OSDTYPE_OSD);
-            else if (term_osd)
-                mp_msg(MSGT_CPLAYER, MSGL_STATUS, "%s%s\n", term_osd_esc, msg->msg);
+            else if (term_osd) {
+                term_osd_eraseline();
+                mp_msg(MSGT_CPLAYER, MSGL_STATUS, "%s\n", msg->msg);
+            }
         }
         return;
     }
@@ -1643,7 +1664,8 @@ static void update_osd_msg(void)
     // Clear the term osd line
     if (term_osd && osd_text[0]) {
         osd_text[0] = 0;
-        printf("%s\n", term_osd_esc);
+        term_osd_eraseline();
+        printf("\n");
     }
 }
 

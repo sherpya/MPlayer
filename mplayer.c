@@ -135,6 +135,11 @@
 #include "stream/stream_dvd.h"
 #endif
 
+#if defined(CONFIG_FONTCONFIG) && defined(_WIN32)
+#include <fontconfig/fontconfig.h>
+extern int FcDebugVal;
+#endif
+
 int slave_mode;
 int player_idle_mode;
 int quiet;
@@ -3088,6 +3093,14 @@ int main(int argc, char *argv[])
         initialized_flags |= INITIALIZED_GUI;
         current_module     = NULL;
         gui(GUI_SET_STATE, (void *)(intptr_t)(filename ? GUI_PLAY : GUI_STOP));
+    }
+#elif defined(CONFIG_FONTCONFIG) && defined(_WIN32)
+    /* force cache creation here and display fontconfig scan activity */
+    if (font_fontconfig >= 0) {
+        FcDebugVal = 128;
+        FcConfigEnableHome(FcFalse);
+        FcInit();
+        FcDebugVal = 0;
     }
 #endif
 

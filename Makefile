@@ -661,6 +661,8 @@ OBJS_MENCODER                 += $(addsuffix .o, $(basename $(SRCS_MENCODER)))
 OBJS_MPLAYER                  += $(addsuffix .o, $(basename $(SRCS_MPLAYER)))
 OBJS_MPLAYER-$(PE_EXECUTABLE) += osdep/mplayer-rc.o
 OBJS_MPLAYER                  += $(OBJS_MPLAYER-yes)
+OBJS_MENCODER-$(PE_EXECUTABLE)+= osdep/mencoder-rc.o
+OBJS_MENCODER                 += $(OBJS_MENCODER-yes)
 
 MENCODER_DEPS = $(OBJS_MENCODER) $(OBJS_COMMON) $(COMMON_LIBS)
 MPLAYER_DEPS  = $(OBJS_MPLAYER)  $(OBJS_COMMON) $(COMMON_LIBS)
@@ -840,6 +842,9 @@ $(DEP_FILES) $(MENCODER_DEPS) $(MPLAYER_DEPS): help_mp.h
 mpcommon.o osdep/mplayer-rc.o gui/dialog/about.o gui/win32/gui.o: version.h
 
 osdep/mplayer-rc.o: osdep/mplayer.exe.manifest
+
+osdep/mencoder-rc.o: osdep/mplayer.rc version.h
+	$(WINDRES) -D IN_MENCODER -o $@ $<
 
 gui/%: CFLAGS += -DLOCALEDIR=\"$(prefix)/share/locale\" -Wno-strict-prototypes
 

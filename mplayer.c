@@ -708,8 +708,10 @@ void exit_player_with_rc(enum exit_reason how, int rc)
         send_udp(udp_ip, udp_port, "bye");
 #endif /* CONFIG_NETWORKING */
 
+#ifndef _WIN32
     if (mpctx->user_muted && !mpctx->edl_muted)
         mixer_mute(&mpctx->mixer);
+#endif
     uninit_player(INITIALIZED_ALL);
 #if defined(__MINGW32__) || defined(__CYGWIN__)
     timeEndPeriod(1);

@@ -3218,6 +3218,15 @@ int run_command(MPContext *mpctx, mp_cmd_t *cmd)
             set_rectangle(sh_video, cmd->args[0].v.i, cmd->args[1].v.i);
             break;
 
+        case MP_CMD_AF_EQ_SET:{
+            af_instance_t* m1=af_get(sh_audio->afilter, "equalizer");
+            if (m1)
+                m1->control( m1, AF_CONTROL_COMMAND_LINE, cmd->args[0].v.s);
+            else
+                mp_msg(MSGT_CPLAYER, MSGL_INFO, "failed (forgot -af equalizer=0:0 ?)\n");
+            }
+            break;
+
         case MP_CMD_GET_TIME_LENGTH:{
                 mp_msg(MSGT_GLOBAL, MSGL_INFO, "ANS_LENGTH=%.2f\n",
                        demuxer_get_time_length(mpctx->demuxer));

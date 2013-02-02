@@ -142,6 +142,7 @@ static int control(struct af_instance_s* af, int cmd, void* arg)
   case AF_CONTROL_COMMAND_LINE:{
     float g[10]={0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
     int i,j;
+    float gain_factor2=0.0;
     sscanf((char*)arg,"%f:%f:%f:%f:%f:%f:%f:%f:%f:%f", &g[0], &g[1],
 	   &g[2], &g[3], &g[4], &g[5], &g[6], &g[7], &g[8] ,&g[9]);
     for(i=0;i<AF_NCH;i++){
@@ -150,6 +151,17 @@ static int control(struct af_instance_s* af, int cmd, void* arg)
 	  pow(10.0,av_clipf(g[j],G_MIN,G_MAX)/20.0)-1.0;
       }
     }
+
+    //calculate gainfactor for slave command
+    //see: af_eq_set_bands  -> input.c
+    //see code: AF_CONTROL_REINIT  in this file
+    for(j=0;j<KM;j++)
+      if(gain_factor2< s->g[0][j]) gain_factor2=s->g[0][j];
+    gain_factor2=log10(gain_factor2 + 1.0) * 20.0;
+    if(gain_factor2 > 0.0) gain_factor2=0.1+(gain_factor2/12.0);
+    else gain_factor2=1;
+    s->gain_factor=gain_factor2;
+
     return AF_OK;
   }
   case AF_CONTROL_EQUALIZER_GAIN | AF_CONTROL_SET:{

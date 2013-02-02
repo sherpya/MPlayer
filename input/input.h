@@ -156,6 +156,7 @@ typedef enum {
   MP_CMD_CHIDE,
 
   /// Audio Filter commands
+  MP_CMD_AF_EQ_SET,
   MP_CMD_AF_SWITCH,
   MP_CMD_AF_ADD,
   MP_CMD_AF_DEL,

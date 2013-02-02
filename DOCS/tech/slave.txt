@@ -523,6 +523,11 @@ run <string>
     Example:
     run "echo ${filename} ${stream_pos} >> <path_to_file>"
 
+af_eq_set_bands <values>
+    Set bands gain in audio equalizer. Se details in manual (-af equalizer).
+    Example:
+       af_eq_set_bands 11:11:10:5:0:-12:0:5:12:12
+
 
 Available properties:
 

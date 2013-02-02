@@ -19,7 +19,15 @@
  */
 
 #include <winver.h>
-#include "version.h"
+#include "../version.h"
+
+#ifdef IN_MENCODER
+#define FILENAME "mencoder.exe\000"
+#define DESCRIPTION "MEncoder\000"
+#else
+#define FILENAME "mplayer.exe\000"
+#define DESCRIPTION "MPlayer - The Movie Player\000"
+#endif
 
 1 VERSIONINFO
 FILEVERSION 0,0,9,0
@@ -33,15 +41,15 @@ FILETYPE VFT_APP
         {
             VALUE "Comments","MPlayer is distributed under the terms of the GNU General Public License Version 2. Source code is available at http://www.mplayerhq.hu\000"
             VALUE "CompanyName", "\000"
-            VALUE "FileDescription", "MPlayer - Movie Player\000"
+            VALUE "FileDescription",DESCRIPTION
             VALUE "FileVersion",VERSION
             VALUE "InternalName", "Hope\000"
             VALUE "LegalCopyright", " (C) 2000-2025 MPlayer Team\000"
             //VALUE "LegalTrademarks"," \000";
-            VALUE "OriginalFilename", "mplayer.exe\000"
-            VALUE "ProductName", "MPlayer - The Movie Player\000"
+            VALUE "OriginalFilename",FILENAME
+            VALUE "ProductName",DESCRIPTION
             VALUE "ProductVersion",VERSION
-            //VALUE "SpecialBuild","\000"
+            VALUE "SpecialBuild","http://oss.netfarm.it/mplayer-win32.php\000"
         }
     }
     BLOCK "VarFileInfo"
@@ -50,7 +58,13 @@ FILETYPE VFT_APP
     }
 }
 
-IDI_ICON1 ICON DISCARDABLE  "etc/mplayer.ico"
+#ifdef IN_MENCODER
+MAIN     ICON DISCARDABLE  "etc/mencoder.ico"
+#else
+MAIN     ICON DISCARDABLE  "etc/mplayer.ico"
+Z_AUDIO  ICON DISCARDABLE  "etc/audio.ico"
+Z_VIDEO  ICON DISCARDABLE  "etc/video.ico"
+#endif
 
 // for some reason RT_MANIFEST does not work
 1 24 "mplayer.exe.manifest"

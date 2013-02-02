@@ -9,10 +9,12 @@ if test -z $version ; then
 # Extract revision number from file used by daily tarball snapshots
 # or from the places different Subversion versions have it.
 svn_revision=$(cat snapshot_version 2> /dev/null)
-test $svn_revision || svn_revision=$(LC_ALL=C svn info 2> /dev/null | grep Revision | cut -d' ' -f2)
+ff_revision=$( cd ../ffmpeg && LC_ALL=C git rev-parse --short upstream/master 2> /dev/null)
+test $svn_revision || svn_revision=$(LC_ALL=C git svn info 2> /dev/null | grep Revision | cut -d' ' -f2)
 test $svn_revision || svn_revision=$(grep revision .svn/entries 2>/dev/null | cut -d '"' -f2)
 test $svn_revision || svn_revision=$(sed -n -e '/^dir$/{n;p;q;}' .svn/entries 2>/dev/null)
-test $svn_revision && svn_revision=SVN-r$svn_revision
+test $svn_revision && svn_revision=sherpya-r$svn_revision
+test $svn_revision && test $ff_revision && svn_revision=$svn_revision+g$ff_revision
 test $svn_revision || svn_revision=UNKNOWN
 version=$svn_revision
 fi

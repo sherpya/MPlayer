@@ -1552,7 +1552,7 @@ test -e FFBRANCH && FFBRANCH=$(cat FFBRANCH)
 if test -e ffmpeg/mp_auto_pull ; then
     echo "Updating FFmpeg, (re)move ffmpeg/mp_auto_pull to disable"
     (cd ffmpeg && git checkout $FFBRANCH)
-    if ! (cd ffmpeg && git pull --rebase --ff-only) ; then
+    if ! (cd ffmpeg && git fetch && git reset --hard @{u}) ; then
         echo "git pull failed, (re)move ffmpeg/mp_auto_pull to disable pulling"
         exit 1
     fi
@@ -1561,13 +1561,13 @@ fi
 if test "$ffmpeg_a" != "no" && ! test -e ffmpeg ; then
     echo "No FFmpeg checkout, press enter to download one with git or CTRL+C to abort"
     read tmp
-    if ! git clone -b $FFBRANCH --depth 1 git://source.ffmpeg.org/ffmpeg.git ffmpeg ; then
+    if ! git clone -b $FFBRANCH --depth 1 https://github.com/sherpya/FFmpeg.git ffmpeg ; then
         rm -rf ffmpeg
         echo "Failed to get a FFmpeg checkout"
         echo "Please try again or put FFmpeg source code copy into ffmpeg/ manually."
         echo "Nightly snapshot: http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2"
         echo "To use a github mirror via http (e.g. because a firewall blocks git):"
-        echo "git clone --depth 1 https://github.com/FFmpeg/FFmpeg ffmpeg; touch ffmpeg/mp_auto_pull"
+        echo "git clone --depth 1 https://github.com/sherpya/FFmpeg.git ffmpeg; touch ffmpeg/mp_auto_pull"
         exit 1
     fi
     touch ffmpeg/mp_auto_pull
@@ -1955,6 +1955,7 @@ fi
 if mingw32 ; then
   _getch=getch2-win.c
   shmem=yes
+  extra_cflags="-mno-ms-bitfields -D__USE_MINGW_ANSI_STDIO=1 $extra_cflags"
 fi
 
 if amigaos ; then

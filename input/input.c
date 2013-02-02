@@ -1130,6 +1130,7 @@ mp_input_get_cmd_from_keys(int n,int* keys, int paused) {
   if(cmd == NULL) {
     char key_name[100];
     int i;
+    if (!keys[0]) return NULL;
     av_strlcpy(key_name, mp_input_get_key_name(keys[0]), sizeof(key_name));
     for (i = 1; i < n; i++) {
       av_strlcat(key_name, "-", sizeof(key_name));

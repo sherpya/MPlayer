@@ -428,7 +428,11 @@ int select_video(demuxer_t* demuxer, int video_id)
 }
 
 /* Parse -noconfig common to both programs */
+#ifdef __MINGW32__
+int disable_system_conf=1;
+#else
 int disable_system_conf=0;
+#endif
 int disable_user_conf=0;
 #ifdef CONFIG_GUI
 int disable_gui_conf=0;

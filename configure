@@ -563,6 +563,8 @@ Available values are: all $msg_lang_all
 Miscellaneous options:
   --enable-runtime-cpudetection    enable runtime CPU detection [disable]
   --enable-cross-compile enable cross-compilation [autodetect]
+  --with-arch=CPU        Override -march detected option
+  --with-tune=CPU        Override -mtune detected option
   --cc=COMPILER          C compiler to build MPlayer [gcc]
   --host-cc=COMPILER     C compiler for tools needed while building [gcc]
   --as=ASSEMBLER         assembler to build MPlayer [as]
@@ -965,6 +967,12 @@ for ac_option do
 
   --target=*)
     _target=$(option_value $ac_option)
+    ;;
+  --with-arch=*)
+    _arch=$(option_value $ac_option)
+    ;;
+  --with-tune=*)
+    _tune=$(option_value $ac_option)
     ;;
   --cc=*)
     _cc=$(option_value $ac_option)
@@ -2878,6 +2886,9 @@ EOF
     die "unsupported architecture $host_arch"
     ;;
 esac # case "$host_arch" in
+
+test -z $_arch || _march="-march=$_arch"
+test -z $_tune || _mcpu="$cpuopt=$_tune"
 
 if test "$_runtime_cpudetection" = yes ; then
   if x86 ; then

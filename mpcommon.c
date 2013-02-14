@@ -597,7 +597,7 @@ int common_init(void)
     if (!codecs_file || !parse_codec_cfg(codecs_file)) {
         char *conf_path = get_path("codecs.conf");
         if (!parse_codec_cfg(conf_path)) {
-            if (!parse_codec_cfg(MPLAYER_CONFDIR "/codecs.conf")) {
+            if (disable_system_conf || !parse_codec_cfg(MPLAYER_CONFDIR "/codecs.conf")) {
                 if (!parse_codec_cfg(NULL)) {
                     free(conf_path);
                     return 0;
@@ -627,7 +627,7 @@ int common_init(void)
             char *desc_path = get_path("font/font.desc");
             vo_font = read_font_desc(desc_path, font_factor, verbose>1);
             free(desc_path);
-            if (!vo_font)
+            if (!vo_font && !disable_system_conf)
                 vo_font = read_font_desc(MPLAYER_DATADIR "/font/font.desc", font_factor, verbose>1);
         }
         if (sub_font_name)

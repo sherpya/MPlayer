@@ -902,7 +902,8 @@ static int load_sub_face(const char *name, int face_index, FT_Face *face)
 	err = FT_New_Face(library, font_file, 0, face);
 	free(font_file);
 	if (err) {
-	    err = FT_New_Face(library, MPLAYER_DATADIR "/subfont.ttf", 0, face);
+	    if (!disable_system_conf)
+	        err = FT_New_Face(library, MPLAYER_DATADIR "/subfont.ttf", 0, face);
 	    if (err) {
 	        mp_msg(MSGT_OSD, MSGL_ERR, MSGTR_LIBVO_FONT_LOAD_FT_NewFaceFailed);
 		return -1;

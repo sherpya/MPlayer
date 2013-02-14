@@ -3062,7 +3062,7 @@ int main(int argc, char *argv[])
             if (menu_init(mpctx, menu_cfg))
                 mp_msg(MSGT_CPLAYER, MSGL_V, "Menu initialized: %s\n", menu_cfg);
             else {
-                if (menu_init(mpctx, MPLAYER_CONFDIR "/menu.conf"))
+                if (disable_system_conf || menu_init(mpctx, MPLAYER_CONFDIR "/menu.conf"))
                     mp_msg(MSGT_CPLAYER, MSGL_V,  "Menu initialized: %s\n", MPLAYER_CONFDIR "/menu.conf");
                 else {
                     mp_msg(MSGT_CPLAYER, MSGL_ERR, MSGTR_MenuInitFailed);

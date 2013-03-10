@@ -454,6 +454,7 @@ Codecs:
   --enable-musepack         enable libmpcdec support (deprecated in favour of libavcodec) [disabled]
   --disable-libopencore_amrnb disable libopencore_amr narrowband [autodetect]
   --disable-libopencore_amrwb disable libopencore_amr wideband [autodetect]
+  --disable-libmodplug      disable libmodplug MOD decoding support [autodetect]
   --disable-libopenjpeg     disable OpenJPEG (JPEG 2000) input/output support [autodetect]
   --disable-crystalhd       disable CrystalHD support [autodetect]
   --disable-decoder=DECODER disable specified FFmpeg decoder
@@ -688,6 +689,7 @@ _vf_lavfi=no
 _libavcodec_mpegaudio_hp=yes
 _libopencore_amrnb=auto
 _libopencore_amrwb=auto
+_libmodplug=auto
 libopenjpeg=auto
 _mencoder=yes
 _mplayer=yes
@@ -1280,6 +1282,8 @@ for ac_option do
   --disable-libopencore_amrnb)  _libopencore_amrnb=no   ;;
   --enable-libopencore_amrwb)   _libopencore_amrwb=yes  ;;
   --disable-libopencore_amrwb)  _libopencore_amrwb=no   ;;
+  --enable-libmodplug)  _libmodplug=yes ;;
+  --disable-libmodplug) _libmodplug=no  ;;
   --enable-ffmpeg_a)    ffmpeg_a=yes    ;;
   --disable-ffmpeg_a)   ffmpeg_a=no     ;;
   --enable-ffmpeg_so)   ffmpeg_so=yes   ;;
@@ -7539,6 +7543,23 @@ else
 fi
 echores "$_libopencore_amrwb"
 
+echocheck "libmodplug support"
+if test "$_libmodplug" = auto; then
+  _libmodplug=no
+  statement_check libmodplug/modplug.h 'ModPlug_Load(0,0)' -lmodplug -lstdc++ && _libmodplug=yes
+  if test "$ffmpeg_a" != yes ; then
+    _libmodplug=no
+    res_comment="ffmpeg (static) is required by libmodplug, sorry"
+  fi
+fi
+if test "$_libmodplug" = yes ; then
+  extra_ldflags="$extra_ldflags -lmodplug -lstdc++"
+  def_libmodplug='#define CONFIG_LIBMODPLUG 1'
+  libavdemuxers="$libavdemuxers LIBMODPLUG_DEMUXER"
+else
+  def_libmodplug='#define CONFIG_LIBMODPLUG 0'
+fi
+echores "$_libmodplug"
 
 echocheck "libdv-0.9.5+"
 if test "$_libdv" = auto ; then
@@ -9497,6 +9518,7 @@ $def_libdav1d_lavc
 $def_libgsm
 $def_libopencore_amrnb
 $def_libopencore_amrwb
+$def_libmodplug
 $def_libopenjpeg
 $def_librtmp
 $def_mp3lame_lavc
@@ -9583,7 +9605,6 @@ $def_openssl
 #define CONFIG_GPL 1
 #define CONFIG_GRAY 0
 #define CONFIG_LCMS2 0
-#define CONFIG_LIBMODPLUG 0
 #define CONFIG_LIBVORBIS 0
 #define CONFIG_LINUX_PERF 0
 #define CONFIG_MEMORY_POISONING 0

@@ -6440,7 +6440,7 @@ if test "$_vcd" = auto; then
   if linux || freebsd || netbsd || openbsd || dragonfly || bsdos || sunos || os2; then
     _vcd=yes
   elif mingw32; then
-  header_check ddk/ntddcdrm.h && _vcd=yes
+  header_check_broken windows.h ntddcdrm.h && _vcd=yes
   fi
 fi
 if test "$_vcd" = yes; then

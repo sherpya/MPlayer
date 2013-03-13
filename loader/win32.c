@@ -64,6 +64,7 @@ for DLL to know too much about its environment.
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
 #include <sys/time.h>
@@ -3705,107 +3706,87 @@ static UINT WINAPI expGetTempFileNameA(LPCSTR cs1,LPCSTR cs2,UINT i,LPSTR ps)
     dbgprintf(" => %d\n", strlen(ps));
     return strlen(ps);
 }
-//
-// This func might need proper implementation if we want AngelPotion codec.
-// They try to open APmpeg4v1.apl with it.
-// DLL will close opened file with CloseHandle().
-//
-static HANDLE WINAPI expCreateFileA(LPCSTR cs1,DWORD i1,DWORD i2,
-				    LPSECURITY_ATTRIBUTES p1, DWORD i3,DWORD i4,HANDLE i5)
+
+// limited read/write capability for CreateFile()
+// the path is prepended by /tmp/
+// if the file already exists it can be only a regular file
+// path is flattened/sanitized and a check for ../ directory traversal is done
+// the file is created with permissions 0600
+static HANDLE WINAPI expCreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess,
+                                    DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+                                    DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes,
+                                    HANDLE hTemplateFile)
 {
-    dbgprintf("CreateFileA(0x%x='%s', %d, %d, 0x%x, %d, %d, 0x%x)\n", cs1, cs1, i1,
-	      i2, p1, i3, i4, i5);
-    if((!cs1) || (strlen(cs1)<2))return -1;
+    char *p, dest[MAX_PATH + 1] = "/tmp/";
+    int flags = 0;
+	int exists = 1;
+    struct stat info;
 
-#ifdef CONFIG_QTX_CODECS
-    if(strstr(cs1, "QuickTime.qts"))
-    {
-	int result;
-	char* tmp = malloc(strlen(codec_path) + 50);
-	strcpy(tmp, codec_path);
-	strcat(tmp, "/");
-	strcat(tmp, "QuickTime.qts");
-	result=open(tmp, O_RDONLY);
-	free(tmp);
-	return result;
-    }
-    if(strstr(cs1, ".qtx"))
-    {
-	int result;
-	char* tmp = malloc(strlen(codec_path) + 250);
-	char* x=strrchr(cs1,'\\');
-	sprintf(tmp, "%s/%s", codec_path, x ? (x + 1) : cs1);
-//	printf("### Open: %s -> %s\n",cs1,tmp);
-	result=open(tmp, O_RDONLY);
-	free(tmp);
-	return result;
-    }
-#endif
+    dbgprintf("CreateFileA(): Filename %s - dwDesiredAccess 0x%08x - dwCreationDisposition 0x%08x\n",
+        lpFileName, dwDesiredAccess, dwCreationDisposition);
 
-    if(strncmp(cs1, "AP", 2) == 0)
+    /* invalid / unsupported */
+    if (!lpFileName || hTemplateFile || (dwFlagsAndAttributes & FILE_FLAG_OVERLAPPED))
+        return INVALID_HANDLE_VALUE;
+
+    strncat(dest, lpFileName, MAX_PATH - 1 - strlen(dest));
+    dest[MAX_PATH] = 0;
+
+    /* avoid directory traversal */
+    if (strstr(dest, "../"))
     {
-	int result;
-	char* tmp = malloc(strlen(codec_path) + 50);
-	strcpy(tmp, codec_path);
-	strcat(tmp, "/");
-	strcat(tmp, "APmpg4v1.apl");
-	result=open(tmp, O_RDONLY);
-	free(tmp);
-	return result;
-    }
-    if (strstr(cs1, "vp3") || strstr(cs1, ".fpf") || strstr(cs1, ".col"))
-    {
-	int r;
-	int flg = 0;
-	char* tmp=malloc(20 + strlen(cs1));
-	strcpy(tmp, "/tmp/");
-	strcat(tmp, cs1);
-	r = 4;
-	while (tmp[r])
-	{
-	    if (tmp[r] == ':' || tmp[r] == '\\')
-		tmp[r] = '_';
-	    r++;
-	}
-	if (GENERIC_READ & i1)
-	    flg |= O_RDONLY;
-	else if (GENERIC_WRITE & i1)
-	{
-	    flg |= O_WRONLY | O_CREAT;
-	    printf("Warning: openning filename %s  %d (flags; 0x%x) for write\n", tmp, r, flg);
-	}
-	r=open(tmp, flg, S_IRWXU);
-	free(tmp);
-	return r;
+        dbgprintf("CreateFileA(): Filename %s - possible directory traversal\n", dest);
+        return INVALID_HANDLE_VALUE;
     }
 
-    // Needed by wnvplay1.dll
-    if (strstr(cs1, "WINNOV.bmp"))
+    /* Sanitize the filename */
+    for (p = dest + 5; *p; p++)
+        if (strchr("/\\:", *p)) *p = '_';
+
+    /* if existing, only allow regular files */
+    if (lstat(dest, &info) == -1)
+		exists = 0;
+	else if (!S_ISREG(info.st_mode))
     {
-	int r;
-	r=open("/dev/null", O_RDONLY);
-	return r;
+        dbgprintf("CreateFileA(): Filename %s - disallowed, not a regular file\n", dest);
+        return INVALID_HANDLE_VALUE;
     }
 
-#if 0
-    /* we need this for some virtualdub filters */
-    {
-	int r;
-	int flg = 0;
-	if (GENERIC_READ & i1)
-	    flg |= O_RDONLY;
-	else if (GENERIC_WRITE & i1)
-	{
-	    flg |= O_WRONLY;
-	    printf("Warning: openning filename %s  %d (flags; 0x%x) for write\n", cs1, r, flg);
-	}
-	r=open(cs1, flg);
-	return r;
-    }
-#endif
+    /* Desidered Access */
+    if ((dwDesiredAccess & GENERIC_READ) && (dwDesiredAccess & GENERIC_WRITE))
+        flags |= O_RDWR;
 
-    return atoi(cs1+2);
+    if (dwDesiredAccess & GENERIC_READ) flags |= O_RDONLY;
+    if (dwDesiredAccess & GENERIC_WRITE) flags |= O_WRONLY;
+
+	SetLastError(exists ? ERROR_ALREADY_EXISTS : ERROR_FILE_NOT_FOUND);
+
+    /* Creation Disposition */
+    switch (dwCreationDisposition)
+    {
+        case CREATE_ALWAYS:
+            flags |= O_CREAT | O_TRUNC;
+            break;
+        case CREATE_NEW:
+			if (exists)
+				return INVALID_HANDLE_VALUE;
+            flags |= O_CREAT | O_EXCL;
+            break;
+        case OPEN_ALWAYS:
+            flags |= O_CREAT;
+			break;
+        case TRUNCATE_EXISTING:
+            flags |= O_TRUNC;
+        case OPEN_EXISTING:
+			if (!exists)
+				return INVALID_HANDLE_VALUE;
+        default:
+            break;
+    }
+
+    return open(dest, flags, S_IRUSR | S_IWUSR);
 }
+
 static UINT WINAPI expGetSystemDirectoryA(
   char* lpBuffer,  // address of buffer for system directory
   UINT uSize        // size of directory buffer

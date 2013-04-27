@@ -66,7 +66,7 @@ mf_t* open_mf(char * filename){
      while ( fgets( fname,PATH_MAX,lst_f ) )
       {
        /* remove spaces from end of fname */
-       char *t=fname + strlen( fname ) - 1;
+       unsigned char *t=fname + strlen( fname ) - 1;
        while ( t > fname && isspace( *t ) ) *(t--)=0;
        if ( stat( fname,&fs ) )
         {

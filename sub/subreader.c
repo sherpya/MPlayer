@@ -91,12 +91,12 @@ int sub_format=SUB_INVALID;
 unsigned long previous_sub_end;
 #endif
 
-static int eol(char p) {
+static int eol(unsigned char p) {
 	return p=='\r' || p=='\n' || p=='\0';
 }
 
 /* Remove leading and trailing space */
-static void trail_space(char *s) {
+static void trail_space(unsigned char *s) {
 	int i = 0;
 	while (isspace(s[i])) ++i;
 	if (i) strcpy(s, s + i);
@@ -781,8 +781,8 @@ static void sub_pp_ssa(subtitle *sub) {
  * by set, based on code by szabi (dunnowhat sub format ;-)
  */
 static subtitle *sub_read_line_pjs(stream_t *st,subtitle *current, int utf16) {
-    char line[LINE_LEN+1];
-    char text[LINE_LEN+1], *s, *d;
+    unsigned char line[LINE_LEN+1];
+    unsigned char text[LINE_LEN+1], *s, *d;
 
     if (!stream_read_line (st, line, LINE_LEN, utf16))
 	return NULL;
@@ -822,7 +822,7 @@ static subtitle *sub_read_line_mpsub(stream_t *st, subtitle *current, int utf16)
 	char line[LINE_LEN+1];
 	float a,b;
 	int num=0;
-	char *p, *q;
+	unsigned char *p, *q;
 
 	do
 	{
@@ -960,7 +960,7 @@ retry:
 
 static subtitle *sub_read_line_jacosub(stream_t* st, subtitle * current, int utf16)
 {
-    char line1[LINE_LEN], line2[LINE_LEN], directive[LINE_LEN], *p, *q;
+    unsigned char line1[LINE_LEN], line2[LINE_LEN], directive[LINE_LEN], *p, *q;
     unsigned a1, a2, a3, a4, b1, b2, b3, b4, comment = 0;
     static unsigned jacoTimeres = 30;
     static int jacoShift = 0;
@@ -1883,7 +1883,7 @@ char * strreplace( char * in,char * what,char * whereof )
 #endif
 
 
-static void strcpy_trim(char *d, const char *s)
+static void strcpy_trim(unsigned char *d, const unsigned char *s)
 {
     // skip leading whitespace
     while (*s && isspace(*s)) {
@@ -1938,7 +1938,7 @@ static void strcpy_get_ext(char *d, const char *s)
    }
 }
 
-static int whiteonly(const char *s)
+static int whiteonly(const unsigned char *s)
 {
     while (*s) {
 	if (!isspace(*s)) return 0;

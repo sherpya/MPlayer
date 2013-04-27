@@ -404,7 +404,7 @@ typedef struct {
 
 int bluray_id_from_lang(stream_t *s, enum stream_ctrl_type type, const char *lang);
 
-int parse_chapter_range(const m_option_t *conf, const char *range);
+int parse_chapter_range(const m_option_t *conf, const unsigned char *range);
 
 #ifdef __MINGW32__
 wchar_t *utf8_to_wide_char(const char *utf8);

@@ -235,7 +235,7 @@ typedef FILE rar_stream_t;
 
 /**********************************************************************/
 
-static ssize_t vobsub_getline(char **lineptr, size_t *n, rar_stream_t *stream)
+static ssize_t vobsub_getline(unsigned char **lineptr, size_t *n, rar_stream_t *stream)
 {
     size_t res = 0;
     int c;
@@ -244,7 +244,7 @@ static ssize_t vobsub_getline(char **lineptr, size_t *n, rar_stream_t *stream)
         if (*lineptr)
             *n = 4096;
     } else if (*n == 0) {
-        char *tmp = realloc(*lineptr, 4096);
+        unsigned char *tmp = realloc(*lineptr, 4096);
         if (tmp) {
             *lineptr = tmp;
             *n = 4096;
@@ -668,11 +668,11 @@ static int vobsub_add_timestamp(vobsub_t *vob, uint64_t filepos, int ms)
     return -1;
 }
 
-static int vobsub_parse_id(vobsub_t *vob, const char *line)
+static int vobsub_parse_id(vobsub_t *vob, const unsigned char *line)
 {
     // id: xx, index: n
     size_t idlen;
-    const char *p, *q;
+    const unsigned char *p, *q;
     p  = line;
     while (isspace(*p))
         ++p;
@@ -695,7 +695,7 @@ static int vobsub_parse_id(vobsub_t *vob, const char *line)
     return vobsub_add_id(vob, p, idlen, atoi(q));
 }
 
-static int vobsub_parse_timestamp(vobsub_t *vob, const char *line)
+static int vobsub_parse_timestamp(vobsub_t *vob, const unsigned char *line)
 {
     int h, m, s, ms;
     uint64_t filepos;
@@ -705,7 +705,7 @@ static int vobsub_parse_timestamp(vobsub_t *vob, const char *line)
     return vobsub_add_timestamp(vob, filepos, vob->delay + ms + 1000 * (s + 60 * (m + 60 * h)));
 }
 
-static int vobsub_parse_origin(vobsub_t *vob, const char *line)
+static int vobsub_parse_origin(vobsub_t *vob, const unsigned char *line)
 {
     // org: X,Y
     unsigned x, y;
@@ -745,7 +745,7 @@ unsigned int vobsub_rgb_to_yuv(unsigned int rgb)
     return y << 16 | u << 8 | v;
 }
 
-static int vobsub_parse_delay(vobsub_t *vob, const char *line)
+static int vobsub_parse_delay(vobsub_t *vob, const unsigned char *line)
 {
     int h, m, s, ms;
     int forward = 1;
@@ -769,7 +769,7 @@ static int vobsub_parse_delay(vobsub_t *vob, const char *line)
     return 0;
 }
 
-static int vobsub_set_lang(const char *line)
+static int vobsub_set_lang(const unsigned char *line)
 {
     if (vobsub_id == -1)
         vobsub_id = atoi(line + 8);
@@ -783,7 +783,7 @@ static int vobsub_parse_one_line(vobsub_t *vob, rar_stream_t *fd,
     ssize_t line_size;
     int res = -1;
         size_t line_reserve = 0;
-        char *line = NULL;
+        unsigned char *line = NULL;
     do {
         line_size = vobsub_getline(&line, &line_reserve, fd);
         if (line_size < 0 || line_size > 1000000 ||

@@ -60,10 +60,10 @@ int m_config_parse_config_file(m_config_t* config, const char *conffile, int sil
 #define MAX_OPT_LEN	1000
 #define MAX_PARAM_LEN	1500
 	FILE *fp = NULL;
-	char *line = NULL;
-	char opt[MAX_OPT_LEN + 1];
-	char param[MAX_PARAM_LEN + 1];
-	char c;		/* for the "" and '' check */
+	unsigned char *line = NULL;
+	unsigned char opt[MAX_OPT_LEN + 1];
+	unsigned char param[MAX_PARAM_LEN + 1];
+	unsigned char c;		/* for the "" and '' check */
 	int tmp;
 	int line_num = 0;
 	int line_pos;	/* line pos */

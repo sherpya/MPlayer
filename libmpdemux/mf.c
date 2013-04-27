@@ -56,7 +56,7 @@ static int init_mf_from_list_file(mf_t* mf, const char * filename){
       {
        struct stat fs;
        /* remove spaces from end of fname */
-       char *t=fname + strlen( fname ) - 1;
+       unsigned char *t=fname + strlen( fname ) - 1;
        while ( t > fname && isspace( *t ) ) *(t--)=0;
        if ( stat( fname,&fs ) )
         {

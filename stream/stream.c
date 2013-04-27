@@ -713,8 +713,8 @@ uint8_t *stream_read_until(stream_t *s, uint8_t *mem, int max,
   return mem;
 }
 
-int parse_chapter_range(const m_option_t *conf, const char *range) {
-  const char *s;
+int parse_chapter_range(const m_option_t *conf, const unsigned char *range) {
+  const unsigned char *s;
   char *t;
   if (!range)
     return M_OPT_MISSING_PARAM;

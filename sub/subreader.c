@@ -31,6 +31,12 @@
 #include <dirent.h>
 #endif
 
+#ifdef HAVE_GLOB
+#include <glob.h>
+#else
+#include "osdep/glob.h"
+#endif
+
 #include "ass_mp.h"
 #include "config.h"
 #include "mp_msg.h"
@@ -89,6 +95,21 @@ int sub_format=SUB_INVALID;
    modified by sub_read_aqt_line or sub_read_subrip09_line.
  */
 unsigned long previous_sub_end;
+#endif
+
+#ifdef __MINGW32__
+#include <windows.h>
+static FILE *win32_fopen_sub(const char *path)
+{
+    int cnt;
+    wchar_t path_w[MAX_PATH];
+
+    cnt = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, path, -1, path_w, sizeof(path_w) / sizeof(*path_w));
+    if (cnt <= 0)
+        return fopen(path, "rt");
+    else
+        return _wfopen(path_w, L"rt");
+}
 #endif
 
 static int eol(unsigned char p) {
@@ -1994,9 +2015,8 @@ static void append_dir_subtitles(struct sub_list *slist, const char *path,
     char *sub_exts[] = {"utf", "utf8", "utf-8", "sub", "srt", "smi", "rt", "txt", "ssa", "aqt", "jss", "js", "ass", NULL};
 
     FILE *f;
-
-    DIR *d;
-    struct dirent *de;
+    glob_t gg;
+    char *pattern;
 
     len = (strlen(fname) > 256 ? strlen(fname) : 256)
          + (strlen(path) > 256 ? strlen(path) : 256) + 2;
@@ -2024,21 +2044,23 @@ static void append_dir_subtitles(struct sub_list *slist, const char *path,
     // 1 = any subtitle file
     // 2 = any sub file containing movie name
     // 3 = sub file containing movie name and the lang extension
-    d = opendir(path);
-    if (d) {
-        mp_msg(MSGT_SUBREADER, MSGL_INFO, "Load subtitles in %s\n", path);
-        while ((de = readdir(d))) {
+    pattern = malloc(strlen(path) + 4);
+    sprintf(pattern, "%s*.*", path);
+    mp_msg(MSGT_SUBREADER, MSGL_INFO, "Load subtitles in %s\n", path);
+    if (!glob(pattern, 0, NULL, &gg)) {
+        int j;
+        for (j = 0; j < gg.gl_pathc; j++) {
             // retrieve various parts of the filename
-            strcpy_strip_ext_lower(tmp_fname_noext, de->d_name);
-            strcpy_get_ext(tmp_fname_ext, de->d_name);
+            strcpy_strip_ext_lower(tmp_fname_noext, gg.gl_pathv[j]);
+            strcpy_get_ext(tmp_fname_ext, gg.gl_pathv[j]);
             strcpy_trim(tmp_fname_trim, tmp_fname_noext);
 
             // If it's a .sub, check if there is a .idx with the same name. If
             // there is one, it's certainly a vobsub so we skip it.
             if (av_strcasecmp(tmp_fname_ext, "sub") == 0) {
-                char *idx, *idxname = strdup(de->d_name);
+                char *idx, *idxname = strdup(gg.gl_pathv[j]);
 
-                strcpy(idxname + strlen(de->d_name) - sizeof("idx") + 1, "idx");
+                strcpy(idxname + strlen(gg.gl_pathv[j]) - sizeof("idx") + 1, "idx");
                 idx = mp_dir_join(path, idxname);
                 free(idxname);
                 f = fopen(idx, "rt");
@@ -2111,9 +2133,13 @@ static void append_dir_subtitles(struct sub_list *slist, const char *path,
                         prio++;
                     }
 #endif
-                    subpath = mp_dir_join(path, de->d_name);
+                    subpath = mp_dir_join(path, gg.gl_pathv[j]);
                     // fprintf(stderr, "%s priority %d\n", subpath, prio);
+#ifdef __MINGW32__
+                    if ((f = win32_fopen_sub(subpath))) {
+#else
                     if ((f = fopen(subpath, "rt"))) {
+#endif
                         struct subfn *sub = &slist->subs[slist->sid++];
 
                         fclose(f);
@@ -2127,7 +2153,8 @@ static void append_dir_subtitles(struct sub_list *slist, const char *path,
             if (slist->sid >= MAX_SUBTITLE_FILES)
                 break;
         }
-        closedir(d);
+        globfree(&gg);
+        free(pattern);
     }
 
     free(tmp_sub_id);

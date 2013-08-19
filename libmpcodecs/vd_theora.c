@@ -27,6 +27,7 @@
 
 #include "vd_internal.h"
 
+#include "vf.h"
 #include "libavutil/intreadwrite.h"
 
 static const vd_info_t info = {
@@ -88,6 +89,10 @@ static int init(sh_video_t *sh)
     ogg_packet op;
     int i;
 
+    vf_instance_t *vf;
+    char * vf_crop_arg[9] = { "w", NULL, "h", NULL, "x", NULL, "y", NULL, NULL };
+    char vf_crop_w[8], vf_crop_h[8], vf_crop_x[8], vf_crop_y[8];
+
     context     = calloc(sizeof(theora_struct_t), 1);
     sh->context = context;
     if (!context)
@@ -130,12 +135,29 @@ static int init(sh_video_t *sh)
     th_setup_free(context->tsi);
 
     if (sh->aspect == 0.0 && context->ti.aspect_denominator != 0) {
-        sh->original_aspect = ((double)context->ti.aspect_numerator * context->ti.frame_width) /
-                              ((double)context->ti.aspect_denominator * context->ti.frame_height);
+        sh->original_aspect = ((double)context->ti.aspect_numerator * context->ti.pic_width) /
+                              ((double)context->ti.aspect_denominator * context->ti.pic_height);
     }
 
     mp_msg(MSGT_DECVIDEO, MSGL_V, "INFO: Theora video init ok!\n");
     mp_msg(MSGT_DECVIDEO, MSGL_INFO, "Frame %dx%d, Picture %dx%d, Offset [%d,%d]\n", context->ti.frame_width, context->ti.frame_height, context->ti.pic_width, context->ti.pic_height, context->ti.pic_x, context->ti.pic_y);
+
+    /* If we have a video with offsets, we apply a crop filter
+       at the beginning of the chain */
+    if(context->ti.pic_width != context->ti.frame_width || context->ti.pic_height != context->ti.frame_height) {
+        vf_crop_arg[1] = vf_crop_w;
+        vf_crop_arg[3] = vf_crop_h;
+        vf_crop_arg[5] = vf_crop_x;
+        vf_crop_arg[7] = vf_crop_y;
+
+        snprintf(vf_crop_arg[1], 8, "%d", context->ti.pic_width);
+        snprintf(vf_crop_arg[3], 8, "%d", context->ti.pic_height);
+        snprintf(vf_crop_arg[5], 8, "%d", context->ti.pic_x);
+        snprintf(vf_crop_arg[7], 8, "%d", context->ti.pic_y);
+
+        vf = vf_open_filter(sh->vfilter, "crop", vf_crop_arg);
+        sh->vfilter = vf;
+    }
 
     return mpcodecs_config_vo(sh, context->ti.frame_width, context->ti.frame_height, theora_pixelformat2imgfmt(context->ti.pixel_fmt));
 

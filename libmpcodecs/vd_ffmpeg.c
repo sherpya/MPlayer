@@ -472,7 +472,7 @@ static int init(sh_video_t *sh){
         break;
 
     default:
-        if (!sh->bih || sh->bih->biSize <= sizeof(*sh->bih))
+        if (!sh->bih || sh->bih->biSize <= (int)sizeof(*sh->bih))
             break;
         avctx->extradata_size = sh->bih->biSize-sizeof(*sh->bih);
         avctx->extradata = av_mallocz(avctx->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);

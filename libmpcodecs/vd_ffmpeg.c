@@ -476,6 +476,10 @@ static int init(sh_video_t *sh){
             break;
         avctx->extradata_size = sh->bih->biSize-sizeof(*sh->bih);
         avctx->extradata = av_mallocz(avctx->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
+        if (!avctx->extradata) {
+            avctx->extradata_size = 0;
+            break;
+        }
         memcpy(avctx->extradata, sh->bih+1, avctx->extradata_size);
         break;
     }

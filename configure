@@ -3490,7 +3490,7 @@ statement_check time.h 'gmtime_r(0, 0)' && _gmtime_r=yes
 if test "$_gmtime_r" = yes ; then
   def_gmtime_r='#define HAVE_GMTIME_R 1'
 else
-  def_gmtime_r='#undef HAVE_GMTIME_R'
+  def_gmtime_r='#define HAVE_GMTIME_R 0'
 fi
 echores "$_gmtime_r"
 
@@ -3500,7 +3500,7 @@ statement_check time.h 'localtime_r(0, 0)' && _localtime_r=yes
 if test "$_localtime_r" = yes ; then
   def_localtime_r='#define HAVE_LOCALTIME_R 1'
 else
-  def_localtime_r='#undef HAVE_LOCALTIME_R'
+  def_localtime_r='#define HAVE_LOCALTIME_R 0'
 fi
 echores "$_localtime_r"
 

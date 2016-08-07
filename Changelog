@@ -13,6 +13,7 @@ MPlayer
     * FFmpeg audio decoders: g721, g732
     * FFmpeg video decoders: more Matrox mpeg2 formats (M702-3-4-5), Truemotion
       RT, Matrox Uncompressed SD/HD
+    * FFmpeg IFF video/image decoders: ANIM, ILBM, PBM, RGB8, RGBN
 
     Fixes:
     * fix more issues reported by Coverity

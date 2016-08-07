@@ -136,6 +136,8 @@ config(uint32_t width, uint32_t height, uint32_t d_width, uint32_t d_height, uin
         avctx->pix_fmt = imgfmt2pixfmt(format);
         avctx->width = width;
         avctx->height = height;
+        avctx->time_base.num = 1;
+        avctx->time_base.den = 1;
         if (avcodec_open2(avctx, avcodec_find_encoder(AV_CODEC_ID_PNG), NULL) < 0) {
             uninit();
             return -1;

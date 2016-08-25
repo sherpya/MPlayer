@@ -69,10 +69,10 @@ static int fntAddNewFont(char *name)
     av_strlcpy(Fonts[id]->name, name, MAX_FONT_NAME);
 
     for (i = 0; i < ASCII_CHRS + EXTRA_CHRS; i++) {
-        Fonts[id]->Fnt[i].x = -1;
-        Fonts[id]->Fnt[i].y = -1;
-        Fonts[id]->Fnt[i].w = -1;
-        Fonts[id]->Fnt[i].h = -1;
+        Fonts[id]->Chr[i].x = -1;
+        Fonts[id]->Chr[i].y = -1;
+        Fonts[id]->Chr[i].w = -1;
+        Fonts[id]->Chr[i].h = -1;
     }
 
     return id;
@@ -161,18 +161,18 @@ int fntRead(char *path, char *fname)
                 i = item[0];
 
             cutStr(param, buf, ',', 0);
-            Fonts[id]->Fnt[i].x = atoi(buf);
+            Fonts[id]->Chr[i].x = atoi(buf);
 
             cutStr(param, buf, ',', 1);
-            Fonts[id]->Fnt[i].y = atoi(buf);
+            Fonts[id]->Chr[i].y = atoi(buf);
 
             cutStr(param, buf, ',', 2);
-            Fonts[id]->Fnt[i].w = atoi(buf);
+            Fonts[id]->Chr[i].w = atoi(buf);
 
             cutStr(param, buf, ',', 3);
-            Fonts[id]->Fnt[i].h = atoi(buf);
+            Fonts[id]->Chr[i].h = atoi(buf);
 
-            mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[font]  char: '%s' params: %d,%d %dx%d\n", item, Fonts[id]->Fnt[i].x, Fonts[id]->Fnt[i].y, Fonts[id]->Fnt[i].w, Fonts[id]->Fnt[i].h);
+            mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[font]  char: '%s' params: %d,%d %dx%d\n", item, Fonts[id]->Chr[i].x, Fonts[id]->Chr[i].y, Fonts[id]->Chr[i].w, Fonts[id]->Chr[i].h);
         } else if (!strcmp(item, "image")) {
             av_strlcpy(buf, path, sizeof(buf));
             av_strlcat(buf, param, sizeof(buf));
@@ -213,7 +213,7 @@ int fntFindID(char *name)
 }
 
 /**
- * @brief Get the #bmpFont::Fnt index of the character @a str points to.
+ * @brief Get the #bmpFont::Chr index of the character @a str points to.
  *
  *        Move pointer @a str to the character according to @a direction
  *        afterwards.
@@ -285,11 +285,11 @@ int fntTextWidth(int id, char *str)
     while (*p) {
         c = fntGetCharIndex(id, &p, utf8, 1);
 
-        if (c == -1 || Fonts[id]->Fnt[c].w == -1)
+        if (c == -1 || Fonts[id]->Chr[c].w == -1)
             c = ' ';
 
-        if (Fonts[id]->Fnt[c].w != -1)
-            size += Fonts[id]->Fnt[c].w;
+        if (Fonts[id]->Chr[c].w != -1)
+            size += Fonts[id]->Chr[c].w;
     }
 
     return size;
@@ -315,10 +315,10 @@ static int fntTextHeight(int id, char *str)
     while (*p) {
         c = fntGetCharIndex(id, &p, utf8, 1);
 
-        if (c == -1 || Fonts[id]->Fnt[c].w == -1)
+        if (c == -1 || Fonts[id]->Chr[c].w == -1)
             c = ' ';
 
-        h = Fonts[id]->Fnt[c].h;
+        h = Fonts[id]->Chr[c].h;
 
         if (h > max)
             max = h;
@@ -407,18 +407,18 @@ guiImage *fntTextRender(guiItem *item, int px, char *txt)
         c = fntGetCharIndex(id, &u, utf8, 1);
 
         if (c != -1)
-            fw = Fonts[id]->Fnt[c].w;
+            fw = Fonts[id]->Chr[c].w;
 
         if (c == -1 || fw == -1) {
             c  = ' ';
-            fw = Fonts[id]->Fnt[c].w;
+            fw = Fonts[id]->Chr[c].w;
         }
 
         if (fw == -1)
             continue;
 
-        fh  = Fonts[id]->Fnt[c].h;
-        fyc = Fonts[id]->Fnt[c].y * fbw + Fonts[id]->Fnt[c].x;
+        fh  = Fonts[id]->Chr[c].h;
+        fyc = Fonts[id]->Chr[c].y * fbw + Fonts[id]->Chr[c].x;
         yc  = dx;
 
         if (dx >= 0) {
@@ -443,18 +443,18 @@ guiImage *fntTextRender(guiItem *item, int px, char *txt)
             c = fntGetCharIndex(id, &u, utf8, -1);
 
             if (c != -1)
-                fw = Fonts[id]->Fnt[c].w;
+                fw = Fonts[id]->Chr[c].w;
 
             if (c == -1 || fw == -1) {
                 c  = ' ';
-                fw = Fonts[id]->Fnt[c].w;
+                fw = Fonts[id]->Chr[c].w;
             }
 
             if (fw == -1)
                 continue;
 
-            fh  = Fonts[id]->Fnt[c].h;
-            fyc = Fonts[id]->Fnt[c].y * fbw + Fonts[id]->Fnt[c].x;
+            fh  = Fonts[id]->Chr[c].h;
+            fyc = Fonts[id]->Chr[c].y * fbw + Fonts[id]->Chr[c].x;
 
             dx -= fw;
             yc  = dx;

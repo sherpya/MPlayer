@@ -34,7 +34,7 @@ typedef struct {
 } fntChar;
 
 typedef struct {
-    fntChar Fnt[ASCII_CHRS + EXTRA_CHRS];
+    fntChar Chr[ASCII_CHRS + EXTRA_CHRS];
     unsigned char nonASCIIidx[EXTRA_CHRS][UTF8LENGTH];
     guiImage Bitmap;
     char name[MAX_FONT_NAME];

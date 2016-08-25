@@ -173,7 +173,7 @@ int fntRead(char *path, char *fname)
             Fonts[id]->Chr[i].h = atoi(buf);
 
             mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[font]  char: '%s' params: %d,%d %dx%d\n", item, Fonts[id]->Chr[i].x, Fonts[id]->Chr[i].y, Fonts[id]->Chr[i].w, Fonts[id]->Chr[i].h);
-        } else if (!strcmp(item, "image")) {
+        } else if (strcmp(item, "image") == 0) {
             av_strlcpy(buf, path, sizeof(buf));
             av_strlcat(buf, param, sizeof(buf));
 
@@ -206,7 +206,7 @@ int fntFindID(char *name)
 
     for (i = 0; i < MAX_FONTS; i++)
         if (Fonts[i])
-            if (!strcmp(name, Fonts[i]->name))
+            if (strcmp(name, Fonts[i]->name) == 0)
                 return i;
 
     return -1;

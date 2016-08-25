@@ -188,7 +188,7 @@ static int item_section(char *in)
         return 1;
     }
 
-    if (!strcmp(strlower(in), "movieplayer"))
+    if (strcmp(strlower(in), "movieplayer") == 0)
         skin = &guiApp;
     else {
         skin_error(MSGTR_GUI_MSG_SkinUnknownName, in);
@@ -1235,7 +1235,7 @@ int skinRead(char *sname)
         strlower(currItem);
 
         for (i = 0; i < FF_ARRAY_ELEMS(skinItem); i++) {
-            if (!strcmp(currItem, skinItem[i].name)) {
+            if (strcmp(currItem, skinItem[i].name) == 0) {
                 if (skinItem[i].func(param) != 0) {
                     fclose(skinfile);
                     return -2;

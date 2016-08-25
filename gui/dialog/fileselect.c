@@ -320,7 +320,7 @@ static void fs_fsFilterCombo_changed(GtkEditable *editable,
     case FILESELECT_VIDEO_AUDIO:
 
         for (i = 0; fsVideoAudioFilterNames[i][0]; i++)
-            if (!strcmp(str, fsVideoAudioFilterNames[i][0])) {
+            if (strcmp(str, fsVideoAudioFilterNames[i][0]) == 0) {
                 fsFilter = fsVideoAudioFilterNames[i][1];
                 fsLastVideoAudioFilterSelected = i;
                 break;
@@ -331,7 +331,7 @@ static void fs_fsFilterCombo_changed(GtkEditable *editable,
     case FILESELECT_SUBTITLE:
 
         for (i = 0; fsSubtitleFilterNames[i][0]; i++)
-            if (!strcmp(str, fsSubtitleFilterNames[i][0])) {
+            if (strcmp(str, fsSubtitleFilterNames[i][0]) == 0) {
                 fsFilter = fsSubtitleFilterNames[i][1];
                 fsLastSubtitleFilterSelected = i;
                 break;
@@ -342,7 +342,7 @@ static void fs_fsFilterCombo_changed(GtkEditable *editable,
     case FILESELECT_AUDIO:
 
         for (i = 0; fsAudioFileNames[i][0]; i++)
-            if (!strcmp(str, fsAudioFileNames[i][0])) {
+            if (strcmp(str, fsAudioFileNames[i][0]) == 0) {
                 fsFilter = fsAudioFileNames[i][1];
                 fsLastAudioFilterSelected = i;
                 break;
@@ -353,7 +353,7 @@ static void fs_fsFilterCombo_changed(GtkEditable *editable,
     case FILESELECT_FONT:
 
         for (i = 0; fsFontFileNames[i][0]; i++)
-            if (!strcmp(str, fsFontFileNames[i][0])) {
+            if (strcmp(str, fsFontFileNames[i][0]) == 0) {
                 fsFilter = fsFontFileNames[i][1];
                 fsLastFontFilterSelected = i;
                 break;
@@ -364,7 +364,7 @@ static void fs_fsFilterCombo_changed(GtkEditable *editable,
     case FILESELECT_IMAGE:
 
         for (i = 0; fsImageFilterNames[i][0]; i++)
-            if (!strcmp(str, fsImageFilterNames[i][0])) {
+            if (strcmp(str, fsImageFilterNames[i][0]) == 0) {
                 fsFilter = fsImageFilterNames[i][1];
                 fsLastImageFilterSelected = i;
                 break;

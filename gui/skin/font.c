@@ -35,6 +35,10 @@
 #include "mp_msg.h"
 #include "libavutil/avstring.h"
 
+#define ASCII_CHRS 128   // number of ASCII characters
+#define EXTRA_CHRS 128   // (arbitrary) number of non-ASCII characters
+#define UTF8LENGTH 4     // length of an UTF-8 encoding according to RFC 3629
+
 #define MAX_FONTS 25
 
 #define fntAlignLeft   0
@@ -68,12 +72,28 @@ static int fntAddNewFont(char *name)
 
     av_strlcpy(Fonts[id]->name, name, MAX_FONT_NAME);
 
+    Fonts[id]->Chr = calloc(ASCII_CHRS + EXTRA_CHRS, sizeof(*Fonts[id]->Chr));
+
+    if (!Fonts[id]->Chr) {
+        nfree(Fonts[id]);
+        return -1;
+    }
+
     for (i = 0; i < ASCII_CHRS + EXTRA_CHRS; i++) {
         Fonts[id]->Chr[i].x = -1;
         Fonts[id]->Chr[i].y = -1;
         Fonts[id]->Chr[i].w = -1;
         Fonts[id]->Chr[i].h = -1;
     }
+
+    Fonts[id]->bit8_chr = calloc(EXTRA_CHRS * UTF8LENGTH, sizeof(*Fonts[id]->bit8_chr));
+
+    if (!Fonts[id]->bit8_chr) {
+        nfree(Fonts[id]->Chr);
+        nfree(Fonts[id]);
+        return -1;
+    } else
+        Fonts[id]->extra_chrs = EXTRA_CHRS;
 
     return id;
 }
@@ -85,6 +105,8 @@ static int fntAddNewFont(char *name)
  */
 static void fntFreeFont(int id)
 {
+    free(Fonts[id]->Chr);
+    free(Fonts[id]->bit8_chr);
     bpFree(&Fonts[id]->Bitmap);
     nfree(Fonts[id]);
 }
@@ -154,14 +176,14 @@ int fntRead(char *path, char *fname)
                 cutStr(item, item, '"', 1);
 
             if (item[0] & 0x80) {
-                for (i = 0; i < EXTRA_CHRS; i++) {
-                    if (!Fonts[id]->nonASCIIidx[i][0]) {
-                        strncpy(Fonts[id]->nonASCIIidx[i], item, UTF8LENGTH);
+                for (i = 0; i < Fonts[id]->extra_chrs; i++) {
+                    if (!(Fonts[id]->bit8_chr + i * UTF8LENGTH)[0]) {
+                        strncpy(Fonts[id]->bit8_chr + i * UTF8LENGTH, item, UTF8LENGTH);
                         break;
                     }
                 }
 
-                if (i == EXTRA_CHRS)
+                if (i == Fonts[id]->extra_chrs)
                     continue;
 
                 i += ASCII_CHRS;
@@ -250,14 +272,14 @@ static int fntGetCharIndex(int id, unsigned char **str, gboolean utf8, int direc
             *str    += direction;
         }
 
-        for (i = 0; (i < EXTRA_CHRS) && Fonts[id]->nonASCIIidx[i][0]; i++) {
-            if (strncmp(Fonts[id]->nonASCIIidx[i], uchar, UTF8LENGTH) == 0)
+        for (i = 0; (i < Fonts[id]->extra_chrs) && (Fonts[id]->bit8_chr + i * UTF8LENGTH)[0]; i++) {
+            if (strncmp(Fonts[id]->bit8_chr + i * UTF8LENGTH, uchar, UTF8LENGTH) == 0)
                 return i + ASCII_CHRS;
 
             if (!utf8 &&
-                (Fonts[id]->nonASCIIidx[i][0] == (*uchar >> 6 | 0xc0) &&
-                 Fonts[id]->nonASCIIidx[i][1] == ((*uchar & 0x3f) | 0x80) &&
-                 Fonts[id]->nonASCIIidx[i][2] == 0))
+                ((Fonts[id]->bit8_chr + i * UTF8LENGTH)[0] == (*uchar >> 6 | 0xc0) &&
+                 (Fonts[id]->bit8_chr + i * UTF8LENGTH)[1] == ((*uchar & 0x3f) | 0x80) &&
+                 (Fonts[id]->bit8_chr + i * UTF8LENGTH)[2] == 0))
                 c = i + ASCII_CHRS;
         }
     } else {

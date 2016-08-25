@@ -79,6 +79,17 @@ static int fntAddNewFont(char *name)
 }
 
 /**
+ * @brief Free all memory allocated to a font.
+ *
+ * @param id font ID
+ */
+static void fntFreeFont(int id)
+{
+    bpFree(&Fonts[id]->Bitmap);
+    nfree(Fonts[id]);
+}
+
+/**
  * @brief Free all memory allocated to fonts.
  */
 void fntFreeFonts(void)

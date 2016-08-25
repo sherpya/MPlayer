@@ -96,12 +96,9 @@ void fntFreeFonts(void)
 {
     int i;
 
-    for (i = 0; i < MAX_FONTS; i++) {
-        if (Fonts[i]) {
-            bpFree(&Fonts[i]->Bitmap);
-            nfree(Fonts[i]);
-        }
-    }
+    for (i = 0; i < MAX_FONTS; i++)
+        if (Fonts[i])
+            fntFreeFont(i);
 }
 
 /**
@@ -132,7 +129,7 @@ int fntRead(char *path, char *fname)
     file = fopen(buf, "rt");
 
     if (!file) {
-        nfree(Fonts[id]);
+        fntFreeFont(id);
         return -3;
     }
 
@@ -191,8 +188,7 @@ int fntRead(char *path, char *fname)
             mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[font] image file: %s\n", buf);
 
             if (skinImageRead(buf, &Fonts[id]->Bitmap) != 0) {
-                bpFree(&Fonts[id]->Bitmap);
-                nfree(Fonts[id]);
+                fntFreeFont(id);
                 fclose(file);
                 return -4;
             }

@@ -81,7 +81,7 @@ static int fntAddNewFont(char *name)
 /**
  * @brief Free all memory allocated to fonts.
  */
-void fntFreeFont(void)
+void fntFreeFonts(void)
 {
     int i;
 

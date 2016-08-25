@@ -135,7 +135,7 @@ void appFreeStruct(void)
     guiApp.IndexOfPlaybarItems = -1;
     guiApp.IndexOfMenuItems    = -1;
 
-    fntFreeFont();
+    fntFreeFonts();
 }
 
 /**

@@ -41,7 +41,7 @@ typedef struct {
 } bmpFont;
 
 int fntFindID(char *name);
-void fntFreeFont(void);
+void fntFreeFonts(void);
 int fntRead(char *path, char *fname);
 guiImage *fntTextRender(guiItem *item, int px, char *txt);
 int fntTextWidth(int id, char *str);

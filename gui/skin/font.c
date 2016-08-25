@@ -48,6 +48,74 @@
 static bmpFont *Fonts[MAX_FONTS];
 
 /**
+ * @brief Allocate and initialize memory for a #bmpFont::Chr array.
+ *
+ * @note If @a Font->Chr is not NULL, memory will be reallocated.
+ *
+ * @param Font pointer to a #Fonts element
+ * @param nmemb number of members the old array should grow by
+ *
+ * @return pointer to the newly allocated array or NULL (error)
+ *
+ * @note As a side effect, @a Font->Chr will point to the newly
+ *       allocated memory and @a Font->chrs will be increased accordingly
+ *       (if and only if memory could be allocated).
+ */
+static void *fntAllocChr(bmpFont *Font, size_t nmemb)
+{
+    void *ptr;
+    int i;
+
+    ptr = realloc(Font->Chr, (Font->chrs + nmemb) * sizeof(*Font->Chr));
+
+    if (ptr) {
+        Font->Chr = ptr;
+
+        for (i = Font->chrs + nmemb - 1; i >= Font->chrs; i--) {
+            Font->Chr[i].x = -1;
+            Font->Chr[i].y = -1;
+            Font->Chr[i].w = -1;
+            Font->Chr[i].h = -1;
+        }
+
+        Font->chrs += nmemb;
+    }
+
+    return ptr;
+}
+
+/**
+ * @brief Allocate and initialize memory for a #bmpFont::bit8_chr array.
+ *
+ * @note If @a Font->bit8_chr is not NULL, memory will be reallocated.
+ *
+ * @param Font pointer to a #Fonts element
+ * @param nmemb number of members the old array should grow by
+ *
+ * @return pointer to the newly allocated array or NULL (error)
+ *
+ * @note As a side effect, @a Font->bit8_chr will point to the newly
+ *       allocated memory and @a Font->extra_chrs will be increased accordingly
+ *       (if and only if memory could be allocated).
+ */
+static void *fntAllocBit8Chr(bmpFont *Font, size_t nmemb)
+{
+    void *ptr;
+
+    ptr = realloc(Font->bit8_chr, (Font->extra_chrs + nmemb) * UTF8LENGTH * sizeof(*Font->bit8_chr));
+
+    if (ptr) {
+        Font->bit8_chr = ptr;
+
+        memset(Font->bit8_chr + Font->extra_chrs * UTF8LENGTH, 0, nmemb * UTF8LENGTH * sizeof(*Font->bit8_chr));
+
+        Font->extra_chrs += nmemb;
+    }
+
+    return ptr;
+}
+
+/**
  * @brief Add a font to #Fonts.
  *
  * @param name name of the font
@@ -56,7 +124,7 @@ static bmpFont *Fonts[MAX_FONTS];
  */
 static int fntAddNewFont(char *name)
 {
-    int id, i;
+    int id;
 
     for (id = 0; id < MAX_FONTS; id++)
         if (!Fonts[id])
@@ -72,28 +140,16 @@ static int fntAddNewFont(char *name)
 
     av_strlcpy(Fonts[id]->name, name, MAX_FONT_NAME);
 
-    Fonts[id]->Chr = calloc(ASCII_CHRS + EXTRA_CHRS, sizeof(*Fonts[id]->Chr));
-
-    if (!Fonts[id]->Chr) {
+    if (!fntAllocChr(Fonts[id], ASCII_CHRS + EXTRA_CHRS)) {
         nfree(Fonts[id]);
         return -1;
     }
 
-    for (i = 0; i < ASCII_CHRS + EXTRA_CHRS; i++) {
-        Fonts[id]->Chr[i].x = -1;
-        Fonts[id]->Chr[i].y = -1;
-        Fonts[id]->Chr[i].w = -1;
-        Fonts[id]->Chr[i].h = -1;
-    }
-
-    Fonts[id]->bit8_chr = calloc(EXTRA_CHRS * UTF8LENGTH, sizeof(*Fonts[id]->bit8_chr));
-
-    if (!Fonts[id]->bit8_chr) {
+    if (!fntAllocBit8Chr(Fonts[id], EXTRA_CHRS)) {
         nfree(Fonts[id]->Chr);
         nfree(Fonts[id]);
         return -1;
-    } else
-        Fonts[id]->extra_chrs = EXTRA_CHRS;
+    }
 
     return id;
 }

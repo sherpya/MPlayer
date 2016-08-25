@@ -30,6 +30,7 @@ typedef struct {
 } fntChar;
 
 typedef struct {
+    int chrs;
     fntChar *Chr;
     int extra_chrs;
     unsigned char *bit8_chr;

@@ -26,6 +26,9 @@ MPlayer
     * MPlayer can link against OpenSSL instead of GnuTLS for https support
       (Warning: the resulting binary can not be redistributed)
 
+    GUI:
+    * No limitation on the number of entries in a font description file
+
 
   1.3.0: "worksforme" February 16, 2016
 

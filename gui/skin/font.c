@@ -219,7 +219,7 @@ int fntRead(char *path, char *fname)
         if (!*buf)
             continue;
 
-        n = (strncmp(buf, "\"=", 2) == 0 ? 1 : 0);
+        n = (buf[0] == '"' && buf[1] == '=' ? 1 : 0);
         cutStr(buf, item, '=', n);
         cutStr(buf, param, '=', n + 1);
 

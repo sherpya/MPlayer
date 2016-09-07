@@ -232,11 +232,11 @@ int fntRead(char *path, char *fname)
                 cutStr(item, item, '"', 1);
 
             if (item[0] & 0x80) {
-                    if (Fonts[id]->bit8_count % EXTRA_CHRS == 0) {
-                        if (!fntAllocChr(Fonts[id], EXTRA_CHRS) ||
-                            !fntAllocBit8Chr(Fonts[id], EXTRA_CHRS))
-                            continue;
-                    }
+                if (Fonts[id]->bit8_count % EXTRA_CHRS == 0) {
+                    if (!fntAllocChr(Fonts[id], EXTRA_CHRS) ||
+                        !fntAllocBit8Chr(Fonts[id], EXTRA_CHRS))
+                        continue;
+                }
 
                 strncpy(Fonts[id]->bit8_chr + Fonts[id]->bit8_count * UTF8LENGTH, item, UTF8LENGTH);
 

@@ -232,23 +232,15 @@ int fntRead(char *path, char *fname)
                 cutStr(item, item, '"', 1);
 
             if (item[0] & 0x80) {
-                for (i = 0;; i++) {
-                    if (i == Fonts[id]->extra_chrs) {
+                    if (Fonts[id]->bit8_count % EXTRA_CHRS == 0) {
                         if (!fntAllocChr(Fonts[id], EXTRA_CHRS) ||
                             !fntAllocBit8Chr(Fonts[id], EXTRA_CHRS))
-                            break;
+                            continue;
                     }
 
-                    if (!(Fonts[id]->bit8_chr + i * UTF8LENGTH)[0]) {
-                        strncpy(Fonts[id]->bit8_chr + i * UTF8LENGTH, item, UTF8LENGTH);
-                        break;
-                    }
-                }
+                strncpy(Fonts[id]->bit8_chr + Fonts[id]->bit8_count * UTF8LENGTH, item, UTF8LENGTH);
 
-                if (i == Fonts[id]->extra_chrs)
-                    continue;
-
-                i += ASCII_CHRS;
+                i = Fonts[id]->bit8_count++ + ASCII_CHRS;
             } else
                 i = item[0];
 
@@ -334,7 +326,7 @@ static int fntGetCharIndex(int id, unsigned char **str, gboolean utf8, int direc
             *str    += direction;
         }
 
-        for (i = 0; (i < Fonts[id]->extra_chrs) && (Fonts[id]->bit8_chr + i * UTF8LENGTH)[0]; i++) {
+        for (i = 0; i < Fonts[id]->bit8_count; i++) {
             if (strncmp(Fonts[id]->bit8_chr + i * UTF8LENGTH, uchar, UTF8LENGTH) == 0)
                 return i + ASCII_CHRS;
 

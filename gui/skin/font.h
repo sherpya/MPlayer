@@ -34,6 +34,7 @@ typedef struct {
     fntChar *Chr;
     int extra_chrs;
     unsigned char *bit8_chr;
+    int bit8_count;
     guiImage Bitmap;
     char name[MAX_FONT_NAME];
 } bmpFont;

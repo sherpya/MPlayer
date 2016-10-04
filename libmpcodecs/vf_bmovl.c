@@ -151,8 +151,11 @@ config(struct vf_instance *vf,
 	}
 
 	// Set default to black...
+	memset( vf->priv->bitmap.y,   0, width*height );
 	memset( vf->priv->bitmap.u, 128, width*height/4 );
 	memset( vf->priv->bitmap.v, 128, width*height/4 );
+	memset( vf->priv->bitmap.a,   0, width*height );
+	memset( vf->priv->bitmap.oa,  0, width*height );
 
     vf->priv->w  = vf->priv->x1 = width;
     vf->priv->h  = vf->priv->y1 = height;
@@ -328,8 +331,8 @@ put_image(struct vf_instance *vf, mp_image_t* mpi, double pts){
 					memset( vf->priv->bitmap.a  + (ypos*vf->priv->w) + imgx, 0, imgw );
 					memset( vf->priv->bitmap.oa + (ypos*vf->priv->w) + imgx, 0, imgw );
 					if(ypos%2) {
-						memset( vf->priv->bitmap.u + ((ypos/2)*dmpi->stride[1]) + (imgx/2), 128, imgw/2 );
-						memset( vf->priv->bitmap.v + ((ypos/2)*dmpi->stride[2]) + (imgx/2), 128, imgw/2 );
+						memset( vf->priv->bitmap.u + ((ypos/2)*(vf->priv->w/2)) + (imgx/2), 128, imgw/2 );
+						memset( vf->priv->bitmap.v + ((ypos/2)*(vf->priv->w/2)) + (imgx/2), 128, imgw/2 );
 					}
 				}	// Recalculate area that contains graphics
 				if( (imgx <= vf->priv->x1) && ( (imgw+imgx) >= vf->priv->x2) ) {
@@ -389,7 +392,7 @@ put_image(struct vf_instance *vf, mp_image_t* mpi, double pts){
 						vf->priv->bitmap.oa[pos] = alpha;
 						vf->priv->bitmap.a[pos]  = INRANGE((alpha+imgalpha),0,255);
 						if((buf_y%2) && ((buf_x/pxsz)%2)) {
-							pos = ( ((buf_y+imgy)/2) * dmpi->stride[1] ) + (((buf_x/pxsz)+imgx)/2);
+							pos = ( ((buf_y+imgy)/2) * (vf->priv->w/2) ) + (((buf_x/pxsz)+imgx)/2);
 							vf->priv->bitmap.u[pos] = rgb2u(red,green,blue);
 							vf->priv->bitmap.v[pos] = rgb2v(red,green,blue);
 						}
@@ -422,33 +425,36 @@ put_image(struct vf_instance *vf, mp_image_t* mpi, double pts){
 	    for( ypos=vf->priv->y1 ; ypos < vf->priv->y2 ; ypos++ ) {
 	        for ( xpos=vf->priv->x1 ; xpos < vf->priv->x2 ; xpos++ ) {
 				pos = (ypos * dmpi->stride[0]) + xpos;
+				int pos_bm = ypos * vf->priv->w + xpos;
 
-				alpha = vf->priv->bitmap.a[pos];
+				alpha = vf->priv->bitmap.a[pos_bm];
 
 				if (alpha == 0) continue; // Completly transparent pixel
 
 				if (alpha == 255) {	// Opaque pixel
-					dmpi->planes[0][pos] = vf->priv->bitmap.y[pos];
+					dmpi->planes[0][pos] = vf->priv->bitmap.y[pos_bm];
 					if ((ypos%2) && (xpos%2)) {
 						pos = ( (ypos/2) * dmpi->stride[1] ) + (xpos/2);
-						dmpi->planes[1][pos] = vf->priv->bitmap.u[pos];
-						dmpi->planes[2][pos] = vf->priv->bitmap.v[pos];
+						pos_bm = (ypos/2) * (vf->priv->w/2) + (xpos/2);
+						dmpi->planes[1][pos] = vf->priv->bitmap.u[pos_bm];
+						dmpi->planes[2][pos] = vf->priv->bitmap.v[pos_bm];
 					}
 				} else { // Alphablended pixel
 					dmpi->planes[0][pos] =
 						((255 - alpha) * (int)dmpi->planes[0][pos] +
-						alpha * (int)vf->priv->bitmap.y[pos]) >> 8;
+						alpha * (int)vf->priv->bitmap.y[pos_bm]) >> 8;
 
 					if ((ypos%2) && (xpos%2)) {
 						pos = ( (ypos/2) * dmpi->stride[1] ) + (xpos/2);
+						pos_bm = (ypos/2) * (vf->priv->w/2) + (xpos/2);
 
 						dmpi->planes[1][pos] =
 							((255 - alpha) * (int)dmpi->planes[1][pos] +
-							alpha * (int)vf->priv->bitmap.u[pos]) >> 8;
+							alpha * (int)vf->priv->bitmap.u[pos_bm]) >> 8;
 
 						dmpi->planes[2][pos] =
 							((255 - alpha) * (int)dmpi->planes[2][pos] +
-							alpha * (int)vf->priv->bitmap.v[pos]) >> 8;
+							alpha * (int)vf->priv->bitmap.v[pos_bm]) >> 8;
 					}
 			    }
 			} // for xpos

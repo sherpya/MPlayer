@@ -424,8 +424,8 @@ put_image(struct vf_instance *vf, mp_image_t* mpi, double pts){
 	} else { // Blit the bitmap to the videoscreen, pixel for pixel
 	    for( ypos=vf->priv->y1 ; ypos < vf->priv->y2 ; ypos++ ) {
 	        for ( xpos=vf->priv->x1 ; xpos < vf->priv->x2 ; xpos++ ) {
-				pos = (ypos * dmpi->stride[0]) + xpos;
 				int pos_bm = ypos * vf->priv->w + xpos;
+				pos = (ypos * dmpi->stride[0]) + xpos;
 
 				alpha = vf->priv->bitmap.a[pos_bm];
 

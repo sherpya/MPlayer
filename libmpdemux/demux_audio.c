@@ -831,7 +831,7 @@ static int demux_audio_control(demuxer_t *demuxer,int cmd, void *arg){
 	    return DEMUXER_CTRL_GUESS;
 
 	case DEMUXER_CTRL_GET_PERCENT_POS:
-	    if (audio_length<=0)
+	    if (audio_length<=0 || priv->next_pts==MP_NOPTS_VALUE)
     		return DEMUXER_CTRL_DONTKNOW;
     	    *((int *)arg)=(int)( (priv->next_pts*100)  / audio_length);
 	    return DEMUXER_CTRL_OK;

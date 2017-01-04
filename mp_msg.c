@@ -42,6 +42,9 @@ int mp_msg_color = 0;
 int mp_msg_module = 0;
 #ifdef CONFIG_ICONV
 char *mp_msg_charset = NULL;
+// only used to simplify freeing get_term_charset
+// result, even when it was overwritten by command-line options.
+char *term_charset_ptr_to_free = NULL;
 static char *old_charset = NULL;
 static iconv_t msgiconv;
 static iconv_t inv_msgiconv = (iconv_t)(-1);
@@ -86,8 +89,10 @@ void mp_msg_init(void){
     mp_msg_levels[MSGT_IDENTIFY] = -1; // no -identify output by default
 #ifdef CONFIG_ICONV
     mp_msg_charset = getenv("MPLAYER_CHARSET");
-    if (!mp_msg_charset)
-      mp_msg_charset = get_term_charset();
+    if (!mp_msg_charset) {
+      free(term_charset_ptr_to_free); // could assert that is is NULL instead
+      mp_msg_charset = term_charset_ptr_to_free = get_term_charset();
+    }
 #endif
 }
 
@@ -99,6 +104,8 @@ void mp_msg_uninit(void)
         iconv_close(msgiconv);
     }
     if (inv_msgiconv != (iconv_t)(-1)) iconv_close(inv_msgiconv);
+    free(term_charset_ptr_to_free);
+    term_charset_ptr_to_free = NULL;
 #endif
 }
 

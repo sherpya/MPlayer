@@ -30,6 +30,9 @@
 #include "string.h"
 #include "gui/app/gui.h"
 
+#define CFG_OLD_PLAYLIST
+#include "gui/app/cfg-old.c"
+
 #include "mp_msg.h"
 
 /**
@@ -170,8 +173,8 @@ plItem **cue_playlist(const char *fname)
             if (!item[i])
                 break;
 
-            item[i]->path = strdup(path);
-            item[i]->name = strdup(data);
+            item[i]->path = strdup(cfg_old_filename_from_utf8(path));
+            item[i]->name = strdup(cfg_old_filename_from_utf8(data));
 
             isTRACK = True;
         } else if (strncmp(l, "TITLE ", 6) == 0) {

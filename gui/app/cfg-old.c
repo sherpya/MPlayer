@@ -21,6 +21,8 @@
  * @brief Translation of old settings or old configure options
  */
 
+#include <glib.h>
+
 /**
  * @brief Convert a filename into the original byte sequence
  *        according to the encoding specified in G_FILENAME_ENCODING,

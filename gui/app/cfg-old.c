@@ -22,6 +22,7 @@
  */
 
 #include <glib.h>
+#include <stdlib.h>
 
 /**
  * @brief Convert a filename into the original byte sequence

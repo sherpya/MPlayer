@@ -229,6 +229,7 @@ static const char * const preferred_list[] = {
     "cdxl",
     "dxa",
     "flv",
+    "flac",
     "gxf",
     "nut",
     "nuv",

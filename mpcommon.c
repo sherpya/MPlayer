@@ -588,9 +588,6 @@ int common_init(void)
     set_priority();
 #endif
 
-    if (codec_path)
-        set_codec_path(codec_path);
-
     /* Check codecs.conf. */
     if (!codecs_file || !parse_codec_cfg(codecs_file)) {
         char *conf_path = get_path("codecs.conf");

@@ -869,6 +869,7 @@ def_stream_cache="#define CONFIG_STREAM_CACHE 1"
 def_path_max_check="#define CONFIG_PATH_MAX_CHECK 0"
 def_priority="#undef CONFIG_PRIORITY"
 def_pthread_cache="#undef PTHREAD_CACHE"
+def_simd_align_32='#define HAVE_SIMD_ALIGN_32 0'
 shmem=no
 
 option_value(){
@@ -2753,6 +2754,7 @@ if test "$_runtime_cpudetection" = yes ; then
   fi
 fi
 
+test "$_avx" != no && def_simd_align_32='#define HAVE_SIMD_ALIGN_32 1'
 
 # endian testing
 echocheck "byte order"
@@ -9342,6 +9344,7 @@ $def_openssl
 #define HAVE_RDTSC 0
 #define HAVE_SECTION_DATA_REL_RO 0
 #define HAVE_SIMD_ALIGN_16 1
+$def_simd_align_32
 #define HAVE_STRERROR_R 0
 #define HAVE_STRPTIME 0
 #define HAVE_STRUCT_POLLFD 0

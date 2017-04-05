@@ -3872,7 +3872,7 @@ echores "$_malloc"
 echocheck "aligned malloc"
 aligned_malloc=no
 def_aligned_malloc='#define HAVE_ALIGNED_MALLOC 0'
-statement_check malloc.h '_aligned_malloc(0)' && aligned_malloc=yes &&
+statement_check malloc.h '_aligned_malloc(1, 32)' && aligned_malloc=yes &&
   def_aligned_malloc='#define HAVE_ALIGNED_MALLOC 1'
 echores "$aligned_malloc"
 

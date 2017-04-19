@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 #include <strings.h>
+#include <vdpau/vdpau_x11.h>
 
 #include "config.h"
 #include "sub/ass_mp.h"

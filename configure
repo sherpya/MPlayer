@@ -8235,7 +8235,7 @@ for try_chunk_xsl in \
 done
 
 if test -z "$chunk_xsl"; then
-  chunk_xsl=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl
+  chunk_xsl=http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl
   echores "not found, using default"
   fake_chunk_xsl=yes
 else
@@ -8260,7 +8260,7 @@ for try_docbook_xsl in \
 done
 
 if test -z "$docbook_xsl"; then
-  docbook_xsl=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/docbook.xsl
+  docbook_xsl=http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl
   echores "not found, using default"
 else
   echores "docbook.xsl"
@@ -8312,7 +8312,7 @@ for try_dtd in \
 done
 
 if test -z "$dtd"; then
-  dtd=/usr/share/sgml/docbook/dtd/xml/4.1.2/docbookx.dtd
+  dtd=http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd
   echores "not found, using default"
 else
   echores "docbookx.dtd"
@@ -8324,7 +8324,7 @@ for lang in $language_doc; do
 <!-- **************************************************
      This file is generated automatically. DO NOT EDIT.
      ************************************************** -->
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
     "$dtd"
 [
 <!ENTITY bugreports.xml SYSTEM "bugreports.xml">

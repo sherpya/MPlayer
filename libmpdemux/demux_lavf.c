@@ -42,6 +42,7 @@
 #include "libavutil/avstring.h"
 #include "libavutil/mathematics.h"
 #include "libavutil/opt.h"
+#include "libavutil/replaygain.h"
 
 #include "mp_taglists.h"
 
@@ -80,6 +81,7 @@ typedef struct lavf_priv {
     int cur_program;
     int nb_streams_last;
     int use_lavf_netstream;
+    int r_gain;
 }lavf_priv_t;
 
 static int mp_read(void *opaque, uint8_t *buf, int size) {
@@ -155,8 +157,10 @@ static int lavf_check_file(demuxer_t *demuxer){
     int read_size = INITIAL_PROBE_SIZE;
     int score;
 
-    if(!demuxer->priv)
+    if(!demuxer->priv) {
         demuxer->priv=calloc(sizeof(lavf_priv_t),1);
+        ((lavf_priv_t *)demuxer->priv)->r_gain = INT32_MIN;
+    }
     priv= demuxer->priv;
 
     init_avformat();
@@ -358,6 +362,14 @@ static void handle_stream(demuxer_t *demuxer, AVFormatContext *avfc, int i) {
             }
             if (demuxer->audio->id != i)
                 st->discard= AVDISCARD_ALL;
+            if (priv->audio_streams == 0) {
+                int rg_size;
+                AVReplayGain *rg = (AVReplayGain*)av_stream_get_side_data(st, AV_PKT_DATA_REPLAYGAIN, &rg_size);
+                if (rg && rg_size >= sizeof(*rg)) {
+                    priv->r_gain = rg->track_gain / 10000;
+                }
+            } else
+                priv->r_gain = INT32_MIN;
             stream_id = priv->audio_streams++;
             break;
         }
@@ -903,6 +915,11 @@ redo:
             priv->cur_program = prog->progid = program->id;
             return DEMUXER_CTRL_OK;
         }
+        case DEMUXER_CTRL_GET_REPLAY_GAIN:
+            if (priv->r_gain == INT32_MIN)
+                return DEMUXER_CTRL_DONTKNOW;
+            *((int *)arg) = priv->r_gain;
+            return DEMUXER_CTRL_OK;
 	default:
 	    return DEMUXER_CTRL_NOTIMPL;
     }

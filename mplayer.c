@@ -1777,6 +1777,7 @@ static int generate_video_frame(sh_video_t *sh_video, demux_stream_t *d_video)
     int in_size;
     int hit_eof = 0;
     double pts;
+    double endpts;
 
     while (1) {
         int drop_frame = 0;
@@ -1787,7 +1788,7 @@ static int generate_video_frame(sh_video_t *sh_video, demux_stream_t *d_video)
         if (vf_output_queued_frame(sh_video->vfilter))
             break;
         current_module = "video_read_frame";
-        in_size = ds_get_packet_pts(d_video, &start, &pts);
+        in_size = ds_get_packet_pts_endpts(d_video, &start, &pts, &endpts);
         if (in_size < 0) {
             // try to extract last frames in case of decoder lag
             in_size = 0;
@@ -1799,13 +1800,13 @@ static int generate_video_frame(sh_video_t *sh_video, demux_stream_t *d_video)
         if (in_size > max_framesize)
             max_framesize = in_size;
         current_module = "decode video";
-        decoded_frame  = decode_video(sh_video, start, in_size, drop_frame, pts, NULL);
+        decoded_frame  = decode_video(sh_video, start, in_size, drop_frame, pts, endpts, NULL);
         if (decoded_frame) {
             update_subtitles(sh_video, sh_video->pts, mpctx->d_sub, 0);
             update_teletext(sh_video, mpctx->demuxer, 0);
             update_osd_msg();
             current_module = "filter video";
-            if (filter_video(sh_video, decoded_frame, sh_video->pts))
+            if (filter_video(sh_video, decoded_frame, sh_video->pts, sh_video->endpts))
                 break;
         } else if (drop_frame)
             return -1;
@@ -2491,7 +2492,7 @@ static double update_video(int *blit_frame)
             // still frame has been reached, no need to decode
             if ((in_size > 0 || flush) && !decoded_frame)
             decoded_frame = decode_video(sh_video, start, in_size, drop_frame,
-                                         sh_video->pts, &full_frame);
+                                         sh_video->pts, sh_video->endpts, &full_frame);
 
             if (flush && !decoded_frame)
                 return -1;
@@ -2512,13 +2513,15 @@ static double update_video(int *blit_frame)
 
         current_module = "filter_video";
         *blit_frame    = (decoded_frame && filter_video(sh_video, decoded_frame,
-                                                        sh_video->pts));
+                                                        sh_video->pts, sh_video->endpts));
     } else {
         int res = generate_video_frame(sh_video, mpctx->d_video);
         if (!res)
             return -1;
         ((vf_instance_t *)sh_video->vfilter)->control(sh_video->vfilter,
                                                       VFCTRL_GET_PTS, &sh_video->pts);
+        ((vf_instance_t *)sh_video->vfilter)->control(sh_video->vfilter,
+                                                      VFCTRL_GET_ENDPTS, &sh_video->endpts);
         if (sh_video->pts == MP_NOPTS_VALUE) {
             mp_msg(MSGT_CPLAYER, MSGL_ERR, MSGTR_PtsAfterFiltersMissing);
             sh_video->pts = sh_video->last_pts;
@@ -3795,7 +3798,7 @@ goto_enable_cache:
                 update_osd_msg();
             } else {
                 int frame_time_remaining = 0;
-                int blit_frame = 1;
+                int blit_frame = mpctx->num_buffered_frames > 0;
                 // skip timing after seek
                 int skip_timing = mpctx->startup_decode_retry > 0;
 
@@ -3822,13 +3825,25 @@ goto_enable_cache:
                         goto goto_next_file;
                     }
                     if (frame_time < 0) {
+                        // try to figure out duration of last frame
+                        if (correct_pts && mpctx->sh_video->endpts != MP_NOPTS_VALUE &&
+                            mpctx->sh_video->pts != MP_NOPTS_VALUE &&
+                            mpctx->sh_video->endpts > mpctx->sh_video->pts) {
+                            frame_time = mpctx->sh_video->endpts - mpctx->sh_video->pts;
+                        } else {
+                            frame_time = mpctx->sh_video->frametime;
+                        }
+                        mpctx->sh_video->frametime = -1;
+                        mpctx->sh_video->endpts = MP_NOPTS_VALUE;
+                    }
+                    if (frame_time < 0) {
                         // if we have no more video, sleep some arbitrary time
                         frame_time = 1.0 / 20.0;
                         // Ensure vo_pts is updated so that ao_pcm will not hang.
                         advance_timer(frame_time);
                         // only stop playing when audio is at end as well
                         if (!mpctx->sh_audio || (mpctx->d_audio->eof && !ds_fill_buffer(mpctx->d_audio)))
-                            mpctx->eof = 1;
+                            mpctx->eof = mpctx->time_frame <= 0;
                     } else {
                         // might return with !eof && !blit_frame if !correct_pts
                         mpctx->num_buffered_frames += blit_frame;

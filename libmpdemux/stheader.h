@@ -38,6 +38,7 @@
   /* audio: last known pts value in output from decoder \
    * video: predicted/interpolated PTS of the current frame */ \
   double pts; \
+  double endpts; \
   /* codec-specific: */ \
   void* context;   /* codec-specific stuff (usually HANDLE or struct pointer) */ \
   char* lang; /* track language */ \
@@ -102,6 +103,7 @@ typedef struct sh_video {
   float next_frame_time;
   double last_pts;
   double buffered_pts[64];
+  double buffered_endpts[64];
   int num_buffered_pts;
   // output format: (set by demuxer)
   float fps;              // frames per second (set only if constant fps)

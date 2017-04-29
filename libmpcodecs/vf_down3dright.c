@@ -96,7 +96,7 @@ static void toright(unsigned char *dst[3], unsigned char *src[3],
         }
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
         mp_image_t *dmpi;
 
@@ -110,7 +110,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
         toright(dmpi->planes, mpi->planes, dmpi->stride,
                 mpi->stride, mpi->w, mpi->h, vf->priv);
 
-        return vf_next_put_image(vf,dmpi, pts);
+        return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static int config(struct vf_instance *vf,

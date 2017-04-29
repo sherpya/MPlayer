@@ -37,7 +37,7 @@ struct vf_priv_s {
     mp_image_t *dmpi;
 };
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     int ret = 0;
     mp_image_t *dmpi;
@@ -76,16 +76,16 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
                        mpi->chroma_width, mpi->chroma_height,
                        dmpi->stride[2]*2, mpi->stride[2]);
             }
-            ret = vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE);
+            ret = vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
         }
         break;
     case 1:
         if (vf->priv->frame & 1)
-            ret = vf_next_put_image(vf, mpi, MP_NOPTS_VALUE);
+            ret = vf_next_put_image(vf, mpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
         break;
     case 2:
         if ((vf->priv->frame & 1) == 0)
-            ret = vf_next_put_image(vf, mpi, MP_NOPTS_VALUE);
+            ret = vf_next_put_image(vf, mpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
         break;
     case 3:
         dmpi = vf_get_image(vf->next, mpi->imgfmt,
@@ -116,7 +116,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
                        dmpi->stride[2]*2, mpi->stride[2]);
             }
         }
-        ret = vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE);
+        ret = vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
         break;
     case 4:
         // Interleave even lines (only) from Frame 'i' with odd
@@ -166,7 +166,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
                           mpi->chroma_width, mpi->chroma_height/2,
                           dmpi->stride[2]*2, mpi->stride[2]*2);
             }
-            ret = vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE);
+            ret = vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
         }
         break;
     }

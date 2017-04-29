@@ -196,7 +196,7 @@ static enum mode analyze_plane(unsigned char *old, unsigned char *new,
    return mode;
    }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
    {
    mp_image_t *dmpi;
    int w;
@@ -237,7 +237,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
                &vf->priv->buf[2], mode);
       }
 
-   return vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE);
+   return vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
    }
 
 static void uninit(struct vf_instance *vf)

@@ -78,7 +78,7 @@ static double cr(void *vf, double x, double y){
     return getpix(vf, x, y, 2);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
     int x,y, plane;
 
@@ -124,7 +124,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 
     vf->priv->framenum++;
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static void uninit(struct vf_instance *vf){

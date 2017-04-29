@@ -66,7 +66,7 @@ static int query_format(struct vf_instance *vf, unsigned fmt) {
     return 0;
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
     int x, y;
     int nblack=0, pblack=0;
@@ -107,7 +107,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 
     vf_clone_mpi_attributes(dmpi, mpi);
 
-    return vf_next_put_image(vf, dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static int control(struct vf_instance *vf, int request, void* data){

@@ -886,14 +886,23 @@ int ds_get_packet(demux_stream_t *ds, unsigned char **start)
 
 int ds_get_packet_pts(demux_stream_t *ds, unsigned char **start, double *pts)
 {
+    double dummy;
+    return ds_get_packet_pts_endpts(ds, start, pts, &dummy);
+}
+
+int ds_get_packet_pts_endpts(demux_stream_t *ds, unsigned char **start, double *pts, double *endpts)
+{
     int len;
     *pts = MP_NOPTS_VALUE;
+    *endpts = MP_NOPTS_VALUE;
     len = ds_get_packet(ds, start);
     if (len < 0)
         return len;
     // Return pts unless this read starts from the middle of a packet
     if (len == ds->buffer_pos)
         *pts = ds->current->pts;
+    if (len == ds->buffer_size)
+        *endpts = ds->current->endpts;
     return len;
 }
 

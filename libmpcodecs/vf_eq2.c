@@ -238,7 +238,7 @@ void apply_lut (eq2_param_t *par, unsigned char *dst, unsigned char *src,
 }
 
 static
-int put_image (vf_instance_t *vf, mp_image_t *src, double pts)
+int put_image (vf_instance_t *vf, mp_image_t *src, double pts, double endpts)
 {
   unsigned      i;
   vf_eq2_t      *eq2;
@@ -278,7 +278,7 @@ int put_image (vf_instance_t *vf, mp_image_t *src, double pts)
     }
   }
 
-  return vf_next_put_image (vf, dst, pts);
+  return vf_next_put_image(vf, dst, pts, endpts);
 }
 
 static

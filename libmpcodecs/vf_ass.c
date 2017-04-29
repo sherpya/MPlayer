@@ -836,7 +836,7 @@ static void prepare_eosd(vf_instance_t *vf, struct mp_eosd_image_list *imgs)
     vf->priv->prepare_buffer(vf);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     struct mp_eosd_image_list images;
     eosd_render_frame(pts, &images);
@@ -844,7 +844,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
     if (images.changed)
         prepare_eosd(vf, &images);
     vf->priv->render_frame(vf);
-    return vf_next_put_image(vf, vf->dmpi, pts);
+    return vf_next_put_image(vf, vf->dmpi, pts, endpts);
 }
 
 static int query_format(struct vf_instance *vf, unsigned int fmt)

@@ -128,7 +128,7 @@ static int diff_to_drop(int hi, int lo, float frac, mp_image_t *old, mp_image_t 
         new->w*(new->bpp/8), new->h, old->stride[0], new->stride[0]);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     mp_image_t *dmpi;
 
@@ -161,7 +161,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
             mpi->chroma_width, mpi->chroma_height,
             dmpi->stride[2], mpi->stride[2]);
     }
-    return vf_next_put_image(vf, dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static void uninit(struct vf_instance *vf)

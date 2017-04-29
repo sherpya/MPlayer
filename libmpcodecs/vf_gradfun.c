@@ -295,7 +295,7 @@ static void get_image(struct vf_instance *vf, mp_image_t *mpi)
     mpi->flags |= MP_IMGFLAG_DIRECT;
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     mp_image_t *dmpi = vf->dmpi;
     int p;
@@ -326,7 +326,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
                        dmpi->stride[p], mpi->stride[p]);
     }
 
-    return vf_next_put_image(vf, dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static int query_format(struct vf_instance *vf, unsigned int fmt)

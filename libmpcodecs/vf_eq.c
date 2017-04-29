@@ -132,7 +132,7 @@ static void (*process)(unsigned char *dest, int dstride, unsigned char *src, int
 
 /* FIXME: add packed yuv version of process */
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
         mp_image_t *dmpi;
 
@@ -158,7 +158,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
                         vf->priv->contrast);
         }
 
-        return vf_next_put_image(vf,dmpi, pts);
+        return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static int control(struct vf_instance *vf, int request, void* data)

@@ -373,7 +373,7 @@ static void ilpack(unsigned char *dst, unsigned char *src[3],
 }
 
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     mp_image_t *dmpi;
 
@@ -384,7 +384,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
 
     ilpack(dmpi->planes[0], mpi->planes, dmpi->stride[0], mpi->stride, mpi->w, mpi->h, vf->priv->pack);
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static int config(struct vf_instance *vf,

@@ -74,7 +74,7 @@ static inline int IsYUY2(mp_image_t *mpi)
 #define PLANAR_U 1
 #define PLANAR_V 2
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     int cw= mpi->w >> mpi->chroma_x_shift;
     int ch= mpi->h >> mpi->chroma_y_shift;
     int W = mpi->w, H = mpi->h;
@@ -98,7 +98,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
     mp_image_t *dmpi, *pmpi;
 
     if(!vf->priv->do_deinterlace)
-        return vf_next_put_image(vf, mpi, pts);
+        return vf_next_put_image(vf, mpi, pts, endpts);
 
     dmpi=vf_get_image(vf->next,mpi->imgfmt,
         MP_IMGTYPE_IP, MP_IMGFLAG_ACCEPT_STRIDE,
@@ -273,7 +273,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
         }
     }
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

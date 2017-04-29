@@ -82,7 +82,7 @@ static int config(struct vf_instance *vf,
     return vf_next_config(vf,width,height,d_width,d_height,flags,IMGFMT_MPEGPES);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t* dmpi;
     int out_size;
     AVFrame *pic= vf->priv->pic;
@@ -116,7 +116,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 
     dmpi->planes[0]=(unsigned char*)&vf->priv->pes;
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

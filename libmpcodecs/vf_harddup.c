@@ -31,7 +31,7 @@ struct vf_priv_s {
     mp_image_t *last_mpi;
 };
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     mp_image_t *dmpi;
 
@@ -49,7 +49,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
         dmpi->stride[2] = mpi->stride[2];
     }
 
-    return vf_next_put_image(vf, dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static int control(struct vf_instance *vf, int request, void* data)
@@ -61,7 +61,7 @@ static int control(struct vf_instance *vf, int request, void* data)
         // has been called earlier in the filter chain
         // since the last put_image. This is reasonable
         // because we're handling a duplicate frame!
-        if (put_image(vf, vf->priv->last_mpi, MP_NOPTS_VALUE))
+        if (put_image(vf, vf->priv->last_mpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE))
             return CONTROL_TRUE;
         break;
     }

@@ -113,7 +113,7 @@ static int config(struct vf_instance *vf,
     return vf_next_config(vf,width,height,d_width,d_height,flags,vf->priv->fmt);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
     int x, y;
     int w = vf->priv->w > 0 ? vf->priv->w : mpi->w;
@@ -137,7 +137,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
          }
      }
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

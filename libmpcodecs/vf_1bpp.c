@@ -123,7 +123,7 @@ static void convert(mp_image_t *mpi, mp_image_t *dmpi, int value0, int value1,in
     }
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
 
     // hope we'll get DR buffer:
@@ -173,7 +173,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 	return 0;
     }
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf,dmpi, pts, endpts);
 }
 
 //===========================================================================//

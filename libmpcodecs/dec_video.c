@@ -388,7 +388,7 @@ int init_best_video_codec(sh_video_t *sh_video, char **video_codec_list,
 }
 
 void *decode_video(sh_video_t *sh_video, unsigned char *start, int in_size,
-                   int drop_frame, double pts, int *full_frame)
+                   int drop_frame, double pts, double endpts, int *full_frame)
 {
     mp_image_t *mpi = NULL;
     unsigned int t = GetTimer();
@@ -420,9 +420,12 @@ void *decode_video(sh_video_t *sh_video, unsigned char *start, int in_size,
             for (i = 0; i < sh_video->num_buffered_pts; i++)
                 if (sh_video->buffered_pts[i] < pts)
                     break;
-            for (j = sh_video->num_buffered_pts; j > i; j--)
+            for (j = sh_video->num_buffered_pts; j > i; j--) {
                 sh_video->buffered_pts[j] = sh_video->buffered_pts[j - 1];
+                sh_video->buffered_endpts[j] = sh_video->buffered_endpts[j - 1];
+            }
             sh_video->buffered_pts[i] = pts;
+            sh_video->buffered_endpts[i] = endpts;
             sh_video->num_buffered_pts++;
         }
     }
@@ -454,10 +457,12 @@ void *decode_video(sh_video_t *sh_video, unsigned char *start, int in_size,
         if (sh_video->num_buffered_pts) {
             sh_video->num_buffered_pts--;
             sh_video->pts = sh_video->buffered_pts[sh_video->num_buffered_pts];
+            sh_video->endpts = sh_video->buffered_endpts[sh_video->num_buffered_pts];
         } else {
             mp_msg(MSGT_CPLAYER, MSGL_ERR,
                    "No pts value from demuxer to use for frame!\n");
             sh_video->pts = MP_NOPTS_VALUE;
+            sh_video->endpts = MP_NOPTS_VALUE;
         }
         if (delay >= 0) {
             // limit buffered pts only afterwards so we do not get confused
@@ -479,13 +484,13 @@ void *decode_video(sh_video_t *sh_video, unsigned char *start, int in_size,
     return mpi;
 }
 
-int filter_video(sh_video_t *sh_video, void *frame, double pts)
+int filter_video(sh_video_t *sh_video, void *frame, double pts, double endpts)
 {
     mp_image_t *mpi = frame;
     unsigned int t2 = GetTimer();
     vf_instance_t *vf = sh_video->vfilter;
     // apply video filters and call the leaf vo/ve
-    int ret = vf->put_image(vf, mpi, pts);
+    int ret = vf->put_image(vf, mpi, pts, endpts);
     if (ret > 0) {
         // draw EOSD first so it ends up below the OSD.
         // Note that changing this is will not work right with vf_ass and the

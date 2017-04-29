@@ -35,7 +35,7 @@ struct vf_priv_s {
     long long out;
 };
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     mp_image_t *dmpi;
     int ret = 0;
@@ -61,7 +61,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
     }
 
     if (state == 0) {
-        ret = vf_next_put_image(vf, mpi, MP_NOPTS_VALUE);
+        ret = vf_next_put_image(vf, mpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
         vf->priv->out++;
         if (flags & MP_IMGFIELD_REPEAT_FIRST) {
             my_memcpy_pic(dmpi->planes[0],
@@ -97,10 +97,10 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
                           mpi->chroma_width, mpi->chroma_height/2,
                           dmpi->stride[2]*2, mpi->stride[2]*2);
         }
-        ret = vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE);
+        ret = vf_next_put_image(vf, dmpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
         vf->priv->out++;
         if (flags & MP_IMGFIELD_REPEAT_FIRST) {
-            ret |= vf_next_put_image(vf, mpi, MP_NOPTS_VALUE);
+            ret |= vf_next_put_image(vf, mpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
             vf->priv->out++;
             state=0;
         } else {

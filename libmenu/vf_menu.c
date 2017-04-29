@@ -54,12 +54,12 @@ struct vf_priv_s {
   int passthrough;
 };
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts);
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts);
 
 void vf_menu_pause_update(struct vf_instance *vf) {
   const vo_functions_t *video_out = mpctx_get_video_out(vf->priv->current->ctx);
   if(pause_mpi) {
-    put_image(vf,pause_mpi, MP_NOPTS_VALUE);
+    put_image(vf,pause_mpi, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
     // Don't draw the osd atm
     //vf->control(vf,VFCTRL_DRAW_OSD,NULL);
     video_out->flip_page();
@@ -137,14 +137,14 @@ static int key_cb(int code) {
   return menu_read_key(st_priv->current,code);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
   mp_image_t *dmpi = NULL;
 
   if (vf->priv->passthrough) {
     dmpi=vf_get_image(vf->next, IMGFMT_MPEGPES, MP_IMGTYPE_EXPORT,
                       0, mpi->w, mpi->h);
     dmpi->planes[0]=mpi->planes[0];
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf,dmpi, pts, endpts);
   }
 
   // Close all menu who requested it
@@ -202,7 +202,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
       dmpi->priv      = mpi->priv;
     }
   }
-  return vf_next_put_image(vf,dmpi, pts);
+  return vf_next_put_image(vf,dmpi, pts, endpts);
 }
 
 static void uninit(vf_instance_t *vf) {

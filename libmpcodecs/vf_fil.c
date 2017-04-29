@@ -63,10 +63,10 @@ static int config(struct vf_instance *vf,
         (d_width*vf->priv->stridefactor)>>1, 2*d_height/vf->priv->stridefactor, flags, outfmt);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     if(mpi->flags&MP_IMGFLAG_DIRECT){
         // we've used DR, so we're ready...
-        return vf_next_put_image(vf,(mp_image_t*)mpi->priv, pts);
+        return vf_next_put_image(vf, (mp_image_t*)mpi->priv, pts, endpts);
     }
 
     vf->dmpi=vf_get_image(vf->next,mpi->imgfmt,
@@ -84,7 +84,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
     } else
         vf->dmpi->planes[1]=mpi->planes[1]; // passthru bgr8 palette!!!
 
-    return vf_next_put_image(vf,vf->dmpi, pts);
+    return vf_next_put_image(vf, vf->dmpi, pts, endpts);
 }
 
 //===========================================================================//

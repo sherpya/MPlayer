@@ -84,7 +84,7 @@ static int config(struct vf_instance *vf,
     return vf_next_config(vf,height,width,d_height,d_width,flags,outfmt);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
 
     // hope we'll get DR buffer:
@@ -109,7 +109,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
         dmpi->planes[1] = mpi->planes[1]; // passthrough rgb8 palette
     }
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

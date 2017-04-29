@@ -283,7 +283,7 @@ static int config(struct vf_instance *vf, int width, int height, int d_width,
                           d_width, d_height, flags, outfmt);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     mp_image_t *dmpi;
     if (vf->priv->in.fmt == vf->priv->out.fmt) { //nothing to do
@@ -384,7 +384,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
             break;
         }
     }
-    return vf_next_put_image(vf, dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static int query_format(struct vf_instance *vf, unsigned int fmt)

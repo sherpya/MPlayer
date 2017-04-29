@@ -774,7 +774,7 @@ static void convert_yv12(const vf_instance_t * const vf, const char * const sour
  * filter, has the logo removed by the filter, and is then sent to the next
  * filter.
  */
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
 
     dmpi=vf_get_image(vf->next,vf->priv->fmt,
@@ -813,7 +813,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
         return 0;
     }
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

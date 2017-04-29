@@ -817,7 +817,7 @@ static int config(struct vf_instance *vf, int width, int height, int d_width,
  * \param mpi pointer to mp_image_t structure
  * \param pts
  */
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
 	struct vf_priv_s *priv = vf->priv;
 	int size = 0;
 	int i;
@@ -833,7 +833,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 			MP_IMGTYPE_EXPORT, 0, mpi->w, mpi->h);
 	dmpi->planes[0] = (uint8_t*)priv->buf;
 	dmpi->planes[1] = (uint8_t*)size;
-	return vf_next_put_image(vf,dmpi, pts);
+	return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 /// query_format entrypoint for the ZRMJPEG vf filter

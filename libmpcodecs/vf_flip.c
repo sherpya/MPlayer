@@ -59,12 +59,12 @@ static void get_image(struct vf_instance *vf, mp_image_t *mpi){
     }
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     if(mpi->flags&MP_IMGFLAG_DIRECT){
 	// we've used DR, so we're ready...
 	if(!(mpi->flags&MP_IMGFLAG_PLANAR))
 	    ((mp_image_t*)mpi->priv)->planes[1] = mpi->planes[1]; // passthrough rgb8 palette
-	return vf_next_put_image(vf,(mp_image_t*)mpi->priv, pts);
+	return vf_next_put_image(vf, (mp_image_t*)mpi->priv, pts, endpts);
     }
 
     vf->dmpi=vf_get_image(vf->next,mpi->imgfmt,
@@ -85,7 +85,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
     } else
 	vf->dmpi->planes[1]=mpi->planes[1]; // passthru bgr8 palette!!!
 
-    return vf_next_put_image(vf,vf->dmpi, pts);
+    return vf_next_put_image(vf, vf->dmpi, pts, endpts);
 }
 
 //===========================================================================//

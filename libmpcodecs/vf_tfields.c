@@ -328,7 +328,7 @@ static void (*qpel_4tap)(unsigned char *d, unsigned char *s, int w, int h, int d
 
 static int continue_buffered_image(struct vf_instance *vf);
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
 	vf->priv->buffered_mpi = mpi;
 	vf->priv->buffered_pts = pts;
@@ -392,7 +392,7 @@ static int continue_buffered_image(struct vf_instance *vf)
 				dmpi->stride[1] = 2*mpi->stride[1];
 				dmpi->stride[2] = 2*mpi->stride[2];
 			}
-			ret |= vf_next_put_image(vf, dmpi, calc_pts(pts, i));
+			ret |= vf_next_put_image(vf, dmpi, calc_pts(pts, i), MP_NOPTS_VALUE);
 			if (correct_pts)
 				break;
 			else
@@ -422,7 +422,7 @@ static int continue_buffered_image(struct vf_instance *vf)
 				deint(dmpi->planes[2], dmpi->stride[2], mpi->planes[2], mpi->stride[2],
 					mpi->chroma_width, mpi->chroma_height, (i^!tff));
 			}
-			ret |= vf_next_put_image(vf, dmpi, calc_pts(pts, i));
+			ret |= vf_next_put_image(vf, dmpi, calc_pts(pts, i), MP_NOPTS_VALUE);
 			if (correct_pts)
 				break;
 			else
@@ -448,7 +448,7 @@ static int continue_buffered_image(struct vf_instance *vf)
 					mpi->chroma_width, mpi->chroma_height/2,
 					dmpi->stride[2], mpi->stride[2]*2, (i^!tff));
 			}
-			ret |= vf_next_put_image(vf, dmpi, calc_pts(pts, i));
+			ret |= vf_next_put_image(vf, dmpi, calc_pts(pts, i), MP_NOPTS_VALUE);
 			if (correct_pts)
 				break;
 			else

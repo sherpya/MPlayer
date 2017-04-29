@@ -112,7 +112,7 @@ static int config(struct vf_instance *vf,
     return vf_next_config(vf,width,height,d_width,d_height,flags,vf->priv->fmt);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
     uint8_t *old_palette = mpi->planes[1];
 
@@ -171,7 +171,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
     }
     mpi->planes[1] = old_palette;
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

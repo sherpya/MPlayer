@@ -38,7 +38,7 @@ struct vf_priv_s {
     unsigned print:1;
 };
 
-static int put_image(vf_instance_t *vf, mp_image_t *src, double pts)
+static int put_image(vf_instance_t *vf, mp_image_t *src, double pts, double endpts)
 {
     struct vf_priv_s *p = vf->priv;
 
@@ -63,7 +63,7 @@ static int put_image(vf_instance_t *vf, mp_image_t *src, double pts)
     } else {
         pts = MP_NOPTS_VALUE;
     }
-    return vf_next_put_image(vf, src, pts);
+    return vf_next_put_image(vf, src, pts, endpts);
 }
 
 static void uninit(vf_instance_t *vf)

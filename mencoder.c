@@ -463,9 +463,9 @@ static int slowseek(float end_pts, demux_stream_t *d_video,
 
         if (vfilter) {
             int softskip = (vfilter->control(vfilter, VFCTRL_SKIP_NEXT_FRAME, 0) == CONTROL_TRUE);
-            void *decoded_frame = decode_video(sh_video, frame_data->start, frame_data->in_size, !softskip, MP_NOPTS_VALUE, NULL);
+            void *decoded_frame = decode_video(sh_video, frame_data->start, frame_data->in_size, !softskip, MP_NOPTS_VALUE, MP_NOPTS_VALUE, NULL);
 	    if (decoded_frame)
-		filter_video(sh_video, decoded_frame, MP_NOPTS_VALUE);
+		filter_video(sh_video, decoded_frame, MP_NOPTS_VALUE, MP_NOPTS_VALUE);
 	    else if (frame_data->flush)
 		return 2;
         }
@@ -1504,7 +1504,7 @@ default:
                      (!sh_video->vfilter ||
                       ((vf_instance_t *)sh_video->vfilter)->control(sh_video->vfilter, VFCTRL_SKIP_NEXT_FRAME, 0) != CONTROL_TRUE);
     void *decoded_frame = decode_video(sh_video,frame_data.start,frame_data.in_size,
-                                       drop_frame, MP_NOPTS_VALUE, NULL);
+                                       drop_frame, MP_NOPTS_VALUE, MP_NOPTS_VALUE, NULL);
     if (frame_data.flush && !decoded_frame)
         at_eof = 3;
     if (did_seek && sh_video->pts != MP_NOPTS_VALUE) {
@@ -1517,7 +1517,7 @@ default:
     // sh_video->pts causes flickering with subtitles and complaints from MPEG-4
     // encoder due to not being monotonic.
     // If you change this please note the reason here!
-    blit_frame = decoded_frame && filter_video(sh_video, decoded_frame, v_muxer_time + sub_offset);}
+    blit_frame = decoded_frame && filter_video(sh_video, decoded_frame, v_muxer_time + sub_offset, MP_NOPTS_VALUE);}
     v_muxer_time = adjusted_muxer_time(mux_v); // update after muxing
 
     if (sh_video->vf_initialized < 0) mencoder_exit(1, NULL);

@@ -398,12 +398,12 @@ static void draw_slice(struct vf_instance *vf,
     vf->priv->first_slice = 0;
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     if (vf->priv->passthrough) {
       mp_image_t *dmpi = vf_get_image(vf->next, IMGFMT_MPEGPES,
                                       MP_IMGTYPE_EXPORT, 0, mpi->w, mpi->h);
       dmpi->planes[0]=mpi->planes[0];
-      return vf_next_put_image(vf,dmpi, pts);
+      return vf_next_put_image(vf, dmpi, pts, endpts);
     }
 
     if(mpi->flags&MP_IMGFLAG_DIRECT || mpi->flags&MP_IMGFLAG_DRAW_CALLBACK){
@@ -423,7 +423,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 	// we've used DR, so we're ready...
 	if(!(mpi->flags&MP_IMGFLAG_PLANAR))
 	    vf->dmpi->planes[1] = mpi->planes[1]; // passthrough rgb8 palette
-	return vf_next_put_image(vf,vf->dmpi, pts);
+	return vf_next_put_image(vf, vf->dmpi, pts, endpts);
     }
 
     // hope we'll get DR buffer:
@@ -455,7 +455,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 #ifdef OSD_SUPPORT
     if(vf->priv->osd) draw_osd(vf,mpi->w,mpi->h);
 #endif
-    return vf_next_put_image(vf,vf->dmpi, pts);
+    return vf_next_put_image(vf, vf->dmpi, pts, endpts);
 }
 
 //===========================================================================//

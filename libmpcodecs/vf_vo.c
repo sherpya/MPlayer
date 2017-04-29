@@ -34,6 +34,7 @@
 
 struct vf_priv_s {
     double pts;
+    double endpts;
     const vo_functions_t *vo;
 };
 #define video_out (vf->priv->vo)
@@ -136,6 +137,11 @@ static int control(struct vf_instance *vf, int request, void* data)
 	*(double *)data = vf->priv->pts;
 	return CONTROL_TRUE;
     }
+    case VFCTRL_GET_ENDPTS:
+    {
+	*(double *)data = vf->priv->endpts;
+	return CONTROL_TRUE;
+    }
     }
     // return video_out->control(request,data);
     return CONTROL_UNKNOWN;
@@ -160,10 +166,11 @@ static void get_image(struct vf_instance *vf,
 }
 
 static int put_image(struct vf_instance *vf,
-        mp_image_t *mpi, double pts){
+        mp_image_t *mpi, double pts, double endpts){
   if(!vo_config_count) return 0; // vo not configured?
   // record pts (potentially modified by filters) for main loop
   vf->priv->pts = pts;
+  vf->priv->endpts = endpts;
   // first check, maybe the vo/vf plugin implements draw_image using mpi:
   if(video_out->control(VOCTRL_DRAW_IMAGE,mpi)==VO_TRUE) return 1; // done.
   // nope, fallback to old draw_frame/draw_slice:

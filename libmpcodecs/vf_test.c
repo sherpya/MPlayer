@@ -269,7 +269,7 @@ static void ring2Test(uint8_t *dst, int stride, int off)
         }
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
     int frame= vf->priv->frame_num;
 
@@ -302,7 +302,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 
     frame++;
     vf->priv->frame_num= frame;
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

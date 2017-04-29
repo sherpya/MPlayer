@@ -163,7 +163,7 @@ static void (*halfpack)(unsigned char *dst, unsigned char *src[3],
 	int dststride, int srcstride[3], int w, int h);
 
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
 	const uint8_t *src[MP_MAX_PLANES] = {
 		mpi->planes[0] + mpi->stride[0]*vf->priv->field,
@@ -187,7 +187,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
 			mpi->stride, mpi->w, mpi->h);
 	}
 
-	return vf_next_put_image(vf,dmpi, pts);
+	return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 static int config(struct vf_instance *vf,

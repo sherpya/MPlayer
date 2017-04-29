@@ -66,7 +66,7 @@ typedef struct vf_instance {
     void (*get_image)(struct vf_instance *vf,
         mp_image_t *mpi);
     int (*put_image)(struct vf_instance *vf,
-        mp_image_t *mpi, double pts);
+        mp_image_t *mpi, double pts, double endpts);
     void (*start_slice)(struct vf_instance *vf,
         mp_image_t *mpi);
     void (*draw_slice)(struct vf_instance *vf,
@@ -109,8 +109,9 @@ typedef struct vf_seteq_s
 #define VFCTRL_INIT_EOSD       15 /* Select EOSD renderer */
 #define VFCTRL_DRAW_EOSD       16 /* Render EOSD */
 #define VFCTRL_GET_PTS         17 /* Return last pts value that reached vf_vo*/
-#define VFCTRL_SET_DEINTERLACE 18 /* Set deinterlacing status */
-#define VFCTRL_GET_DEINTERLACE 19 /* Get deinterlacing status */
+#define VFCTRL_GET_ENDPTS      18 /* Return last endpts value that reached vf_vo*/
+#define VFCTRL_SET_DEINTERLACE 19 /* Set deinterlacing status */
+#define VFCTRL_GET_DEINTERLACE 20 /* Get deinterlacing status */
 
 #include "vfcap.h"
 
@@ -138,7 +139,7 @@ int vf_next_config(struct vf_instance *vf,
 int vf_next_control(struct vf_instance *vf, int request, void* data);
 void vf_extra_flip(struct vf_instance *vf);
 int vf_next_query_format(struct vf_instance *vf, unsigned int fmt);
-int vf_next_put_image(struct vf_instance *vf,mp_image_t *mpi, double pts);
+int vf_next_put_image(struct vf_instance *vf,mp_image_t *mpi, double pts, double endpts);
 void vf_next_draw_slice (struct vf_instance *vf, unsigned char** src, int* stride, int w,int h, int x, int y);
 
 vf_instance_t* append_filters(vf_instance_t* last);

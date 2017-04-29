@@ -45,7 +45,7 @@ static int config(struct vf_instance *vf,
     return vf_next_config(vf,width,height,d_width,d_height,flags,IMGFMT_YV12);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     mp_image_t *dmpi;
     int y,w,h;
 
@@ -75,7 +75,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 
     vf_clone_mpi_attributes(dmpi, mpi);
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

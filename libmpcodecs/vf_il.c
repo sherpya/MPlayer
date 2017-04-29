@@ -73,7 +73,7 @@ static void interleave(uint8_t *dst, uint8_t *src, int w, int h, int dstStride, 
     }
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     int w;
     FilterParam *luma  = &vf->priv->lumaParam;
     FilterParam *chroma= &vf->priv->chromaParam;
@@ -100,7 +100,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
             dmpi->stride[2], mpi->stride[2], chroma->interleave, luma->swap);
     }
 
-    return vf_next_put_image(vf,dmpi, pts);
+    return vf_next_put_image(vf, dmpi, pts, endpts);
 }
 
 //===========================================================================//

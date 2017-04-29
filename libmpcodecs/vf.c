@@ -716,14 +716,14 @@ int vf_next_query_format(struct vf_instance *vf, unsigned int fmt){
     return flags;
 }
 
-int vf_next_put_image(struct vf_instance *vf,mp_image_t *mpi, double pts){
+int vf_next_put_image(struct vf_instance *vf,mp_image_t *mpi, double pts, double endpts){
     mpi->usage_count--;
     if (mpi->usage_count < 0) {
         mp_msg(MSGT_VFILTER, MSGL_V, "Bad mp_image usage count %i in vf_%s (type %i)\n",
                mpi->usage_count, vf->info->name, mpi->type);
         mpi->usage_count = 0;
     }
-    return vf->next->put_image(vf->next,mpi, pts);
+    return vf->next->put_image(vf->next,mpi, pts, endpts);
 }
 
 void vf_next_draw_slice(struct vf_instance *vf,unsigned char** src, int * stride,int w, int h, int x, int y){

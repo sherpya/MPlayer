@@ -300,7 +300,7 @@ static void get_image(struct vf_instance *vf, mp_image_t *mpi)
     mpi->priv = buf;
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     AVFilterBufferRef *buf;
     mp_image_t *cmpi = NULL;

@@ -2536,7 +2536,9 @@ static double update_video(int *blit_frame)
             mp_msg(MSGT_CPLAYER, MSGL_V, "pts value < previous\n");
         }
         frame_time = sh_video->pts - sh_video->last_pts;
-        if (!frame_time)
+        // The first frame should be displayed directly,
+        // all others should get a default frame_time
+        if (!frame_time && mpctx->startup_decode_retry == 0)
             frame_time = sh_video->frametime;
         sh_video->last_pts = sh_video->pts;
         advance_timer(frame_time);

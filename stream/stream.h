@@ -404,4 +404,9 @@ int bluray_id_from_lang(stream_t *s, enum stream_ctrl_type type, const char *lan
 
 int parse_chapter_range(const m_option_t *conf, const char *range);
 
+#if defined(__MINGW32__) || defined(__CYGWIN__)
+wchar_t *utf8_to_wide_char(const char *utf8);
+char *utf8_to_local_windows_code_page(const char *utf8);
+#endif
+
 #endif /* MPLAYER_STREAM_H */

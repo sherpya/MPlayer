@@ -790,7 +790,14 @@ static int open_s(stream_t *stream,int mode, void* opts, int* file_format) {
     } else
 #endif /* defined(__APPLE__) || defined(__DARWIN__) */
     {
+#if defined(__MINGW32__) || defined(__CYGWIN__)
+        char *ansi_dvd_device_current = utf8_to_local_windows_code_page(dvd_device_current);
+
+        dvd = DVDOpen(ansi_dvd_device_current ? ansi_dvd_device_current : dvd_device_current);
+        free(ansi_dvd_device_current);
+#else
         dvd = DVDOpen(dvd_device_current);
+#endif
         if(!dvd) {
           mp_msg(MSGT_OPEN,MSGL_ERR,MSGTR_CantOpenDVD,dvd_device_current, strerror(errno));
           goto fail;

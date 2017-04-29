@@ -746,3 +746,70 @@ int parse_chapter_range(const m_option_t *conf, const char *range) {
   }
   return 0;
 }
+
+#if defined(__MINGW32__) || defined(__CYGWIN__)
+wchar_t *utf8_to_wide_char(const char *utf8)
+{
+    int conv_size;
+    wchar_t *wide_char = NULL;
+
+    int wide_char_size = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, utf8, -1, wide_char, 0);
+    if (wide_char_size < 0) goto err_out;
+
+    wide_char = calloc(wide_char_size, sizeof(*wide_char));
+    if (!wide_char) goto err_out;
+
+    conv_size = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, utf8, -1, wide_char, wide_char_size);
+    if (conv_size <= 0) goto err_out;
+
+    return wide_char;
+
+err_out:
+    free(wide_char);
+
+    return 0;
+}
+
+static char *wide_char_to_local_windows_code_page(const wchar_t *wide_char)
+{
+    int conv_size;
+
+    char *ansi = NULL;
+
+    int ansi_size = WideCharToMultiByte(CP_ACP, 0, wide_char, -1, NULL, 0, NULL, NULL);
+    if (ansi_size < 0) goto err_out;
+
+    ansi = calloc(ansi_size, sizeof(*ansi));
+    if (!ansi) goto err_out;
+
+    conv_size = WideCharToMultiByte(CP_ACP, 0, wide_char, -1, ansi, ansi_size, NULL, NULL);
+    if (conv_size < 0) goto err_out;
+
+    return ansi;
+
+err_out:
+    free(ansi);
+
+    return 0;
+}
+
+char *utf8_to_local_windows_code_page(const char *utf8)
+{
+    char *windows_local_code_page = NULL;
+
+    wchar_t *wide_char = utf8_to_wide_char(utf8);
+    if (!wide_char) goto err_out;
+
+    windows_local_code_page = wide_char_to_local_windows_code_page(wide_char);
+    if (!windows_local_code_page) goto err_out;
+
+    free(wide_char);
+
+    return windows_local_code_page;
+
+err_out:
+    free(wide_char);
+    free(windows_local_code_page);
+    return NULL;
+}
+#endif

@@ -123,17 +123,13 @@ static int control(stream_t *s, int cmd, void *arg) {
 #ifdef __MINGW32__
 static int win32_open(const char *fname, int m, int omode)
 {
-    int cnt;
     int fd = -1;
-    wchar_t fname_w[MAX_PATH];
-    int WINAPI (*mb2wc)(UINT, DWORD, LPCSTR, int, LPWSTR, int) = NULL;
-    HMODULE kernel32 = GetModuleHandle("Kernel32.dll");
-    if (!kernel32) goto fallback;
-    mb2wc = GetProcAddress(kernel32, "MultiByteToWideChar");
-    if (!mb2wc) goto fallback;
-    cnt = mb2wc(CP_UTF8, MB_ERR_INVALID_CHARS, fname, -1, fname_w, sizeof(fname_w) / sizeof(*fname_w));
-    if (cnt <= 0) goto fallback;
+    wchar_t *fname_w = utf8_to_wide_char(fname);
+    if (!fname_w) goto fallback;
+
     fd = _wsopen(fname_w, m, SH_DENYNO, omode);
+    free(fname_w);
+
     if (fd != -1 || (m & O_CREAT))
         return fd;
 

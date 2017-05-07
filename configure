@@ -9475,12 +9475,15 @@ fi
 
 
 # Create a config.mak for FFmpeg that includes MPlayer's config.mak.
-cat > ffmpeg/config.mak << EOF
+cat > ffmpeg/ffbuild/config.mak << EOF
 ifndef FFMPEG_CONFIG_MAK
 FFMPEG_CONFIG_MAK = 1
 include ../config.mak
 endif # FFMPEG_CONFIG_MAK
 EOF
+
+# TODO: temporary support for older ffmpeg
+cp ffmpeg/ffbuild/config.mak ffmpeg/config.mak
 
 cat > ffmpeg/config.h << EOF
 #include "../config.h"

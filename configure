@@ -2861,6 +2861,10 @@ cpp_condition_check features.h "defined __GLIBC__" &&
   CFLAGS="-D_POSIX_C_SOURCE=200112 -D_XOPEN_SOURCE=600 $CFLAGS" &&
   HOSTCFLAGS="-D_POSIX_C_SOURCE=200112 -D_XOPEN_SOURCE=600 $HOSTCFLAGS"
 
+if cygwin; then
+  CFLAGS="-D_XOPEN_SOURCE=600 $CFLAGS"
+fi
+
 if test "$cc_vendor" = "gnu" ; then
   cflag_check -fno-tree-vectorize && CFLAGS="$CFLAGS -fno-tree-vectorize"
   cflag_check -Wundef && WARNFLAGS="-Wundef $WARNFLAGS"

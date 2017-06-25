@@ -1602,7 +1602,7 @@ libavprotocols=$(echo $libavprotocols_all)
 libavfilters=$(echo $libavfilters_all)
 
 libavdecoders=$(filter_out_component decoder 'LIB[A-Z0-9_]* H264_QSV MJPEG_QSV MPEG2_MMAL MPEG4_MMAL MPEG2_QSV HEVC_QSV VC1_MMAL VC1_QSV H264_MMAL H264_MEDIACODEC HEVC_MEDIACODEC MPEG2_MEDIACODEC H264_CUVID HEVC_CUVID VC1_CUVID VP8_CUVID VP9_CUVID H263_CUVID MJPEG_CUVID MPEG1_CUVID MPEG2_CUVID MPEG4_CUVID VP8_MEDIACODEC VP9_MEDIACODEC MPEG4_MEDIACODEC VP8_QSV [A-Z0-9_]*_AT')
-libavencoders=$(filter_out_component encoder 'LIB[A-Z0-9_]* H264_QSV MJPEG_QSV MPEG2_QSV HEVC_QSV VC1_MMAL VC1_QSV NVENC[A-Z0-9_]* H264_NVENC[A-Z0-9_]* HEVC_NVENC[A-Z0-9_]* HAP H264_VIDEOTOOLBOX H264_VAAPI HEVC_VAAPI MJPEG_VAAPI MPEG2_VAAPI VP8_VAAPI H264_OMX MPEG4_OMX [A-Z0-9_]*_AT')
+libavencoders=$(filter_out_component encoder 'LIB[A-Z0-9_]* H264_QSV MJPEG_QSV MPEG2_QSV HEVC_QSV VC1_MMAL VC1_QSV NVENC[A-Z0-9_]* H264_NVENC[A-Z0-9_]* HEVC_NVENC[A-Z0-9_]* HAP H264_VIDEOTOOLBOX H264_VAAPI HEVC_VAAPI MJPEG_VAAPI MPEG2_VAAPI VP8_VAAPI VP9_VAAPI H264_OMX MPEG4_OMX [A-Z0-9_]*_AT')
 libavdemuxers=$(filter_out_component demuxer 'AVISYNTH LIB[A-Z0-9_]* REDIR')
 libavmuxers=$(filter_out_component muxer 'CHROMAPRINT LIB[A-Z0-9_]* RTP RTSP SAP')
 libavprotocols=$(filter_out_component protocol 'BLURAY FFRTMPCRYPT HTTPS LIB[A-Z0-9_]* TLS TLS_GNUTLS TLS_OPENSSL TLS_SECURETRANSPORT TLS_SCHANNEL')
@@ -3091,11 +3091,13 @@ if test "$_yasm" ; then
   fi
 fi
 if test $_yasm ; then
-  def_yasm='#define HAVE_YASM 1'
+  def_yasm='#define HAVE_YASM 1
+#define HAVE_X86ASM 1'
   have_yasm="yes"
   echores "$_yasm"
 else
-  def_yasm='#define HAVE_YASM 0'
+  def_yasm='#define HAVE_YASM 0
+#define HAVE_X86ASM 0'
   have_yasm="no"
   echores "no"
 fi
@@ -3114,7 +3116,8 @@ echores "$xmm_clobbers"
 
 else
   _yasm=''
-  def_yasm='#define HAVE_YASM 0'
+  def_yasm='#define HAVE_YASM 0
+#define HAVE_X86ASM 0'
   have_yasm="no"
 fi #if x86
 
@@ -8652,8 +8655,12 @@ CXX_C      = -c
 LD         = gcc
 RANLIB     = $_ranlib
 YASM       = $_yasm
+X86ASM     = $_yasm
 DEPYASM    = $_yasm
+DEPX86ASM  = $_yasm
 YASMFLAGS  = $YASMFLAGS
+X86ASMFLAGS = $YASMFLAGS
+DEPX86ASMFLAGS=\$(X86ASMFLAGS)
 STRIP      = strip
 
 CONFIG_FFPROBE       = no
@@ -8782,6 +8789,7 @@ HAVE_SHM        = $_shm
 HAVE_W32THREADS = $_w32threads
 HAVE_THREADS    = $_threads
 HAVE_YASM       = $have_yasm
+HAVE_X86ASM     = $have_yasm
 INTRINSICS      = none
 
 CONFIG_LIBXVID = $_xvid_lavc

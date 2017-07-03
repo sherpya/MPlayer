@@ -332,6 +332,11 @@ static int decode_audio(sh_audio_t *sh_audio,unsigned char *buf,int minlen,int m
 	    int in_size = x;
 	    int consumed = ds_parse(sh_audio->ds, &start, &x, pts, 0);
 	    sh_audio->ds->buffer_pos -= in_size - consumed;
+	    // Note: hopefully below is correct, it was only
+	    // added because FFmpeg broke the API and 0-sized
+	    // packets started to break e.g. AC3 decode.
+	    if (x <= 0)
+	        break; // error or not enough data
 	}
 
 	av_init_packet(&pkt);

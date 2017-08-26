@@ -413,6 +413,18 @@ static int draw_slice(uint8_t * image[], int stride[], int w, int h,
         memcpy_pic(dst, image[idx_p2], w, h, xvimage[current_buf]->pitches[2],
             stride[idx_p2]);
         break;
+    case IMGFMT_NV12:
+    case IMGFMT_NV21:
+        x &= ~1;
+        y /= 2;
+        w &= ~1;
+        h /= 2;
+
+        dst = xvimage[current_buf]->data + xvimage[current_buf]->offsets[1] +
+            xvimage[current_buf]->pitches[1] * y + x;
+        memcpy_pic(dst, image[idx_p1], w, h, xvimage[current_buf]->pitches[1],
+            stride[idx_p1]);
+        break;
     }
 
     return 0;
@@ -496,6 +508,13 @@ static uint32_t get_image(mp_image_t * mpi)
             mpi->stride[1] = xvimage[current_buf]->pitches[idx_p1];
             mpi->stride[2] = xvimage[current_buf]->pitches[idx_p2];
             break;
+        case IMGFMT_NV12:
+        case IMGFMT_NV21:
+            mpi->planes[1] =
+                xvimage[current_buf]->data +
+                xvimage[current_buf]->offsets[1];
+            mpi->stride[1] = xvimage[current_buf]->pitches[1];
+            break;
         }
         mpi->flags |= MP_IMGFLAG_DIRECT;
         mpi->priv = (void *)(intptr_t)current_buf;
@@ -511,6 +530,8 @@ static int is_supported_format(uint32_t format)
     case IMGFMT_YV12:
     case IMGFMT_I420:
     case IMGFMT_IYUV:
+    case IMGFMT_NV12:
+    case IMGFMT_NV21:
         return 1;
     default:
         return !mp_get_chroma_shift(image_format, NULL, NULL, NULL);

@@ -397,20 +397,20 @@ static int draw_slice(uint8_t * image[], int stride[], int w, int h,
     case IMGFMT_YV12:
         idx_p1 = 2; idx_p2 = 1;
     default:
-    x /= 2;
-    y /= 2;
-    w /= 2;
-    h /= 2;
+        x /= 2;
+        y /= 2;
+        w /= 2;
+        h /= 2;
 
-    dst = xvimage[current_buf]->data + xvimage[current_buf]->offsets[1] +
-        xvimage[current_buf]->pitches[1] * y + x;
+        dst = xvimage[current_buf]->data + xvimage[current_buf]->offsets[1] +
+            xvimage[current_buf]->pitches[1] * y + x;
         memcpy_pic(dst, image[idx_p1], w, h, xvimage[current_buf]->pitches[1],
-                   stride[idx_p1]);
+            stride[idx_p1]);
 
-    dst = xvimage[current_buf]->data + xvimage[current_buf]->offsets[2] +
-        xvimage[current_buf]->pitches[2] * y + x;
+        dst = xvimage[current_buf]->data + xvimage[current_buf]->offsets[2] +
+            xvimage[current_buf]->pitches[2] * y + x;
         memcpy_pic(dst, image[idx_p2], w, h, xvimage[current_buf]->pitches[2],
-                   stride[idx_p2]);
+            stride[idx_p2]);
         break;
     }
 
@@ -485,14 +485,14 @@ static uint32_t get_image(mp_image_t * mpi)
         case IMGFMT_YV12:
             idx_p1 = 2; idx_p2 = 1;
         default:
-                mpi->planes[1] =
-                    xvimage[current_buf]->data +
-                    xvimage[current_buf]->offsets[idx_p1];
-                mpi->planes[2] =
-                    xvimage[current_buf]->data +
-                    xvimage[current_buf]->offsets[idx_p2];
-                mpi->stride[1] = xvimage[current_buf]->pitches[idx_p1];
-                mpi->stride[2] = xvimage[current_buf]->pitches[idx_p2];
+            mpi->planes[1] =
+                xvimage[current_buf]->data +
+                xvimage[current_buf]->offsets[idx_p1];
+            mpi->planes[2] =
+                xvimage[current_buf]->data +
+                xvimage[current_buf]->offsets[idx_p2];
+            mpi->stride[1] = xvimage[current_buf]->pitches[idx_p1];
+            mpi->stride[2] = xvimage[current_buf]->pitches[idx_p2];
             break;
         }
         mpi->flags |= MP_IMGFLAG_DIRECT;

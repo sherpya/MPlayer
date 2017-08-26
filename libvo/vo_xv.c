@@ -396,7 +396,8 @@ static int draw_slice(uint8_t * image[], int stride[], int w, int h,
     switch (image_format) {
     case IMGFMT_YV12:
         idx_p1 = 2; idx_p2 = 1;
-    default:
+    case IMGFMT_I420:
+    case IMGFMT_IYUV:
         x /= 2;
         y /= 2;
         w /= 2;
@@ -484,7 +485,8 @@ static uint32_t get_image(mp_image_t * mpi)
         switch (image_format) {
         case IMGFMT_YV12:
             idx_p1 = 2; idx_p2 = 1;
-        default:
+        case IMGFMT_I420:
+        case IMGFMT_IYUV:
             mpi->planes[1] =
                 xvimage[current_buf]->data +
                 xvimage[current_buf]->offsets[idx_p1];
@@ -503,10 +505,25 @@ static uint32_t get_image(mp_image_t * mpi)
     return VO_FALSE;
 }
 
+static int is_supported_format(uint32_t format)
+{
+    switch (format) {
+    case IMGFMT_YV12:
+    case IMGFMT_I420:
+    case IMGFMT_IYUV:
+        return 1;
+    default:
+        return !mp_get_chroma_shift(image_format, NULL, NULL, NULL);
+    }
+}
+
 static int query_format(uint32_t format)
 {
     uint32_t i;
     int flag = VFCAP_CSP_SUPPORTED | VFCAP_CSP_SUPPORTED_BY_HW | VFCAP_HWSCALE_UP | VFCAP_HWSCALE_DOWN | VFCAP_OSD | VFCAP_ACCEPT_STRIDE;       // FIXME! check for DOWN
+    if (!is_supported_format(format)) {
+        return 0;
+    }
 
     /* check image formats */
     for (i = 0; i < formats; i++)

@@ -409,7 +409,7 @@ static int draw_slice(uint8_t * image[], int stride[], int w, int h,
 
     dst = xvimage[current_buf]->data + xvimage[current_buf]->offsets[2] +
         xvimage[current_buf]->pitches[2] * y + x;
-        memcpy_pic(dst, image[idx_p2], w, h, xvimage[current_buf]->pitches[1],
+        memcpy_pic(dst, image[idx_p2], w, h, xvimage[current_buf]->pitches[2],
                    stride[idx_p2]);
         break;
     }

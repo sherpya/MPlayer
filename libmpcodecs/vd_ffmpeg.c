@@ -1159,7 +1159,7 @@ static int get_buffer2(AVCodecContext *avctx, AVFrame *frame, int flags)
      */
     CompatReleaseBufPriv *priv = NULL;
     AVBufferRef *dummy_buf = NULL;
-    int planes, i, ret;
+    int planes, i, ret, w = avctx->width, h = avctx->height;
 
     ret = get_buffer(avctx, frame, flags & AV_GET_BUFFER_FLAG_REF);
     if (ret < 0)
@@ -1209,8 +1209,14 @@ do {                                                                    \
         planes = av_pix_fmt_count_planes(frame->format);
         /* workaround for AVHWAccel plane count of 0, buf[0] is used as
            check for allocated buffers: make libavcodec happy */
-        if (desc && desc->flags & AV_PIX_FMT_FLAG_HWACCEL)
+        /* newest FFmpeg versions in addition need to coded_width
+         * as frame width value in case of hwaccel codecs or they
+         * will apply the cropping amount twice */
+        if (desc && desc->flags & AV_PIX_FMT_FLAG_HWACCEL) {
             planes = 1;
+            w = avctx->coded_width;
+            h = avctx->coded_height;
+        }
         if (!desc || planes <= 0) {
             ret = AVERROR(EINVAL);
             goto fail;
@@ -1227,8 +1233,8 @@ do {                                                                    \
     av_buffer_unref(&dummy_buf);
 
 end0:
-    frame->width  = avctx->width;
-    frame->height = avctx->height;
+    frame->width  = w;
+    frame->height = h;
 
     return 0;
 

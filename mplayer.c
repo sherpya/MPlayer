@@ -3833,6 +3833,7 @@ goto_enable_cache:
                         } else {
                             frame_time = mpctx->sh_video->frametime;
                         }
+                        // mark as last frame. Note: needs to be reset on seeking
                         mpctx->sh_video->frametime = -1;
                         mpctx->sh_video->endpts = MP_NOPTS_VALUE;
                     }
@@ -4032,6 +4033,9 @@ goto_enable_cache:
                     }
                 }
 
+                // reset last frame marker
+                if (mpctx->sh_video->frametime < 0)
+                    mpctx->sh_video->frametime = 1.0f / mpctx->sh_video->fps;
                 rel_seek_secs = 0;
                 abs_seek_pos  = 0;
                 loop_seek     = 0;

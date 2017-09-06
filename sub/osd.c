@@ -450,6 +450,8 @@ vo_draw_alpha_func vo_get_draw_alpha(unsigned fmt) {
     case IMGFMT_YV12:
     case IMGFMT_I420:
     case IMGFMT_IYUV:
+    case IMGFMT_NV12:
+    case IMGFMT_NV21:
         return vo_draw_alpha_yv12;
     case IMGFMT_YUY2:
     case IMGFMT_YVYU:

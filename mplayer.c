@@ -4034,7 +4034,7 @@ goto_enable_cache:
                 }
 
                 // reset last frame marker
-                if (mpctx->sh_video->frametime < 0)
+                if (mpctx->sh_video && mpctx->sh_video->frametime < 0)
                     mpctx->sh_video->frametime = 1.0f / mpctx->sh_video->fps;
                 rel_seek_secs = 0;
                 abs_seek_pos  = 0;

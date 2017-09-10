@@ -6330,6 +6330,7 @@ if test "$_iconv" = no ; then
 fi
 
 if test "$_freetype" = auto ; then
+    test -n "$ld_static" && _freetypeconfig="$_freetypeconfig --static"
     if ( $_freetypeconfig --version ) >/dev/null 2>&1 ; then
         cat > $TMPC << EOF
 #include <stdio.h>

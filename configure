@@ -3302,6 +3302,8 @@ test "$neon"       = yes && cpuexts="NEON $cpuexts"
 test "$_iwmmxt"    = yes && cpuexts="IWMMXT $cpuexts"
 test "$_vis"       = yes && cpuexts="VIS $cpuexts"
 test "$_mvi"       = yes && cpuexts="MVI $cpuexts"
+cpuexts_external=""
+test "$have_yasm"  = yes && cpuexts_external="$cpuexts"
 
 # Checking kernel version...
 if x86_32 && linux ; then
@@ -8985,7 +8987,7 @@ $def_vfp_args
 $(ff_config_enable "$arch_all" "$arch" "#" "ARCH")
 $(ff_config_enable "$subarch_all" "$subarch" "#" "ARCH")
 $(ff_config_enable "$cpuexts_all" "$cpuexts" "#" "HAVE")
-$(ff_config_enable "$cpuexts_all" "$cpuexts" "#" "HAVE" "_EXTERNAL")
+$(ff_config_enable "$cpuexts_all" "$cpuexts_external" "#" "HAVE" "_EXTERNAL")
 $(ff_config_enable "$cpuexts_all" "$cpuexts" "#" "HAVE" "_INLINE")
 
 
@@ -9477,7 +9479,7 @@ echo "%define CONFIG_GPL 1" >> "$TMPS"
 echo "%define HAVE_ALIGNED_STACK 1" >> "$TMPS"
 echo "$(ff_config_enable "$arch_all" "$arch" "%" "ARCH")" >> "$TMPS"
 echo "$(ff_config_enable "$subarch_all" "$subarch" "%" "ARCH")" >> "$TMPS"
-echo "$(ff_config_enable "$cpuexts_all" "$cpuexts" "%" "HAVE" "_EXTERNAL")" >> "$TMPS"
+echo "$(ff_config_enable "$cpuexts_all" "$cpuexts_external" "%" "HAVE" "_EXTERNAL")" >> "$TMPS"
 echo "$(ff_config_enable "$cpuexts_all" "$cpuexts" "%" "HAVE" "_INLINE")" >> "$TMPS"
 echo "$(ff_config_enable "$yasm_features_all" "$yasm_features" "%" "HAVE")" >> "$TMPS"
 echo "$(ff_config_enable "$libavdecoders_all"  "$libavdecoders" "%" "CONFIG")" >> "$TMPS"

@@ -48,16 +48,28 @@ static BOOL isLeopardOrLater;
 
 static NSAutoreleasePool *autoreleasepool;
 static MPCommonOpenGLView *oglv;
+static NSOpenGLPixelFormat *pixfmt;
 
 void (*vo_osx_redraw_func)(void);
+
+static const NSOpenGLPixelFormatAttribute double_attribs[] = {
+    NSOpenGLPFADoubleBuffer, 0
+};
+
+static const NSOpenGLPixelFormatAttribute nodouble_attribs[] = {
+    0
+};
 
 int vo_osx_init(void)
 {
     autoreleasepool = [[NSAutoreleasePool alloc] init];
-    oglv = [[MPCommonOpenGLView alloc] initWithFrame:NSMakeRect(0, 0, 100, 100) pixelFormat:[MPCommonOpenGLView defaultPixelFormat]];
+    const NSOpenGLPixelFormatAttribute *attribs = vo_doublebuffering ? double_attribs : nodouble_attribs;
+    pixfmt = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
+    oglv = [[MPCommonOpenGLView alloc] initWithFrame:NSMakeRect(0, 0, 100, 100) pixelFormat:pixfmt];
     [oglv autorelease];
     [oglv display];
     [oglv preinit];
+    [pixfmt autorelease];
     return 1;
 }
 
@@ -105,12 +117,11 @@ void vo_osx_swap_buffers(void)
 }
 
 @implementation MPCommonOpenGLView
-- (void) update_screen_info
+- (NSScreen *) fullscreen_screen
 {
 	int screen_id = xinerama_screen;
 	NSArray *screen_array = [NSScreen screens];
 	NSScreen *screen_handle;
-	NSRect screen_frame;
 
 	if(screen_id >= (int)[screen_array count])
 	{
@@ -121,8 +132,13 @@ void vo_osx_swap_buffers(void)
 		screen_handle = [[self window] screen];
 	else
 		screen_handle = [screen_array objectAtIndex:(screen_id < 0 ? 0 : screen_id)];
+	return screen_handle;
+}
 
-	screen_frame = [screen_handle frame];
+- (void) update_screen_info
+{
+	NSScreen *screen_handle = [self fullscreen_screen];
+	NSRect screen_frame = [screen_handle frame];
 	vo_screenwidth = screen_frame.size.width;
 	vo_screenheight = screen_frame.size.height;
 	xinerama_x = screen_frame.origin.x;
@@ -168,7 +184,7 @@ void vo_osx_swap_buffers(void)
 	winSizeMult = 1;
 
 	//create OpenGL Context
-	glContext = [[NSOpenGLContext alloc] initWithFormat:[NSOpenGLView defaultPixelFormat] shareContext:nil];
+	glContext = [[NSOpenGLContext alloc] initWithFormat:pixfmt shareContext:nil];
 
 	[self setOpenGLContext:glContext];
 	[glContext setValues:&swapInterval forParameter:NSOpenGLCPSwapInterval];
@@ -384,6 +400,7 @@ void vo_osx_swap_buffers(void)
 	//go fullscreen
 	if(vo_fs)
 	{
+		[window enterFullScreenMode:[self fullscreen_screen]];
 		if(!vo_rootwin)
 		{
 			SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar);
@@ -403,6 +420,7 @@ void vo_osx_swap_buffers(void)
 	}
 	else
 	{
+		[window exitFullScreenMode:[self fullscreen_screen]];
 		SetSystemUIMode( kUIModeNormal, 0);
 
 		CGDisplayShowCursor(kCGDirectMainDisplay);

@@ -124,7 +124,7 @@ static void stringreplace(char *dest, const char *what, const char *format, ... 
 }
 
 /**
- * @brief Convert #guiInfo member Filename.
+ * @brief Convert #guiInfo member @ref guiInterface_t.Filename "Filename".
  *
  * @param how 0 (cut file path and extension),
  *            1 (additionally, convert lower case) or

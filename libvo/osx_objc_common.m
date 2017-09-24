@@ -400,7 +400,9 @@ void vo_osx_swap_buffers(void)
 	//go fullscreen
 	if(vo_fs)
 	{
+		if ([window respondsToSelector:@selector(enterFullScreenMode)]) {
 		[window enterFullScreenMode:[self fullscreen_screen]];
+		}
 		if(!vo_rootwin)
 		{
 			SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar);
@@ -420,7 +422,9 @@ void vo_osx_swap_buffers(void)
 	}
 	else
 	{
+		if ([window respondsToSelector:@selector(exitFullScreenMode)]) {
 		[window exitFullScreenMode:[self fullscreen_screen]];
+		}
 		SetSystemUIMode( kUIModeNormal, 0);
 
 		CGDisplayShowCursor(kCGDirectMainDisplay);

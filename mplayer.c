@@ -4050,9 +4050,10 @@ goto_enable_cache:
                 } else {
                     guiInfo.Position = demuxer_get_percent_pos(mpctx->demuxer);
                 }
+                guiInfo.ElapsedTime = -1;
                 if (mpctx->sh_video)
                     guiInfo.ElapsedTime = mpctx->sh_video->pts;
-                else if (mpctx->sh_audio)
+                if (guiInfo.ElapsedTime < 0 && mpctx->sh_audio)
                     guiInfo.ElapsedTime = playing_audio_pts(mpctx->sh_audio, mpctx->d_audio, mpctx->audio_out);
                 guiInfo.RunningTime = demuxer_get_time_length(mpctx->demuxer);
                 gui(GUI_SET_VOLUME_BALANCE, &mpctx->mixer);

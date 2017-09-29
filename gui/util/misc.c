@@ -120,7 +120,7 @@ float msf2sec(const char *msf)
  */
 plItem **cue_playlist(const char *fname)
 {
-    static plItem *item[100];
+    static plItem *item[101];
     FILE *file;
     char line[256], *l, *fmt, *path = NULL, *data = NULL;
     int i = -1, isFILE = False, isTRACK = False;
@@ -131,6 +131,8 @@ plItem **cue_playlist(const char *fname)
         mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[misc] cue file: %s\n", fname);
     else
         return NULL;
+
+    memset(item, 0, sizeof(item));
 
     while (fgetstr(line, sizeof(line), file) && (i < 99)) {
         l = (char *)ltrim(line);

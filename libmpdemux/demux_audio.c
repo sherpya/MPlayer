@@ -321,15 +321,15 @@ static unsigned int mp3_vbr_frames(stream_t *s, off_t off, da_priv_t *priv) {
         data = stream_read_dword(s);    // frames
 
       if (stream_skip(s, 123)) {
-          uint16_t word = stream_read_word(s);
+        uint16_t word = stream_read_word(s);
 
-          /* Radio ReplayGain */
-          if ((word >> 13) == 1) {
-            priv->r_gain = word & 0x1ff;
+        /* Radio ReplayGain */
+        if ((word >> 13) == 1) {
+          priv->r_gain = word & 0x1ff;
 
-            if ((word >> 9) & 1)
-              priv->r_gain = -priv->r_gain;
-          }
+          if ((word >> 9) & 1)
+            priv->r_gain = -priv->r_gain;
+        }
       }
 
       return data;

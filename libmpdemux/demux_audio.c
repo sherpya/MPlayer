@@ -320,10 +320,7 @@ static unsigned int mp3_vbr_frames(stream_t *s, off_t off, da_priv_t *priv) {
       if (data & 0x1)                   // frames field is present
         data = stream_read_dword(s);    // frames
 
-      if (stream_skip(s, 108)) {
-        unsigned int dword = stream_read_dword(s);
-
-        if (dword == MKBETAG('L','A','M','E') && stream_skip(s, 11)) {
+      if (stream_skip(s, 123)) {
           uint16_t word = stream_read_word(s);
 
           /* Radio ReplayGain */
@@ -333,7 +330,6 @@ static unsigned int mp3_vbr_frames(stream_t *s, off_t off, da_priv_t *priv) {
             if ((word >> 9) & 1)
               priv->r_gain = -priv->r_gain;
           }
-        }
       }
 
       return data;

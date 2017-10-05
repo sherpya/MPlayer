@@ -981,3 +981,47 @@ void uiNext(void)
     else if (!stop && !next && unset)
         uiUnsetMedia(True);
 }
+
+/**
+ * @brief Check whether the end of a cue sheet playlist track has been
+ *        reached and set #guiInfo information for the next track.
+ *
+ * @param set whether to set next track's information or skip setting
+ *            information once
+ *
+ * @note Parameter @a set will be set for next call of the function.
+ *
+ * @return #True (information for next track has been set),
+ *         #False (end not yet reached) or -1 (@a set was #False)
+ */
+int uiCueCheckNext(int *set)
+{
+    plItem *next;
+
+    if (guiInfo.Stop && (guiInfo.ElapsedTime >= guiInfo.Stop)) {
+        if (!*set) {
+            *set = True;
+            return -1;
+        }
+
+        next = listMgr(PLAYLIST_ITEM_GET_NEXT, 0);
+
+        if (next) {
+            free(guiInfo.Title);
+            guiInfo.Title = gstrdup(next->title);
+            guiInfo.Track = (uintptr_t)listMgr(PLAYLIST_ITEM_GET_POS, next);
+            guiInfo.Start = next->start;
+            guiInfo.Stop  = next->stop;
+
+            if (guiInfo.ElapsedTime != guiInfo.Start) {
+                guiInfo.PlaylistNext  = False;
+                guiInfo.MediumChanged = GUI_MEDIUM_NEW;
+            }
+
+            *set = False;
+        }
+
+        return True;
+    } else
+        return False;
+}

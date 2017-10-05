@@ -406,6 +406,7 @@ void guiDone(void)
 int gui(int what, void *data)
 {
     static float last_balance = -1.0f;
+    static int last_playlistnext = True;
 #ifdef CONFIG_DVDREAD
     dvd_priv_t *dvd;
 #endif
@@ -447,8 +448,7 @@ int gui(int what, void *data)
         wsMouseAutohide();
         gtkEvents();
 
-        if (guiInfo.Stop && (guiInfo.ElapsedTime >= guiInfo.Stop))
-            guiInfo.MediumChanged = GUI_MEDIUM_NEW;
+        uiCueCheckNext(&last_playlistnext);
 
         break;
 
@@ -1007,6 +1007,8 @@ int gui(int what, void *data)
         uiEvent(ivRedraw, True);
 
         if (guiInfo.Playing) {
+            last_playlistnext = guiInfo.PlaylistNext;
+
             if (!guiInfo.PlaylistNext) {
                 guiInfo.PlaylistNext = True;
                 break;

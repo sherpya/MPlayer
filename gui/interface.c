@@ -16,6 +16,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <limits.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -576,7 +577,7 @@ int gui(int what, void *data)
                         if (*(playlist + 1))
                             (*playlist)->stop = (*(playlist + 1))->start;
                         else
-                            (*playlist)->stop = 0;
+                            (*playlist)->stop = INT_MAX;
 
                         listMgr(PLAYLIST_ITEM_INSERT, *playlist);
                         playlist++;

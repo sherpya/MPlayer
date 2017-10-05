@@ -405,7 +405,7 @@ void guiDone(void)
  */
 int gui(int what, void *data)
 {
-    static float last_balance = -1.0f;
+    static float last_balance    = -1.0f;
     static int last_playlistnext = True;
 #ifdef CONFIG_DVDREAD
     dvd_priv_t *dvd;

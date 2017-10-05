@@ -448,7 +448,8 @@ int gui(int what, void *data)
         wsMouseAutohide();
         gtkEvents();
 
-        uiCueCheckNext(&last_playlistnext);
+        if (uiCueCheckNext(&last_playlistnext) == False)
+            uiCueSetTitle();
 
         break;
 

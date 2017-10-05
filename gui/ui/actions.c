@@ -1025,3 +1025,24 @@ int uiCueCheckNext(int *set)
     } else
         return False;
 }
+
+/**
+ * @brief Set or unset #guiInfo member @ref guiInterface_t.Title "Title"
+ *        depending on whether playback position is within the current
+ *        cue sheet playlist track or not.
+ */
+void uiCueSetTitle(void)
+{
+    if (guiInfo.MediumChanged)
+        return;
+
+    if (guiInfo.Stop) {
+        if (guiInfo.ElapsedTime >= guiInfo.Start && guiInfo.ElapsedTime <= guiInfo.Stop) {
+            plItem *curr = listMgr(PLAYLIST_ITEM_GET_CURR, 0);
+
+            if (curr && !guiInfo.Title)
+                guiInfo.Title = gstrdup(curr->title);
+        } else
+            nfree(guiInfo.Title);
+    }
+}

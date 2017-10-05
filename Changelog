@@ -29,6 +29,7 @@ MPlayer
     GUI:
     * No limitation on the number of entries in a font description file
     * Dramatic speedup of scanning font description files
+    * Playback improvements for cue sheet playlists
 
 
   1.3.0: "worksforme" February 16, 2016

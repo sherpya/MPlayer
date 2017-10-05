@@ -998,7 +998,7 @@ int uiCueCheckNext(int *set)
 {
     plItem *next;
 
-    if (guiInfo.Stop && (guiInfo.ElapsedTime >= guiInfo.Stop)) {
+    if (guiInfo.Stop && (guiInfo.ElapsedTime == guiInfo.Stop)) {
         if (!*set) {
             *set = True;
             return -1;

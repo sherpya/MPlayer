@@ -1020,6 +1020,11 @@ int gui(int what, void *data)
             }
 
             next = listMgr(PLAYLIST_ITEM_GET_NEXT, 0);
+
+            if (guiInfo.Stop && (guiInfo.ElapsedTime > guiInfo.Stop)) {
+                while (next && next->stop)
+                    next = listMgr(PLAYLIST_ITEM_GET_NEXT, 0);
+            }
         }
 
         if (next) {

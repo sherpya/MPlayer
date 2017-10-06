@@ -45,7 +45,8 @@ static urlItem *urlList;
  * @param data list item for the task
  *
  * @return pointer to top of list (GET command),
- *         pointer to current list item (ITEM command) or
+ *         pointer to current list item (ITEM command),
+ *         pointer to copied item (PLITEM_COPY) or
  *         NULL (PLAYLIST_DELETE, PLITEM_FREE or unknown command)
  *
  * @note PLAYLIST_ITEM_GET_POS returns the position number as pointer value
@@ -220,6 +221,20 @@ void *listMgr(int cmd, void *data)
 
         plCurrent = NULL;
         return NULL;
+
+    case PLITEM_COPY:
+
+        item = calloc(1, sizeof(*item));
+
+        if (item) {
+            item->path  = gstrdup(pdat->path);
+            item->name  = gstrdup(pdat->name);
+            item->title = gstrdup(pdat->title);
+            item->start = pdat->start;
+            item->stop  = pdat->stop;
+        }
+
+        return item;
 
     case PLITEM_FREE:
 

@@ -133,7 +133,7 @@ void *listMgr(int cmd, void *data)
         pos = 0;
 
         if (plList) {
-            uintptr_t i  = 0;
+            uintptr_t i = 0;
 
             item = plList;
 

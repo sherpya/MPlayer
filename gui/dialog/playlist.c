@@ -446,7 +446,7 @@ static GtkWidget * CreatePlaylist( void )
   accel_group=gtk_accel_group_new();
 
   Playlist=gtk_window_new( GTK_WINDOW_TOPLEVEL );
-  gtk_widget_set_usize( Playlist,512,384 );
+  gtk_widget_set_usize(Playlist, 640, 480);
   gtk_window_set_title( GTK_WINDOW( Playlist ),MSGTR_GUI_Playlist );
   gtk_window_set_position( GTK_WINDOW( Playlist ),GTK_WIN_POS_CENTER );
   gtk_window_set_wmclass( GTK_WINDOW( Playlist ),"Playlist",MPlayer );
@@ -528,7 +528,7 @@ static GtkWidget * CreatePlaylist( void )
   CLSelected=gtk_clist_new( 4 );
   gtk_widget_show( CLSelected );
   gtk_container_add( GTK_CONTAINER( scrolledwindow3 ),CLSelected );
-  gtk_clist_set_column_width( GTK_CLIST( CLSelected ),0,295 );
+  gtk_clist_set_column_width( GTK_CLIST( CLSelected ),0,298 );
   gtk_clist_set_column_width( GTK_CLIST( CLSelected ),1,295 );
   gtk_clist_set_column_visibility( GTK_CLIST( CLSelected ),2,FALSE );
   gtk_clist_set_column_visibility( GTK_CLIST( CLSelected ),3,FALSE );

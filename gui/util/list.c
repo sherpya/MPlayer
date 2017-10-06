@@ -106,7 +106,10 @@ void *listMgr(int cmd, void *data)
             plItem *item = plList;
 
             do {
-                if (gstrcmp(item->path, pdat->path) == 0 && gstrcmp(item->name, pdat->name) == 0)
+                if (gstrcmp(item->path, pdat->path) == 0 &&
+                    gstrcmp(item->name, pdat->name) == 0 &&
+                    gstrcmp(item->title, pdat->title) == 0 &&
+                    item->start == pdat->start && item->stop == pdat->stop)
                     return item;
 
                 item = item->next;

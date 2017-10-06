@@ -57,6 +57,7 @@ void *listMgr(int cmd, void *data)
     uintptr_t pos;
     plItem *pdat  = (plItem *)data;
     urlItem *udat = (urlItem *)data;
+    plItem *item;
 
     switch (cmd) {
     /* playlist */
@@ -68,7 +69,7 @@ void *listMgr(int cmd, void *data)
     case PLAYLIST_ITEM_APPEND:
 
         if (plList) {
-            plItem *item = plList;
+            item = plList;
 
             while (item->next)
                 item = item->next;
@@ -103,7 +104,7 @@ void *listMgr(int cmd, void *data)
     case PLAYLIST_ITEM_FIND:
 
         if (plList) {
-            plItem *item = plList;
+            item = plList;
 
             do {
                 if (gstrcmp(item->path, pdat->path) == 0 &&
@@ -133,7 +134,8 @@ void *listMgr(int cmd, void *data)
 
         if (plList) {
             uintptr_t i  = 0;
-            plItem *item = plList;
+
+            item = plList;
 
             do {
                 i++;
@@ -173,7 +175,7 @@ void *listMgr(int cmd, void *data)
     case PLAYLIST_ITEM_GET_LAST:
 
         if (plList) {
-            plItem *item = plList;
+            item = plList;
 
             while (item->next)
                 item = item->next;
@@ -209,7 +211,7 @@ void *listMgr(int cmd, void *data)
     case PLAYLIST_DELETE:
 
         while (plList) {
-            plItem *item = plList->next;
+            item = plList->next;
 
             free(plList->path);
             free(plList->name);

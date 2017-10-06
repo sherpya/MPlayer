@@ -46,7 +46,7 @@ static urlItem *urlList;
  *
  * @return pointer to top of list (GET command),
  *         pointer to current list item (ITEM command) or
- *         NULL (DELETE or unknown command)
+ *         NULL (PLAYLIST_DELETE, PLITEM_FREE or unknown command)
  *
  * @note PLAYLIST_ITEM_GET_POS returns the position number as pointer value
  *       (if @a data is NULL the last position number, i.e. number of items),
@@ -213,15 +213,23 @@ void *listMgr(int cmd, void *data)
         while (plList) {
             item = plList->next;
 
-            free(plList->path);
-            free(plList->name);
-            free(plList->title);
-            free(plList);
+            listMgr(PLITEM_FREE, plList);
 
             plList = item;
         }
 
         plCurrent = NULL;
+        return NULL;
+
+    case PLITEM_FREE:
+
+        if (pdat) {
+            free(pdat->path);
+            free(pdat->name);
+            free(pdat->title);
+            free(pdat);
+        }
+
         return NULL;
 
     /* URL list */

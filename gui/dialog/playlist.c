@@ -632,8 +632,18 @@ void ShowPlaylist( void )
   {
    while ( next || next->next )
     {
-     char * text[1][5]; text[0][4]="";
-     text[0][0]=g_filename_display_name( next->name );
+     char *name, *text[1][5]; text[0][4]="";
+
+     name = g_filename_display_name(next->name);
+
+     if (next->title)
+     {
+       char *title = g_strdup_printf("%s · %s", name, next->title);
+       g_free(name);
+       name = title;
+     }
+
+     text[0][0]=name;
      text[0][1]=g_filename_display_name( next->path );
      text[0][2]=next->name;
      text[0][3]=next->path;

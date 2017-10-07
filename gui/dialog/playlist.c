@@ -132,18 +132,11 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
   case 1: // ok
        {
         int i;
-        plItem curr, * item, * old;
+        plItem *curr = NULL, *item, *old;
         item = listMgr( PLAYLIST_ITEM_GET_CURR,0 );
-        if (item)
-         {
-          curr.path = gstrdup(item->path);
-          curr.name = gstrdup(item->name);
-         }
-        else
-         {
-          curr.path = NULL;
-          curr.name = NULL;
-         }
+
+        if (item) curr = listMgr(PLITEM_COPY, item);
+
         listMgr( PLAYLIST_DELETE,0 );
         for ( i=0;i<NrOfSelected;i++ )
          {
@@ -161,7 +154,8 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
          {
           if ( guiInfo.Playing )
            {
-            old = listMgr( PLAYLIST_ITEM_FIND,&curr );
+            old = (curr ? listMgr(PLAYLIST_ITEM_FIND, curr) : NULL);
+
             if ( old )
              {
               listMgr( PLAYLIST_ITEM_SET_CURR,old );
@@ -171,16 +165,21 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
            }
           if ( item )
            {
+            if (item->stop) uiSetFileFromPlaylist(item);
+            else
+            {
             uiSetFile( item->path,item->name,STREAMTYPE_FILE );
+            guiInfo.Track = 1;
+            }
+
             guiInfo.MediumChanged = GUI_MEDIUM_NEW;
             guiInfo.PlaylistNext = !guiInfo.Playing;
-            guiInfo.Track = 1;
            }
          }
         else if (isPlaylistStreamtype && !guiInfo.Playing) uiUnsetFile();
         guiInfo.Tracks = (uintptr_t) listMgr( PLAYLIST_ITEM_GET_POS,0 );
-        free(curr.path);
-        free(curr.name);
+
+        listMgr(PLITEM_FREE, curr);
        }
   case 0: // cancel
        NrOfSelected=NrOfEntrys=0;

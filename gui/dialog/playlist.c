@@ -168,8 +168,8 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
             if (item->stop) uiSetFileFromPlaylist(item);
             else
             {
-            uiSetFile( item->path,item->name,STREAMTYPE_FILE );
-            guiInfo.Track = 1;
+              uiSetFile(item->path, item->name, STREAMTYPE_FILE);
+              guiInfo.Track = 1;
             }
 
             guiInfo.MediumChanged = GUI_MEDIUM_NEW;

@@ -118,6 +118,11 @@ static void plUnRowSelect( GtkCList * clist,gint row,gint column,GdkEvent * even
   }
 }
 
+static void plFreeRowData (gpointer data)
+{
+  listMgr(PLITEM_FREE, data);
+}
+
 static void plButtonReleased( GtkButton * button,gpointer user_data )
 {
  (void) button;
@@ -142,12 +147,13 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
         listMgr( PLAYLIST_DELETE,0 );
         for ( i=0;i<NrOfSelected;i++ )
          {
-          char * text[2];
-          item=calloc( 1,sizeof( *item ) );
-          gtk_clist_get_text(GTK_CLIST(CLSelected), i, 0, &text[0]);
-          gtk_clist_get_text(GTK_CLIST(CLSelected), i, 1, &text[1]);
-          item->name = strdup(cfg_old_filename_from_utf8(text[0]));
-          item->path = strdup(cfg_old_filename_from_utf8(text[1]));
+          plItem *data, *item;
+
+          data = gtk_clist_get_row_data(GTK_CLIST(CLSelected), i);
+          item = listMgr(PLITEM_COPY, data);
+
+          if (!item) continue;
+
           listMgr( PLAYLIST_ITEM_APPEND,item );
          }
         item = listMgr( PLAYLIST_GET,0 );
@@ -216,11 +222,18 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
   case 3: // add
        {
         int i;
+        plItem *data;
         void *p;
         char *text[2];
+        gint row;
+
         gtk_clist_freeze( GTK_CLIST( CLSelected ) );
         for ( i=0;i<NrOfEntrys;i++ )
          {
+          data = calloc(1, sizeof(*data));
+
+          if (!data) continue;
+
           if ( CLFileSelected[i] )
            {
             NrOfSelected++;
@@ -232,7 +245,10 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
               CLListSelected[NrOfSelected - 1]=False;
               gtk_clist_get_text(GTK_CLIST(CLFiles), i, 0, &text[0]);
               text[1] = g_filename_display_name(current_path);
-              gtk_clist_append(GTK_CLIST(CLSelected), text);
+              row = gtk_clist_append(GTK_CLIST(CLSelected), text);
+              data->name = strdup(cfg_old_filename_from_utf8(text[0]));
+              data->path = strdup(current_path);
+              gtk_clist_set_row_data_full(GTK_CLIST(CLSelected), row, data, plFreeRowData);
               g_free(text[1]);
              }
            }
@@ -627,7 +643,13 @@ void ShowPlaylist( void )
   {
    while ( next || next->next )
     {
+     plItem *data;
      char *name, *text[2];
+     gint row;
+
+     data = listMgr(PLITEM_COPY, next);;
+
+     if (!data) break;
 
      name = g_filename_display_name(next->name);
 
@@ -640,7 +662,10 @@ void ShowPlaylist( void )
 
      text[0] = name;
      text[1] = g_filename_display_name(next->path);
-     gtk_clist_append(GTK_CLIST(CLSelected), text);
+
+     row = gtk_clist_append(GTK_CLIST(CLSelected), text);
+     gtk_clist_set_row_data_full(GTK_CLIST(CLSelected), row, data, plFreeRowData);
+
      g_free(text[0]);
      g_free(text[1]);
      NrOfSelected++;

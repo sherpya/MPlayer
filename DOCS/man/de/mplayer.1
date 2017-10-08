@@ -11437,61 +11437,6 @@ dem Referenzzeitgeber des Ausgabestreams (SCR) und des
 Decodierungszeitstempels (DTS) für jeden vorhandenen Stream
 (Verzögerung von Demuxing zu Decodierung).
 .
-.TP
-.
-.
-.\" --------------------------------------------------------------------------
-.\" Dateien
-.\" --------------------------------------------------------------------------
-.
-.SH DATEIEN
-.TP
-/usr/\:local/\:etc/\:mplayer/\:mplayer.conf
-systemweite Einstellungen
-.
-.TP
-~/.mplayer/\:config
-Benutzereinstellungen
-.
-.TP
-~/.mplayer/\:input.conf
-Eingabebelegungen (siehe '\-input keylist' für eine vollständige Auflistung
-aller Tastennamen)
-.
-.TP
-~/.mplayer/\:gui.conf
-Konfigurationsdatei für die GUI
-.
-.TP
-~/.mplayer/\:gui.history
-Verzeichnis-Verlaufsdatei für die GUI
-.
-.TP
-~/.mplayer/\:gui.pl
-Playlist für die GUI
-.
-.TP
-~/.mplayer/\:gui.url
-URL-Liste für die GUI
-.
-.TP
-~/.mplayer/\:font/
-Schriftartenverzeichnis (es müssen sich eine Datei font.desc und Dateien mit
-der Erweiterung .RAW in dem Verzeichnis befinden)
-.
-.TP
-~/.mplayer/\:DVDkeys/
-zwischengespeicherte CSS-Schlüssel
-.
-.TP
-Angenommen, dass /Pfad/\:zum/\:film.avi abgespielt wird,
-sucht MPlayer nach Untertiteldateien in folgender Reihenfolge:
-.RS
-/Pfad/\:zum/\:film.sub
-.br
-~/.mplayer/\:sub/\:film.sub
-.RE
-.PD 1
 .
 .
 .\" --------------------------------------------------------------------------
@@ -11737,10 +11682,10 @@ FIXME: Muss noch dokumentiert werden.
 .
 .
 .\" --------------------------------------------------------------------------
-.\" Files
+.\" Dateien
 .\" --------------------------------------------------------------------------
 .
-.SH FILES
+.SH DATEIEN
 .
 .TP
 /usr/\:local/\:etc/\:mplayer/\:mplayer.conf
@@ -11767,8 +11712,16 @@ Eingabebindungen (Siehe '\-input keylist' für eine vollständige Liste)
 GUI-Konfigurationsdatei
 .
 .TP
+~/.mplayer/\:gui.history
+GUI-Verzeichnisverlauf
+.
+.TP
 ~/.mplayer/\:gui.pl
 GUI-Playliste
+.
+.TP
+~/.mplayer/\:gui.url
+GUI-URL-Liste
 .
 .TP
 ~/.mplayer/\:font/
@@ -11777,21 +11730,9 @@ mit .RAW-Erweiterung existieren)
 .
 .TP
 ~/.mplayer/\:DVDkeys/
-Cacheverzeichnis für CSS-Schlüssel
-.
-.TP
-Angenommen, das /path/\:to/\:movie.avi abgespielt werden soll, sucht
-MPlayer in folgender Reichenfolge nach Untertiteldateien:
-.RS
-/path/\:to/\:movie.sub
-.br
-~/.mplayer/\:sub/\:movie.sub
-.br
-~/.mplayer/\:default.sub
+zwischengespeicherte CSS-Schlüssel
 .RE
 .PD 1
-.
-.
 .
 .
 .\" --------------------------------------------------------------------------

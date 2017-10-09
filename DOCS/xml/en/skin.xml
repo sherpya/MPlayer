@@ -642,6 +642,10 @@ blocks.
     <entry>the <keycap>e</keycap> character (if playback is paused)</entry>
   </row>
   <row>
+    <entry>$g</entry>
+    <entry>the <keycap>g</keycap> character (if ReplayGain is active)</entry>
+  </row>
+  <row>
     <entry>$x</entry>
     <entry>video width</entry>
   </row>
@@ -835,6 +839,7 @@ symbols (and thus require a different font).
   <row><entry><keycap>m</keycap></entry><entry>mono sound</entry></row>
   <row><entry><keycap>t</keycap></entry><entry>stereo sound</entry></row>
   <row><entry><keycap>r</keycap></entry><entry>surround sound</entry></row>
+  <row><entry><keycap>g</keycap></entry><entry>replay gain</entry></row>
   <row><entry><keycap>space</keycap></entry><entry>no (known)stream</entry></row>
   <row><entry><keycap>f</keycap></entry><entry>stream is a file</entry></row>
   <row><entry><keycap>a</keycap></entry><entry>stream is a CD</entry></row>

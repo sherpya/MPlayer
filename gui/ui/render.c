@@ -268,6 +268,11 @@ MMMM_SS:        snprintf(trans, sizeof(trans), "%04d:%02d", t / 60, t % 60);
                 av_strlcat(translation, trans, sizeof(translation));
                 break;
 
+            case 'g':
+                if (guiInfo.LastVolume >= 0.0f && guiInfo.Volume == guiInfo.ReplayGainVolume)
+                    av_strlcat(translation, "g", sizeof(translation));
+                break;
+
             case 'o':
                 TranslateFilename(0, trans, sizeof(trans));
                 av_strlcat(translation, trans, sizeof(translation));

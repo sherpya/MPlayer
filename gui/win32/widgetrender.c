@@ -278,6 +278,8 @@ static char *generatetextfromlabel(widget *item)
     stringreplace(text, "$f", acp(TranslateFilename(1, tmp, sizeof(tmp))));
     stringreplace(text, "$F", acp(TranslateFilename(2, tmp, sizeof(tmp))));
 
+    stringreplace(text, "$g", "");
+
     return text;
 }
 

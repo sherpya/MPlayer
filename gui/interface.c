@@ -917,6 +917,7 @@ int gui(int what, void *data)
             if (demux_control(mpctx_get_demuxer(guiInfo.mpcontext), DEMUXER_CTRL_GET_REPLAY_GAIN, &replay_gain) == DEMUXER_CTRL_OK) {
                 guiInfo.LastVolume = guiInfo.Volume;
                 guiInfo.Volume     = constrain(100.0 + (replay_gain / 10.0 + gtkReplayGainAdjustment) / 0.5);
+                guiInfo.ReplayGainVolume = -1.0f;
             }
         }
 
@@ -969,6 +970,9 @@ int gui(int what, void *data)
 
         mixer_getvolume(mixer, &l, &r);
         guiInfo.Volume = FFMAX(l, r);
+
+        if (guiInfo.LastVolume >= 0.0f && guiInfo.ReplayGainVolume < 0.0f)
+            guiInfo.ReplayGainVolume = guiInfo.Volume;
 
         mixer_getbalance(mixer, &b);
         guiInfo.Balance = (b + 1.0) * 50.0;   // transform -1..1 to 0..100

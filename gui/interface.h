@@ -141,6 +141,7 @@ typedef struct {
     float Balance;
 
     float LastVolume;
+    float ReplayGainVolume;
     int MediumChanged;        // public, read access by MPlayer
     int PlaylistNext;
 

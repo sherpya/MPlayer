@@ -784,6 +784,12 @@ end
                     </entry>
                   </row>
                   <row>
+                    <entry>$g</entry>
+                    <entry>
+                      Buchstabe <keycap>g</keycap> (wenn die Lautstärke-Anpassung aktiv ist)
+                    </entry>
+                  </row>
+                  <row>
                     <entry>$x</entry>
                     <entry>Videobreite</entry>
                   </row>
@@ -988,6 +994,7 @@ image = font.png
             <row><entry><keycap>m</keycap></entry><entry>Mono-Sound</entry></row>
             <row><entry><keycap>t</keycap></entry><entry>Stereo-Sound</entry></row>
             <row><entry><keycap>r</keycap></entry><entry>Surround-Sound</entry></row>
+            <row><entry><keycap>g</keycap></entry><entry>Lautstärke-Anpassung (Replay Gain)</entry></row>
             <row><entry><keycap>Leerzeichen</keycap></entry><entry>kein (bekannter) Stream</entry></row>
             <row><entry><keycap>f</keycap></entry><entry>Stream ist eine Datei</entry></row>
             <row><entry><keycap>a</keycap></entry><entry>Stream ist eine CD</entry></row>

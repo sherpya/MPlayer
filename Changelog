@@ -32,6 +32,7 @@ MPlayer
     * Playback improvements for cue sheet playlists
     * Implementation of audio playback utilizing ReplayGain data
     * New symbol character 'g' and new dynamic label variable $g
+    * Skins can leave current volume unchanged at startup
 
 
   1.3.0: "worksforme" February 16, 2016

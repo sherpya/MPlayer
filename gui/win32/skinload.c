@@ -371,7 +371,7 @@ static void addwidget(skin_t *skin, window *win, const char *desc)
     else if(!strncmp(desc, "hpotmeter", 9) || !strncmp(desc, "vpotmeter", 9) || !strncmp(desc, "rpotmeter", 9) || /* legacy */ !strncmp(desc, "potmeter", 8))
     {
         int base = counttonextchar(desc, '=') + 1;
-        int i, av_uninit(x0), av_uninit(y0), av_uninit(x1), av_uninit(y1);
+        int i, av_uninit(x0), av_uninit(y0), av_uninit(x1), av_uninit(y1), no_default;
         /* hpotmeter = button, bwidth, bheight, phases, numphases, default, X, Y, width, height, message */
         if(!strncmp(desc, "vpotmeter", 9)) mywidget->type = tyVpotmeter;
         else if(!strncmp(desc, "rpotmeter", 9)) mywidget->type = tyRpotmeter;
@@ -403,6 +403,7 @@ static void addwidget(skin_t *skin, window *win, const char *desc)
         }
 
         mywidget->value = atof(findnextstring(temp, desc, &base));
+        no_default = (strcmp(temp, "-") == 0);
         mywidget->x = mywidget->wx = atoi(findnextstring(temp, desc, &base));
         mywidget->y = mywidget->wy = atoi(findnextstring(temp, desc, &base));
         mywidget->wwidth = atoi(findnextstring(temp, desc, &base));
@@ -454,6 +455,8 @@ static void addwidget(skin_t *skin, window *win, const char *desc)
             mywidget->width = mywidget->wwidth;
             mywidget->height = mywidget->wheight;
         }
+
+        if ((mywidget->msg == evSetVolume) && no_default) mywidget->value = -1.0f;
     }
     else if(!strncmp(desc, "pimage", 6))
     {

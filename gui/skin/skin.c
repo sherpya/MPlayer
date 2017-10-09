@@ -603,9 +603,9 @@ static int parse_potmeter(guiItem *item, char *in)
 {
     unsigned char bfname[256];
     unsigned char phfname[256];
-    unsigned char buf[512];
+    unsigned char buf[512], dfmt[5];
     int i = 0, av_uninit(x0), av_uninit(y0), av_uninit(x1), av_uninit(y1);
-    int bwidth, bheight, num, d, x, y, w, h, message;
+    int bwidth, bheight, num, no_default, d, x, y, w, h, message;
 
     if (!window_item(currItem))
         return 1;
@@ -627,6 +627,9 @@ static int parse_potmeter(guiItem *item, char *in)
         x1 = cutInt(in, ',', i++);
         y1 = cutInt(in, ',', i++);
     }
+
+    cutStr(in, buf, ',', i);
+    no_default = (strcmp(buf, "-") == 0);
 
     d = cutInt(in, ',', i++);
     x = cutInt(in, ',', i++);
@@ -650,9 +653,15 @@ static int parse_potmeter(guiItem *item, char *in)
         return 1;
     }
 
+    if ((message == evSetVolume) && no_default) {
+        d = -1;
+        strcpy(dfmt, "-");
+    } else
+        sprintf(dfmt, "%d%%", d);
+
     mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[skin]    %s image: %s %d,%d %dx%d\n", currItem, phfname, x, y, w, h);
     mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[skin]     button image: %s %dx%d\n", bfname, bwidth, bheight);
-    mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[skin]     numphases: %d, default: %d%%\n", num, d);
+    mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[skin]     numphases: %d, default: %s\n", num, dfmt);
     mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[skin]     message: %s (#%d)\n", buf, message);
 
     item->x         = x;

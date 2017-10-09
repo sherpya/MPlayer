@@ -78,6 +78,7 @@ guiInterface_t guiInfo = {
     .PlaylistNext = True
 };
 
+static int current_volume;
 static int guiInitialized;
 static int orig_fontconfig;
 static struct {
@@ -310,6 +311,12 @@ void guiInit(void)
     btnValue(evSetVolume, &guiInfo.Volume);
     btnValue(evSetBalance, &guiInfo.Balance);
     btnValue(evSetMoviePosition, &guiInfo.Position);
+
+    // skin demands usage of current volume
+    if (guiInfo.Volume < 0.0f) {
+        guiInfo.Volume = 0.0f;
+        current_volume = True;
+    }
 
     if (guiInfo.Position)
         uiEvent(evSetMoviePosition, guiInfo.Position);
@@ -912,6 +919,12 @@ int gui(int what, void *data)
             btnSet(evSetVolume, btnDisabled);
         if (guiInfo.AudioChannels < 2 || guiInfo.AudioPassthrough)
             btnSet(evSetBalance, btnDisabled);
+
+        if (current_volume) {
+            mixer_getvolume(mpctx_get_mixer(guiInfo.mpcontext), &l, &r);
+            guiInfo.Volume = FFMAX(l, r);
+            current_volume = False;
+        }
 
         if (gtkReplayGainOn) {
             if (demux_control(mpctx_get_demuxer(guiInfo.mpcontext), DEMUXER_CTRL_GET_REPLAY_GAIN, &replay_gain) == DEMUXER_CTRL_OK) {

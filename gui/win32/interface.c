@@ -640,8 +640,11 @@ int gui(int what, void *data)
                 guiInfo.AudioChannels = 0;
                 guiInfo.AudioPassthrough = FALSE;
             }
-            guiSetEvent(evSetVolume);
-            guiSetEvent(evSetBalance);
+            if (guiInfo.Volume >= 0.0f) /* otherwise skin demands usage of current volume */
+            {
+                guiSetEvent(evSetVolume);
+                guiSetEvent(evSetBalance);
+            }
             if(IsWindowVisible(mygui->videowindow) && !guiInfo.VideoWindow)
                 ShowWindow(mygui->videowindow, SW_HIDE);
             break;

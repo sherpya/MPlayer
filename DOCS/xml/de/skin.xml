@@ -534,6 +534,12 @@ end
                   <literal>default</literal> - Voreinstellung des Potentiometers
                   (im Bereich <literal>0</literal> bis <literal>100</literal>)
                 </para>
+                <para>
+                  (Für die Nachricht <literal>evSetVolume</literal> ist auch
+                  ein einfaches Bindestrich-Minus als Wert erlaubt. Dieses
+                  bewirkt, dass die aktuell eingestellte Lautstärke nicht
+                  verändert wird.)
+                </para>
               </listitem>
               <listitem>
                 <para>

@@ -442,6 +442,10 @@ blocks.
   <listitem><para>
     <literal>default</literal> - default value for the potentiometer
     (in the range <literal>0</literal> to <literal>100</literal>)
+    </para><para>
+    (If message is <literal>evSetVolume</literal>, it's allowed to use a
+    plain hyphen-minus as value. This will cause the currently set volume to
+    remain unchanged.)
   </para></listitem>
   <listitem><para>
     <literal>X</literal>, <literal>Y</literal> - position for the potentiometer

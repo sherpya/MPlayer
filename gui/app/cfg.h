@@ -80,6 +80,9 @@ typedef struct {
 
 extern gtkASS_t gtkASS;
 
+extern int gtkReplayGainOn;
+extern int gtkReplayGainAdjustment;
+
 extern int gtkEnablePlayBar;
 extern int gtkLoadFullscreen;
 extern int gtkShowVideoWindow;

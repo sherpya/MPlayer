@@ -89,6 +89,9 @@ int gtkSubDumpSrt;
 
 gtkASS_t gtkASS;
 
+int gtkReplayGainOn;
+int gtkReplayGainAdjustment;
+
 int gtkEnablePlayBar = True;
 int gtkLoadFullscreen;
 int gtkShowVideoWindow = True;
@@ -169,6 +172,9 @@ static const m_option_t gui_opts[] = {
     audio_equ_row(4, 0), audio_equ_row(4, 1), audio_equ_row(4, 2), audio_equ_row(4, 3), audio_equ_row(4, 4), audio_equ_row(4, 5), audio_equ_row(4, 6), audio_equ_row(4, 7), audio_equ_row(4, 8), audio_equ_row(4, 9),
     audio_equ_row(5, 0), audio_equ_row(5, 1), audio_equ_row(5, 2), audio_equ_row(5, 3), audio_equ_row(5, 4), audio_equ_row(5, 5), audio_equ_row(5, 6), audio_equ_row(5, 7), audio_equ_row(5, 8), audio_equ_row(5, 9),
 #undef audio_equ_row
+
+    { "replay_gain",                 &gtkReplayGainOn,         CONF_TYPE_FLAG,        0,           0,     1,          NULL },
+    { "replay_gain_adjustment",      &gtkReplayGainAdjustment, CONF_TYPE_INT,         CONF_RANGE,  -30,   10,         NULL },
 
     { "playbar",                     &gtkEnablePlayBar,        CONF_TYPE_FLAG,        0,           0,     1,          NULL },
     { "load_fullscreen",             &gtkLoadFullscreen,       CONF_TYPE_FLAG,        0,           0,     1,          NULL },

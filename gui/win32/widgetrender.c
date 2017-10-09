@@ -314,7 +314,9 @@ void renderinfobox(skin_t *skin, window_priv_t *priv)
     for (i=0; i<skin->widgetcount; i++)
         if((skin->widgets[i]->type == tyDlabel) || (skin->widgets[i]->type == tySlabel))
         {
-            if(skin->widgets[i]->window == priv->type)
+            char *text = generatetextfromlabel(skin->widgets[i]);
+
+            if(*text && (skin->widgets[i]->window == priv->type))
                 render(skin->desktopbpp,
                        &priv->img,
                        find_background(skin, skin->widgets[i]),
@@ -325,6 +327,8 @@ void renderinfobox(skin_t *skin, window_priv_t *priv)
                        skin->widgets[i]->length,
                        skin->widgets[i]->font->chars[0]->height,
                        1);
+
+            free(text);
         }
 
     /* load all slabels and dlabels */

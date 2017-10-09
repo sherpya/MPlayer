@@ -74,6 +74,7 @@ guiInterface_t guiInfo = {
     .StreamType   = STREAMTYPE_DUMMY,
     .Volume       = 50.0f,
     .Balance      = 50.0f,
+    .LastVolume   = -1.0f,
     .PlaylistNext = True
 };
 
@@ -410,7 +411,7 @@ int gui(int what, void *data)
 #ifdef CONFIG_DVDREAD
     dvd_priv_t *dvd;
 #endif
-    int idata = (intptr_t)data, msg, state;
+    int idata = (intptr_t)data, msg, state, replay_gain;
     stream_t *stream = NULL;
     sh_audio_t *sh_audio;
     mixer_t *mixer;
@@ -912,9 +913,17 @@ int gui(int what, void *data)
         if (guiInfo.AudioChannels < 2 || guiInfo.AudioPassthrough)
             btnSet(evSetBalance, btnDisabled);
 
-        if (last_balance < 0.0f) {
+        if (gtkReplayGainOn) {
+            if (demux_control(mpctx_get_demuxer(guiInfo.mpcontext), DEMUXER_CTRL_GET_REPLAY_GAIN, &replay_gain) == DEMUXER_CTRL_OK) {
+                guiInfo.LastVolume = guiInfo.Volume;
+                guiInfo.Volume     = constrain(100.0 + (replay_gain / 10.0 + gtkReplayGainAdjustment) / 0.5);
+            }
+        }
+
+        if (guiInfo.LastVolume >= 0.0f || last_balance < 0.0f)
             uiEvent(ivSetVolume, guiInfo.Volume);
 
+        if (last_balance < 0.0f) {
             if (guiInfo.AudioChannels == 2 && !guiInfo.AudioPassthrough)
                 uiEvent(ivSetBalance, guiInfo.Balance);
 
@@ -1001,6 +1010,11 @@ int gui(int what, void *data)
     case GUI_END_PLAY:
 
         guiInfo.sh_video = NULL;
+
+        if (guiInfo.LastVolume >= 0.0f) {
+            uiEvent(ivSetVolume, guiInfo.LastVolume);
+            guiInfo.LastVolume = -1.0f;
+        }
 
         btnSet(evSetVolume, btnReleased);
         btnSet(evSetBalance, btnReleased);

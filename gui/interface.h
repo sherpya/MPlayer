@@ -140,6 +140,7 @@ typedef struct {
     float Volume;
     float Balance;
 
+    float LastVolume;
     int MediumChanged;        // public, read access by MPlayer
     int PlaylistNext;
 

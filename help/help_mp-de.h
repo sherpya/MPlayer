@@ -984,7 +984,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_RearRight "Hinten rechts"
 #define MSGTR_GUI_Remove "Entfernen"
 #define MSGTR_GUI_ReplayGain "Lautstärke-Anpassung"
-#define MSGTR_GUI_ReplayGainAdjustment "mit anschließender Korrektur von"
+#define MSGTR_GUI_ReplayGainAdjustment "mit anschließender Korrektur um"
 #define MSGTR_GUI_Rotation "Drehung"
 #define MSGTR_GUI_Rotation180 "180°"
 #define MSGTR_GUI_Rotation90CCW "90° gegen den Uhrzeigersinn"

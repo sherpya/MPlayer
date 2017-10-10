@@ -1042,7 +1042,9 @@ int gui(int what, void *data)
         guiInfo.sh_video = NULL;
 
         if (guiInfo.LastVolume >= 0.0f) {
-            uiEvent(ivSetVolume, guiInfo.LastVolume);
+            if (guiInfo.Volume == guiInfo.ReplayGainVolume)
+                uiEvent(ivSetVolume, guiInfo.LastVolume);
+
             guiInfo.LastVolume = -1.0f;
         }
 

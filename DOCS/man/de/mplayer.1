@@ -33,7 +33,7 @@
 .\" Titel
 .\" --------------------------------------------------------------------------
 .
-.TH MPlayer 1 "09.10.2017" "Das MPlayer Projekt"
+.TH MPlayer 1 "10.10.2017" "Das MPlayer Projekt"
 .
 .SH NAME
 mplayer  \- Movie Player
@@ -11712,6 +11712,15 @@ Eingabebindungen (Siehe '\-input keylist' für eine vollständige Liste)
 .TP
 ~/.mplayer/\:gui.conf
 GUI-Konfigurationsdatei
+.
+.TP
+~/.mplayer/\:gui.gain
+Für Audio-Dateien, die keine Information zur Lautstärke-Anpassung (Replay
+Gain) enthalten, kann man eine Zeile mit Verstärkung oder Verminderung und
+Dateinamen (durch ein Leerzeichen getrennt) eintragen, z. B.
+.br
+
++1.50 /home/ich/Musik/Lied.mp3
 .
 .TP
 ~/.mplayer/\:gui.history

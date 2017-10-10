@@ -33,6 +33,9 @@
 #include "mp_msg.h"
 #include "path.h"
 
+static gainItem *gainList;
+static unsigned int gainCount;
+
 static plItem *plList;
 static plItem *plCurrent;
 
@@ -42,7 +45,7 @@ static urlItem *urlList;
  * @brief Manage playlists and URL lists.
  *
  * @param cmd task to be performed
- * @param data list item for the task
+ * @param data list item (or string in case of GAINLIST_ITEM_FIND) for the task
  *
  * @return pointer to top of list (GET command),
  *         pointer to current list item (ITEM command),
@@ -56,11 +59,66 @@ static urlItem *urlList;
 void *listMgr(int cmd, void *data)
 {
     uintptr_t pos;
+    gainItem *gdat = (gainItem *)data;
+    char *cdat     = (char *)data;
     plItem *pdat  = (plItem *)data;
     urlItem *udat = (urlItem *)data;
     plItem *item;
 
     switch (cmd) {
+    /* ReplayGain list (sorted) */
+
+    case GAINLIST_ITEM_INSERT:
+
+        if (!gainList || (strcmp(gainList->filename, gdat->filename) >= 0)) {
+            gdat->next = gainList;
+            gainList   = gdat;
+        } else {
+            gainItem *item = gainList;
+
+            while (item->next && (strcmp(item->next->filename, gdat->filename) < 0))
+                item = item->next;
+
+            gdat->next = item->next;
+            item->next = gdat;
+        }
+
+        gainCount++;
+        return gdat;
+
+    case GAINLIST_ITEM_FIND:
+
+        if (!gainList || (strcmp(gainList->filename, cdat) == 0))
+            return gainList;
+        else {
+            gainItem *left = gainList, *right = NULL;
+            unsigned int count = gainCount;
+
+            while (count > 1) {
+                int cmp;
+                unsigned int i, newcount = count / 2;
+
+                right = left;
+
+                for (i = 0; i < newcount && right->next != NULL; i++)
+                    right = right->next;
+
+                cmp = strcmp(right->filename, cdat);
+
+                if (cmp == 0)
+                    return right;
+                else if (cmp < 0)
+                    left = right;
+
+                count -= newcount;
+            }
+
+            if (right && (strcmp(right->filename, cdat) == 0))
+                return right;
+            else
+                return NULL;
+        }
+
     /* playlist */
 
     case PLAYLIST_GET:

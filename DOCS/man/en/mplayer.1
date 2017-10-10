@@ -31,7 +31,7 @@
 .\" Title
 .\" --------------------------------------------------------------------------
 .
-.TH MPlayer 1 "2017-10-09" "The MPlayer Project" "The Movie Player"
+.TH MPlayer 1 "2017-10-10" "The MPlayer Project" "The Movie Player"
 .
 .SH NAME
 mplayer  \- movie player
@@ -12202,6 +12202,14 @@ input bindings (see '\-input keylist' for the full list)
 .TP
 ~/.mplayer/\:gui.conf
 GUI configuration file
+.
+.TP
+~/.mplayer/\:gui.gain
+for audio files not containing ReplayGain data, add a line with replay gain
+and filename separated by a space character, e.g.
+.br
+
++1.50 /home/me/music/Song.mp3
 .
 .TP
 ~/.mplayer/\:gui.history

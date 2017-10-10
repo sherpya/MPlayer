@@ -16,6 +16,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -111,6 +112,7 @@ char *skinName;
 char *fsHistory[5];
 
 static const char gui_configuration[] = "gui.conf";
+static const char gui_gainlist[]      = "gui.gain";
 static const char gui_history[]       = "gui.history";
 static const char gui_playlist[]      = "gui.pl";
 static const char gui_urllist[]       = "gui.url";
@@ -362,6 +364,39 @@ void cfg_read(void)
         while (fgetstr(line, sizeof(line), file))
             if (*line && (i < FF_ARRAY_ELEMS(fsHistory)))
                 fsHistory[i++] = strdup(line);
+
+        fclose(file);
+    }
+
+    free(fname);
+
+    /* ReplayGain list */
+
+    fname = get_path(gui_gainlist);
+    file  = fopen(fname, "rt");
+
+    if (file) {
+        while (fgetstr(line, sizeof(line), file)) {
+            char *space = strchr(line, ' ');
+
+            if (space) {
+                float gain;
+
+                *space = 0;
+                errno  = 0;
+                gain   = strtof(line, NULL);
+
+                if (errno == 0) {
+                    gainItem *item = calloc(1, sizeof(*item));
+
+                    if (item) {
+                        item->filename    = strdup(space + 1);
+                        item->replay_gain = gain;
+                        listMgr(GAINLIST_ITEM_INSERT, item);
+                    }
+                }
+            }
+        }
 
         fclose(file);
     }

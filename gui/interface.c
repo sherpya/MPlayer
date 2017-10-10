@@ -927,7 +927,20 @@ int gui(int what, void *data)
         }
 
         if (gtkReplayGainOn) {
-            if (demux_control(mpctx_get_demuxer(guiInfo.mpcontext), DEMUXER_CTRL_GET_REPLAY_GAIN, &replay_gain) == DEMUXER_CTRL_OK) {
+            gainItem *item;
+            int ReplayGain = False;
+
+            item = listMgr(GAINLIST_ITEM_FIND, guiInfo.Filename);
+
+            if (item) {
+                replay_gain = (item->replay_gain < 0.0f ? item->replay_gain - 0.05f : item->replay_gain + 0.05f) * 10;
+                ReplayGain  = True;
+            }
+
+            if (!ReplayGain)
+                ReplayGain = (demux_control(mpctx_get_demuxer(guiInfo.mpcontext), DEMUXER_CTRL_GET_REPLAY_GAIN, &replay_gain) == DEMUXER_CTRL_OK);
+
+            if (ReplayGain) {
                 guiInfo.LastVolume       = guiInfo.Volume;
                 guiInfo.Volume           = constrain(100.0 + (replay_gain / 10.0 + gtkReplayGainAdjustment) / 0.5);
                 guiInfo.ReplayGainVolume = -1.0f;

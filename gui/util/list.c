@@ -61,8 +61,8 @@ void *listMgr(int cmd, void *data)
     uintptr_t pos;
     gainItem *gdat = (gainItem *)data;
     char *cdat     = (char *)data;
-    plItem *pdat  = (plItem *)data;
-    urlItem *udat = (urlItem *)data;
+    plItem *pdat   = (plItem *)data;
+    urlItem *udat  = (urlItem *)data;
     plItem *item;
 
     switch (cmd) {

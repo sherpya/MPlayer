@@ -50,7 +50,7 @@
 
 #ifdef CONFIG_FFMPEG
 #include "libavcodec/avcodec.h"
-#if MP_INPUT_BUFFER_PADDING_SIZE < FF_INPUT_BUFFER_PADDING_SIZE
+#if MP_INPUT_BUFFER_PADDING_SIZE < AV_INPUT_BUFFER_PADDING_SIZE
 #error MP_INPUT_BUFFER_PADDING_SIZE is too small!
 #endif
 #include "av_helpers.h"

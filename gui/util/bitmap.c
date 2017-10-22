@@ -95,7 +95,7 @@ static int pngRead(const char *fname, guiImage *img)
         return 3;
     }
 
-    data = av_malloc(len + FF_INPUT_BUFFER_PADDING_SIZE);
+    data = av_malloc(len + AV_INPUT_BUFFER_PADDING_SIZE);
 
     if (!data) {
         fclose(file);

@@ -213,7 +213,7 @@ const m_option_t lavcopts_conf[]={
 	{"vstrict", &lavc_param_strict, CONF_TYPE_INT, CONF_RANGE, -99, 99, NULL},
 	{"vdpart", &lavc_param_data_partitioning, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"keyint", &lavc_param_keyint, CONF_TYPE_INT, 0, 0, 0, NULL},
-	{"gray", &lavc_param_gray, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_GRAY, NULL},
+	{"gray", &lavc_param_gray, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_GRAY, NULL},
 	{"mpeg_quant", &lavc_param_mpeg_quant, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"vi_qfactor", &lavc_param_vi_qfactor, CONF_TYPE_FLOAT, CONF_RANGE, -31.0, 31.0, NULL},
 	{"vi_qoffset", &lavc_param_vi_qoffset, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 31.0, NULL},
@@ -242,7 +242,7 @@ const m_option_t lavcopts_conf[]={
         {"pred", &lavc_param_prediction_method, CONF_TYPE_INT, CONF_RANGE, 0, 20, NULL},
         {"format", &lavc_param_format, CONF_TYPE_IMGFMT, 0, 0, 0, NULL},
         {"debug", &lavc_param_debug, CONF_TYPE_INT, CONF_RANGE, 0, 100000000, NULL},
-        {"psnr", &lavc_param_psnr, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_PSNR, NULL},
+        {"psnr", &lavc_param_psnr, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_PSNR, NULL},
         {"precmp", &lavc_param_me_pre_cmp, CONF_TYPE_INT, CONF_RANGE, 0, 2000, NULL},
         {"cmp", &lavc_param_me_cmp, CONF_TYPE_INT, CONF_RANGE, 0, 2000, NULL},
         {"subcmp", &lavc_param_me_sub_cmp, CONF_TYPE_INT, CONF_RANGE, 0, 2000, NULL},
@@ -251,21 +251,21 @@ const m_option_t lavcopts_conf[]={
 #ifdef FF_CMP_VSAD
         {"ildctcmp", &lavc_param_ildct_cmp, CONF_TYPE_INT, CONF_RANGE, 0, 2000, NULL},
 #endif
-        {"bit_exact", &lavc_param_bit_exact, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_BITEXACT, NULL},
+        {"bit_exact", &lavc_param_bit_exact, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_BITEXACT, NULL},
         {"predia", &lavc_param_pre_dia_size, CONF_TYPE_INT, CONF_RANGE, -2000, 2000, NULL},
         {"dia", &lavc_param_dia_size, CONF_TYPE_INT, CONF_RANGE, -2000, 2000, NULL},
-	{"qpel", &lavc_param_qpel, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_QPEL, NULL},
+	{"qpel", &lavc_param_qpel, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_QPEL, NULL},
 	{"trell", &lavc_param_trell, CONF_TYPE_FLAG, 0, 0, 1, NULL},
-	{"lowdelay", &lavc_param_lowdelay, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_LOW_DELAY, NULL},
+	{"lowdelay", &lavc_param_lowdelay, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_LOW_DELAY, NULL},
 	{"last_pred", &lavc_param_last_pred, CONF_TYPE_INT, CONF_RANGE, 0, 2000, NULL},
 	{"preme", &lavc_param_pre_me, CONF_TYPE_INT, CONF_RANGE, 0, 2000, NULL},
 	{"subq", &lavc_param_me_subpel_quality, CONF_TYPE_INT, CONF_RANGE, 0, 8, NULL},
 	{"me_range", &lavc_param_me_range, CONF_TYPE_INT, CONF_RANGE, 0, 16000, NULL},
-	{"aic", &lavc_param_aic, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_AC_PRED, NULL},
+	{"aic", &lavc_param_aic, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_AC_PRED, NULL},
 	{"umv", &lavc_param_umv, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"aiv", &lavc_param_aiv, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"obmc", &lavc_param_obmc, CONF_TYPE_FLAG, 0, 0, 1, NULL},
-	{"loop", &lavc_param_loop, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_LOOP_FILTER, NULL},
+	{"loop", &lavc_param_loop, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_LOOP_FILTER, NULL},
 	{"ibias", &lavc_param_ibias, CONF_TYPE_INT, CONF_RANGE, -512, 512, NULL},
 	{"pbias", &lavc_param_pbias, CONF_TYPE_INT, CONF_RANGE, -512, 512, NULL},
 	{"coder", &lavc_param_coder, CONF_TYPE_INT, CONF_RANGE, 0, 10, NULL},
@@ -278,8 +278,8 @@ const m_option_t lavcopts_conf[]={
 	{"qprd", "Please use o=mpv_flags=+qp_rd instead of qprd.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"ss", &lavc_param_ss, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"alt", &lavc_param_alt, CONF_TYPE_FLAG, 0, 0, 1, NULL},
-	{"ilme", &lavc_param_ilme, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_INTERLACED_ME, NULL},
-	{"cgop", &lavc_param_closed_gop, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_CLOSED_GOP, NULL},
+	{"ilme", &lavc_param_ilme, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_INTERLACED_ME, NULL},
+	{"cgop", &lavc_param_closed_gop, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_CLOSED_GOP, NULL},
 	{"gmc", &lavc_param_gmc, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_GMC, NULL},
 	{"dc", &lavc_param_dc_precision, CONF_TYPE_INT, CONF_RANGE, 8, 11, NULL},
 	{"border_mask", &lavc_param_border_masking, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 1.0, NULL},
@@ -545,7 +545,7 @@ static int config(struct vf_instance *vf,
     if (lavc_param_obmc)
         av_dict_set(&opts, "obmc", "1", 0);
     lavc_venc_context->flags|= lavc_param_loop;
-    lavc_venc_context->flags|= lavc_param_v4mv ? CODEC_FLAG_4MV : 0;
+    lavc_venc_context->flags|= lavc_param_v4mv ? AV_CODEC_FLAG_4MV : 0;
     if (lavc_param_data_partitioning)
         av_dict_set(&opts, "data_partitioning", "1", 0);
     lavc_venc_context->flags|= lavc_param_mv0;
@@ -555,13 +555,13 @@ static int config(struct vf_instance *vf,
         av_dict_set(&opts, "alternate_scan", "1", 0);
     lavc_venc_context->flags|= lavc_param_ilme;
     lavc_venc_context->flags|= lavc_param_gmc;
-#ifdef CODEC_FLAG_CLOSED_GOP
+#ifdef AV_CODEC_FLAG_CLOSED_GOP
     lavc_venc_context->flags|= lavc_param_closed_gop;
 #endif
     lavc_venc_context->flags|= lavc_param_gray;
 
     if(lavc_param_normalize_aqp) lavc_venc_context->flags|= CODEC_FLAG_NORMALIZE_AQP;
-    if(lavc_param_interlaced_dct) lavc_venc_context->flags|= CODEC_FLAG_INTERLACED_DCT;
+    if(lavc_param_interlaced_dct) lavc_venc_context->flags|= AV_CODEC_FLAG_INTERLACED_DCT;
     lavc_venc_context->flags|= lavc_param_psnr;
     lavc_venc_context->intra_dc_precision = lavc_param_dc_precision - 8;
     lavc_venc_context->prediction_method= lavc_param_prediction_method;
@@ -570,10 +570,10 @@ static int config(struct vf_instance *vf,
     lavc_venc_context->scenechange_factor = lavc_param_sc_factor;
     if((lavc_param_video_global_header&1)
        /*|| (video_global_header==0 && (oc->oformat->flags & AVFMT_GLOBALHEADER))*/){
-        lavc_venc_context->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        lavc_venc_context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
     }
     if(lavc_param_video_global_header&2){
-        lavc_venc_context->flags2 |= CODEC_FLAG2_LOCAL_HEADER;
+        lavc_venc_context->flags2 |= AV_CODEC_FLAG2_LOCAL_HEADER;
     }
     lavc_venc_context->mv0_threshold = lavc_param_mv0_threshold;
     lavc_venc_context->refs = lavc_param_refs;
@@ -598,7 +598,7 @@ static int config(struct vf_instance *vf,
     switch(lavc_param_vpass){
     case 2:
     case 3:
-	lavc_venc_context->flags|= CODEC_FLAG_PASS2;
+	lavc_venc_context->flags|= AV_CODEC_FLAG_PASS2;
 	stats_file= fopen(passtmpfile, "rb");
 	if(stats_file==NULL){
 	    mp_msg(MSGT_MENCODER,MSGL_ERR,"2pass failed: filename=%s\n", passtmpfile);
@@ -625,7 +625,7 @@ static int config(struct vf_instance *vf,
 	    fclose(stats_file);
 	    /* fall through */
     case 1:
-	lavc_venc_context->flags|= CODEC_FLAG_PASS1;
+	lavc_venc_context->flags|= AV_CODEC_FLAG_PASS1;
 	stats_file= fopen(passtmpfile, "wb");
 	if(stats_file==NULL){
 	    mp_msg(MSGT_MENCODER,MSGL_ERR,"2pass failed: filename=%s\n", passtmpfile);
@@ -645,8 +645,8 @@ static int config(struct vf_instance *vf,
 	  lavc_venc_context->noise_reduction = 0; // nr=0
 	  lavc_venc_context->mb_decision = 0; // mbd=0 ("realtime" encoding)
 
-	  lavc_venc_context->flags &= ~CODEC_FLAG_QPEL;
-	  lavc_venc_context->flags &= ~CODEC_FLAG_4MV;
+	  lavc_venc_context->flags &= ~AV_CODEC_FLAG_QPEL;
+	  lavc_venc_context->flags &= ~AV_CODEC_FLAG_4MV;
 	  lavc_venc_context->trellis = 0;
 	  av_dict_set(&opts, "mpv_flags", "-mv0", 0);
 	  av_dict_set(&opts, "mpv_flags", "-qp_rd-cbp_rd", 0);
@@ -661,7 +661,7 @@ static int config(struct vf_instance *vf,
     if (lavc_param_vqscale >= 0.0)
     {
 	mp_msg(MSGT_MENCODER, MSGL_INFO, MSGTR_MPCODECS_UsingConstantQscale, lavc_param_vqscale);
-	lavc_venc_context->flags |= CODEC_FLAG_QSCALE;
+	lavc_venc_context->flags |= AV_CODEC_FLAG_QSCALE;
         lavc_venc_context->global_quality=
 	vf->priv->pic->quality = (int)(FF_QP2LAMBDA * lavc_param_vqscale + 0.5);
     }
@@ -700,7 +700,7 @@ static int control(struct vf_instance *vf, int request, void* data){
 
     switch(request){
         case VFCTRL_FLUSH_FRAMES:
-            if(vf->priv->codec->capabilities & CODEC_CAP_DELAY)
+            if(vf->priv->codec->capabilities & AV_CODEC_CAP_DELAY)
                 while(encode_frame(vf, NULL, MP_NOPTS_VALUE) > 0);
             return CONTROL_TRUE;
         default:

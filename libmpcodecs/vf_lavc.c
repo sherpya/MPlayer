@@ -157,7 +157,7 @@ static int vf_open(vf_instance_t *vf, char *args){
 
     if(p_quality<32){
 	// fixed qscale
-	lavc_venc_context.flags = CODEC_FLAG_QSCALE;
+	lavc_venc_context.flags = AV_CODEC_FLAG_QSCALE;
 	lavc_venc_context.global_quality =
 	vf->priv->pic->quality = (int)(FF_QP2LAMBDA * ((p_quality<1) ? 1 : p_quality) + 0.5);
     } else {

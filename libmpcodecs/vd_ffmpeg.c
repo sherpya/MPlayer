@@ -115,8 +115,7 @@ static int lavc_param_gray=0;
 static int lavc_param_vstats=0;
 static int lavc_param_idct_algo=0;
 static int lavc_param_debug=0;
-static int lavc_param_vismv=0;
-#ifdef CODEC_FLAG2_SHOW_ALL
+#ifdef AV_CODEC_FLAG2_SHOW_ALL
 static int lavc_param_wait_keyframe=0;
 #endif
 static int lavc_param_skip_top=0;
@@ -141,24 +140,23 @@ static const mp_image_t mpi_no_picture =
 const m_option_t lavc_decode_opts_conf[]={
     {"bug"           , &lavc_param_workaround_bugs      , CONF_TYPE_INT     , CONF_RANGE, -1, 999999, NULL},
     {"er"            , &lavc_param_error_resilience     , CONF_TYPE_INT     , CONF_RANGE, 0, 99, NULL},
-    {"gray"          , &lavc_param_gray                 , CONF_TYPE_FLAG    , 0, 0, CODEC_FLAG_GRAY, NULL},
+    {"gray"          , &lavc_param_gray                 , CONF_TYPE_FLAG    , 0, 0, AV_CODEC_FLAG_GRAY, NULL},
     {"idct"          , &lavc_param_idct_algo            , CONF_TYPE_INT     , CONF_RANGE, 0, 99, NULL},
     {"ec"            , &lavc_param_error_concealment    , CONF_TYPE_INT     , CONF_RANGE, 0, 99, NULL},
     {"vstats"        , &lavc_param_vstats               , CONF_TYPE_FLAG    , 0, 0, 1, NULL},
     {"debug"         , &lavc_param_debug                , CONF_TYPE_INT     , CONF_RANGE, 0, 9999999, NULL},
-    {"vismv"         , &lavc_param_vismv                , CONF_TYPE_INT     , CONF_RANGE, 0, 9999999, NULL},
-#ifdef CODEC_FLAG2_SHOW_ALL
+#ifdef AV_CODEC_FLAG2_SHOW_ALL
     {"wait_keyframe" , &lavc_param_wait_keyframe        , CONF_TYPE_FLAG    , 0, 0, 1, NULL},
 #endif
     {"st"            , &lavc_param_skip_top             , CONF_TYPE_INT     , CONF_RANGE, 0, 999, NULL},
     {"sb"            , &lavc_param_skip_bottom          , CONF_TYPE_INT     , CONF_RANGE, 0, 999, NULL},
-    {"fast"          , &lavc_param_fast                 , CONF_TYPE_FLAG    , 0, 0, CODEC_FLAG2_FAST, NULL},
+    {"fast"          , &lavc_param_fast                 , CONF_TYPE_FLAG    , 0, 0, AV_CODEC_FLAG2_FAST, NULL},
     {"lowres"        , &lavc_param_lowres_str           , CONF_TYPE_STRING  , 0, 0, 0, NULL},
     {"skiploopfilter", &lavc_param_skip_loop_filter_str , CONF_TYPE_STRING  , 0, 0, 0, NULL},
     {"skipidct"      , &lavc_param_skip_idct_str        , CONF_TYPE_STRING  , 0, 0, 0, NULL},
     {"skipframe"     , &lavc_param_skip_frame_str       , CONF_TYPE_STRING  , 0, 0, 0, NULL},
     {"threads"       , &lavc_param_threads              , CONF_TYPE_INT     , CONF_RANGE, 1, 32, NULL},
-    {"bitexact"      , &lavc_param_bitexact             , CONF_TYPE_FLAG    , 0, 0, CODEC_FLAG_BITEXACT, NULL},
+    {"bitexact"      , &lavc_param_bitexact             , CONF_TYPE_FLAG    , 0, 0, AV_CODEC_FLAG_BITEXACT, NULL},
     {"o"             , &lavc_avopt                      , CONF_TYPE_STRING  , 0, 0, 0, NULL},
     {NULL, NULL, 0, 0, 0, 0, NULL}
 };
@@ -257,9 +255,9 @@ static void set_dr_slice_settings(struct AVCodecContext *avctx, const AVCodec *l
     // explicitly requested
     int use_slices = vd_use_slices > 0 || (vd_use_slices <  0 && lavc_param_threads <= 1);
 
-    ctx->do_slices = use_slices && (lavc_codec->capabilities & CODEC_CAP_DRAW_HORIZ_BAND);
+    ctx->do_slices = use_slices && (lavc_codec->capabilities & AV_CODEC_CAP_DRAW_HORIZ_BAND);
 
-    ctx->do_dr1 = (lavc_codec->capabilities & CODEC_CAP_DR1) &&
+    ctx->do_dr1 = (lavc_codec->capabilities & AV_CODEC_CAP_DR1) &&
         lavc_codec->id != AV_CODEC_ID_INTERPLAY_VIDEO &&
         lavc_codec->id != AV_CODEC_ID_H264 &&
         lavc_codec->id != AV_CODEC_ID_HEVC;
@@ -271,12 +269,9 @@ static void set_dr_slice_settings(struct AVCodecContext *avctx, const AVCodec *l
         ctx->do_dr1 = 1;
         ctx->nonref_dr = 1;
     }
-    if (lavc_param_vismv || (lavc_param_debug & (FF_DEBUG_VIS_MB_TYPE|FF_DEBUG_VIS_QP))) {
-        ctx->do_slices = ctx->do_dr1 = 0;
-    }
     if(ctx->do_dr1){
         avctx->get_buffer2 = get_buffer2;
-    } else if (lavc_codec->capabilities & CODEC_CAP_DR1) {
+    } else if (lavc_codec->capabilities & AV_CODEC_CAP_DR1) {
         avctx->get_buffer2 = avcodec_default_get_buffer2;
     }
     avctx->slice_flags = 0;
@@ -372,9 +367,9 @@ static int init(sh_video_t *sh){
     case 1:
         avctx->err_recognition |= AV_EF_CAREFUL;
     }
-    lavc_param_gray|= CODEC_FLAG_GRAY;
-#ifdef CODEC_FLAG2_SHOW_ALL
-    if(!lavc_param_wait_keyframe) avctx->flags2 |= CODEC_FLAG2_SHOW_ALL;
+    lavc_param_gray|= AV_CODEC_FLAG_GRAY;
+#ifdef AV_CODEC_FLAG2_SHOW_ALL
+    if(!lavc_param_wait_keyframe) avctx->flags2 |= AV_CODEC_FLAG2_SHOW_ALL;
 #endif
     avctx->flags2|= lavc_param_fast;
     avctx->codec_tag= sh->format;
@@ -383,7 +378,6 @@ static int init(sh_video_t *sh){
     avctx->debug= lavc_param_debug;
     if (lavc_param_debug)
         av_log_set_level(AV_LOG_DEBUG);
-    avctx->debug_mv= lavc_param_vismv;
     avctx->skip_top   = lavc_param_skip_top;
     avctx->skip_bottom= lavc_param_skip_bottom;
     if(lavc_param_lowres_str != NULL)
@@ -419,7 +413,7 @@ static int init(sh_video_t *sh){
        handled here; the second case falls through to the next section. */
         if (sh->ImageDesc) {
             avctx->extradata_size = (*(int *)sh->ImageDesc) - sizeof(int);
-            avctx->extradata = av_mallocz(avctx->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
+            avctx->extradata = av_mallocz(avctx->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
             memcpy(avctx->extradata, ((int *)sh->ImageDesc)+1, avctx->extradata_size);
             break;
         }
@@ -434,7 +428,7 @@ static int init(sh_video_t *sh){
             break;
         av_dict_set(&opts, "extern_huff", "1", 0);
         avctx->extradata_size = sh->bih->biSize-sizeof(*sh->bih);
-        avctx->extradata = av_mallocz(avctx->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
+        avctx->extradata = av_mallocz(avctx->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
         memcpy(avctx->extradata, sh->bih+1, avctx->extradata_size);
 
 #if 0
@@ -457,14 +451,14 @@ static int init(sh_video_t *sh){
         if(sh->bih->biSize<sizeof(*sh->bih)+8){
             /* only 1 packet per frame & sub_id from fourcc */
             avctx->extradata_size= 8;
-            avctx->extradata = av_mallocz(avctx->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
+            avctx->extradata = av_mallocz(avctx->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
             ((uint32_t *)avctx->extradata)[0] = 0;
             ((uint32_t *)avctx->extradata)[1] =
                 (sh->format == mmioFOURCC('R', 'V', '1', '3')) ? 0x10003001 : 0x10000000;
         } else {
             /* has extra slice header (demux_rm or rm->avi streamcopy) */
             avctx->extradata_size = sh->bih->biSize-sizeof(*sh->bih);
-            avctx->extradata = av_mallocz(avctx->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
+            avctx->extradata = av_mallocz(avctx->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
             memcpy(avctx->extradata, sh->bih+1, avctx->extradata_size);
         }
 
@@ -475,7 +469,7 @@ static int init(sh_video_t *sh){
         if (!sh->bih || sh->bih->biSize <= (int)sizeof(*sh->bih))
             break;
         avctx->extradata_size = sh->bih->biSize-sizeof(*sh->bih);
-        avctx->extradata = av_mallocz(avctx->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
+        avctx->extradata = av_mallocz(avctx->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
         if (!avctx->extradata) {
             avctx->extradata_size = 0;
             break;

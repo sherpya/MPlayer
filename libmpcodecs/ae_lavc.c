@@ -224,10 +224,10 @@ int mpae_init_lavc(audio_encoder_t *encoder)
 	}
         if((lavc_param_audio_global_header&1)
         /*|| (video_global_header==0 && (oc->oformat->flags & AVFMT_GLOBALHEADER))*/){
-                lavc_actx->flags |= CODEC_FLAG_GLOBAL_HEADER;
+                lavc_actx->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
         }
         if(lavc_param_audio_global_header&2){
-                lavc_actx->flags2 |= CODEC_FLAG2_LOCAL_HEADER;
+                lavc_actx->flags2 |= AV_CODEC_FLAG2_LOCAL_HEADER;
         }
 
 	if(avcodec_open2(lavc_actx, lavc_acodec, NULL) < 0)

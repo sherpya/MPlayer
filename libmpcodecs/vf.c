@@ -200,7 +200,7 @@ static const vf_info_t* const filter_list[]={
     &vf_info_uspp,
     &vf_info_fspp,
     &vf_info_qp,
-    &vf_info_mcdeint,
+//    &vf_info_mcdeint, //TODO: vf_mcdeint is deactivated because it doesn't build after latest FFmpeg major bumps
 #endif
     &vf_info_yuvcsp,
     &vf_info_kerndeint,

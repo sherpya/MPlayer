@@ -52,7 +52,7 @@ const m_option_t ovc_conf[]={
     "   nuv      - nuppel video\n"
 #endif
 #ifdef CONFIG_FFMPEG
-    "   lavc     - libavcodec codecs - best quality!\n"
+//    "   lavc     - libavcodec codecs - best quality!\n"//TODO: ve_lavc is deactivated because it doesn't build after latest FFmpeg major bumps
 #endif
 #ifdef CONFIG_WIN32DLL
     "   vfw      - VfW DLLs, read DOCS/HTML/en/encoding-guide.html.\n"
@@ -106,7 +106,7 @@ const m_option_t oac_conf[]={
     "   mp3lame  - cbr/abr/vbr MP3 using libmp3lame\n"
 #endif
 #ifdef CONFIG_FFMPEG
-    "   lavc     - FFmpeg audio encoder (MP2, AC3, ...)\n"
+//    "   lavc     - FFmpeg audio encoder (MP2, AC3, ...)\n"//TODO: ae_lavc was deactivated because it depends on ve_lavc which does not compile after latest FFmpeg major bumps
 #endif
 #ifdef CONFIG_TOOLAME
     "   toolame  - Toolame MP2 audio encoder\n"
@@ -226,7 +226,7 @@ const m_option_t mencoder_opts[]={
     {"lameopts", lameopts_conf, CONF_TYPE_SUBCONFIG, CONF_GLOBAL, 0, 0, NULL},
 #endif
 #ifdef CONFIG_FFMPEG
-    {"lavcopts", lavcopts_conf, CONF_TYPE_SUBCONFIG, CONF_GLOBAL, 0, 0, NULL},
+    //{"lavcopts", lavcopts_conf, CONF_TYPE_SUBCONFIG, CONF_GLOBAL, 0, 0, NULL}, //TODO: ve_lavc doesn't build after latest FFmpeg major bumps
 #else
     {"lavcopts", "MPlayer was compiled without libavcodec. See README or DOCS.\n", CONF_TYPE_PRINT, CONF_NOCFG, 0, 0, NULL},
 #endif /* CONFIG_FFMPEG */

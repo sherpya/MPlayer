@@ -180,7 +180,7 @@ static int lavf_check_file(demuxer_t *demuxer){
     }
 
     avpd.buf = av_mallocz(FFMAX(BIO_BUFFER_SIZE, PROBE_BUF_SIZE) +
-                          FF_INPUT_BUFFER_PADDING_SIZE);
+                          AV_INPUT_BUFFER_PADDING_SIZE);
     do {
         read_size = stream_read(demuxer->stream, avpd.buf + probe_data_size, read_size);
         if(read_size < 0) {

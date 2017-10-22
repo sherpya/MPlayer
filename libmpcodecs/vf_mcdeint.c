@@ -231,7 +231,7 @@ static int config(struct vf_instance *vf,
             avctx_enc->gop_size = 300;
             avctx_enc->max_b_frames= 0;
             avctx_enc->pix_fmt = AV_PIX_FMT_YUV420P;
-            avctx_enc->flags = CODEC_FLAG_QSCALE | CODEC_FLAG_LOW_DELAY;
+            avctx_enc->flags = AV_CODEC_FLAG_QSCALE | AV_CODEC_FLAG_LOW_DELAY;
             avctx_enc->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
             avctx_enc->global_quality= 1;
             av_dict_set(&opts, "memc_only", "1", 0);
@@ -245,11 +245,11 @@ static int config(struct vf_instance *vf,
             case 2:
                 avctx_enc->me_method= ME_ITER;
             case 1:
-                avctx_enc->flags |= CODEC_FLAG_4MV;
+                avctx_enc->flags |= AV_CODEC_FLAG_4MV;
                 avctx_enc->dia_size=2;
 //                avctx_enc->mb_decision = MB_DECISION_RD;
             case 0:
-                avctx_enc->flags |= CODEC_FLAG_QPEL;
+                avctx_enc->flags |= AV_CODEC_FLAG_QPEL;
             }
 
             avcodec_open2(avctx_enc, enc, &opts);

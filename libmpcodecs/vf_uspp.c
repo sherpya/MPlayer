@@ -240,7 +240,7 @@ static int config(struct vf_instance *vf,
             avctx_enc->gop_size = 300;
             avctx_enc->max_b_frames= 0;
             avctx_enc->pix_fmt = AV_PIX_FMT_YUV420P;
-            avctx_enc->flags = CODEC_FLAG_QSCALE | CODEC_FLAG_LOW_DELAY;
+            avctx_enc->flags = AV_CODEC_FLAG_QSCALE | AV_CODEC_FLAG_LOW_DELAY;
             avctx_enc->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
             avctx_enc->global_quality= 123;
             av_dict_set(&opts, "no_bitstream", "1", 0);

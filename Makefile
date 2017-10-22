@@ -68,7 +68,6 @@ SRCS_COMMON-$(CONFIG_VF_LAVFI)      +=  libmpcodecs/vf_lavfi.c
 
 # These filters use private headers and do not work with shared FFmpeg.
 SRCS_COMMON-$(FFMPEG_A)              += libmpcodecs/vf_fspp.c           \
-                                        libmpcodecs/vf_mcdeint.c        \
                                         libmpcodecs/vf_qp.c             \
                                         libmpcodecs/vf_spp.c            \
                                         libmpcodecs/vf_uspp.c           \
@@ -616,9 +615,7 @@ SRCS_MPLAYER = command.c                \
 
 #MEncoder
 SRCS_MENCODER-$(FAAC)             += libmpcodecs/ae_faac.c
-SRCS_MENCODER-$(FFMPEG)           += libmpcodecs/ae_lavc.c              \
-                                     libmpcodecs/ve_lavc.c              \
-                                     libmpdemux/muxer_lavf.c
+SRCS_MENCODER-$(FFMPEG)           += libmpdemux/muxer_lavf.c
 SRCS_MENCODER-$(LIBDV)            += libmpcodecs/ve_libdv.c
 SRCS_MENCODER-$(LIBLZO)           += libmpcodecs/ve_nuv.c               \
                                      libmpcodecs/native/rtjpegn.c

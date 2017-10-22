@@ -134,7 +134,7 @@ static int init(sh_audio_t *sh_audio)
 
     /* alloc extra data */
     if (sh_audio->wf && sh_audio->wf->cbSize > 0) {
-        lavc_context->extradata = av_mallocz(sh_audio->wf->cbSize + FF_INPUT_BUFFER_PADDING_SIZE);
+        lavc_context->extradata = av_mallocz(sh_audio->wf->cbSize + AV_INPUT_BUFFER_PADDING_SIZE);
         lavc_context->extradata_size = sh_audio->wf->cbSize;
         memcpy(lavc_context->extradata, sh_audio->wf + 1,
                lavc_context->extradata_size);

@@ -194,7 +194,7 @@ static int control(sh_video_t *sh, int cmd, void *arg, ...){
 #if CONFIG_XVMC
         case IMGFMT_XVMC_IDCT_MPEG2:
         case IMGFMT_XVMC_MOCO_MPEG2:
-            if(avctx->pix_fmt == AV_PIX_FMT_XVMC_MPEG2_IDCT) return CONTROL_TRUE;
+            if(avctx->pix_fmt == AV_PIX_FMT_XVMC) return CONTROL_TRUE;
 #endif
         }
         return CONTROL_FALSE;

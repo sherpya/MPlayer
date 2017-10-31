@@ -63,12 +63,9 @@ static int lavc_param_vbitrate = -1;
 static int lavc_param_vrate_tolerance = 1000*8;
 static int lavc_param_mb_decision = 0; /* default is realtime encoding */
 static int lavc_param_v4mv = 0;
-static int lavc_param_vme = 4;
 static float lavc_param_vqscale = -1;
 static int lavc_param_vqmin = 2;
 static int lavc_param_vqmax = 31;
-static float lavc_param_lmin = 2;
-static float lavc_param_lmax = 31;
 static float lavc_param_mb_lmin = 2;
 static float lavc_param_mb_lmax = 31;
 static int lavc_param_vqdiff = 3;
@@ -81,22 +78,15 @@ static float lavc_param_vi_qoffset = 0.0;
 static int lavc_param_vmax_b_frames = 0;
 static int lavc_param_keyint = -1;
 static int lavc_param_vpass = 0;
-static int lavc_param_vrc_strategy = 0;
 static int lavc_param_vb_strategy = 0;
 static int lavc_param_packet_size= 0;
 static int lavc_param_strict= -1;
 static int lavc_param_data_partitioning= 0;
 static int lavc_param_gray=0;
-static float lavc_param_rc_qsquish=1.0;
-static float lavc_param_rc_qmod_amp=0;
-static int lavc_param_rc_qmod_freq=0;
 static char *lavc_param_rc_override_string=NULL;
-static char *lavc_param_rc_eq="tex^qComp";
 static int lavc_param_rc_buffer_size=0;
-static float lavc_param_rc_buffer_aggressivity=1.0;
 static int lavc_param_rc_max_rate=0;
 static int lavc_param_rc_min_rate=0;
-static float lavc_param_rc_initial_cplx=0;
 static float lavc_param_rc_initial_buffer_occupancy=0.9;
 static int lavc_param_mpeg_quant=0;
 static int lavc_param_fdct=0;
@@ -108,8 +98,6 @@ static float lavc_param_dark_masking= 0.0;
 static float lavc_param_temporal_cplx_masking= 0.0;
 static float lavc_param_spatial_cplx_masking= 0.0;
 static float lavc_param_p_masking= 0.0;
-static float lavc_param_border_masking= 0.0;
-static int lavc_param_normalize_aqp= 0;
 static int lavc_param_interlaced_dct= 0;
 static int lavc_param_prediction_method= FF_PRED_LEFT;
 static int lavc_param_format= IMGFMT_YV12;
@@ -131,15 +119,12 @@ static int lavc_param_bit_exact = 0;
 static int lavc_param_aic= 0;
 static int lavc_param_aiv= 0;
 static int lavc_param_umv= 0;
-static int lavc_param_gmc= 0;
 static int lavc_param_obmc= 0;
 static int lavc_param_loop= 0;
 static int lavc_param_last_pred= 0;
 static int lavc_param_pre_me= 1;
 static int lavc_param_me_subpel_quality= 8;
 static int lavc_param_me_range= 0;
-static int lavc_param_ibias= FF_DEFAULT_QUANT_BIAS;
-static int lavc_param_pbias= FF_DEFAULT_QUANT_BIAS;
 static int lavc_param_coder= 0;
 static int lavc_param_context= 0;
 static char *lavc_param_intra_matrix = NULL;
@@ -162,7 +147,6 @@ static int lavc_param_skip_exp=0;
 static int lavc_param_skip_cmp=0;
 static int lavc_param_brd_scale = 0;
 static int lavc_param_bidir_refine = 0;
-static int lavc_param_sc_factor = 1;
 static int lavc_param_video_global_header= 0;
 static int lavc_param_mv0_threshold = 256;
 static int lavc_param_refs = 1;
@@ -190,21 +174,21 @@ const m_option_t lavcopts_conf[]={
 	{"vhq", &lavc_param_mb_decision, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"mbd", &lavc_param_mb_decision, CONF_TYPE_INT, CONF_RANGE, 0, 9, NULL},
 	{"v4mv", &lavc_param_v4mv, CONF_TYPE_FLAG, 0, 0, 1, NULL},
-	{"vme", &lavc_param_vme, CONF_TYPE_INT, CONF_RANGE, 0, 8, NULL},
+	{"vme", "vme has no effect, please use the corresponding codec specific option (see FFmpeg documentation) instead of vme.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"vqscale", &lavc_param_vqscale, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 255.0, NULL},
 	{"vqmin", &lavc_param_vqmin, CONF_TYPE_INT, CONF_RANGE, 1, 31, NULL},
 	{"vqmax", &lavc_param_vqmax, CONF_TYPE_INT, CONF_RANGE, 1, 31, NULL},
-	{"lmin", &lavc_param_lmin, CONF_TYPE_FLOAT, CONF_RANGE, 0.01, 255.0, NULL},
-	{"lmax", &lavc_param_lmax, CONF_TYPE_FLOAT, CONF_RANGE, 0.01, 255.0, NULL},
+        {"lmin", "Please use o=lmin=<value>*QP2LAMBDA instead of lmin.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
+        {"lmax", "Please use o=lmax=<value>*QP2LAMBDA instead of lmax.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"mblmin", &lavc_param_mb_lmin, CONF_TYPE_FLOAT, CONF_RANGE, 0.01, 255.0, NULL},
 	{"mblmax", &lavc_param_mb_lmax, CONF_TYPE_FLOAT, CONF_RANGE, 0.01, 255.0, NULL},
 	{"vqdiff", &lavc_param_vqdiff, CONF_TYPE_INT, CONF_RANGE, 1, 31, NULL},
 	{"vqcomp", &lavc_param_vqcompress, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 1.0, NULL},
 	{"vqblur", &lavc_param_vqblur, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 1.0, NULL},
 	{"vb_qfactor", &lavc_param_vb_qfactor, CONF_TYPE_FLOAT, CONF_RANGE, -31.0, 31.0, NULL},
-	{"vmax_b_frames", &lavc_param_vmax_b_frames, CONF_TYPE_INT, CONF_RANGE, 0, FF_MAX_B_FRAMES, NULL},
+	{"vmax_b_frames", &lavc_param_vmax_b_frames, CONF_TYPE_INT, CONF_RANGE, 0, 16, NULL}, // FF_MAX_B_FRAMES was removed from FFmpeg. We still use its value here, so we probably limit ourselves in some cases.
 	{"vpass", &lavc_param_vpass, CONF_TYPE_INT, CONF_RANGE, 0, 3, NULL},
-	{"vrc_strategy", &lavc_param_vrc_strategy, CONF_TYPE_INT, CONF_RANGE, 0, 2, NULL},
+	{"vrc_strategy", "Please use o=rc_strategy=<value> instead of vrc_strategy.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"vb_strategy", &lavc_param_vb_strategy, CONF_TYPE_INT, CONF_RANGE, 0, 10, NULL},
 	{"vb_qoffset", &lavc_param_vb_qoffset, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 31.0, NULL},
 	{"vlelim", "Please use o=luma_elim_threshold=<value> instead of vlelim.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
@@ -217,16 +201,16 @@ const m_option_t lavcopts_conf[]={
 	{"mpeg_quant", &lavc_param_mpeg_quant, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"vi_qfactor", &lavc_param_vi_qfactor, CONF_TYPE_FLOAT, CONF_RANGE, -31.0, 31.0, NULL},
 	{"vi_qoffset", &lavc_param_vi_qoffset, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 31.0, NULL},
-	{"vqsquish", &lavc_param_rc_qsquish, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 99.0, NULL},
-	{"vqmod_amp", &lavc_param_rc_qmod_amp, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 99.0, NULL},
-	{"vqmod_freq", &lavc_param_rc_qmod_freq, CONF_TYPE_INT, 0, 0, 0, NULL},
-	{"vrc_eq", &lavc_param_rc_eq, CONF_TYPE_STRING, 0, 0, 0, NULL},
+	{"vqsquish", "Please use o=qsquish=<value> instead of vqsquish.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
+	{"vqmod_amp", "Please use o=rc_qmod_amp=<value> instead of vqmod_amp.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
+	{"vqmod_freq", "Please use o=rc_qmod_freq=<value> instead of vqmod_freq.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
+	{"vrc_eq", "Please use o=rc_eq=<value> instead of vrc_eq.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"vrc_override", &lavc_param_rc_override_string, CONF_TYPE_STRING, 0, 0, 0, NULL},
 	{"vrc_maxrate", &lavc_param_rc_max_rate, CONF_TYPE_INT, CONF_RANGE, 0, MAX_BITRATE, NULL},
 	{"vrc_minrate", &lavc_param_rc_min_rate, CONF_TYPE_INT, CONF_RANGE, 0, MAX_BITRATE, NULL},
 	{"vrc_buf_size", &lavc_param_rc_buffer_size, CONF_TYPE_INT, CONF_RANGE, 4, MAX_BITRATE, NULL},
-	{"vrc_buf_aggressivity", &lavc_param_rc_buffer_aggressivity, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 99.0, NULL},
-	{"vrc_init_cplx", &lavc_param_rc_initial_cplx, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 9999999.0, NULL},
+	{"vrc_buf_aggressivity", "Please use o=rc_buf_aggressivity=<value> instead of vrc_buf_aggressivity.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
+	{"vrc_init_cplx", "Please use o=rc_init_cplx=<value> instead of vrc_init_cplx.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"vrc_init_occupancy", &lavc_param_rc_initial_buffer_occupancy, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 1.0, NULL},
         {"vfdct", &lavc_param_fdct, CONF_TYPE_INT, CONF_RANGE, 0, 10, NULL},
 	{"aspect", &lavc_param_aspect, CONF_TYPE_STRING, 0, 0, 0, NULL},
@@ -235,7 +219,7 @@ const m_option_t lavcopts_conf[]={
 	{"tcplx_mask", &lavc_param_temporal_cplx_masking, CONF_TYPE_FLOAT, CONF_RANGE, -1.0, 1.0, NULL},
 	{"scplx_mask", &lavc_param_spatial_cplx_masking, CONF_TYPE_FLOAT, CONF_RANGE, -1.0, 1.0, NULL},
 	{"p_mask", &lavc_param_p_masking, CONF_TYPE_FLOAT, CONF_RANGE, -1.0, 1.0, NULL},
-	{"naq", &lavc_param_normalize_aqp, CONF_TYPE_FLAG, 0, 0, 1, NULL},
+	{"naq", "Please use o=mpv_flags=+naq instead of naq.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"dark_mask", &lavc_param_dark_masking, CONF_TYPE_FLOAT, CONF_RANGE, -1.0, 1.0, NULL},
 	{"ildct", &lavc_param_interlaced_dct, CONF_TYPE_FLAG, 0, 0, 1, NULL},
         {"idct", &lavc_param_idct, CONF_TYPE_INT, CONF_RANGE, 0, 20, NULL},
@@ -266,8 +250,8 @@ const m_option_t lavcopts_conf[]={
 	{"aiv", &lavc_param_aiv, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"obmc", &lavc_param_obmc, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"loop", &lavc_param_loop, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_LOOP_FILTER, NULL},
-	{"ibias", &lavc_param_ibias, CONF_TYPE_INT, CONF_RANGE, -512, 512, NULL},
-	{"pbias", &lavc_param_pbias, CONF_TYPE_INT, CONF_RANGE, -512, 512, NULL},
+	{"ibias", "Please use o=ibias=<value> instead of ibias.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
+	{"pbias", "Please use o=pbias=<value> instead of pbias.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"coder", &lavc_param_coder, CONF_TYPE_INT, CONF_RANGE, 0, 10, NULL},
 	{"context", &lavc_param_context, CONF_TYPE_INT, CONF_RANGE, 0, 10, NULL},
 	{"intra_matrix", &lavc_param_intra_matrix, CONF_TYPE_STRING, 0, 0, 0, NULL},
@@ -280,9 +264,9 @@ const m_option_t lavcopts_conf[]={
 	{"alt", &lavc_param_alt, CONF_TYPE_FLAG, 0, 0, 1, NULL},
 	{"ilme", &lavc_param_ilme, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_INTERLACED_ME, NULL},
 	{"cgop", &lavc_param_closed_gop, CONF_TYPE_FLAG, 0, 0, AV_CODEC_FLAG_CLOSED_GOP, NULL},
-	{"gmc", &lavc_param_gmc, CONF_TYPE_FLAG, 0, 0, CODEC_FLAG_GMC, NULL},
+	{"gmc", "Please use o=gmc=<value> instead of gmc.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"dc", &lavc_param_dc_precision, CONF_TYPE_INT, CONF_RANGE, 8, 11, NULL},
-	{"border_mask", &lavc_param_border_masking, CONF_TYPE_FLOAT, CONF_RANGE, 0.0, 1.0, NULL},
+	{"border_mask", "Please use o=border_mask=<value> instead of border_mask.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"inter_threshold", "inter_threshold has no effect, please remove it.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"sc_threshold", &lavc_param_sc_threshold, CONF_TYPE_INT, CONF_RANGE, -1000000000, 1000000000, NULL},
 	{"top", &lavc_param_top, CONF_TYPE_INT, CONF_RANGE, -1, 1, NULL},
@@ -295,7 +279,7 @@ const m_option_t lavcopts_conf[]={
         {"skip_exp", &lavc_param_skip_exp, CONF_TYPE_INT, CONF_RANGE, 0, 1000000, NULL},
 	{"brd_scale", &lavc_param_brd_scale, CONF_TYPE_INT, CONF_RANGE, 0, 10, NULL},
 	{"bidir_refine", &lavc_param_bidir_refine, CONF_TYPE_INT, CONF_RANGE, 0, 4, NULL},
-	{"sc_factor", &lavc_param_sc_factor, CONF_TYPE_INT, CONF_RANGE, 1, INT_MAX, NULL},
+	{"sc_factor", "sc_factor has no effect, please remove it.\n", CONF_TYPE_PRINT, 0, 0, 0, NULL},
 	{"vglobal", &lavc_param_video_global_header, CONF_TYPE_INT, CONF_RANGE, 0, INT_MAX, NULL},
 	{"aglobal", &lavc_param_audio_global_header, CONF_TYPE_INT, CONF_RANGE, 0, INT_MAX, NULL},
 	{"mv0_threshold", &lavc_param_mv0_threshold, CONF_TYPE_INT, CONF_RANGE, 0, INT_MAX, NULL},
@@ -353,8 +337,6 @@ static int config(struct vf_instance *vf,
     lavc_venc_context->time_base= (AVRational){mux_v->h.dwScale, mux_v->h.dwRate};
     lavc_venc_context->qmin= lavc_param_vqmin;
     lavc_venc_context->qmax= lavc_param_vqmax;
-    lavc_venc_context->lmin= (int)(FF_QP2LAMBDA * lavc_param_lmin + 0.5);
-    lavc_venc_context->lmax= (int)(FF_QP2LAMBDA * lavc_param_lmax + 0.5);
     lavc_venc_context->mb_lmin= (int)(FF_QP2LAMBDA * lavc_param_mb_lmin + 0.5);
     lavc_venc_context->mb_lmax= (int)(FF_QP2LAMBDA * lavc_param_mb_lmax + 0.5);
     lavc_venc_context->max_qdiff= lavc_param_vqdiff;
@@ -362,17 +344,12 @@ static int config(struct vf_instance *vf,
     lavc_venc_context->qblur= lavc_param_vqblur;
     lavc_venc_context->max_b_frames= lavc_param_vmax_b_frames;
     lavc_venc_context->b_quant_factor= lavc_param_vb_qfactor;
-    lavc_venc_context->rc_strategy= lavc_param_vrc_strategy;
     lavc_venc_context->b_frame_strategy= lavc_param_vb_strategy;
     lavc_venc_context->b_quant_offset= (int)(FF_QP2LAMBDA * lavc_param_vb_qoffset + 0.5);
     lavc_venc_context->rtp_payload_size= lavc_param_packet_size;
     lavc_venc_context->strict_std_compliance= lavc_param_strict;
     lavc_venc_context->i_quant_factor= lavc_param_vi_qfactor;
     lavc_venc_context->i_quant_offset= (int)(FF_QP2LAMBDA * lavc_param_vi_qoffset + 0.5);
-    lavc_venc_context->rc_qsquish= lavc_param_rc_qsquish;
-    lavc_venc_context->rc_qmod_amp= lavc_param_rc_qmod_amp;
-    lavc_venc_context->rc_qmod_freq= lavc_param_rc_qmod_freq;
-    lavc_venc_context->rc_eq= av_strdup(lavc_param_rc_eq);
 
     mux_v->max_rate=
     lavc_venc_context->rc_max_rate= lavc_param_rc_max_rate*1000;
@@ -384,8 +361,6 @@ static int config(struct vf_instance *vf,
     lavc_venc_context->rc_initial_buffer_occupancy=
             lavc_venc_context->rc_buffer_size *
             lavc_param_rc_initial_buffer_occupancy;
-    lavc_venc_context->rc_buffer_aggressivity= lavc_param_rc_buffer_aggressivity;
-    lavc_venc_context->rc_initial_cplx= lavc_param_rc_initial_cplx;
     lavc_venc_context->debug= lavc_param_debug;
     lavc_venc_context->last_predictor_count= lavc_param_last_pred;
     lavc_venc_context->pre_me= lavc_param_pre_me;
@@ -393,8 +368,6 @@ static int config(struct vf_instance *vf,
     lavc_venc_context->pre_dia_size= lavc_param_pre_dia_size;
     lavc_venc_context->me_subpel_quality= lavc_param_me_subpel_quality;
     lavc_venc_context->me_range= lavc_param_me_range;
-    lavc_venc_context->intra_quant_bias= lavc_param_ibias;
-    lavc_venc_context->inter_quant_bias= lavc_param_pbias;
     lavc_venc_context->coder_type= lavc_param_coder;
     lavc_venc_context->context_model= lavc_param_context;
     lavc_venc_context->scenechange_threshold= lavc_param_sc_threshold;
@@ -481,7 +454,6 @@ static int config(struct vf_instance *vf,
     lavc_venc_context->spatial_cplx_masking= lavc_param_spatial_cplx_masking;
     lavc_venc_context->p_masking= lavc_param_p_masking;
     lavc_venc_context->dark_masking= lavc_param_dark_masking;
-        lavc_venc_context->border_masking = lavc_param_border_masking;
 
     if (lavc_param_aspect != NULL)
     {
@@ -554,20 +526,17 @@ static int config(struct vf_instance *vf,
     if (lavc_param_alt)
         av_dict_set(&opts, "alternate_scan", "1", 0);
     lavc_venc_context->flags|= lavc_param_ilme;
-    lavc_venc_context->flags|= lavc_param_gmc;
 #ifdef AV_CODEC_FLAG_CLOSED_GOP
     lavc_venc_context->flags|= lavc_param_closed_gop;
 #endif
     lavc_venc_context->flags|= lavc_param_gray;
 
-    if(lavc_param_normalize_aqp) lavc_venc_context->flags|= CODEC_FLAG_NORMALIZE_AQP;
     if(lavc_param_interlaced_dct) lavc_venc_context->flags|= AV_CODEC_FLAG_INTERLACED_DCT;
     lavc_venc_context->flags|= lavc_param_psnr;
     lavc_venc_context->intra_dc_precision = lavc_param_dc_precision - 8;
     lavc_venc_context->prediction_method= lavc_param_prediction_method;
     lavc_venc_context->brd_scale = lavc_param_brd_scale;
     lavc_venc_context->bidir_refine = lavc_param_bidir_refine;
-    lavc_venc_context->scenechange_factor = lavc_param_sc_factor;
     if((lavc_param_video_global_header&1)
        /*|| (video_global_header==0 && (oc->oformat->flags & AVFMT_GLOBALHEADER))*/){
         lavc_venc_context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
@@ -654,8 +623,6 @@ static int config(struct vf_instance *vf,
 	break;
     }
     }
-
-    lavc_venc_context->me_method = ME_ZERO+lavc_param_vme;
 
     /* fixed qscale :p */
     if (lavc_param_vqscale >= 0.0)

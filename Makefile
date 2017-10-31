@@ -615,7 +615,9 @@ SRCS_MPLAYER = command.c                \
 
 #MEncoder
 SRCS_MENCODER-$(FAAC)             += libmpcodecs/ae_faac.c
-SRCS_MENCODER-$(FFMPEG)           += libmpdemux/muxer_lavf.c
+SRCS_MENCODER-$(FFMPEG)           += libmpcodecs/ae_lavc.c              \
+                                     libmpcodecs/ve_lavc.c              \
+                                     libmpdemux/muxer_lavf.c
 SRCS_MENCODER-$(LIBDV)            += libmpcodecs/ve_libdv.c
 SRCS_MENCODER-$(LIBLZO)           += libmpcodecs/ve_nuv.c               \
                                      libmpcodecs/native/rtjpegn.c

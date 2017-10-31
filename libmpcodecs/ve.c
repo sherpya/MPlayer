@@ -43,7 +43,7 @@ extern const vf_info_t ve_info_x264;
 
 static const vf_info_t * const encoder_list[] = {
 #ifdef CONFIG_FFMPEG
-//    &ve_info_lavc,//TODO: ve_lavc is deactivated because it doesn't build after latest FFmpeg major bumps
+    &ve_info_lavc,
 #endif
 #ifdef CONFIG_WIN32DLL
     &ve_info_vfw,

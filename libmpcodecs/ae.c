@@ -59,7 +59,9 @@ audio_encoder_t *new_audio_encoder(muxer_stream_t *stream, audio_encoding_params
 			break;
 #endif
 #ifdef CONFIG_FFMPEG
-		//TODO: ACODEC_LAVC <-- has been removed here because it depends on ve_lavc which does not compile after latest FFmpeg major bumps
+		case ACODEC_LAVC:
+			ris = mpae_init_lavc(encoder);
+			break;
 #endif
 #ifdef CONFIG_MP3LAME
 		case ACODEC_VBRMP3:

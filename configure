@@ -8689,6 +8689,7 @@ SLIBNAME_WITH_MAJOR = \$(SLIBNAME)-42
 
 # Some FFmpeg codecs depend on these. Enable them unconditionally for now.
 CONFIG_AANDCTTABLES  = yes
+CONFIG_ADTS_HEADER = yes
 CONFIG_AUDIODSP = yes
 CONFIG_AUDIO_FRAME_QUEUE = yes
 CONFIG_BLOCKDSP= yes
@@ -9374,6 +9375,7 @@ $def_simd_align_32
 
 /* Some FFmpeg codecs depend on these. Enable them unconditionally for now. */
 #define CONFIG_AANDCTTABLES 1
+#define CONFIG_ADTS_HEADER 1
 #define CONFIG_AUDIODSP 1
 #define CONFIG_AUDIO_FRAME_QUEUE 1
 #define CONFIG_BLOCKDSP 1

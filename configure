@@ -1580,6 +1580,15 @@ libavfilters_all=$(list_subparts   FILTER   filter   filter/allfilters.c)
 test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
 
+# a white space separated list (1st arg)
+# has an item with the given value (2nd arg)
+contains_item() {
+  test "$1" || false
+  for item in $1; do
+    test "$item" = "$2" && return
+  done
+  false
+}
 filter_out_component() {
   eval list=\$libav${1}s
   type=$(echo $1 | toupper)
@@ -4452,7 +4461,12 @@ if test "$_gnutls" = auto ; then
 fi
 if test "$_gnutls" = yes ; then
   def_gnutls='#define CONFIG_GNUTLS 1'
-  libavprotocols="$libavprotocols HTTPS_PROTOCOL TLS_GNUTLS_PROTOCOL"
+  libavprotocols="$libavprotocols HTTPS_PROTOCOL"
+  if contains_item "$libavprotocols_all" 'TLS_GNUTLS_PROTOCOL' ; then
+      libavprotocols="$libavprotocols TLS_GNUTLS_PROTOCOL"
+  else
+      libavprotocols="$libavprotocols TLS_PROTOCOL"
+  fi
   extra_cflags="$extra_cflags $($_pkg_config --cflags gnutls)"
   extra_ldflags="$extra_ldflags $($_pkg_config --libs gnutls)"
 else
@@ -4463,7 +4477,12 @@ echores "$_gnutls"
 echocheck "OpenSSL"
 if test "$_openssl" = yes ; then
   def_openssl='#define CONFIG_OPENSSL 1'
-  libavprotocols="$libavprotocols HTTPS_PROTOCOL TLS_OPENSSL_PROTOCOL"
+  libavprotocols="$libavprotocols HTTPS_PROTOCOL"
+  if contains_item "$libavprotocols_all" 'TLS_OPENSSL_PROTOCOL' ; then
+      libavprotocols="$libavprotocols TLS_OPENSSL_PROTOCOL"
+  else
+      libavprotocols="$libavprotocols TLS_PROTOCOL"
+  fi
   extra_cflags="$extra_cflags $($_pkg_config --cflags openssl)"
   extra_ldflags="$extra_ldflags $($_pkg_config --libs openssl)"
 else

@@ -1583,7 +1583,6 @@ echores "$_list_subparts"
 # a white space separated list (1st arg)
 # has an item with the given value (2nd arg)
 contains_item() {
-  test "$1" || false
   for item in $1; do
     test "$item" = "$2" && return
   done

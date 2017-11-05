@@ -5331,12 +5331,30 @@ fi
 echocheck "OpenJPEG (JPEG 2000) support"
 if test "$libopenjpeg" = auto ; then
   libopenjpeg=no
-  define_statement_check OPJ_STATIC openjpeg.h 'opj_dparameters_t dec_params; opj_set_default_decoder_parameters(&dec_params);opj_decode_with_info(0,0,0)' -lopenjpeg && libopenjpeg=yes
+  if test "$ffmpeg_a" = no ; then
+    res_comment="dynamic linking to libopenjpeg is irrelevant when using dynamic FFmpeg"
+  else
+    cat > $TMPC << EOF
+#include <openjpeg.h>
+
+int main(void) {
+  opj_dparameters_t dec_params; opj_set_default_decoder_parameters(&dec_params);
+  return opj_decode(0,0,0);
+}
+EOF
+    if $_pkg_config --exists "libopenjp2 >= 2.1.0" ; then
+      inc_libopenjpeg=$($_pkg_config --silence-errors --cflags libopenjp2)
+      ld_libopenjpeg=$($_pkg_config --silence-errors --libs libopenjp2)
+      cc_check $inc_libopenjpeg $ld_libopenjpeg        &&
+        libopenjpeg=yes                                &&
+        extra_cflags="$extra_cflags $inc_libopenjpeg"  &&
+        extra_ldflags="$extra_ldflags $ld_libopenjpeg"
+    fi
+  fi
 fi
 echores "$libopenjpeg"
 if test "$libopenjpeg" = yes ; then
   def_libopenjpeg='#define CONFIG_LIBOPENJPEG 1'
-  extra_ldflags="$extra_ldflags -lopenjpeg"
   libavdecoders="$libavdecoders LIBOPENJPEG_DECODER"
   libavencoders="$libavencoders LIBOPENJPEG_ENCODER"
   codecmodules="OpenJPEG $codecmodules"

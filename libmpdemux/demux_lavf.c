@@ -90,6 +90,8 @@ static int mp_read(void *opaque, uint8_t *buf, int size) {
     int ret;
 
     ret=stream_read(stream, buf, size);
+    if (!ret && stream->eof)
+      ret = AVERROR_EOF;
 
     mp_msg(MSGT_HEADER,MSGL_DBG2,"%d=mp_read(%p, %p, %d), pos: %"PRId64", eof:%d\n",
            ret, stream, buf, size, stream_tell(stream), stream->eof);

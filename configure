@@ -1555,7 +1555,12 @@ echocheck "ffmpeg/libavcodec/allcodecs.c"
 libavdecoders_all=$(list_subparts  DEC      decoder  codec/allcodecs.c)
 libavencoders_all=$(list_subparts  ENC      encoder  codec/allcodecs.c)
 libavparsers_all=$(list_subparts   PARSER   parser   codec/allcodecs.c)
-libavhwaccels_all=$(list_subparts  HWACCEL  hwaccel  codec/allcodecs.c)
+test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
+echores "$_list_subparts"
+
+echocheck "ffmpeg/libavcodec/hwaccels.h"
+libavhwaccels_all=$(list_subparts_extern  AVHWAccel hwaccel codec/hwaccels.h)
+test $? -eq 0 || libavhwaccels_all=$(list_subparts  HWACCEL  hwaccel  codec/allcodecs.c)
 test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
 

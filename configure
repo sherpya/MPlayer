@@ -7410,7 +7410,7 @@ if test "$_x264" = auto && test "$_mencoder" = yes ; then
 int main(void) { x264_encoder_open((void*)0); return 0; }
 EOF
   _x264=no
-  for ld_x264 in "-lx264 $ld_pthread" "-lx264 $ld_pthread" ; do
+  for ld_x264 in "-lx264 $ld_pthread" ; do
     cc_check $ld_x264 && libs_mencoder="$libs_mencoder $ld_x264" && _x264=yes && break
   done
 fi

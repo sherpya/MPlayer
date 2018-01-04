@@ -632,6 +632,7 @@ _sse4_1=auto
 _sse4_2=auto
 _avx=auto
 _avx2=auto
+_avx512=no
 _xop=auto
 _fma3=auto
 _fma4=auto
@@ -3285,7 +3286,7 @@ if arm ; then
   echores "$_iwmmxt"
 fi
 
-cpuexts_all='ALTIVEC XOP AVX AVX2 FMA3 FMA4 MMX MMX2 MMXEXT AMD3DNOW AMD3DNOWEXT SSE SSE2 SSE3 SSSE3 SSE4 SSE42 FAST_CMOV I686 FAST_CLZ ARMV5TE ARMV6 ARMV6T2 VFP VFPV3 SETEND NEON IWMMXT MMI VIS MVI'
+cpuexts_all='ALTIVEC XOP AVX AVX2 AVX512 FMA3 FMA4 MMX MMX2 MMXEXT AMD3DNOW AMD3DNOWEXT SSE SSE2 SSE3 SSSE3 SSE4 SSE42 FAST_CMOV I686 FAST_CLZ ARMV5TE ARMV6 ARMV6T2 VFP VFPV3 SETEND NEON IWMMXT MMI VIS MVI'
 test "$_altivec"   = yes && cpuexts="ALTIVEC $cpuexts"
 test "$_mmx"       = yes && cpuexts="MMX $cpuexts"
 test "$_mmxext"    = yes && cpuexts="MMX2 $cpuexts"
@@ -3300,6 +3301,7 @@ test "$_sse4_1"    = yes && cpuexts="SSE4 $cpuexts"
 test "$_sse4_2"    = yes && cpuexts="SSE42 $cpuexts"
 test "$_avx"       = yes && cpuexts="AVX $cpuexts"
 test "$_avx2"      = yes && cpuexts="AVX2 $cpuexts"
+test "$_avx512"    = yes && cpuexts="AVX512 $cpuexts"
 test "$_xop"       = yes && cpuexts="XOP $cpuexts"
 test "$_fma3"      = yes && cpuexts="FMA3 $cpuexts"
 test "$_fma4"      = yes && cpuexts="FMA4 $cpuexts"

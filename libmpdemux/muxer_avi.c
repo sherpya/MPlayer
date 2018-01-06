@@ -120,7 +120,6 @@ static muxer_stream_t* avifile_new_stream(muxer_t *muxer,int type){
     si->idx=calloc(si->idxsize, sizeof(struct avi_odmlidx_entry));
     si->riffofssize=16;
     si->riffofs=calloc((si->riffofssize+1), sizeof(off_t));
-    memset(si->riffofs, 0, sizeof(off_t)*si->riffofssize);
 
     switch(type){
     case MUXER_TYPE_VIDEO:
@@ -619,7 +618,6 @@ static void avifile_odml_write_index(muxer_t *muxer){
 
     si->superidxsize = si->superidxpos;
     si->superidx = calloc(si->superidxsize, sizeof(*si->superidx));
-    memset(si->superidx, 0, sizeof(*si->superidx) * si->superidxsize);
 
     idxpos = 0;
     for (j=0; j<si->superidxpos; j++) {

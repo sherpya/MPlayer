@@ -3718,7 +3718,7 @@ echocheck "inet_aton()"
 def_inet_aton='#define HAVE_INET_ATON 0'
 inet_aton=no
 for ld_tmp in "$ld_sock" "$ld_sock -lresolv" ; do
-  statement_check arpa/inet.h 'inet_aton(0, 0)' $ld_tmp && inet_aton=yes && break
+  define_statement_check _BSD_SOURCE arpa/inet.h 'inet_aton(0, 0)' $ld_tmp && inet_aton=yes && break
 done
 if test $inet_aton = yes ; then
   test "$ld_tmp" && res_comment="using $ld_tmp"

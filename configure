@@ -5304,8 +5304,13 @@ fi
 echocheck "MNG support"
 if test "$_mng" = auto ; then
   _mng=no
+  cat > $TMPC << EOF
+#define MNG_NO_INCLUDE_JNG
+#include <libmng.h>
+int main(void) { return !mng_version_text(); }
+EOF
   for mnglibs in '-lmng -lz' '-lmng -ljpeg -lz' ; do
-    return_statement_check libmng.h 'const char * p_ver = mng_version_text()' '!p_ver || p_ver[0] == 0' $mnglibs && _mng=yes && break
+    cc_check $mnglibs && _mng=yes && break
   done
 fi
 echores "$_mng"

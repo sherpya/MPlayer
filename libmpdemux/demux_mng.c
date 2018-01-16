@@ -33,6 +33,7 @@
 #include "demuxer.h"
 #include "stheader.h"
 
+#define MNG_NO_INCLUDE_JNG
 #define MNG_SUPPORT_READ
 #define MNG_SUPPORT_DISPLAY
 #include <libmng.h>

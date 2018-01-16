@@ -30,6 +30,7 @@
 
 #include <zlib.h>
 
+#define MNG_NO_INCLUDE_JNG
 #define MNG_INCLUDE_WRITE_PROCS
 #define MNG_ACCESS_CHUNKS
 #define MNG_SUPPORT_READ

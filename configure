@@ -1553,9 +1553,9 @@ list_subparts_extern() {
 }
 
 echocheck "ffmpeg/libavcodec/allcodecs.c"
-libavdecoders_all=$(list_subparts  DEC      decoder  codec/allcodecs.c)
-libavencoders_all=$(list_subparts  ENC      encoder  codec/allcodecs.c)
-libavparsers_all=$(list_subparts   PARSER   parser   codec/allcodecs.c)
+libavdecoders_all=$(list_subparts_extern  AVCodec       decoder  codec/allcodecs.c)
+libavencoders_all=$(list_subparts_extern  AVCodec       encoder  codec/allcodecs.c)
+libavparsers_all=$(list_subparts_extern   AVCodecParser parser   codec/parser.c)
 test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
 
@@ -1566,8 +1566,8 @@ test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
 
 echocheck "ffmpeg/libavformat/allformats.c"
-libavdemuxers_all=$(list_subparts  DEMUX    demuxer  format/allformats.c)
-libavmuxers_all=$(list_subparts    _MUX     muxer    format/allformats.c)
+libavdemuxers_all=$(list_subparts_extern  AVInputFormat    demuxer  format/allformats.c)
+libavmuxers_all=$(list_subparts_extern    AVOutputFormat   muxer    format/allformats.c)
 test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
 
@@ -9572,7 +9572,13 @@ print_enabled_components(){
     cp $TMPH ffmpeg/$file
 }
 
+print_enabled_components libavcodec/codec_list.c AVCodec codec_list $libavdecoders $libavencoders
+print_enabled_components libavcodec/parser_list.c AVCodecParser parser_list $libavparsers
 print_enabled_components libavcodec/bsf_list.c AVBitStreamFilter bitstream_filters $libavbsfs
+print_enabled_components libavdevice/indev_list.c AVInputFormat indev_list ""
+print_enabled_components libavdevice/outdev_list.c AVOutputFormat outdev_list ""
+print_enabled_components libavformat/demuxer_list.c AVInputFormat demuxer_list $libavdemuxers
+print_enabled_components libavformat/muxer_list.c AVOutputFormat muxer_list $libavmuxers
 print_enabled_components libavformat/protocol_list.c URLProtocol url_protocols $libavprotocols
 
 fi

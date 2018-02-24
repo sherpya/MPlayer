@@ -404,9 +404,6 @@ Codecs:
   --disable-xvid-lavc       disable Xvid in libavcodec [autodetect]
   --disable-x264            disable x264 [autodetect]
   --disable-x264-lavc       disable x264 in libavcodec [autodetect]
-  --disable-libdirac-lavc   disable Dirac in libavcodec [autodetect]
-  --disable-libschroedinger-lavc   disable Dirac in libavcodec (Schroedinger
-                                   decoder) [autodetect]
   --disable-libvpx-lavc     disable libvpx in libavcodec [autodetect]
   --disable-libnut          disable libnut [autodetect]
   --disable-ffmpeg_a        disable static FFmpeg [autodetect]
@@ -738,7 +735,6 @@ _libmpeg2=auto
 _libmpeg2_internal=no
 _faad=auto
 _faac=auto
-_faac_lavc=auto
 _ladspa=auto
 _libbs2b=auto
 _libilbc=auto
@@ -800,8 +796,6 @@ _xvid=auto
 _xvid_lavc=auto
 _x264=auto
 _x264_lavc=auto
-_libdirac_lavc=auto
-_libschroedinger_lavc=auto
 _libvpx_lavc=auto
 _libnut=auto
 _lirc=auto
@@ -1152,8 +1146,6 @@ for ac_option do
   --disable-faad)       _faad=no        ;;
   --enable-faac)        _faac=yes       ;;
   --disable-faac)       _faac=no        ;;
-  --enable-faac-lavc)   _faac_lavc=yes  ;;
-  --disable-faac-lavc)  _faac_lavc=no   ;;
   --enable-ladspa)      _ladspa=yes     ;;
   --disable-ladspa)     _ladspa=no      ;;
   --enable-libbs2b)     _libbs2b=yes    ;;
@@ -1256,10 +1248,6 @@ for ac_option do
   --disable-x264)       _x264=no        ;;
   --enable-x264-lavc)   _x264_lavc=yes  ;;
   --disable-x264-lavc)  _x264_lavc=no   ;;
-  --enable-libdirac-lavc)   _libdirac_lavc=yes  ;;
-  --disable-libdirac-lavc)  _libdirac_lavc=no   ;;
-  --enable-libschroedinger-lavc)   _libschroedinger_lavc=yes  ;;
-  --disable-libschroedinger-lavc)  _libschroedinger_lavc=no   ;;
   --enable-libvpx-lavc)   _libvpx_lavc=yes  ;;
   --disable-libvpx-lavc)  _libvpx_lavc=no   ;;
   --enable-libnut)      _libnut=yes     ;;
@@ -6895,20 +6883,11 @@ EOF
 fi
 if test "$_faac" = yes ; then
   def_faac="#define CONFIG_FAAC 1"
-  test "$_faac_lavc" = auto && _faac_lavc=yes
-  if test "$_faac_lavc" = yes ; then
-    def_faac_lavc="#define CONFIG_LIBFAAC 1"
-    libs_mplayer="$libs_mplayer $ld_faac"
-    libavencoders="$libavencoders LIBFAAC_ENCODER"
-  fi
   codecmodules="faac $codecmodules"
 else
-  _faac_lavc=no
   def_faac="#undef CONFIG_FAAC"
-  def_faac_lavc="#define CONFIG_LIBFAAC 0"
   nocodecmodules="faac $nocodecmodules"
 fi
-res_comment="in FFmpeg: $_faac_lavc"
 echores "$_faac"
 
 
@@ -7440,79 +7419,6 @@ fi
 res_comment="in FFmpeg: $_x264_lavc"
 echores "$_x264"
 
-
-echocheck "libdirac"
-if test "$_libdirac_lavc" = auto; then
-  _libdirac_lavc=no
-  if test "$ffmpeg_a" != yes; then
-    res_comment="ffmpeg (static) is required by libdirac, sorry"
-  else
-    cat > $TMPC << EOF
-#include <libdirac_encoder/dirac_encoder.h>
-#include <libdirac_decoder/dirac_parser.h>
-int main(void)
-{
-    dirac_encoder_context_t enc_ctx;
-    dirac_decoder_t *dec_handle;
-    dirac_encoder_context_init(&enc_ctx, VIDEO_FORMAT_SD_576I50);
-    dec_handle = dirac_decoder_init(0);
-    if (dec_handle)
-        dirac_decoder_close(dec_handle);
-    return 0;
-}
-EOF
-    if $_pkg_config --exists dirac ; then
-      inc_dirac=$($_pkg_config --silence-errors --cflags dirac)
-      ld_dirac=$($_pkg_config --silence-errors --libs dirac)
-      cc_check $inc_dirac $ld_dirac        &&
-      _libdirac_lavc=yes                   &&
-      extra_cflags="$extra_cflags $inc_dirac" &&
-      extra_ldflags="$extra_ldflags $ld_dirac"
-    fi
-  fi
-fi
-if test "$_libdirac_lavc" = yes ; then
-  def_libdirac_lavc='#define CONFIG_LIBDIRAC 1'
-  libavencoders="$libavencoders LIBDIRAC_ENCODER"
-  libavdecoders="$libavdecoders LIBDIRAC_DECODER"
-  codecmodules="libdirac $codecmodules"
-else
-  def_libdirac_lavc='#define CONFIG_LIBDIRAC 0'
-  nocodecmodules="libdirac $nocodecmodules"
-fi
-echores "$_libdirac_lavc"
-
-
-echocheck "libschroedinger"
-if test "$_libschroedinger_lavc" = auto ; then
-  _libschroedinger_lavc=no
-  if test "$ffmpeg_a" != yes; then
-    res_comment="ffmpeg (static) is required by libschroedinger, sorry"
-  else
-    cat > $TMPC << EOF
-#include <schroedinger/schro.h>
-int main(void) { schro_init(); return SCHRO_ENCODER_RATE_CONTROL_CONSTANT_QUALITY; }
-EOF
-    if $_pkg_config --exists schroedinger-1.0 ; then
-      inc_schroedinger=$($_pkg_config --silence-errors --cflags schroedinger-1.0)
-      ld_schroedinger=$($_pkg_config --silence-errors --libs schroedinger-1.0)
-      cc_check $inc_schroedinger $ld_schroedinger   &&
-      _libschroedinger_lavc=yes                     &&
-      extra_cflags="$extra_cflags $inc_schroedinger"   &&
-      extra_ldflags="$extra_ldflags $ld_schroedinger"
-    fi
-  fi
-fi
-if test "$_libschroedinger_lavc" = yes ; then
-  def_libschroedinger_lavc='#define CONFIG_LIBSCHROEDINGER 1'
-  libavencoders="$libavencoders LIBSCHROEDINGER_ENCODER"
-  libavdecoders="$libavdecoders LIBSCHROEDINGER_DECODER"
-  codecmodules="libschroedinger $codecmodules"
-else
-  def_libschroedinger_lavc='#define CONFIG_LIBSCHROEDINGER 0'
-  nocodecmodules="libschroedinger $nocodecmodules"
-fi
-echores "$_libschroedinger_lavc"
 
 echocheck "libvpx"
 if test "$_libvpx_lavc" = auto; then
@@ -9280,14 +9186,11 @@ $def_windows_h
 /* external libraries */
 $def_bzlib
 $def_crystalhd
-$def_faac_lavc
-$def_libdirac_lavc
 $def_libgsm
 $def_libopencore_amrnb
 $def_libopencore_amrwb
 $def_libopenjpeg
 $def_librtmp
-$def_libschroedinger_lavc
 $def_mp3lame_lavc
 $def_x264_lavc
 $def_xvid_lavc

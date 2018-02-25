@@ -435,6 +435,7 @@ Codecs:
   --enable-faad             enable FAAD2 (AAC) [autodetect]
   --disable-faac            disable support for FAAC (AAC encoder) [autodetect]
   --disable-faac-lavc       disable support for FAAC in libavcodec [autodetect]
+  --disable-libfdk-aac-lavc disable support for libfdk-aac in libavcodec [autodetect]
   --disable-ladspa          disable LADSPA plugin support [autodetect]
   --disable-libbs2b         disable libbs2b audio filter support [autodetect]
   --disable-libdv           disable libdv 0.9.5 en/decoding support [autodetect]
@@ -757,6 +758,7 @@ _libmpeg2=auto
 _libmpeg2_internal=no
 _faad=auto
 _faac=auto
+_libfdk_aac_lavc=auto
 _ladspa=auto
 _libbs2b=auto
 _libilbc=auto
@@ -1168,6 +1170,8 @@ for ac_option do
   --disable-faad)       _faad=no        ;;
   --enable-faac)        _faac=yes       ;;
   --disable-faac)       _faac=no        ;;
+  --enable-libfdk-aac-lavc)      _libfdk_aac_lavc=yes     ;;
+  --disable-libfdk-aac-lavc)     _libfdk_aac_lavc=no      ;;
   --enable-ladspa)      _ladspa=yes     ;;
   --disable-ladspa)     _ladspa=no      ;;
   --enable-libbs2b)     _libbs2b=yes    ;;
@@ -7127,6 +7131,19 @@ else
 fi
 echores "$_faac"
 
+echocheck "libfdk-aac-lavc support"
+if test "$_libfdk_aac_lavc" = auto; then
+  _libfdk_aac_lavc=no
+  ld_libfdk_aac_lavc="-lfdk-aac"
+  statement_check fdk-aac/aacenc_lib.h 'aacEncOpen(0,0,0)' $ld_libfdk_aac_lavc && _libfdk_aac_lavc=yes
+fi
+if test "$_libfdk_aac_lavc" = yes ; then
+  def_libfdk_aac_lavc='#define CONFIG_LIBFDK_AAC 1'
+  libavencoders="$libavencoders LIBFDK_AAC_ENCODER"
+else
+  def_libfdk_aac_lavc='#define CONFIG_LIBFDK_AAC 0'
+fi
+echores "$_libfdk_aac_lavc"
 
 echocheck "FAAD2 support"
 if test "$_faad" = auto ; then
@@ -9515,6 +9532,7 @@ $def_bzlib
 $def_crystalhd
 $def_libaom_lavc
 $def_libdav1d_lavc
+$def_libfdk_aac_lavc
 $def_libgsm
 $def_libopencore_amrnb
 $def_libopencore_amrwb

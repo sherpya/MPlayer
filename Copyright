@@ -133,6 +133,6 @@ License:    GNU General Public License
 Name:       Icons
 Version:    2012-01-07
 URL:        http://www.andreasn.se
-Directory:  etc/
+Files:      etc/mplayer*.{ico,png}
 Copyright:  Andreas Nilsson <andreas@andreasn.se>
 License:    GNU General Public License

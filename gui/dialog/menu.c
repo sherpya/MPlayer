@@ -647,34 +647,34 @@ GtkWidget * CreatePopUpMenu( void )
 
   if ( guiInfo.VideoWindow )
    {
-    int a11 = False, a169 = False, a43 = False, a235 = False, ca = TRUE;
+    int a11 = False, a43 = False, a169 = False, a235 = False, ca = TRUE;
     float a;
     char *aspect = NULL, tmp[32];
 
     if (movie_aspect == -1.0f) a11 = True;
     else
      {
-       a169 = (FFABS(movie_aspect - 16.0f / 9.0f) <= 0.01f);
        a43 = (FFABS(movie_aspect - 4.0f / 3.0f) <= 0.01f);
+       a169 = (FFABS(movie_aspect - 16.0f / 9.0f) <= 0.01f);
        a235 = (FFABS(movie_aspect - 2.35f) <= 0.01f);
      }
 
     if ( guiInfo.sh_video )
      {
-      a = FFABS(guiInfo.sh_video->original_aspect - 16.0f / 9.0f);
-
-      if (a <= 0.075f)
-       {
-         aspect = "16:9";
-
-         if (a <= 0.01f) ca = FALSE;
-       }
-
       a = FFABS(guiInfo.sh_video->original_aspect - 4.0f / 3.0f);
 
       if (a <= 0.075f)
        {
          aspect = "4:3";
+
+         if (a <= 0.01f) ca = FALSE;
+       }
+
+      a = FFABS(guiInfo.sh_video->original_aspect - 16.0f / 9.0f);
+
+      if (a <= 0.075f)
+       {
+         aspect = "16:9";
 
          if (a <= 0.01f) ca = FALSE;
        }
@@ -693,15 +693,15 @@ GtkWidget * CreatePopUpMenu( void )
 
     AspectMenu=AddSubMenu( window1, (const char*)aspect_xpm, Menu,MSGTR_GUI_AspectRatio );
     H=AddMenuCheckItem( window1, (const char*)aspect11_xpm, AspectMenu,tmp, a11, evSetAspect + ( 1 << 16 ) );
-    N=AddMenuCheckItem( window1, (const char*)aspect169_xpm, AspectMenu,"16:9", a169, evSetAspect + ( 2 << 16 ) );
     D=AddMenuCheckItem( window1, (const char*)aspect43_xpm, AspectMenu,"4:3", a43, evSetAspect + ( 3 << 16 ) );
+    N=AddMenuCheckItem( window1, (const char*)aspect169_xpm, AspectMenu,"16:9", a169, evSetAspect + ( 2 << 16 ) );
     F=AddMenuCheckItem( window1, (const char*)aspect235_xpm, AspectMenu,MSGTR_GUI_235To1, a235, evSetAspect + ( 4 << 16 ) );
 
     if ( !guiInfo.Playing )
      {
       gtk_widget_set_sensitive( H,FALSE );
-      gtk_widget_set_sensitive( N,FALSE );
       gtk_widget_set_sensitive( D,FALSE );
+      gtk_widget_set_sensitive( N,FALSE );
       gtk_widget_set_sensitive( F,FALSE );
      }
    }

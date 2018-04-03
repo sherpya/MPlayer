@@ -572,7 +572,6 @@ GtkWidget * CreatePopUpMenu( void )
     AddSeparator( SubMenu );
     AddMenuItem( window1, (const char*)loadeaf_xpm, SubMenu,MSGTR_GUI_AudioTrack"...", evLoadAudioFile );
     AddMenuItem( window1, (const char*)sub_xpm, SubMenu,MSGTR_GUI_Subtitle"...   ", evLoadSubtitle );
-    AddMenuItem( window1, (const char*)nosub_xpm, SubMenu,MSGTR_GUI_DropSubtitle,evDropSubtitle );
    SubMenu=AddSubMenu(window1, (const char*)play_xpm, Menu,MSGTR_GUI_Playback );
     AddMenuItem( window1, (const char*)play_xpm, SubMenu,MSGTR_GUI_Play"        ", evPlay );
     AddMenuItem( window1, (const char*)pause_xpm, SubMenu,MSGTR_GUI_Pause, evPause );
@@ -833,6 +832,8 @@ GtkWidget * CreatePopUpMenu( void )
       AddMenuCheckItem( window1,(const char*)empty1px_xpm,SubMenu,tmp,sub_pos == i,( i << 16 ) + ivSetSubtitle );
      }
    }
+
+  if ( subdata ) AddMenuItem( window1, (const char*)nosub_xpm, Menu,MSGTR_GUI_DropSubtitle,evDropSubtitle );
 
   AddSeparator( Menu );
   AddMenuItem( window1, (const char*)equalizer_xpm, Menu,MSGTR_GUI_Equalizer, evEqualizer );

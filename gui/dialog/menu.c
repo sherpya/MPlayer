@@ -731,6 +731,28 @@ GtkWidget * CreatePopUpMenu( void )
      }
    }
 
+  if ( guiInfo.Playing && demuxer && guiInfo.StreamType != STREAMTYPE_DVD )
+   {
+    int i,c = 0;
+
+    for ( i=0;i < MAX_V_STREAMS;i++ )
+     if ( demuxer->v_streams[i] ) c++;
+
+    if ( c > 1 )
+     {
+      SubMenu=AddSubMenu( window1, (const char*)video_xpm, Menu,MSGTR_GUI_VideoTracks );
+      for ( i=0;i < MAX_V_STREAMS;i++ )
+       if ( demuxer->v_streams[i] )
+        {
+         int vid = ((sh_video_t *)demuxer->v_streams[i])->vid;
+         char tmp[32];
+         int selected_id = (video_id == vid || (video_id == -1 && vid == demuxer_default_video_track(demuxer)));
+         snprintf( tmp,32,MSGTR_GUI_TrackN,vid );
+         AddMenuCheckItem( window1, (const char*)empty1px_xpm, SubMenu,tmp,selected_id,( vid << 16 ) + ivSetVideo );
+        }
+     }
+   }
+
   AddSeparator( Menu );
   MenuItem=AddMenuCheckItem( window1, (const char*)sound_xpm, Menu,MSGTR_GUI_Mute,mixer->muted,evMute );
   if ( !guiInfo.AudioChannels ) gtk_widget_set_sensitive( MenuItem,FALSE );
@@ -754,23 +776,6 @@ GtkWidget * CreatePopUpMenu( void )
          if ( demuxer_audio_lang( demuxer, i, lng, sizeof(lng) ) == 0 ) snprintf( tmp,sizeof(tmp),MSGTR_GUI_TrackN" - %s",aid,GetLanguage( lng, GET_LANG_CHR ) );
          else snprintf( tmp,sizeof(tmp),MSGTR_GUI_TrackN,aid );
          AddMenuCheckItem( window1, (const char*)empty1px_xpm, SubMenu,tmp,selected_id,( aid << 16 ) + ivSetAudio );
-        }
-     }
-
-    for ( c=0,i=0;i < MAX_V_STREAMS;i++ )
-     if ( demuxer->v_streams[i] ) c++;
-
-    if ( c > 1 )
-     {
-      SubMenu=AddSubMenu( window1, (const char*)video_xpm, Menu,MSGTR_GUI_VideoTracks );
-      for ( i=0;i < MAX_V_STREAMS;i++ )
-       if ( demuxer->v_streams[i] )
-        {
-         int vid = ((sh_video_t *)demuxer->v_streams[i])->vid;
-         char tmp[32];
-         int selected_id = (video_id == vid || (video_id == -1 && vid == demuxer_default_video_track(demuxer)));
-         snprintf( tmp,32,MSGTR_GUI_TrackN,vid );
-         AddMenuCheckItem( window1, (const char*)empty1px_xpm, SubMenu,tmp,selected_id,( vid << 16 ) + ivSetVideo );
         }
      }
    }

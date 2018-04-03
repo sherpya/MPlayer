@@ -625,6 +625,7 @@ GtkWidget * CreatePopUpMenu( void )
 //    AddMenuItem( SubMenu,MSGTR_GUI_SizeNormal"      ", evNormalSize );
 //    AddMenuItem( SubMenu,MSGTR_GUI_SizeDouble, evDoubleSize );
 //    AddMenuItem( SubMenu,MSGTR_GUI_SizeFullscreen, evFullScreen + ( True << 16 ) );
+    AddMenuItem( window1, (const char*)playlist_xpm, Menu,MSGTR_GUI_Playlist, evPlaylist );
 
   if ( guiInfo.VideoWindow )
    {
@@ -832,7 +833,6 @@ GtkWidget * CreatePopUpMenu( void )
 
   AddSeparator( Menu );
   AddMenuItem( window1, (const char*)equalizer_xpm, Menu,MSGTR_GUI_Equalizer, evEqualizer );
-  AddMenuItem( window1, (const char*)playlist_xpm, Menu,MSGTR_GUI_Playlist, evPlaylist );
   AddMenuItem( window1, (const char*)skin_xpm, Menu,MSGTR_GUI_SkinBrowser, evSkinBrowser );
   AddMenuItem( window1, (const char*)prefs_xpm, Menu,MSGTR_GUI_Preferences, evPreferences );
 

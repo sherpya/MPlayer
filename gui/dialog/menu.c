@@ -629,24 +629,6 @@ GtkWidget * CreatePopUpMenu( void )
 
   if ( guiInfo.VideoWindow )
    {
-    AddSeparator( Menu );
-    RotationMenu=AddSubMenu( window1, (const char*)rotate_xpm, Menu,MSGTR_GUI_Rotation );
-    N=AddMenuCheckItem( window1, (const char*)rotate0_xpm, RotationMenu,MSGTR_GUI__none_, guiInfo.Rotation == -1, evSetRotation );
-    D=AddMenuCheckItem( window1, (const char*)rotate90cw_xpm, RotationMenu,MSGTR_GUI_Rotation90CW, guiInfo.Rotation == 1, evSetRotation + ( 90 << 16 ) );
-    F=AddMenuCheckItem( window1, (const char*)rotate90ccw_xpm, RotationMenu,MSGTR_GUI_Rotation90CCW, guiInfo.Rotation == 2, evSetRotation + ( -90 << 16 ) );
-    H=AddMenuCheckItem( window1, (const char*)rotate180_xpm, RotationMenu,MSGTR_GUI_Rotation180, guiInfo.Rotation == 8, evSetRotation + ( 180 << 16 ) );
-
-    if ( !guiInfo.Playing )
-     {
-      gtk_widget_set_sensitive( N,FALSE );
-      gtk_widget_set_sensitive( D,FALSE );
-      gtk_widget_set_sensitive( F,FALSE );
-      gtk_widget_set_sensitive( H,FALSE );
-     }
-   }
-
-  if ( guiInfo.VideoWindow )
-   {
     int a11 = False, a43 = False, a169 = False, a235 = False, ca = TRUE;
     float a;
     char *aspect = NULL, tmp[32];
@@ -691,6 +673,7 @@ GtkWidget * CreatePopUpMenu( void )
 
     snprintf(tmp, sizeof(tmp), "%s%s%s%s%s", MSGTR_GUI_Original, aspect ? " (" : "", aspect && ca ? "≈" : "", aspect ? aspect : "", aspect ? ")" : "");
 
+    AddSeparator( Menu );
     AspectMenu=AddSubMenu( window1, (const char*)aspect_xpm, Menu,MSGTR_GUI_AspectRatio );
     H=AddMenuCheckItem( window1, (const char*)aspect11_xpm, AspectMenu,tmp, a11, evSetAspect + ( 1 << 16 ) );
     D=AddMenuCheckItem( window1, (const char*)aspect43_xpm, AspectMenu,"4:3", a43, evSetAspect + ( 3 << 16 ) );
@@ -703,6 +686,23 @@ GtkWidget * CreatePopUpMenu( void )
       gtk_widget_set_sensitive( D,FALSE );
       gtk_widget_set_sensitive( N,FALSE );
       gtk_widget_set_sensitive( F,FALSE );
+     }
+   }
+
+  if ( guiInfo.VideoWindow )
+   {
+    RotationMenu=AddSubMenu( window1, (const char*)rotate_xpm, Menu,MSGTR_GUI_Rotation );
+    N=AddMenuCheckItem( window1, (const char*)rotate0_xpm, RotationMenu,MSGTR_GUI__none_, guiInfo.Rotation == -1, evSetRotation );
+    D=AddMenuCheckItem( window1, (const char*)rotate90cw_xpm, RotationMenu,MSGTR_GUI_Rotation90CW, guiInfo.Rotation == 1, evSetRotation + ( 90 << 16 ) );
+    F=AddMenuCheckItem( window1, (const char*)rotate90ccw_xpm, RotationMenu,MSGTR_GUI_Rotation90CCW, guiInfo.Rotation == 2, evSetRotation + ( -90 << 16 ) );
+    H=AddMenuCheckItem( window1, (const char*)rotate180_xpm, RotationMenu,MSGTR_GUI_Rotation180, guiInfo.Rotation == 8, evSetRotation + ( 180 << 16 ) );
+
+    if ( !guiInfo.Playing )
+     {
+      gtk_widget_set_sensitive( N,FALSE );
+      gtk_widget_set_sensitive( D,FALSE );
+      gtk_widget_set_sensitive( F,FALSE );
+      gtk_widget_set_sensitive( H,FALSE );
      }
    }
 

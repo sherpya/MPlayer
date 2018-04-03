@@ -177,7 +177,7 @@ static void uiMainMouse( int Button,int X,int Y,int RX,int RY )
           break;
 
    case wsRRMouseButton:
-        gtkShow( ivShowPopUpMenu,NULL );
+        gtkShow( ivShowPopUpMenu, (void *) wMain );
         break;
 
 /* rolled mouse ... de szar :))) */

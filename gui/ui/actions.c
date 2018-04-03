@@ -369,7 +369,7 @@ play:
          * gtkShow( ivHidePopUpMenu,NULL );            with this menu from skin as
          * uiMenuShow( 0,0 );                          they do with normal menus.
          * }
-         * else*/gtkShow(ivShowPopUpMenu, NULL);
+         * else*/gtkShow(ivShowPopUpMenu, (void *)wMain);
         break;
 
     case evIconify:

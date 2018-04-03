@@ -63,7 +63,7 @@ static void uiVideoMouse( int Button,int X,int Y,int RX,int RY )
  switch( Button )
   {
    case wsRRMouseButton:
-          gtkShow( ivShowPopUpMenu,NULL );
+          gtkShow( ivShowPopUpMenu, (void *) wVideo );
           break;
    case wsPMMouseButton:
           gtkShow( ivHidePopUpMenu,NULL );

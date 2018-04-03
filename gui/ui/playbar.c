@@ -147,7 +147,7 @@ static void uiPlaybarMouse( int Button, int X, int Y, int RX, int RY )
         uiMenuHide( RX,RY,0 );
         break;
    case wsRRMouseButton:
-        gtkShow( ivShowPopUpMenu,NULL );
+        gtkShow( ivShowPopUpMenu, (void *) wPlaybar );
         break;
 /* --- */
    case wsPLMouseButton:

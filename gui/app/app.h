@@ -95,6 +95,14 @@ typedef struct {
     const char *name;
 } evName;
 
+/// Window types
+enum {
+    wMain,
+    wVideo,
+    wPlaybar,
+    wMenu
+};
+
 /// Skin items
 enum {
     itNone,

@@ -786,7 +786,7 @@ GtkWidget * CreatePopUpMenu( void )
     for ( i=0;i < subs;i++ )
      {
       int ret = -1;
-      char lng[32], tmp[64], *lang = NULL;
+      char lng[60], tmp[80], *lang = NULL;
       /* file */
       if ( i < subs0 )
        {

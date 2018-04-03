@@ -772,7 +772,7 @@ GtkWidget * CreatePopUpMenu( void )
 
        for ( i=0;i < guiInfo.Subtitles;i++ )
         {
-         av_strlcpy( tmp,GetLanguage( &guiInfo.Subtitle[i].language, GET_LANG_INT ),sizeof(tmp) );
+         snprintf(tmp, sizeof(tmp), MSGTR_GUI_TrackN" - %s", i, GetLanguage(&guiInfo.Subtitle[i].language, GET_LANG_INT));
          AddMenuCheckItem( window1, (const char*)empty1px_xpm, DVDSubtitleLanguageMenu,tmp,
                            guiInfo.mpcontext->d_sub->id == guiInfo.Subtitle[i].id,
                            ( guiInfo.Subtitle[i].id << 16 ) + ivSetDVDSubtitle );

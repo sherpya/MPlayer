@@ -768,13 +768,13 @@ GtkWidget * CreatePopUpMenu( void )
        char tmp[64]; int i;
 
        DVDSubtitleLanguageMenu=AddSubMenu( window1, (const char*)subtitle_xpm, Menu,MSGTR_GUI_Subtitles );
-       AddMenuItem( window1, (const char*)empty1px_xpm, DVDSubtitleLanguageMenu,MSGTR_GUI__none_,( (unsigned short)-1 << 16 ) + ivSetDVDSubtitle );
+       AddMenuCheckItem( window1, (const char*)empty1px_xpm, DVDSubtitleLanguageMenu,MSGTR_GUI__none_, guiInfo.mpcontext->d_sub->id == -2, ( -2 << 16 ) + ivSetDVDSubtitle );
 
        for ( i=0;i < guiInfo.Subtitles;i++ )
         {
          av_strlcpy( tmp,GetLanguage( &guiInfo.Subtitle[i].language, GET_LANG_INT ),sizeof(tmp) );
          AddMenuCheckItem( window1, (const char*)empty1px_xpm, DVDSubtitleLanguageMenu,tmp,
-                           dvdsub_id == guiInfo.Subtitle[i].id,
+                           guiInfo.mpcontext->d_sub->id == guiInfo.Subtitle[i].id,
                            ( guiInfo.Subtitle[i].id << 16 ) + ivSetDVDSubtitle );
         }
       }

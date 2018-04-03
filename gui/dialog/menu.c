@@ -561,25 +561,6 @@ GtkWidget * CreatePopUpMenu( void )
         MenuItem=AddMenuItem( window1, (const char*)empty1px_xpm, DVDChapterMenu,MSGTR_GUI__none_,evNone );
         gtk_widget_set_sensitive( MenuItem,FALSE );
        }
-    DVDAudioLanguageMenu=AddSubMenu( window1, (const char*)audio_xpm, DVDSubMenu,MSGTR_GUI_AudioTracks );
-     if ( guiInfo.AudioStreams && demuxer && ( guiInfo.StreamType == STREAMTYPE_DVD ) )
-      {
-       char tmp[64]; int i;
-       for ( i=0;i < guiInfo.AudioStreams;i++ )
-        {
-   snprintf( tmp,64,"%s - %s %s",GetLanguage( &guiInfo.AudioStream[i].language, GET_LANG_INT ),
-     ChannelTypes[ guiInfo.AudioStream[i].type ],
-     ChannelNumbers[ guiInfo.AudioStream[i].channels ] );
-         AddMenuCheckItem( window1, (const char*)dolby_xpm, DVDAudioLanguageMenu,tmp,
-         demuxer->audio->id == guiInfo.AudioStream[i].id,
-         ( guiInfo.AudioStream[i].id << 16 ) + ivSetDVDAudio );
-        }
-      }
-      else
-       {
-        MenuItem=AddMenuItem( window1, (const char*)empty1px_xpm, DVDAudioLanguageMenu,MSGTR_GUI__none_,evNone );
-        gtk_widget_set_sensitive( MenuItem,FALSE );
-       }
 #endif
 #if defined(CONFIG_LIBCDIO) || defined(CONFIG_DVDREAD)
     AddMenuItem( window1, (const char*)playimage_xpm, SubMenu,MSGTR_GUI_Image"...    ", evPlayImage );
@@ -763,6 +744,23 @@ GtkWidget * CreatePopUpMenu( void )
    }
 
 #ifdef CONFIG_DVDREAD
+     if ( guiInfo.AudioStreams && demuxer && ( guiInfo.StreamType == STREAMTYPE_DVD ) )
+      {
+       char tmp[64]; int i;
+
+       DVDAudioLanguageMenu=AddSubMenu( window1, (const char*)audio_xpm, Menu,MSGTR_GUI_AudioTracks );
+
+       for ( i=0;i < guiInfo.AudioStreams;i++ )
+        {
+         snprintf( tmp,64,"%s - %s %s",GetLanguage( &guiInfo.AudioStream[i].language, GET_LANG_INT ),
+                   ChannelTypes[ guiInfo.AudioStream[i].type ],
+                   ChannelNumbers[ guiInfo.AudioStream[i].channels ] );
+         AddMenuCheckItem( window1, (const char*)dolby_xpm, DVDAudioLanguageMenu,tmp,
+                           demuxer->audio->id == guiInfo.AudioStream[i].id,
+                           ( guiInfo.AudioStream[i].id << 16 ) + ivSetDVDAudio );
+        }
+      }
+
      if ( guiInfo.Subtitles && ( guiInfo.StreamType == STREAMTYPE_DVD ) )
       {
        char tmp[64]; int i;

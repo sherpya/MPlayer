@@ -703,7 +703,7 @@ static LRESULT CALLBACK VideoProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
                 window *desc = NULL;
 
                 for (i=0; i<gui->skin->windowcount; i++)
-                    if(gui->skin->windows[i]->type == wiVideo)
+                    if(gui->skin->windows[i]->type == wVideo)
                         desc = gui->skin->windows[i];
 
                 SelectObject(hMemDC, get_bitmap(hWnd));
@@ -1491,7 +1491,7 @@ int create_videowindow(gui_t *gui)
     vo_colorkey = 0xff00ff;
 
     for (i=0; i<gui->skin->windowcount; i++)
-        if(gui->skin->windows[i]->type == wiVideo)
+        if(gui->skin->windows[i]->type == wVideo)
             desc = gui->skin->windows[i];
 
     if(!desc)
@@ -1593,7 +1593,7 @@ int create_window(gui_t *gui, char *skindir)
 
     /* find the description of the mainwindow */
     for (i=0; i<gui->skin->windowcount; i++)
-        if(gui->skin->windows[i]->type == wiMain)
+        if(gui->skin->windows[i]->type == wMain)
             desc = gui->skin->windows[i];
 
     if(!desc)

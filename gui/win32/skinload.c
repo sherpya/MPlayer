@@ -719,17 +719,21 @@ skin_t* loadskin(char* skindir, int desktopbpp)
             skin->windows = realloc(skin->windows, sizeof(window *) * skin->windowcount);
             mywindow = skin->windows[(skin->windowcount) - 1] = calloc(1, sizeof(window));
             mywindow->name = strdup(desc + 7);
-            if(!strncmp(desc + 7, "main", 4)) mywindow->type = wiMain;
+            if(!strncmp(desc + 7, "main", 4)) mywindow->type = wMain;
             else if(!strncmp(desc+7, "video", 5) || /* legacy */ !strncmp(desc+7, "sub", 3))
             {
-                mywindow->type = wiVideo;
+                mywindow->type = wVideo;
                 mywindow->decoration = TRUE;
                 // legacy
                 if (desc[7] == 's') skin_legacy("sub", "video");
             }
-            else if(!strncmp(desc + 7, "menu", 4)) mywindow->type = wiMenu;
-            else if(!strncmp(desc + 7, "playbar", 7)) mywindow->type = wiPlaybar;
-            else mp_msg(MSGT_GPLAYER, MSGL_V, "[SKIN] warning found unknown windowtype");
+            else if(!strncmp(desc + 7, "menu", 4)) mywindow->type = wMenu;
+            else if(!strncmp(desc + 7, "playbar", 7)) mywindow->type = wPlaybar;
+            else
+            {
+                mywindow->type = -1;
+                mp_msg(MSGT_GPLAYER, MSGL_V, "[SKIN] warning found unknown windowtype");
+            }
         }
         else if(!strncmp(desc, "decoration", 10) && !strncmp(desc + 11, "enable", 6))
         {

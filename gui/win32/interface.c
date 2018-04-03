@@ -969,7 +969,7 @@ static int update_videowindow(void)
         unsigned int i;
 
         for (i=0; i<mygui->skin->windowcount; i++)
-            if(mygui->skin->windows[i]->type == wiVideo)
+            if(mygui->skin->windows[i]->type == wVideo)
                 desc = mygui->skin->windows[i];
 
         rd.right = rd.left+desc->base->bitmap[0]->width;

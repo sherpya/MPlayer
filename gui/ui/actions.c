@@ -375,11 +375,11 @@ play:
     case evIconify:
 
         switch (iparam) {
-        case 0:
+        case wMain:
             wsWindowIconify(&guiApp.mainWindow);
             break;
 
-        case 1:
+        case wVideo:
             wsWindowIconify(&guiApp.videoWindow);
             break;
         }

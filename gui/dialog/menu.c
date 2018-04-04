@@ -112,7 +112,6 @@ int gtkPopupMenuParam;
 
 static void ActivateMenuItem( int Item )
 {
-// fprintf( stderr,"[menu] item: %d.%d\n",Item&0xffff,Item>>16 );
  gtkPopupMenu=Item & 0x0000ffff;
  gtkPopupMenuParam=Item >> 16;
  uiEvent( Item & 0x0000ffff,Item >> 16 );
@@ -491,7 +490,6 @@ GtkWidget * CreatePopUpMenu( int wType )
       for ( i=1;i <= guiInfo.Tracks;i++ )
        {
         snprintf( tmp,32,MSGTR_GUI_TitleNN,i );
-    //AddMenuItem( CDTitleMenu,tmp,( i << 16 ) + ivSetCDTrack );
         AddMenuCheckItem(window1, (const char*)empty1px_xpm, CDTitleMenu,tmp, guiInfo.Track == i, ( i << 16 ) + ivSetCDTrack );
        }
      }
@@ -513,7 +511,6 @@ GtkWidget * CreatePopUpMenu( int wType )
       for ( i=1;i < guiInfo.Tracks;i++ )
        {
         snprintf( tmp,32,MSGTR_GUI_TitleNN,i );
-    //AddMenuItem( VCDTitleMenu,tmp,( i << 16 ) + ivSetVCDTrack );
         AddMenuCheckItem(window1, (const char*)empty1px_xpm, VCDTitleMenu,tmp, guiInfo.Track == i + 1, ( ( i + 1 ) << 16 ) + ivSetVCDTrack );
        }
      }
@@ -527,7 +524,6 @@ GtkWidget * CreatePopUpMenu( int wType )
     AddMenuItem( window1, (const char*)playdvd_xpm, SubMenu,MSGTR_GUI_DVD, evPlayDVD );
     DVDSubMenu=AddSubMenu( window1, (const char*)dvd_xpm, Menu,MSGTR_GUI_DVD );
     AddMenuItem( window1, (const char*)playdvd_xpm, DVDSubMenu,MSGTR_GUI_Play"    ", evPlayDVD );
-//    AddMenuItem( DVDSubMenu,MSGTR_MENU_ShowDVDMenu, evNone );
     AddSeparator( DVDSubMenu );
     DVDTitleMenu=AddSubMenu( window1, (const char*)title_xpm, DVDSubMenu,MSGTR_GUI_Titles );
      if ( guiInfo.Tracks && ( guiInfo.StreamType == STREAMTYPE_DVD ) )
@@ -584,10 +580,6 @@ GtkWidget * CreatePopUpMenu( int wType )
 //    AddMenuItem( SubMenu,"Fwd 10 sec", evForward10sec );
 //    AddMenuItem( SubMenu,"Back 1 min", evBackward1min );
 //    AddMenuItem( SubMenu,"Fwd 1 min", evForward1min );
-//   SubMenu=AddSubMenu( Menu,MSGTR_MENU_Size );
-//    AddMenuItem( SubMenu,MSGTR_GUI_SizeNormal"      ", evNormalSize );
-//    AddMenuItem( SubMenu,MSGTR_GUI_SizeDouble, evDoubleSize );
-//    AddMenuItem( SubMenu,MSGTR_GUI_SizeFullscreen, evFullScreen + ( True << 16 ) );
     AddMenuItem( window1, (const char*)playlist_xpm, Menu,MSGTR_GUI_Playlist, evPlaylist );
 
   if ( guiInfo.VideoWindow )

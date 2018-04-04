@@ -612,6 +612,7 @@ static void fs_Destroy(void)
 
 static GtkWidget *CreateFileSelect(void)
 {
+    gint x, y;
     GtkWidget *vbox4;
     GtkWidget *hbox4;
     GtkWidget *vseparator1;
@@ -625,10 +626,12 @@ static GtkWidget *CreateFileSelect(void)
     GtkStyle *upstyle;
 
     FileSelector = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_usize(FileSelector, 512, 300);
+    gtk_widget_set_usize(FileSelector, 512, 440);
     gtk_widget_set_events(FileSelector, GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK | GDK_VISIBILITY_NOTIFY_MASK);
     gtk_window_set_title(GTK_WINDOW(FileSelector), MSGTR_GUI_SelectFile);
     gtk_window_set_position(GTK_WINDOW(FileSelector), GTK_WIN_POS_CENTER);
+    gtk_window_get_position(GTK_WINDOW(FileSelector), &x, &y);
+    gtk_window_move(GTK_WINDOW(FileSelector), x, y * 5 / 6);
     gtk_window_set_wmclass(GTK_WINDOW(FileSelector), "FileSelector", MPlayer);
     fsColorMap = gdk_colormap_get_system();
 
@@ -662,7 +665,7 @@ static GtkWidget *CreateFileSelect(void)
     gtk_container_add(GTK_CONTAINER(fsUp), uppixmapwid);
     gtk_widget_show(fsUp);
     gtk_box_pack_start(GTK_BOX(hbox4), fsUp, FALSE, FALSE, 0);
-    gtk_widget_set_usize(fsUp, 65, 15);
+    gtk_widget_set_usize(fsUp, 60, -2);
 
     gtkAddHSeparator(vbox4);
 

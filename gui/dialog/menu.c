@@ -458,7 +458,7 @@ GtkWidget * VCDTitleMenu;
 GtkWidget * CDSubMenu;
 GtkWidget * CDTitleMenu;
 
-GtkWidget * CreatePopUpMenu( void )
+GtkWidget * CreatePopUpMenu( int wType )
 {
  GtkWidget * window1;
  GtkWidget * Menu = NULL;

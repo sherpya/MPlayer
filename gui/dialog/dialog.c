@@ -325,7 +325,7 @@ void gtkShow(int type, char *param)
             gtk_widget_destroy(PopUpMenu);
         }
 
-        PopUpMenu = CreatePopUpMenu();
+        PopUpMenu = CreatePopUpMenu((int)param);
         gtk_menu_popup(GTK_MENU(PopUpMenu), NULL, NULL, NULL, NULL, 0, 0);
         break;
 

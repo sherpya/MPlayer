@@ -575,11 +575,13 @@ GtkWidget * CreatePopUpMenu( int wType )
     AddMenuItem( window1, (const char*)stop_xpm, SubMenu,MSGTR_GUI_Stop, evStop );
     AddMenuItem( window1, (const char*)next_xpm, SubMenu,MSGTR_GUI_Next, evNext );
     AddMenuItem( window1, (const char*)prev_xpm, SubMenu,MSGTR_GUI_Previous, evPrev );
-//    AddSeparator( SubMenu );
-//    AddMenuItem( SubMenu,"Back 10 sec", evBackward10sec );
-//    AddMenuItem( SubMenu,"Fwd 10 sec", evForward10sec );
-//    AddMenuItem( SubMenu,"Back 1 min", evBackward1min );
-//    AddMenuItem( SubMenu,"Fwd 1 min", evForward1min );
+    AddSeparator( SubMenu );
+    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward10sec, evForward10sec );
+    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward1min, evForward1min );
+    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward10min, evForward10min );
+    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward10sec, evBackward10sec );
+    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward1min, evBackward1min );
+    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward10min, evBackward10min );
     AddMenuItem( window1, (const char*)playlist_xpm, Menu,MSGTR_GUI_Playlist, evPlaylist );
 
   if ( guiInfo.VideoWindow )

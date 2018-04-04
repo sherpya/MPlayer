@@ -132,10 +132,17 @@ static GtkWidget * AddMenuCheckItem(GtkWidget *window1, const char * immagine_xp
  Pixmap = gtk_pixmap_new (PixmapIcon, MaskIcon);
  gdk_pixmap_unref (PixmapIcon);
 
+ hbox = gtk_hbox_new (FALSE, 8);
+
+ if ( *label == '\b' )
+  {
+   gtk_box_set_spacing (GTK_BOX (hbox), 4);
+   label++;
+  }
+
  Item=gtk_check_menu_item_new();
  Label = gtk_label_new (label);
 
- hbox = gtk_hbox_new (FALSE, 8);
  gtk_box_pack_start (GTK_BOX (hbox), Pixmap, FALSE, FALSE, 0);
  gtk_box_pack_start (GTK_BOX (hbox), Label, FALSE, FALSE, 0);
  gtk_container_add (GTK_CONTAINER (Item), hbox);

@@ -414,10 +414,18 @@ static const Languages_t Languages[] =
 };
 
 #ifdef CONFIG_DVDREAD
-static char * ChannelTypes[] =
-  { "Dolby Digital","","Mpeg1","Mpeg2","PCM","","Digital Theatre System" };
+static const char * const *ChannelTypes[] =
+{
+  dolby_xpm,   // Dolby Digital
+  empty_xpm,
+  empty_xpm,   // Mpeg-1
+  empty_xpm,   // Mpeg-2
+  empty_xpm,   // LPCM
+  empty_xpm,
+  empty_xpm    // Digital Theatre System
+};
 static char * ChannelNumbers[] =
-  { "1.0", "2.0", "2.1", "3.1", "5.0", "5.1" };
+  { "\b1.0", "\b2.0", "\b2.1", "\b3.1", "\b5.0", "\b5.1" };
 #endif
 
 enum
@@ -780,10 +788,10 @@ GtkWidget * CreatePopUpMenu( int wType )
 
        for ( i=0;i < guiInfo.AudioStreams;i++ )
         {
-         snprintf( tmp,64,"%s - %s %s",GetLanguage( &guiInfo.AudioStream[i].language, GET_LANG_INT ),
-                   ChannelTypes[ guiInfo.AudioStream[i].type ],
-                   ChannelNumbers[ guiInfo.AudioStream[i].channels ] );
-         AddMenuCheckItem( window1, (const char*)dolby_xpm, DVDAudioLanguageMenu,tmp,
+         snprintf( tmp, sizeof(tmp), "%s - %s",
+                   ChannelNumbers[ guiInfo.AudioStream[i].channels ],
+                   GetLanguage( &guiInfo.AudioStream[i].language, GET_LANG_INT ));
+         AddMenuCheckItem( window1, (const char *) ChannelTypes[ guiInfo.AudioStream[i].type ], DVDAudioLanguageMenu, tmp,
                            demuxer->audio->id == guiInfo.AudioStream[i].id,
                            ( guiInfo.AudioStream[i].id << 16 ) + ivSetDVDAudio );
         }

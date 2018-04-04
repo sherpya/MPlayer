@@ -453,6 +453,7 @@ GtkWidget * DVDAudioLanguageMenu;
 GtkWidget * DVDSubtitleLanguageMenu;
 GtkWidget * AspectMenu;
 GtkWidget * RotationMenu;
+GtkWidget * VolumeMenu;
 GtkWidget * VCDSubMenu;
 GtkWidget * VCDTitleMenu;
 GtkWidget * CDSubMenu;
@@ -716,6 +717,16 @@ GtkWidget * CreatePopUpMenu( int wType )
    }
 
   AddSeparator( Menu );
+  VolumeMenu = AddSubMenu( window1, (const char *) empty_xpm, Menu, MSGTR_Volume );
+  H = AddMenuItem( window1, (const char *) empty_xpm, VolumeMenu, MSGTR_GUI_Increase, evIncVolume );
+  D = AddMenuItem( window1, (const char *) empty_xpm, VolumeMenu, MSGTR_GUI_Decrease, evDecVolume );
+
+  if ( !guiInfo.AudioChannels )
+   {
+    gtk_widget_set_sensitive( H, FALSE );
+    gtk_widget_set_sensitive( D, FALSE );
+   }
+
   MenuItem=AddMenuCheckItem( window1, (const char*)sound_xpm, Menu,MSGTR_GUI_Mute,mixer->muted,evMute );
   if ( !guiInfo.AudioChannels ) gtk_widget_set_sensitive( MenuItem,FALSE );
 

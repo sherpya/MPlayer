@@ -465,6 +465,7 @@ GtkWidget * CreatePopUpMenu( int wType )
  GtkWidget * SubMenu = NULL;
  GtkWidget * MenuItem = NULL;
  GtkWidget * H, * N, * D, * F;
+ GtkWidget * I, * I2, * I3, * I4, * I5, * I6, * I7;
  demuxer_t *demuxer = mpctx_get_demuxer(guiInfo.mpcontext);
  mixer_t *mixer = mpctx_get_mixer(guiInfo.mpcontext);
  int subs = 0, sub_pos;
@@ -570,18 +571,34 @@ GtkWidget * CreatePopUpMenu( int wType )
     AddMenuItem( window1, (const char*)loadeaf_xpm, SubMenu,MSGTR_GUI_AudioTrack"...", evLoadAudioFile );
     AddMenuItem( window1, (const char*)sub_xpm, SubMenu,MSGTR_GUI_Subtitle"...   ", evLoadSubtitle );
    SubMenu=AddSubMenu(window1, (const char*)play_xpm, Menu,MSGTR_GUI_Playback );
-    AddMenuItem( window1, (const char*)play_xpm, SubMenu,MSGTR_GUI_Play"        ", evPlay );
-    AddMenuItem( window1, (const char*)pause_xpm, SubMenu,MSGTR_GUI_Pause, evPause );
-    AddMenuItem( window1, (const char*)stop_xpm, SubMenu,MSGTR_GUI_Stop, evStop );
-    AddMenuItem( window1, (const char*)next_xpm, SubMenu,MSGTR_GUI_Next, evNext );
-    AddMenuItem( window1, (const char*)prev_xpm, SubMenu,MSGTR_GUI_Previous, evPrev );
+    D = AddMenuItem( window1, (const char*)play_xpm, SubMenu,MSGTR_GUI_Play"        ", evPlay );
+    F = AddMenuItem( window1, (const char*)pause_xpm, SubMenu,MSGTR_GUI_Pause, evPause );
+    H = AddMenuItem( window1, (const char*)stop_xpm, SubMenu,MSGTR_GUI_Stop, evStop );
+    N = AddMenuItem( window1, (const char*)next_xpm, SubMenu,MSGTR_GUI_Next, evNext );
+    I = AddMenuItem( window1, (const char*)prev_xpm, SubMenu,MSGTR_GUI_Previous, evPrev );
     AddSeparator( SubMenu );
-    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward10sec, evForward10sec );
-    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward1min, evForward1min );
-    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward10min, evForward10min );
-    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward10sec, evBackward10sec );
-    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward1min, evBackward1min );
-    AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward10min, evBackward10min );
+    I2 = AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward10sec, evForward10sec );
+    I3 = AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward1min, evForward1min );
+    I4 = AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekForward10min, evForward10min );
+    I5 = AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward10sec, evBackward10sec );
+    I6 = AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward1min, evBackward1min );
+    I7 = AddMenuItem( window1, (const char*)empty_xpm, SubMenu,MSGTR_GUI_SeekBackward10min, evBackward10min );
+
+    if ( !guiInfo.Playing )
+     {
+      gtk_widget_set_sensitive( D, guiInfo.Filename && *guiInfo.Filename );
+      gtk_widget_set_sensitive( F, FALSE );
+      gtk_widget_set_sensitive( H, FALSE );
+      gtk_widget_set_sensitive( N, FALSE );
+      gtk_widget_set_sensitive( I, FALSE );
+      gtk_widget_set_sensitive( I2, FALSE );
+      gtk_widget_set_sensitive( I3, FALSE );
+      gtk_widget_set_sensitive( I4, FALSE );
+      gtk_widget_set_sensitive( I5, FALSE );
+      gtk_widget_set_sensitive( I6, FALSE );
+      gtk_widget_set_sensitive( I7, FALSE );
+     }
+
     AddMenuItem( window1, (const char*)playlist_xpm, Menu,MSGTR_GUI_Playlist, evPlaylist );
 
   if ( guiInfo.VideoWindow )

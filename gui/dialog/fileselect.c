@@ -645,16 +645,13 @@ static GtkWidget *CreateFileSelect(void)
     fsCombo4 = gtk_combo_new();
     gtk_widget_show(fsCombo4);
     gtk_box_pack_start(GTK_BOX(hbox4), fsCombo4, TRUE, TRUE, 0);
-    gtk_widget_set_usize(fsCombo4, -2, 20);
 
     fsPathCombo = GTK_COMBO(fsCombo4)->entry;
     gtk_widget_show(fsPathCombo);
-    gtk_widget_set_usize(fsPathCombo, -2, 20);
 
     vseparator1 = gtk_vseparator_new();
     gtk_widget_show(vseparator1);
     gtk_box_pack_start(GTK_BOX(hbox4), vseparator1, FALSE, TRUE, 0);
-    gtk_widget_set_usize(vseparator1, 7, 20);
 
     upstyle     = gtk_widget_get_style(FileSelector);
     uppixmap    = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &upmask, &upstyle->bg[GTK_STATE_NORMAL], (gchar **)up_xpm);
@@ -675,7 +672,6 @@ static GtkWidget *CreateFileSelect(void)
     fsFNameListWindow = gtk_scrolled_window_new(NULL, NULL);
     gtk_widget_show(fsFNameListWindow);
     gtk_box_pack_start(GTK_BOX(hbox6), fsFNameListWindow, TRUE, TRUE, 0);
-    gtk_widget_set_usize(fsFNameListWindow, -2, 145);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(fsFNameListWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
     fsFNameList = gtk_clist_new(2);
@@ -692,12 +688,10 @@ static GtkWidget *CreateFileSelect(void)
     gtk_object_set_data_full(GTK_OBJECT(FileSelector), "List", List, (GtkDestroyNotify)gtk_widget_unref);
     gtk_widget_show(List);
     gtk_box_pack_start(GTK_BOX(vbox4), List, FALSE, FALSE, 0);
-    gtk_widget_set_usize(List, -2, 20);
 
     fsFilterCombo = GTK_COMBO(List)->entry;
     gtk_widget_show(fsFilterCombo);
     gtk_entry_set_editable(GTK_ENTRY(fsFilterCombo), FALSE);
-    gtk_widget_set_usize(fsFilterCombo, -2, 20);
 
     gtkAddHSeparator(vbox4);
 

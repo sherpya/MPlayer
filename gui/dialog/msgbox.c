@@ -81,20 +81,17 @@ static GtkWidget * CreateMessageBox( void )
  ErrorPixmap=gtk_pixmap_new( pixmapwid,mask );
 
  gtk_widget_hide( InformationPixmap );
- gtk_box_pack_start( GTK_BOX( hbox1 ),InformationPixmap,FALSE,FALSE,0 );
- gtk_widget_set_usize( InformationPixmap,55,-2 );
+ gtk_box_pack_start( GTK_BOX( hbox1 ),InformationPixmap,FALSE,FALSE,2 );
 
  gtk_widget_hide( WarningPixmap );
- gtk_box_pack_start( GTK_BOX( hbox1 ),WarningPixmap,FALSE,FALSE,0 );
- gtk_widget_set_usize( WarningPixmap,55,-2 );
+ gtk_box_pack_start( GTK_BOX( hbox1 ),WarningPixmap,FALSE,FALSE,2 );
 
  gtk_widget_hide( ErrorPixmap );
- gtk_box_pack_start( GTK_BOX( hbox1 ),ErrorPixmap,FALSE,FALSE,0 );
- gtk_widget_set_usize( ErrorPixmap,55,-2 );
+ gtk_box_pack_start( GTK_BOX( hbox1 ),ErrorPixmap,FALSE,FALSE,2 );
 
  gtkMessageBoxText=gtk_label_new( "Text jol. Ha ezt megerted,akkor neked nagyon jo a magyar tudasod,te." );
  gtk_widget_show( gtkMessageBoxText );
- gtk_box_pack_start( GTK_BOX( hbox1 ),gtkMessageBoxText,TRUE,TRUE,0 );
+ gtk_box_pack_start( GTK_BOX( hbox1 ),gtkMessageBoxText,FALSE,FALSE,4 );
 // gtk_label_set_justify( GTK_LABEL( gtkMessageBoxText ),GTK_JUSTIFY_FILL );
  gtk_label_set_justify( GTK_LABEL( gtkMessageBoxText ),GTK_JUSTIFY_CENTER );
  gtk_label_set_line_wrap( GTK_LABEL( gtkMessageBoxText ),FALSE );
@@ -116,7 +113,8 @@ static GtkWidget * CreateMessageBox( void )
 
 void ShowMessageBox( const char * msg )
 {
+ (void) msg;
+
  if ( MessageBox ) gtk_widget_destroy( MessageBox );
  MessageBox=CreateMessageBox();
- if ( strlen( msg ) < 20 ) gtk_widget_set_usize( MessageBox,196,-1 );
 }

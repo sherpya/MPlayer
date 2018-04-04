@@ -410,7 +410,7 @@ static const Languages_t Languages[] =
 static char * ChannelTypes[] =
   { "Dolby Digital","","Mpeg1","Mpeg2","PCM","","Digital Theatre System" };
 static char * ChannelNumbers[] =
-  { "","2.0","","","","5.1" };
+  { "1.0", "2.0", "2.1", "3.1", "5.0", "5.1" };
 #endif
 
 enum

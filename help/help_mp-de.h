@@ -897,6 +897,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Information "Information"
 #define MSGTR_GUI_Lavc "lavc (MPEG-1-Encodierung in Echtzeit)"
 #define MSGTR_GUI_MaximumUsageSpareCPU "Maximale Nutzung freier CPU-Zeit"
+#define MSGTR_GUI_Minimize "Minimieren"
 #define MSGTR_GUI_Miscellaneous "Sonstiges"
 #define MSGTR_GUI_Mixer "Mixer"
 #define MSGTR_GUI_MixerChannel "Mixer-Kanal"

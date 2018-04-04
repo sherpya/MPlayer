@@ -841,6 +841,7 @@ GtkWidget * CreatePopUpMenu( int wType )
   AddMenuItem( window1, (const char*)prefs_xpm, Menu,MSGTR_GUI_Preferences, evPreferences );
 
   AddSeparator( Menu );
+  if ( wType == wMain || wType == wVideo ) AddMenuItem( window1, (const char *) empty_xpm, Menu, MSGTR_GUI_Minimize, (wType << 16) + evIconify );
   AddMenuItem( window1, (const char*)exit_xpm, Menu,MSGTR_GUI_Quit, evExit );
 
  return Menu;

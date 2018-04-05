@@ -42,8 +42,8 @@
 #include "playlist.h"
 #include "tools.h"
 
-#include "pixmaps/open2.xpm"
-#include "pixmaps/dir2.xpm"
+#include "pixmaps/open.xpm"
+#include "pixmaps/dir.xpm"
 
 #define CFG_OLD_PLAYLIST
 #include "gui/app/cfg-old.c"
@@ -487,8 +487,8 @@ static GtkWidget * CreatePlaylist( void )
   gtk_clist_column_titles_show( GTK_CLIST( CTDirTree ) );
   gtk_clist_set_shadow_type( GTK_CLIST( CTDirTree ),GTK_SHADOW_NONE );
 
-  if ( !pxOpenedBook ) pxOpenedBook=gdk_pixmap_create_from_xpm_d( Playlist->window,&msOpenedBook,&transparent,(gchar **)dir2_xpm );
-  if ( !pxClosedBook ) pxClosedBook=gdk_pixmap_create_from_xpm_d( Playlist->window,&msClosedBook,&transparent,(gchar **)open2_xpm );
+  if ( !pxOpenedBook ) pxOpenedBook=gdk_pixmap_create_from_xpm_d( Playlist->window,&msOpenedBook,&transparent,(gchar **)dir_xpm );
+  if ( !pxClosedBook ) pxClosedBook=gdk_pixmap_create_from_xpm_d( Playlist->window,&msClosedBook,&transparent,(gchar **)open_xpm );
 
   parent=gtk_ctree_insert_node( GTK_CTREE( CTDirTree ),NULL,NULL,&root,4,pxOpenedBook,msOpenedBook,pxClosedBook,msClosedBook,FALSE,FALSE );
   DirNode=malloc( sizeof( *DirNode ) );

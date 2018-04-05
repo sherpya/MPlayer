@@ -157,7 +157,8 @@ static GtkWidget * AddMenuCheckItem(GtkWidget *window1, const char * immagine_xp
 
  return Item;
 }
-GtkWidget * AddMenuItem( GtkWidget *window1, const char * immagine_xpm,  GtkWidget * SubMenu,const char * label,int Number )
+
+static GtkWidget * AddMenuItem( GtkWidget *window1, const char * immagine_xpm,  GtkWidget * SubMenu,const char * label,int Number )
 {
  GtkWidget * Label = NULL;
  GtkWidget * Pixmap = NULL;
@@ -189,8 +190,7 @@ GtkWidget * AddMenuItem( GtkWidget *window1, const char * immagine_xpm,  GtkWidg
  return Item;
 }
 
-
-GtkWidget * AddSubMenu( GtkWidget *window1, const char * immagine_xpm, GtkWidget * Menu,const char * label )
+static GtkWidget * AddSubMenu( GtkWidget *window1, const char * immagine_xpm, GtkWidget * Menu,const char * label )
 {
  GtkWidget * Label = NULL;
  GtkWidget * Pixmap = NULL;
@@ -221,7 +221,7 @@ GtkWidget * AddSubMenu( GtkWidget *window1, const char * immagine_xpm, GtkWidget
  return Item;
 }
 
-GtkWidget * AddSeparator( GtkWidget * Menu )
+static GtkWidget * AddSeparator( GtkWidget * Menu )
 {
  GtkWidget * Item = NULL;
 

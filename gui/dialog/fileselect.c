@@ -29,7 +29,7 @@
 #include "tools.h"
 #include "pixmaps/dir.xpm"
 #include "pixmaps/file.xpm"
-#include "pixmaps/up.xpm"
+#include "pixmaps/dir_up.xpm"
 #include "gui/interface.h"
 #include "gui/app/app.h"
 #include "gui/app/cfg.h"
@@ -657,7 +657,7 @@ static GtkWidget *CreateFileSelect(void)
     gtk_box_pack_start(GTK_BOX(hbox4), vseparator1, FALSE, TRUE, 0);
 
     upstyle     = gtk_widget_get_style(FileSelector);
-    uppixmap    = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &upmask, &upstyle->bg[GTK_STATE_NORMAL], (gchar **)up_xpm);
+    uppixmap    = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &upmask, &upstyle->bg[GTK_STATE_NORMAL], (gchar **)dir_up_xpm);
     uppixmapwid = gtk_pixmap_new(uppixmap, upmask);
     gtk_widget_show(uppixmapwid);
 

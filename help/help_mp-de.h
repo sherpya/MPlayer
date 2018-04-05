@@ -822,7 +822,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_DeviceDVD "DVD-Gerät"
 #define MSGTR_GUI_Directory "Verzeichnis"
 #define MSGTR_GUI_DirectoryTree "Verzeichnisstruktur"
-#define MSGTR_GUI_DropSubtitle "Untertitel schließen"
+#define MSGTR_GUI_DropSubtitle "Untertitel entfernen"
 #define MSGTR_GUI_DVD "DVD"
 #define MSGTR_GUI_EnableAssSubtitle "Rendering von ssa-/ass-Untertiteln aktivieren"
 #define MSGTR_GUI_EnableAutomaticAVSync "Automatische A/V-Synchronisation aktivieren"

@@ -1541,6 +1541,13 @@ list_subparts_extern() {
   return 0
 }
 
+list_subparts_filters() {
+  test ! -e ffmpeg/libav${1} && return 1
+  pattern="s/^extern AVFilter ff_([avfsinkrc]{2,5})_([a-zA-Z0-9_]+);/\1_\2_filter/p"
+  sed -E -n "$pattern" ffmpeg/libav${1} | toupper
+  return 0
+}
+
 echocheck "ffmpeg/libavcodec/allcodecs.c"
 libavdecoders_all=$(list_subparts_extern  AVCodec       decoder  codec/allcodecs.c)
 libavencoders_all=$(list_subparts_extern  AVCodec       encoder  codec/allcodecs.c)
@@ -1571,7 +1578,7 @@ test $? -eq 0 && _list_subparts_extern=found || _list_subparts_extern="not found
 echores "$_list_subparts_extern"
 
 echocheck "ffmpeg/libavfilter/allfilters.c"
-libavfilters_all=$(list_subparts   FILTER   filter   filter/allfilters.c)
+libavfilters_all=$(list_subparts_filters filter/allfilters.c)
 test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
 
@@ -1610,7 +1617,7 @@ libavbsfs=$(filter_out_component bsf 'TRACE_HEADERS [A-Z0-9_]*_METADATA H264_RED
 libavdemuxers=$(filter_out_component demuxer 'AVISYNTH DASH LIB[A-Z0-9_]* REDIR')
 libavmuxers=$(filter_out_component muxer 'CHROMAPRINT LIB[A-Z0-9_]* RTP RTSP SAP')
 libavprotocols=$(filter_out_component protocol 'BLURAY FFRTMPCRYPT HTTPS LIB[A-Z0-9_]* TLS TLS_GNUTLS TLS_OPENSSL TLS_SECURETRANSPORT TLS_SCHANNEL')
-libavfilters=$(filter_out_component filter 'FREI0R[A-Z0-9_]* LIB[A-Z0-9_]* MP OCV')
+libavfilters=$(filter_out_component filter 'VF_FREI0R[A-Z0-9_]* LIB[A-Z0-9_]* MP VF_OCV')
 
 # second pass command line parsing for options needing local FFmpeg checkout
 for ac_option do
@@ -9476,6 +9483,24 @@ print_enabled_components(){
     cp $TMPH ffmpeg/$file
 }
 
+print_enabled_filters(){
+    file=$1
+    struct_name=$2
+    name=$3
+    shift 3
+    list=$(echo $* | tolower)
+    echo "static const $struct_name *$name[] = {" > $TMPH
+    for c in $list; do
+        printf "    &ff_%s,\n" $(echo $c | rev | cut -d _ -f 2- | rev) >> $TMPH
+    done
+    for c in asrc_abuffer vsrc_buffer asink_abuffer vsink_buffer; do
+        printf "    &ff_%s,\n" $c >> $TMPH
+    done
+    echo "    NULL };" >> $TMPH
+    cmp -s $TMPH ffmpeg/$file && return
+    cp $TMPH ffmpeg/$file
+}
+
 print_enabled_components libavcodec/codec_list.c AVCodec codec_list $libavdecoders $libavencoders
 print_enabled_components libavcodec/parser_list.c AVCodecParser parser_list $libavparsers
 print_enabled_components libavcodec/bsf_list.c AVBitStreamFilter bitstream_filters $libavbsfs
@@ -9484,6 +9509,7 @@ print_enabled_components libavdevice/outdev_list.c AVOutputFormat outdev_list ""
 print_enabled_components libavformat/demuxer_list.c AVInputFormat demuxer_list $libavdemuxers
 print_enabled_components libavformat/muxer_list.c AVOutputFormat muxer_list $libavmuxers
 print_enabled_components libavformat/protocol_list.c URLProtocol url_protocols $libavprotocols
+print_enabled_filters libavfilter/filter_list.c AVFilter filter_list $libavfilters
 
 fi
 

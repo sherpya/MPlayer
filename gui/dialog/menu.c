@@ -50,13 +50,8 @@
 
 #include "icons.h"
 
-int gtkPopupMenu;
-int gtkPopupMenuParam;
-
 static void ActivateMenuItem( int message )
 {
- gtkPopupMenu=message & 0x0000ffff;
- gtkPopupMenuParam=message >> 16;
  uiEvent( message & 0x0000ffff, message >> 16 );
 }
 

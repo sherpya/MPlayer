@@ -21,9 +21,6 @@
 
 #include <gtk/gtk.h>
 
-extern int gtkPopupMenu;
-extern int gtkPopupMenuParam;
-
 GtkWidget * CreatePopUpMenu( int );
 
 #endif /* MPLAYER_GUI_MENU_H */

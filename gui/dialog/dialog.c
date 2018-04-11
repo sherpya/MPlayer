@@ -317,8 +317,6 @@ void gtkShow(int type, char *param)
         break;
 
     case ivShowPopUpMenu:
-        gtkPopupMenu      = evNone;
-        gtkPopupMenuParam = 0;
 
         if (PopUpMenu) {
             gtk_widget_hide(PopUpMenu);

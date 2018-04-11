@@ -479,6 +479,7 @@ SRCS_MPLAYER-$(GUI_GTK)      += gui/app/app.c                           \
                                 gui/dialog/dialog.c                     \
                                 gui/dialog/equalizer.c                  \
                                 gui/dialog/fileselect.c                 \
+                                gui/dialog/icons.c                      \
                                 gui/dialog/menu.c                       \
                                 gui/dialog/msgbox.c                     \
                                 gui/dialog/playlist.c                   \

@@ -34,6 +34,8 @@ MPlayer
     * New symbol character 'g' and new dynamic label variable $g
     * Skins can leave current volume unchanged at startup
     * New configuration file: gui.gain
+    * Modern new icons for the (default) menu, the file selector,
+      the playlist and the message boxes
 
 
   1.3.0: "worksforme" February 16, 2016

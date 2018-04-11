@@ -22,9 +22,9 @@
 #include <gtk/gtk.h>
 
 extern GtkWidget * MessageBox;
-extern GtkWidget * InformationPixmap;
-extern GtkWidget * WarningPixmap;
-extern GtkWidget * ErrorPixmap;
+extern GtkWidget * InformationImage;
+extern GtkWidget * WarningImage;
+extern GtkWidget * ErrorImage;
 extern GtkWidget * gtkMessageBoxText;
 
 void ShowMessageBox( const char * msg );

@@ -25,11 +25,11 @@
 
 #include "fileselect.h"
 #include "dialog.h"
+#include "icons.h"
 #include "preferences.h"
 #include "tools.h"
 #include "pixmaps/dir.xpm"
 #include "pixmaps/file.xpm"
-#include "pixmaps/dir_up.xpm"
 #include "gui/interface.h"
 #include "gui/app/app.h"
 #include "gui/app/cfg.h"
@@ -620,10 +620,8 @@ static GtkWidget *CreateFileSelect(void)
     GtkWidget *fsFNameListWindow;
     GtkWidget *hbuttonbox3;
 
-    GtkWidget *uppixmapwid;
-    GdkPixmap *uppixmap;
-    GdkBitmap *upmask;
-    GtkStyle *upstyle;
+    GtkWidget *upimage;
+    GdkPixbuf *uppixbuf;
 
     FileSelector = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_usize(FileSelector, 512, 440);
@@ -656,13 +654,13 @@ static GtkWidget *CreateFileSelect(void)
     gtk_widget_show(vseparator1);
     gtk_box_pack_start(GTK_BOX(hbox4), vseparator1, FALSE, TRUE, 0);
 
-    upstyle     = gtk_widget_get_style(FileSelector);
-    uppixmap    = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &upmask, &upstyle->bg[GTK_STATE_NORMAL], (gchar **)dir_up_xpm);
-    uppixmapwid = gtk_pixmap_new(uppixmap, upmask);
-    gtk_widget_show(uppixmapwid);
+    uppixbuf = gdk_pixbuf_new_from_inline(-1, dir_up_png, FALSE, NULL);
+    upimage  = gtk_image_new_from_pixbuf(uppixbuf);
+    g_object_unref(uppixbuf);
+    gtk_widget_show(upimage);
 
     fsUp = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(fsUp), uppixmapwid);
+    gtk_button_set_image(GTK_BUTTON(fsUp), upimage);
     gtk_widget_show(fsUp);
     gtk_box_pack_start(GTK_BOX(hbox4), fsUp, FALSE, FALSE, 0);
     gtk_widget_set_usize(fsUp, 60, -2);

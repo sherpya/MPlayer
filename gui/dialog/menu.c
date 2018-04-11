@@ -435,10 +435,10 @@ GtkWidget * CreatePopUpMenu( int wType )
  Menu=gtk_menu_new();
  gtk_widget_realize (Menu);
 
-  AddMenuItem( Menu, about_png, MSGTR_GUI_AboutMPlayer"     ", evAbout );
+  AddMenuItem( Menu, about_png, MSGTR_GUI_AboutMPlayer, evAbout );
   AddSeparator( Menu );
    SubMenu=AddSubMenu( Menu, open_png, MSGTR_GUI_Open );
-    AddMenuItem( SubMenu, file_png, MSGTR_GUI_File"...    ", evLoadPlay );
+    AddMenuItem( SubMenu, file_png, MSGTR_GUI_File"...", evLoadPlay );
 #ifdef CONFIG_CDDA
     AddMenuItem( SubMenu, cd_play_png, MSGTR_GUI_CD, evPlayCD );
     CDSubMenu=AddSubMenu( Menu, cd_png, MSGTR_GUI_CD );
@@ -484,7 +484,7 @@ GtkWidget * CreatePopUpMenu( int wType )
 #ifdef CONFIG_DVDREAD
     AddMenuItem( SubMenu, dvd_play_png, MSGTR_GUI_DVD, evPlayDVD );
     DVDSubMenu=AddSubMenu( Menu, dvd_png, MSGTR_GUI_DVD );
-    AddMenuItem( DVDSubMenu, dvd_play_png, MSGTR_GUI_Play"    ", evPlayDVD );
+    AddMenuItem( DVDSubMenu, dvd_play_png, MSGTR_GUI_Play, evPlayDVD );
     AddSeparator( DVDSubMenu );
     DVDTitleMenu=AddSubMenu( DVDSubMenu, title_png, MSGTR_GUI_Titles );
      if ( guiInfo.Tracks && ( guiInfo.StreamType == STREAMTYPE_DVD ) )
@@ -521,7 +521,7 @@ GtkWidget * CreatePopUpMenu( int wType )
        }
 #endif
 #if defined(CONFIG_LIBCDIO) || defined(CONFIG_DVDREAD)
-    AddMenuItem( SubMenu, image_png, MSGTR_GUI_Image"...    ", evPlayImage );
+    AddMenuItem( SubMenu, image_png, MSGTR_GUI_Image"...", evPlayImage );
 #endif
     AddMenuItem( SubMenu, url_png, MSGTR_GUI_URL"...", evLoadURL );
 #ifdef CONFIG_TV
@@ -529,9 +529,9 @@ GtkWidget * CreatePopUpMenu( int wType )
 #endif
     AddSeparator( SubMenu );
     AddMenuItem( SubMenu, audio_track_load_png, MSGTR_GUI_AudioTrack"...", evLoadAudioFile );
-    AddMenuItem( SubMenu, subtitle_load_png, MSGTR_GUI_Subtitle"...   ", evLoadSubtitle );
+    AddMenuItem( SubMenu, subtitle_load_png, MSGTR_GUI_Subtitle"...", evLoadSubtitle );
    SubMenu=AddSubMenu( Menu, play_png, MSGTR_GUI_Playback );
-    D = AddMenuItem( SubMenu, play_png, MSGTR_GUI_Play"        ", evPlay );
+    D = AddMenuItem( SubMenu, play_png, MSGTR_GUI_Play, evPlay );
     F = AddMenuItem( SubMenu, play_pause_png, MSGTR_GUI_Pause, evPause );
     H = AddMenuItem( SubMenu, play_stop_png, MSGTR_GUI_Stop, evStop );
     N = AddMenuItem( SubMenu, play_next_png, MSGTR_GUI_Next, evNext );
@@ -654,7 +654,7 @@ GtkWidget * CreatePopUpMenu( int wType )
      } else b1=!guiApp.videoWindow.isFullScreen;
     F=AddMenuCheckItem( Menu, size_full_png, MSGTR_GUI_SizeFullscreen, guiApp.videoWindow.isFullScreen, evFullScreen + ( True << 16 ) );
     D=AddMenuCheckItem( Menu, size_double_png, MSGTR_GUI_SizeDouble, b2, evDoubleSize );
-    N=AddMenuCheckItem( Menu, size_normal_png, MSGTR_GUI_SizeNormal"      ", b1, evNormalSize );
+    N=AddMenuCheckItem( Menu, size_normal_png, MSGTR_GUI_SizeNormal, b1, evNormalSize );
     H=AddMenuCheckItem( Menu, size_half_png, MSGTR_GUI_SizeHalf, b_half, evHalfSize );
     if ( !guiInfo.Playing )
      {

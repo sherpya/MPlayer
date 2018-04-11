@@ -366,11 +366,11 @@ static const guint8 *ChannelTypes[] =
 {
   audio_dolby_png,   // Dolby Digital
   blank_png,
-  blank_png,         // Mpeg-1
-  blank_png,         // Mpeg-2
-  blank_png,         // LPCM
+  audio_mpeg_png,    // Mpeg-1
+  audio_mpeg_png,    // Mpeg-2
+  audio_lpcm_png,    // LPCM
   blank_png,
-  blank_png          // Digital Theatre System
+  audio_dts_png      // Digital Theatre System
 };
 static char * ChannelNumbers[] =
   { "\b1.0", "\b2.0", "\b2.1", "\b3.1", "\b5.0", "\b5.1" };
@@ -537,12 +537,12 @@ GtkWidget * CreatePopUpMenu( int wType )
     N = AddMenuItem( SubMenu, play_next_png, MSGTR_GUI_Next, evNext );
     I = AddMenuItem( SubMenu, play_previous_png, MSGTR_GUI_Previous, evPrev );
     AddSeparator( SubMenu );
-    I2 = AddMenuItem( SubMenu, blank_png, MSGTR_GUI_SeekForward10sec, evForward10sec );
-    I3 = AddMenuItem( SubMenu, blank_png, MSGTR_GUI_SeekForward1min, evForward1min );
-    I4 = AddMenuItem( SubMenu, blank_png, MSGTR_GUI_SeekForward10min, evForward10min );
-    I5 = AddMenuItem( SubMenu, blank_png, MSGTR_GUI_SeekBackward10sec, evBackward10sec );
-    I6 = AddMenuItem( SubMenu, blank_png, MSGTR_GUI_SeekBackward1min, evBackward1min );
-    I7 = AddMenuItem( SubMenu, blank_png, MSGTR_GUI_SeekBackward10min, evBackward10min );
+    I2 = AddMenuItem( SubMenu, seek_forward_10sec_png, MSGTR_GUI_SeekForward10sec, evForward10sec );
+    I3 = AddMenuItem( SubMenu, seek_forward_1min_png, MSGTR_GUI_SeekForward1min, evForward1min );
+    I4 = AddMenuItem( SubMenu, seek_forward_10min_png, MSGTR_GUI_SeekForward10min, evForward10min );
+    I5 = AddMenuItem( SubMenu, seek_backward_10sec_png, MSGTR_GUI_SeekBackward10sec, evBackward10sec );
+    I6 = AddMenuItem( SubMenu, seek_backward_1min_png, MSGTR_GUI_SeekBackward1min, evBackward1min );
+    I7 = AddMenuItem( SubMenu, seek_backward_10min_png, MSGTR_GUI_SeekBackward10min, evBackward10min );
 
     if ( !guiInfo.Playing )
      {
@@ -688,9 +688,9 @@ GtkWidget * CreatePopUpMenu( int wType )
    }
 
   AddSeparator( Menu );
-  VolumeMenu = AddSubMenu( Menu, blank_png, MSGTR_Volume );
-  H = AddMenuItem( VolumeMenu, blank_png, MSGTR_GUI_Increase, evIncVolume );
-  D = AddMenuItem( VolumeMenu, blank_png, MSGTR_GUI_Decrease, evDecVolume );
+  VolumeMenu = AddSubMenu( Menu, volume_png, MSGTR_Volume );
+  H = AddMenuItem( VolumeMenu, volume_increase_png, MSGTR_GUI_Increase, evIncVolume );
+  D = AddMenuItem( VolumeMenu, volume_decrease_png, MSGTR_GUI_Decrease, evDecVolume );
 
   if ( !guiInfo.AudioChannels )
    {
@@ -823,7 +823,7 @@ GtkWidget * CreatePopUpMenu( int wType )
   AddMenuItem( Menu, preferences_png, MSGTR_GUI_Preferences, evPreferences );
 
   AddSeparator( Menu );
-  if ( wType == wMain || wType == wVideo ) AddMenuItem( Menu, blank_png, MSGTR_GUI_Minimize, (wType << 16) + evIconify );
+  if ( wType == wMain || wType == wVideo ) AddMenuItem( Menu, minimize_png, MSGTR_GUI_Minimize, (wType << 16) + evIconify );
   AddMenuItem( Menu, exit_png, MSGTR_GUI_Quit, evExit );
 
  return Menu;

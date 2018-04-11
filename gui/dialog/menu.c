@@ -70,9 +70,9 @@ static GtkWidget * AddMenuCheckItem( GtkWidget *Menu, const guint8 *icon, const 
 
  if ( icon )
   {
- Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
- Image = gtk_image_new_from_pixbuf(Pixbuf);
- g_object_unref(Pixbuf);
+   Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
+   Image = gtk_image_new_from_pixbuf(Pixbuf);
+   g_object_unref(Pixbuf);
   }
  else Image = gtk_label_new(NULL);
 
@@ -112,9 +112,9 @@ static GtkWidget * AddMenuItem( GtkWidget *SubMenu, const guint8 *icon, const ch
 
  if ( icon )
   {
- Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
- Image = gtk_image_new_from_pixbuf(Pixbuf);
- g_object_unref(Pixbuf);
+   Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
+   Image = gtk_image_new_from_pixbuf(Pixbuf);
+   g_object_unref(Pixbuf);
   }
  else Image = gtk_label_new(NULL);
 
@@ -147,9 +147,9 @@ static GtkWidget * AddSubMenu( GtkWidget *Menu, const guint8 *icon, const char *
 
  if ( icon )
   {
- Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
- Image = gtk_image_new_from_pixbuf(Pixbuf);
- g_object_unref(Pixbuf);
+   Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
+   Image = gtk_image_new_from_pixbuf(Pixbuf);
+   g_object_unref(Pixbuf);
   }
  else Image = gtk_label_new(NULL);
 

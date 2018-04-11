@@ -53,14 +53,14 @@
 int gtkPopupMenu;
 int gtkPopupMenuParam;
 
-static void ActivateMenuItem( int Item )
+static void ActivateMenuItem( int message )
 {
- gtkPopupMenu=Item & 0x0000ffff;
- gtkPopupMenuParam=Item >> 16;
- uiEvent( Item & 0x0000ffff,Item >> 16 );
+ gtkPopupMenu=message & 0x0000ffff;
+ gtkPopupMenuParam=message >> 16;
+ uiEvent( message & 0x0000ffff, message >> 16 );
 }
 
-static GtkWidget * AddMenuCheckItem( GtkWidget *Menu, const guint8 *icon, const char *label, gboolean state, int Number )
+static GtkWidget * AddMenuCheckItem( GtkWidget *Menu, const guint8 *icon, const char *label, gboolean state, int message )
 {
  GtkWidget * Label = NULL;
  GtkWidget * Image;
@@ -95,14 +95,14 @@ static GtkWidget * AddMenuCheckItem( GtkWidget *Menu, const guint8 *icon, const 
 
  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(Item),state);
  gtk_signal_connect_object( GTK_OBJECT(Item),"activate",
-   GTK_SIGNAL_FUNC(ActivateMenuItem),GINT_TO_POINTER(Number) );
+   GTK_SIGNAL_FUNC(ActivateMenuItem), GINT_TO_POINTER(message) );
  gtk_menu_item_right_justify (GTK_MENU_ITEM (Item));
  gtk_widget_show_all(Item);
 
  return Item;
 }
 
-static GtkWidget * AddMenuItem( GtkWidget *SubMenu, const guint8 *icon, const char *label, int Number )
+static GtkWidget * AddMenuItem( GtkWidget *Menu, const guint8 *icon, const char *label, int message )
 {
  GtkWidget * Label = NULL;
  GtkWidget * Image;
@@ -127,9 +127,9 @@ static GtkWidget * AddMenuItem( GtkWidget *SubMenu, const guint8 *icon, const ch
  gtk_container_add (GTK_CONTAINER (Item), hbox);
 
 
- gtk_menu_append( GTK_MENU( SubMenu ),Item );
+ gtk_menu_append( GTK_MENU( Menu ), Item );
  gtk_signal_connect_object( GTK_OBJECT(Item),"activate",
-   GTK_SIGNAL_FUNC(ActivateMenuItem),GINT_TO_POINTER(Number) );
+   GTK_SIGNAL_FUNC(ActivateMenuItem), GINT_TO_POINTER(message) );
 
  gtk_menu_item_right_justify (GTK_MENU_ITEM (Item));
  gtk_widget_show_all(Item);

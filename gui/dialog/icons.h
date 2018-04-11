@@ -34,7 +34,6 @@ extern const guint8 audio_dolby_png[];
 extern const guint8 audio_track_png[];
 extern const guint8 audio_track_load_png[];
 extern const guint8 blank_png[];
-extern const guint8 blank_1px_png[];
 extern const guint8 cd_png[];
 extern const guint8 cd_play_png[];
 extern const guint8 chapter_png[];

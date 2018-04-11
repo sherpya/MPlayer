@@ -683,34 +683,6 @@ const guint8 blank_png[] =
 /* GdkPixbuf RGBA C-Source image dump */
 
 #ifdef __SUNPRO_C
-#pragma align 4 (blank_1px_png)
-#endif
-#ifdef __GNUC__
-const guint8 blank_1px_png[] __attribute__ ((__aligned__ (4))) =
-#else
-const guint8 blank_1px_png[] =
-#endif
-{ ""
-  /* Pixbuf magic (0x47646b50) */
-  "GdkP"
-  /* length: header (24) + pixel_data (64) */
-  "\0\0\0X"
-  /* pixdata_type (0x1010002) */
-  "\1\1\0\2"
-  /* rowstride (4) */
-  "\0\0\0\4"
-  /* width (1) */
-  "\0\0\0\1"
-  /* height (16) */
-  "\0\0\0\20"
-  /* pixel_data: */
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};
-
-
-/* GdkPixbuf RGBA C-Source image dump */
-
-#ifdef __SUNPRO_C
 #pragma align 4 (cd_png)
 #endif
 #ifdef __GNUC__

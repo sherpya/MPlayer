@@ -68,9 +68,13 @@ static GtkWidget * AddMenuCheckItem( GtkWidget *Menu, const guint8 *icon, const 
  GtkWidget * Item = NULL;
  GdkPixbuf * Pixbuf;
 
+ if ( icon )
+  {
  Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
  Image = gtk_image_new_from_pixbuf(Pixbuf);
  g_object_unref(Pixbuf);
+  }
+ else Image = gtk_label_new(NULL);
 
  hbox = gtk_hbox_new (FALSE, 8);
 
@@ -106,9 +110,13 @@ static GtkWidget * AddMenuItem( GtkWidget *SubMenu, const guint8 *icon, const ch
  GtkWidget * Item = NULL;
  GdkPixbuf * Pixbuf;
 
+ if ( icon )
+  {
  Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
  Image = gtk_image_new_from_pixbuf(Pixbuf);
  g_object_unref(Pixbuf);
+  }
+ else Image = gtk_label_new(NULL);
 
  Item=gtk_menu_item_new();
  Label = gtk_label_new (label);
@@ -137,9 +145,13 @@ static GtkWidget * AddSubMenu( GtkWidget *Menu, const guint8 *icon, const char *
  GtkWidget * SubItem = NULL;
  GdkPixbuf * Pixbuf;
 
+ if ( icon )
+  {
  Pixbuf = gdk_pixbuf_new_from_inline(-1, icon, FALSE, NULL);
  Image = gtk_image_new_from_pixbuf(Pixbuf);
  g_object_unref(Pixbuf);
+  }
+ else Image = gtk_label_new(NULL);
 
  SubItem=gtk_menu_item_new();
  Item=gtk_menu_new();
@@ -439,12 +451,12 @@ GtkWidget * CreatePopUpMenu( int wType )
       for ( i=1;i <= guiInfo.Tracks;i++ )
        {
         snprintf( tmp,32,MSGTR_GUI_TitleNN,i );
-        AddMenuCheckItem( CDTitleMenu, blank_1px_png, tmp, guiInfo.Track == i, ( i << 16 ) + ivSetCDTrack );
+        AddMenuCheckItem( CDTitleMenu, NULL, tmp, guiInfo.Track == i, ( i << 16 ) + ivSetCDTrack );
        }
      }
      else
       {
-       MenuItem=AddMenuItem( CDTitleMenu, blank_1px_png, MSGTR_GUI__none_, evNone );
+       MenuItem=AddMenuItem( CDTitleMenu, NULL, MSGTR_GUI__none_, evNone );
        gtk_widget_set_sensitive( MenuItem,FALSE );
       }
 #endif
@@ -460,12 +472,12 @@ GtkWidget * CreatePopUpMenu( int wType )
       for ( i=1;i < guiInfo.Tracks;i++ )
        {
         snprintf( tmp,32,MSGTR_GUI_TitleNN,i );
-        AddMenuCheckItem( VCDTitleMenu, blank_1px_png, tmp, guiInfo.Track == i + 1, ( ( i + 1 ) << 16 ) + ivSetVCDTrack );
+        AddMenuCheckItem( VCDTitleMenu, NULL, tmp, guiInfo.Track == i + 1, ( ( i + 1 ) << 16 ) + ivSetVCDTrack );
        }
      }
      else
       {
-       MenuItem=AddMenuItem( VCDTitleMenu, blank_1px_png, MSGTR_GUI__none_, evNone );
+       MenuItem=AddMenuItem( VCDTitleMenu, NULL, MSGTR_GUI__none_, evNone );
        gtk_widget_set_sensitive( MenuItem,FALSE );
       }
 #endif
@@ -481,14 +493,14 @@ GtkWidget * CreatePopUpMenu( int wType )
        for ( i=1 ; i<= guiInfo.Tracks;i++ )
         {
          snprintf( tmp,32,MSGTR_GUI_TitleNN,i);
-         AddMenuCheckItem( DVDTitleMenu, blank_1px_png, tmp,
+         AddMenuCheckItem( DVDTitleMenu, NULL, tmp,
          guiInfo.Track == i,
          (i << 16) + ivSetDVDTitle );
         }
       }
       else
        {
-        MenuItem=AddMenuItem( DVDTitleMenu, blank_1px_png, MSGTR_GUI__none_, evNone );
+        MenuItem=AddMenuItem( DVDTitleMenu, NULL, MSGTR_GUI__none_, evNone );
         gtk_widget_set_sensitive( MenuItem,FALSE );
        }
     DVDChapterMenu=AddSubMenu( DVDSubMenu, chapter_png, MSGTR_GUI_Chapters );
@@ -498,13 +510,13 @@ GtkWidget * CreatePopUpMenu( int wType )
        for ( i=1;i <= guiInfo.Chapters;i++ )
         {
          snprintf( tmp,32,MSGTR_GUI_ChapterNN,i );
-         AddMenuCheckItem( DVDChapterMenu, blank_1px_png, tmp, guiInfo.Chapter == i,
+         AddMenuCheckItem( DVDChapterMenu, NULL, tmp, guiInfo.Chapter == i,
          ( i << 16 ) + ivSetDVDChapter );
         }
       }
       else
        {
-        MenuItem=AddMenuItem( DVDChapterMenu, blank_1px_png, MSGTR_GUI__none_, evNone );
+        MenuItem=AddMenuItem( DVDChapterMenu, NULL, MSGTR_GUI__none_, evNone );
         gtk_widget_set_sensitive( MenuItem,FALSE );
        }
 #endif
@@ -670,7 +682,7 @@ GtkWidget * CreatePopUpMenu( int wType )
          char tmp[32];
          int selected_id = (video_id == vid || (video_id == -1 && vid == demuxer_default_video_track(demuxer)));
          snprintf( tmp,32,MSGTR_GUI_TrackN,vid );
-         AddMenuCheckItem( SubMenu, blank_1px_png, tmp, selected_id, ( vid << 16 ) + ivSetVideo );
+         AddMenuCheckItem( SubMenu, NULL, tmp, selected_id, ( vid << 16 ) + ivSetVideo );
         }
      }
    }
@@ -707,7 +719,7 @@ GtkWidget * CreatePopUpMenu( int wType )
          char lng[32], tmp[64];
          if ( demuxer_audio_lang( demuxer, i, lng, sizeof(lng) ) == 0 ) snprintf( tmp,sizeof(tmp),MSGTR_GUI_TrackN" - %s",aid,GetLanguage( lng, GET_LANG_CHR ) );
          else snprintf( tmp,sizeof(tmp),MSGTR_GUI_TrackN,aid );
-         AddMenuCheckItem( SubMenu, blank_1px_png, tmp, selected_id, ( aid << 16 ) + ivSetAudio );
+         AddMenuCheckItem( SubMenu, NULL, tmp, selected_id, ( aid << 16 ) + ivSetAudio );
         }
      }
    }
@@ -735,12 +747,12 @@ GtkWidget * CreatePopUpMenu( int wType )
        char tmp[64]; int i;
 
        DVDSubtitleLanguageMenu=AddSubMenu( Menu, subtitle_track_png, MSGTR_GUI_Subtitles );
-       AddMenuCheckItem( DVDSubtitleLanguageMenu, blank_1px_png, MSGTR_GUI__none_, guiInfo.mpcontext->d_sub->id == -2, ( -2 << 16 ) + ivSetDVDSubtitle );
+       AddMenuCheckItem( DVDSubtitleLanguageMenu, NULL, MSGTR_GUI__none_, guiInfo.mpcontext->d_sub->id == -2, ( -2 << 16 ) + ivSetDVDSubtitle );
 
        for ( i=0;i < guiInfo.Subtitles;i++ )
         {
          snprintf(tmp, sizeof(tmp), MSGTR_GUI_TrackN" - %s", i, GetLanguage(&guiInfo.Subtitle[i].language, GET_LANG_INT));
-         AddMenuCheckItem( DVDSubtitleLanguageMenu, blank_1px_png, tmp,
+         AddMenuCheckItem( DVDSubtitleLanguageMenu, NULL, tmp,
                            guiInfo.mpcontext->d_sub->id == guiInfo.Subtitle[i].id,
                            ( guiInfo.Subtitle[i].id << 16 ) + ivSetDVDSubtitle );
         }
@@ -755,7 +767,7 @@ GtkWidget * CreatePopUpMenu( int wType )
    {
     int i, j, subs0 = guiInfo.mpcontext->sub_counts[SUB_SOURCE_SUBS], subs1 = guiInfo.mpcontext->sub_counts[SUB_SOURCE_VOBSUB];
     SubMenu=AddSubMenu( Menu, subtitle_track_png, MSGTR_GUI_Subtitles );
-    AddMenuCheckItem( SubMenu, blank_1px_png, MSGTR_GUI__none_, sub_pos == -1, (-1 << 16) + ivSetSubtitle );
+    AddMenuCheckItem( SubMenu, NULL, MSGTR_GUI__none_, sub_pos == -1, (-1 << 16) + ivSetSubtitle );
     for ( i=0;i < subs;i++ )
      {
       int ret = -1;
@@ -799,7 +811,7 @@ GtkWidget * CreatePopUpMenu( int wType )
        }
       if ( ret == 0 ) snprintf( tmp, sizeof(tmp), MSGTR_GUI_TrackN" - %s", i, GetLanguage( lng, GET_LANG_CHR ) );
       else snprintf( tmp, sizeof(tmp), MSGTR_GUI_TrackN, i );
-      AddMenuCheckItem( SubMenu, blank_1px_png, tmp, sub_pos == i, ( i << 16 ) + ivSetSubtitle );
+      AddMenuCheckItem( SubMenu, NULL, tmp, sub_pos == i, ( i << 16 ) + ivSetSubtitle );
      }
    }
 

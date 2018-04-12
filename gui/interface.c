@@ -1386,9 +1386,6 @@ void mplayer(int what, float value, void *data)
 
 void mplayerLoadSubtitle(const char *name)
 {
-    if (guiInfo.Playing == GUI_STOP)
-        return;
-
     if (subdata) {
         mp_msg(MSGT_GPLAYER, MSGL_INFO, MSGTR_GUI_MSG_RemovingSubtitle);
 

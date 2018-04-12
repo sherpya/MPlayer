@@ -759,6 +759,13 @@ GtkWidget * CreatePopUpMenu( int wType )
 
   mpctx_get_global_sub_info(guiInfo.mpcontext, &subs, &sub_pos);
 
+  if ( guiInfo.mpcontext->set_of_sub_pos >= 0 )
+   {
+    sub_pos = guiInfo.mpcontext->set_of_sub_pos;
+
+    if ( guiInfo.mpcontext->sub_counts[SUB_SOURCE_SUBS] == 0 ) sub_pos = -1;
+   }
+
   if ( subs && guiInfo.StreamType != STREAMTYPE_DVD )
    {
     int i, j, subs0 = guiInfo.mpcontext->sub_counts[SUB_SOURCE_SUBS], subs1 = guiInfo.mpcontext->sub_counts[SUB_SOURCE_VOBSUB];

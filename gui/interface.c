@@ -1420,8 +1420,10 @@ void mplayerLoadSubtitle(const char *name)
 
         subdata = sub_read_file(name, guiInfo.sh_video ? guiInfo.sh_video->fps : 0);
 
-        if (!subdata)
+        if (!subdata) {
             gmp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_CantLoadSub, name);
+            return;
+        }
     }
 
     update_set_of_subtitles();

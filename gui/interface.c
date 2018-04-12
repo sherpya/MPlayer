@@ -1041,6 +1041,8 @@ int gui(int what, void *data)
 
         guiInfo.sh_video = NULL;
 
+        nfree(guiInfo.AudioFilename);
+
         if (guiInfo.LastVolume >= 0.0f) {
             if (guiInfo.Volume == guiInfo.ReplayGainVolume)
                 uiEvent(ivSetVolume, guiInfo.LastVolume);

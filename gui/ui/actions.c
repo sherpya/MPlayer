@@ -243,7 +243,6 @@ play:
         break;
 
     case evDropSubtitle:
-        nfree(guiInfo.SubtitleFilename);
         mplayerLoadSubtitle(NULL);
         break;
 

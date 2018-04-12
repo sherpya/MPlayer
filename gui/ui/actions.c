@@ -765,7 +765,7 @@ void uiUnsetFile(void)
  * @brief Unset media information.
  *
  * @param totals whether to additionally unset number of chapters, angles and
- *               audio filename (#True)
+ *               audio and subtitle filenames (#True)
  *               or just track, chapter and angle (#False)
  */
 void uiUnsetMedia(int totals)
@@ -785,6 +785,7 @@ void uiUnsetMedia(int totals)
             guiInfo.Angles = 0;
 
         nfree(guiInfo.AudioFilename);
+        nfree(guiInfo.SubtitleFilename);
     } else {
         guiInfo.Track   = 0;
         guiInfo.Chapter = 0;
@@ -793,7 +794,6 @@ void uiUnsetMedia(int totals)
 
     nfree(guiInfo.CodecName);
     nfree(guiInfo.Title);
-    nfree(guiInfo.SubtitleFilename);
     nfree(guiInfo.ImageFilename);
 }
 

@@ -1038,6 +1038,7 @@ int gui(int what, void *data)
         guiInfo.sh_video = NULL;
 
         nfree(guiInfo.AudioFilename);
+        nfree(guiInfo.SubtitleFilename);
 
         if (guiInfo.LastVolume >= 0.0f) {
             if (guiInfo.Volume == guiInfo.ReplayGainVolume)

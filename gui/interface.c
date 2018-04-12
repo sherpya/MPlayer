@@ -347,9 +347,6 @@ void guiInit(void)
         filename       = NULL; // don't start playing
     }
 
-    if (subdata)
-        setdup(&guiInfo.SubtitleFilename, subdata->filename);
-
     orig_fontconfig = font_fontconfig;
     set_fontconfig();
 
@@ -755,7 +752,6 @@ int gui(int what, void *data)
 
         /* subtitle */
 
-// subdata->filename=gstrdup( guiInfo.SubtitleFilename );
         stream_dump_type = 0;
 
         if (gtkSubDumpMPSub)

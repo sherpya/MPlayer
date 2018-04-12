@@ -1421,10 +1421,6 @@ void mplayerLoadSubtitle(const char *name)
 
         if (!subdata)
             gmp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_CantLoadSub, name);
-
-        sub_name    = (malloc(2 * sizeof(char *))); // when mplayer will be restarted
-        sub_name[0] = strdup(name);                 // sub_name[0] will be read
-        sub_name[1] = NULL;
     }
 
     update_set_of_subtitles();

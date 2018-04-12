@@ -525,7 +525,8 @@ GtkWidget * CreatePopUpMenu( int wType )
     AddSeparator( SubMenu );
     D = AddMenuItem( SubMenu, audio_track_load_png, MSGTR_GUI_AudioTrack"...", evLoadAudioFile );
     gtk_widget_set_sensitive( D, !guiInfo.Playing );
-    AddMenuItem( SubMenu, subtitle_load_png, MSGTR_GUI_Subtitle"...", evLoadSubtitle );
+    D = AddMenuItem( SubMenu, subtitle_load_png, MSGTR_GUI_Subtitle"...", evLoadSubtitle );
+    gtk_widget_set_sensitive( D, !guiInfo.Playing );
    SubMenu=AddSubMenu( Menu, play_png, MSGTR_GUI_Playback );
     D = AddMenuItem( SubMenu, play_png, MSGTR_GUI_Play, evPlay );
     F = AddMenuItem( SubMenu, play_pause_png, MSGTR_GUI_Pause, evPause );

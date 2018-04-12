@@ -1135,6 +1135,7 @@ void update_set_of_subtitles(void)
             set_of_subtitles[i - 1] = set_of_subtitles[i];
         set_of_subtitles[mpctx->set_of_sub_size - 1] = NULL;
         --mpctx->set_of_sub_size;
+        --mpctx->sub_counts[SUB_SOURCE_SUBS];
         if (mpctx->set_of_sub_size > 0)
             subdata = set_of_subtitles[mpctx->set_of_sub_pos = 0];
     } else if (mpctx->set_of_sub_size > 0 && subdata != NULL) { // *subdata was changed
@@ -1142,6 +1143,7 @@ void update_set_of_subtitles(void)
     } else if (mpctx->set_of_sub_size <= 0 && subdata != NULL) { // *subdata was added
         set_of_subtitles[mpctx->set_of_sub_pos = mpctx->set_of_sub_size] = subdata;
         ++mpctx->set_of_sub_size;
+        ++mpctx->sub_counts[SUB_SOURCE_SUBS];
     }
 }
 

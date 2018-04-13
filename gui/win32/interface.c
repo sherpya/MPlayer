@@ -82,7 +82,7 @@
 int guiWinID = 0;
 
 char *skinName = NULL;
-char *codecname = NULL;
+const char *codecname = NULL;
 static gui_t *mygui = NULL;
 static int update_videowindow(void);
 static RECT old_rect;

@@ -52,23 +52,6 @@ void mplayerLoadSubtitle(const char *name)
         mp_msg(MSGT_GPLAYER, MSGL_INFO, MSGTR_GUI_MSG_RemovingSubtitle);
         sub_free(subdata);
         subdata = NULL;
-        vo_sub = NULL;
-        if (vo_osd_list)
-        {
-            int len;
-            mp_osd_obj_t *osd = vo_osd_list;
-            while (osd)
-            {
-                if (osd->type == OSDTYPE_SUBTITLE) break;
-                osd = osd->next;
-            }
-            if (osd && osd->flags & OSDFLAG_VISIBLE)
-            {
-                len = osd->stride * (osd->bbox.y2 - osd->bbox.y1);
-                memset(osd->bitmap_buffer, 0, len);
-                memset(osd->alpha_buffer, 0, len);
-            }
-        }
     }
 
     if (name)

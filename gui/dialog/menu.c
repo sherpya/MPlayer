@@ -433,7 +433,7 @@ GtkWidget * CreatePopUpMenu( int wType )
   AddMenuItem( Menu, about_png, MSGTR_GUI_AboutMPlayer, evAbout );
   AddSeparator( Menu );
    SubMenu=AddSubMenu( Menu, open_png, MSGTR_GUI_Open );
-    AddMenuItem( SubMenu, file_png, MSGTR_GUI_File"...", evLoadPlay );
+    AddMenuItem( SubMenu, file_png, MSGTR_GUI_File ELLIPSIS, evLoadPlay );
 #ifdef CONFIG_CDDA
     AddMenuItem( SubMenu, cd_play_png, MSGTR_GUI_CD, evPlayCD );
     CDSubMenu=AddSubMenu( Menu, cd_png, MSGTR_GUI_CD );
@@ -516,16 +516,16 @@ GtkWidget * CreatePopUpMenu( int wType )
        }
 #endif
 #if defined(CONFIG_LIBCDIO) || defined(CONFIG_DVDREAD)
-    AddMenuItem( SubMenu, image_png, MSGTR_GUI_Image"...", evPlayImage );
+    AddMenuItem( SubMenu, image_png, MSGTR_GUI_Image ELLIPSIS, evPlayImage );
 #endif
-    AddMenuItem( SubMenu, url_png, MSGTR_GUI_URL"...", evLoadURL );
+    AddMenuItem( SubMenu, url_png, MSGTR_GUI_URL ELLIPSIS, evLoadURL );
 #ifdef CONFIG_TV
     AddMenuItem( SubMenu, tv_png, MSGTR_GUI_TV, evPlayTV );
 #endif
     AddSeparator( SubMenu );
-    D = AddMenuItem( SubMenu, audio_track_load_png, MSGTR_GUI_AudioTrack"...", evLoadAudioFile );
+    D = AddMenuItem( SubMenu, audio_track_load_png, MSGTR_GUI_AudioTrack ELLIPSIS, evLoadAudioFile );
     gtk_widget_set_sensitive( D, !guiInfo.Playing );
-    D = AddMenuItem( SubMenu, subtitle_load_png, MSGTR_GUI_Subtitle"...", evLoadSubtitle );
+    D = AddMenuItem( SubMenu, subtitle_load_png, MSGTR_GUI_Subtitle ELLIPSIS, evLoadSubtitle );
     gtk_widget_set_sensitive( D, !guiInfo.Playing );
    SubMenu=AddSubMenu( Menu, play_png, MSGTR_GUI_Playback );
     D = AddMenuItem( SubMenu, play_png, MSGTR_GUI_Play, evPlay );

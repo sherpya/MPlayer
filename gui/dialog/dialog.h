@@ -22,6 +22,8 @@
 #include <gtk/gtk.h>
 #include <X11/Xlib.h>
 
+#define ELLIPSIS "…"
+
 /// MessageBox types
 enum {
     MSGBOX_INFORMATION,

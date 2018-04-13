@@ -1447,6 +1447,8 @@ void gmp_msg(int mod, int lev, const char *format, ...)
 
     mp_msg(mod, lev, "%s", msg);
 
-    if (mp_msg_test(mod, lev))
+    if (mp_msg_test(mod, lev)) {
+        wsEvents();
         gtkMessageBox(MSGBOX_FATAL, msg);
+    }
 }

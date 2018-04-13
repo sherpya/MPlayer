@@ -640,6 +640,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_FilterAudioMatroska "Matroska audio (*.mka)"
 #define MSGTR_GUI_FilterAudioMPEG "MPEG audio (*.aac, *.f4a, *.m4a, *.mp2, *.mp3, *.mpga)"
 #define MSGTR_GUI_FilterAudioOgg "Ogg audio (*.oga, *.ogg, *.spx)"
+#define MSGTR_GUI_FilterAudioVideo "Popular audio and video files"
 #define MSGTR_GUI_FilterAudioWav "WAV audio (*.wav)"
 #define MSGTR_GUI_FilterAudioWma "Windows Media audio (*.wma)"
 #define MSGTR_GUI_FilterFileAll "All files"

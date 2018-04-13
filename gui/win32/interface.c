@@ -101,11 +101,13 @@ mixer_t *mixer = NULL;
  *
  * @return converted file path string
  */
-static char *unix_name (char *win_filename)
+char *unix_name (const char *win_filename)
 {
     static char *unix_filename;
     LPSTR (*CDECL wine_get_unix_file_name_ptr)(LPCWSTR);
     int wchar_conv;
+
+    setdup(&unix_filename, win_filename);
 
     if (*win_filename && (win_filename[1] == ':'))
     {
@@ -121,13 +123,12 @@ static char *unix_name (char *win_filename)
             MultiByteToWideChar(CP_UNIXCP, 0, win_filename, -1, ntpath, wchar_conv);
             unix_name = wine_get_unix_file_name_ptr(ntpath);
             setdup(&unix_filename, unix_name);
-            win_filename = unix_filename;
             HeapFree(GetProcessHeap(), 0, unix_name);
             HeapFree(GetProcessHeap(), 0, ntpath);
         }
     }
 
-    return win_filename;
+    return unix_filename;
 }
 
 #if defined(CONFIG_CDDA) || defined(CONFIG_DVDREAD)

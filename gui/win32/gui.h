@@ -126,4 +126,8 @@ void display_eqwindow(gui_t *gui);
 void display_prefswindow(gui_t *gui);
 void display_opensubtitlewindow(gui_t *gui);
 
+#ifdef __WINE__
+char *unix_name(const char *win_filename);
+#endif
+
 #endif /* MPLAYER_GUI_GUI_H */

@@ -302,7 +302,7 @@ void gtkShow(int type, char *param)
         break;
 
     case evLoadAudioFile:
-        ShowFileSelector(FILESELECT_AUDIO);
+        ShowFileSelector(FILESELECT_AUDIO_TRACK);
         gtkSetLayer(FileSelector);
         break;
 

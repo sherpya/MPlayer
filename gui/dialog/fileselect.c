@@ -259,7 +259,7 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
         *mask   = smask;
         break;
 
-    case FILESELECT_AUDIO:
+    case FILESELECT_AUDIO_TRACK:
         if (!atpixmap)
             atpixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &atmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_audio_track_xpm);
         *pixmap = atpixmap;
@@ -466,7 +466,7 @@ static void fs_fsFilterCombo_changed(GtkEditable *editable,
 
         break;
 
-    case FILESELECT_AUDIO:
+    case FILESELECT_AUDIO_TRACK:
 
         for (i = 0; fsAudioFileNames[i][0]; i++)
             if (strcmp(str, fsAudioFileNames[i][0]) == 0) {
@@ -632,7 +632,7 @@ static void fs_Ok_released(GtkButton *button, gpointer user_data)
         setddup(&guiInfo.SubtitleFilename, fsSelectedDirectory, fsSelectedFile);
         break;
 
-    case FILESELECT_AUDIO:
+    case FILESELECT_AUDIO_TRACK:
         setddup(&guiInfo.AudioFilename, fsSelectedDirectory, fsSelectedFile);
         break;
 
@@ -893,7 +893,7 @@ void ShowFileSelector(int type)
         tmp = guiInfo.SubtitleFilename;
         break;
 
-    case FILESELECT_AUDIO:
+    case FILESELECT_AUDIO_TRACK:
         gtk_window_set_title(GTK_WINDOW(FileSelector), MSGTR_GUI_SelectAudioFile);
         fsList_items = NULL;
 
@@ -936,7 +936,7 @@ void ShowFileSelector(int type)
         break;
     }
 
-    fsMedium = (fsType == FILESELECT_VIDEO_AUDIO || fsType == FILESELECT_SUBTITLE || fsType == FILESELECT_AUDIO || fsType == FILESELECT_IMAGE);
+    fsMedium = (fsType == FILESELECT_VIDEO_AUDIO || fsType == FILESELECT_SUBTITLE || fsType == FILESELECT_AUDIO_TRACK || fsType == FILESELECT_IMAGE);
 
     if (tmp && tmp[0] && !strstr(tmp, "://")) {
         dir = strdup(tmp);

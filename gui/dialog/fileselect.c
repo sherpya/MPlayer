@@ -503,7 +503,6 @@ static void fs_Ok_released(GtkButton *button, gpointer user_data)
 
     case FILESELECT_SUBTITLE:
         setddup(&guiInfo.SubtitleFilename, fsSelectedDirectory, fsSelectedFile);
-        mplayerLoadSubtitle(guiInfo.SubtitleFilename);
         break;
 
     case FILESELECT_AUDIO:
@@ -550,6 +549,9 @@ static void fs_Ok_released(GtkButton *button, gpointer user_data)
         uiEvent(ev, 0);
     } else
         gui(GUI_SET_STATE, (void *)GUI_STOP);
+
+    if (fsType == FILESELECT_SUBTITLE)
+        mplayerLoadSubtitle(guiInfo.SubtitleFilename);
 }
 
 /**

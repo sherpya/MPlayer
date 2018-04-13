@@ -130,6 +130,7 @@ static char *unix_name (char *win_filename)
     return win_filename;
 }
 
+#if defined(CONFIG_CDDA) || defined(CONFIG_DVDREAD)
 /**
  * @brief Convert a Windows style device name into an Unix style one.
  *
@@ -174,6 +175,7 @@ static char *unix_device (char *device)
 
     return device;
 }
+#endif
 #endif
 
 /* test for playlist files, no need to specify -playlist on the commandline.

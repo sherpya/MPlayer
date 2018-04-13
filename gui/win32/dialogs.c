@@ -73,6 +73,13 @@ void mplayerLoadSubtitle(const char *name)
 
     if (name)
     {
+#ifdef __WINE__
+        // When the GUI receives the subtitle file name from the open dialog
+        // box it's in Windows style (C:\path\to\file), which needs to be
+        // converted for MPlayer, so that it will find the filename in the
+        // Linux filesystem.
+        name = unix_name(name);
+#endif
         mp_msg(MSGT_GPLAYER, MSGL_INFO, MSGTR_GUI_MSG_LoadingSubtitle, name);
         subdata = sub_read_file(name, (guiInfo.sh_video ? guiInfo.sh_video->fps : 0));
         if (!subdata)

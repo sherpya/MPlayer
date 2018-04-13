@@ -277,7 +277,7 @@ void gtkShow(int type, char *param)
             gtkSetLayer(SkinBrowser);
         } else {
             gtk_widget_destroy(SkinBrowser);
-            gtkMessageBox(MSGBOX_ERROR, "Skin dirs not found ... Please install skins.");
+            gtkMessageBox(MSGBOX_ERROR, MSGTR_GUI_MSG_SkinDirNotFound);
         }
 
         break;

@@ -927,7 +927,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_MSG_SkinBitmapPngReadError "PNG-Lesefehler in %s\n"
 #define MSGTR_GUI_MSG_SkinCfgError "Verarbeitungsfehler in der Konfigurationsdatei des Skins '%s'\n"
 #define MSGTR_GUI_MSG_SkinCfgNotFound "Skin '%s' nicht gefunden.\n"
-#define MSGTR_GUI_MSG_SkinCfgSelectedNotFound "Ausgewähltes Skin '%s' nicht gefunden, es wird mit Skin 'default' versucht ...\n"
+#define MSGTR_GUI_MSG_SkinCfgSelectedNotFound "Gewählter Skin '%s' nicht gefunden, es wird Skin 'default' versucht ...\n"
 #define MSGTR_GUI_MSG_SkinDirNotFound "Kein Skin-Verzeichnis gefunden! Bitte einen Skin installieren."
 #define MSGTR_GUI_MSG_SkinErrorBitmap16Bit "Die Farbtiefe von %s beträgt 16 bpp oder weniger, was nicht unterstützt wird.\n"
 #define MSGTR_GUI_MSG_SkinErrorDefault "Vorgabewert (%d) außerhalb des Wertebereichs\n"

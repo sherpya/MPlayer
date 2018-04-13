@@ -64,7 +64,7 @@ void mplayerLoadSubtitle(const char *name)
         name = unix_name(name);
 #endif
         mp_msg(MSGT_GPLAYER, MSGL_INFO, MSGTR_GUI_MSG_LoadingSubtitle, name);
-        subdata = sub_read_file(name, (guiInfo.sh_video ? guiInfo.sh_video->fps : 0));
+        subdata = sub_read_file(name, (guiInfo.sh_video ? guiInfo.sh_video->fps : 25));
         if (!subdata)
         {
             mp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_CantLoadSub,name);

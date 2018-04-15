@@ -141,14 +141,6 @@ static int pngRead(const char *fname, guiImage *img)
     memset(img, 0, sizeof(*img));
 
     switch (avctx->pix_fmt) {
-    case AV_PIX_FMT_GRAY8:
-        img->Bpp = 8;
-        break;
-
-    case AV_PIX_FMT_GRAY16BE:
-        img->Bpp = 16;
-        break;
-
     case AV_PIX_FMT_RGB24:
         img->Bpp = 24;
         break;
@@ -159,6 +151,7 @@ static int pngRead(const char *fname, guiImage *img)
 
     default:
         img->Bpp = 0;
+        mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[bitmap] unsupported pixel format: %d\n", avctx->pix_fmt);
         break;
     }
 
@@ -258,10 +251,8 @@ int bpRead(const char *fname, guiImage *img)
         return -5;
     }
 
-    if (img->Bpp < 24) {
-        mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[bitmap] bpp too low: %u\n", img->Bpp);
+    if (!img->Bpp)
         return -1;
-    }
 
     if (!convert_ARGB(img))
         return -8;

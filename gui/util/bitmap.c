@@ -36,6 +36,8 @@
 #include "libavutil/intreadwrite.h"
 #include "libvo/fastmemcpy.h"
 
+static uint32_t palette[256];
+
 /**
  * @brief Check whether a (PNG) file exists.
  *
@@ -140,9 +142,15 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
     avcodec_decode_video2(avctx, frame, &decode_ok, &pkt);
 
     memset(img, 0, sizeof(*img));
+    memset(palette, 0, sizeof(palette));
+
     *pix_fmt = avctx->pix_fmt;
 
     switch (*pix_fmt) {
+    case AV_PIX_FMT_PAL8:
+        img->Bpp = 8;
+        break;
+
     case AV_PIX_FMT_RGB24:
         img->Bpp = 24;
         break;
@@ -169,9 +177,12 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
 
         img->Image = malloc(img->ImageSize);
 
-        if (img->Image)
+        if (img->Image) {
             memcpy_pic(img->Image, frame->data[0], bpl, img->Height, bpl, frame->linesize[0]);
-        else
+
+            if (frame->data[1])
+                memcpy(palette, frame->data[1], sizeof(palette));
+        } else
             decode_ok = False;
     }
 
@@ -195,10 +206,12 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
  */
 static int convert_ARGB(guiImage *img, int pix_fmt)
 {
+    unsigned int orgSize;
     unsigned char *orgImage;
     unsigned int i, c;
 
-    if (pix_fmt == AV_PIX_FMT_RGB24) {
+    if (pix_fmt == AV_PIX_FMT_PAL8 || pix_fmt == AV_PIX_FMT_RGB24) {
+        orgSize  = img->ImageSize;
         orgImage = img->Image;
 
         img->Bpp       = 32;
@@ -213,6 +226,11 @@ static int convert_ARGB(guiImage *img, int pix_fmt)
 
         mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[bitmap] 32 bpp conversion size: %u\n", img->ImageSize);
 
+        if (pix_fmt == AV_PIX_FMT_PAL8)
+            for (i = 0, c = 0; c < orgSize; i += 4, c++)
+                *(uint32_t *)&img->Image[i] = palette[orgImage[c]];
+
+        if (pix_fmt == AV_PIX_FMT_RGB24)
         for (i = 0, c = 0; i < img->ImageSize; i += 4, c += 3)
             *(uint32_t *)&img->Image[i] = ALPHA_OPAQUE | AV_RB24(&orgImage[c]);
 

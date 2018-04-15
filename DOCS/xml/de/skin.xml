@@ -48,7 +48,8 @@
     <sect2 id="skin-overview-formats">
       <title>Bildformate</title>
       <para>
-        Die Bilder müssen Truecolor-PNGs sein (24 oder 32 bpp).
+        Die Bilder müssen PNGs sein &#x2013; entweder Truecolor
+        (24 oder 32 bpp) oder 8 bpp mit einer RGBA-Farbpalette.
       </para>
 
       <para>

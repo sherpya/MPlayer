@@ -111,7 +111,10 @@ they are clicked.
 <sect2 id="skin-overview-formats">
 <title>Image formats</title>
 
-<para>Images must be truecolor (24 or 32 bpp) PNGs.</para>
+<para>
+Images must be PNGs&#x2014;either truecolor (24 or 32 bpp)
+or 8 bpp with a RGBA color palette.
+</para>
 <para>
 In the main window and in the playbar (see below) you can use images with
 `transparency': Regions filled with the color #FF00FF (magenta) are fully

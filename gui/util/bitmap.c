@@ -67,12 +67,13 @@ static const char *fExist(const char *fname)
  *
  * @param fname filename (with path)
  * @param img memory location to store the image data
+ * @param pix_fmt pointer to the location to store the pixel format
  *
  * @return 0 (ok), 1 (decoding error), 2 (file open error), 3 (file too big),
  *                 4 (out of memory), 5 (read error), 6 (avcodec alloc error),
  *                 7 (avcodec open error)
  */
-static int pngRead(const char *fname, guiImage *img)
+static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
 {
     FILE *file;
     size_t len, l;
@@ -139,8 +140,9 @@ static int pngRead(const char *fname, guiImage *img)
     avcodec_decode_video2(avctx, frame, &decode_ok, &pkt);
 
     memset(img, 0, sizeof(*img));
+    *pix_fmt = avctx->pix_fmt;
 
-    switch (avctx->pix_fmt) {
+    switch (*pix_fmt) {
     case AV_PIX_FMT_RGB24:
         img->Bpp = 24;
         break;
@@ -151,7 +153,7 @@ static int pngRead(const char *fname, guiImage *img)
 
     default:
         img->Bpp = 0;
-        mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[bitmap] unsupported pixel format: %d\n", avctx->pix_fmt);
+        mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[bitmap] unsupported pixel format: %d\n", *pix_fmt);
         break;
     }
 
@@ -191,12 +193,12 @@ static int pngRead(const char *fname, guiImage *img)
  * @note This is an in-place conversion,
  *       new memory will be allocated for @a img if necessary.
  */
-static int convert_ARGB(guiImage *img)
+static int convert_ARGB(guiImage *img, int pix_fmt)
 {
     unsigned char *orgImage;
     unsigned int i, c;
 
-    if (img->Bpp == 24) {
+    if (pix_fmt == AV_PIX_FMT_RGB24) {
         orgImage = img->Image;
 
         img->Bpp       = 32;
@@ -215,7 +217,7 @@ static int convert_ARGB(guiImage *img)
             *(uint32_t *)&img->Image[i] = ALPHA_OPAQUE | AV_RB24(&orgImage[c]);
 
         free(orgImage);
-    } else if (img->Bpp == 32) {
+    } else if (pix_fmt == AV_PIX_FMT_RGBA) {
         mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[bitmap] 32 bpp ARGB conversion\n");
 
         for (i = 0; i < img->ImageSize; i += 4)
@@ -237,14 +239,14 @@ static int convert_ARGB(guiImage *img)
  */
 int bpRead(const char *fname, guiImage *img)
 {
-    int r;
+    int r, pix_fmt;
 
     fname = fExist(fname);
 
     if (!fname)
         return -2;
 
-    r = pngRead(fname, img);
+    r = pngRead(fname, img, &pix_fmt);
 
     if (r != 0) {
         mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[bitmap] read error #%d: %s\n", r, fname);
@@ -254,7 +256,7 @@ int bpRead(const char *fname, guiImage *img)
     if (!img->Bpp)
         return -1;
 
-    if (!convert_ARGB(img))
+    if (!convert_ARGB(img, pix_fmt))
         return -8;
 
     return 0;

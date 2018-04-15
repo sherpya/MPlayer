@@ -231,8 +231,8 @@ static int convert_ARGB(guiImage *img, int pix_fmt)
                 *(uint32_t *)&img->Image[i] = palette[orgImage[c]];
 
         if (pix_fmt == AV_PIX_FMT_RGB24)
-        for (i = 0, c = 0; i < img->ImageSize; i += 4, c += 3)
-            *(uint32_t *)&img->Image[i] = ALPHA_OPAQUE | AV_RB24(&orgImage[c]);
+            for (i = 0, c = 0; i < img->ImageSize; i += 4, c += 3)
+                *(uint32_t *)&img->Image[i] = ALPHA_OPAQUE | AV_RB24(&orgImage[c]);
 
         free(orgImage);
     } else if (pix_fmt == AV_PIX_FMT_RGBA) {

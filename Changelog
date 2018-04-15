@@ -36,6 +36,9 @@ MPlayer
     * New configuration file: gui.gain
     * Modern new icons for the (default) menu, the file selector,
       the playlist and the message boxes
+    * Rearrangement of some items of the (default) menu
+    * Fix of broken evLoadAudioFile, evLoadSubtitle and evDropSubtitle
+    * Skin support for 8-bit PNGs with palette
 
 
   1.3.0: "worksforme" February 16, 2016

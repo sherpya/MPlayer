@@ -7211,10 +7211,9 @@ echores "$_librtmp"
 
 
 echocheck "FFmpeg"
-ffmpeg=no
 if test "$ffmpeg_a" = auto ; then
   ffmpeg_a=no
-  test -d ffmpeg/libavcodec && ffmpeg_a=yes && ffmpeg_so=no && ffmpeg=yes
+  test -d ffmpeg/libavcodec && ffmpeg_a=yes && ffmpeg_so=no
 fi
 if test "$ffmpeg_so" = auto ; then
   ffmpeg_so=no
@@ -7227,9 +7226,12 @@ if test "$ffmpeg_so" = auto ; then
   elif header_check libavutil/avutil.h -lswscale -lswresample -lavformat -lavcodec -lavutil ; then
     extra_ldflags="$extra_ldflags -lswscale -lswresample -lavformat -lavcodec -lavutil"
     ffmpeg_so=yes
-    ffmpeg=yes
   fi
 fi
+
+ffmpeg=no
+test "$ffmpeg_a" = yes && ffmpeg=yes
+test "$ffmpeg_so" = yes && ffmpeg=yes
 
 if test "$ffmpeg" = yes; then
   test -e config.h || touch config.h

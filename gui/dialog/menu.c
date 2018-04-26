@@ -728,17 +728,17 @@ GtkWidget * CreatePopUpMenu( int wType )
 
        if (guiInfo.AudioStreams > 1)
         {
-       DVDAudioLanguageMenu=AddSubMenu( Menu, audio_track_png, MSGTR_GUI_AudioTracks );
+         DVDAudioLanguageMenu=AddSubMenu( Menu, audio_track_png, MSGTR_GUI_AudioTracks );
 
-       for ( i=0;i < guiInfo.AudioStreams;i++ )
-        {
-         snprintf( tmp, sizeof(tmp), "%s - %s",
-                   ChannelNumbers[ guiInfo.AudioStream[i].channels ],
-                   GetLanguage( &guiInfo.AudioStream[i].language, GET_LANG_INT ));
-         AddMenuCheckItem( DVDAudioLanguageMenu, ChannelTypes[ guiInfo.AudioStream[i].type ], tmp,
-                           demuxer->audio->id == guiInfo.AudioStream[i].id,
-                           ( guiInfo.AudioStream[i].id << 16 ) + ivSetDVDAudio );
-        }
+         for ( i=0;i < guiInfo.AudioStreams;i++ )
+          {
+           snprintf( tmp, sizeof(tmp), "%s - %s",
+                     ChannelNumbers[ guiInfo.AudioStream[i].channels ],
+                     GetLanguage( &guiInfo.AudioStream[i].language, GET_LANG_INT ));
+           AddMenuCheckItem( DVDAudioLanguageMenu, ChannelTypes[ guiInfo.AudioStream[i].type ], tmp,
+                             demuxer->audio->id == guiInfo.AudioStream[i].id,
+                             ( guiInfo.AudioStream[i].id << 16 ) + ivSetDVDAudio );
+          }
         }
       }
 

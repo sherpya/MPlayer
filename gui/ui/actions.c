@@ -134,6 +134,8 @@ void uiEvent(int ev, float param)
         guiInfo.Track = iparam;
 
     case evPlayCD:
+        if (guiInfo.StreamType != STREAMTYPE_CDDA)
+            guiInfo.Track = 0;
         guiInfo.StreamType = STREAMTYPE_CDDA;
         goto play;
 #endif
@@ -142,6 +144,8 @@ void uiEvent(int ev, float param)
         guiInfo.Track = iparam;
 
     case evPlayVCD:
+        if (guiInfo.StreamType != STREAMTYPE_VCD)
+            guiInfo.Track = 0;
         guiInfo.StreamType = STREAMTYPE_VCD;
         goto play;
 #endif
@@ -171,6 +175,8 @@ void uiEvent(int ev, float param)
     case evPlayDVD:
         guiInfo.Chapter = 1;
         guiInfo.Angle   = 1;
+        if (guiInfo.StreamType != STREAMTYPE_DVD)
+            guiInfo.Track = 0;
 
     case ivPlayDVD:
         guiInfo.StreamType = STREAMTYPE_DVD;

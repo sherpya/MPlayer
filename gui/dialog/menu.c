@@ -726,6 +726,8 @@ GtkWidget * CreatePopUpMenu( int wType )
       {
        char tmp[64]; int i;
 
+       if (guiInfo.AudioStreams > 1)
+        {
        DVDAudioLanguageMenu=AddSubMenu( Menu, audio_track_png, MSGTR_GUI_AudioTracks );
 
        for ( i=0;i < guiInfo.AudioStreams;i++ )
@@ -736,6 +738,7 @@ GtkWidget * CreatePopUpMenu( int wType )
          AddMenuCheckItem( DVDAudioLanguageMenu, ChannelTypes[ guiInfo.AudioStream[i].type ], tmp,
                            demuxer->audio->id == guiInfo.AudioStream[i].id,
                            ( guiInfo.AudioStream[i].id << 16 ) + ivSetDVDAudio );
+        }
         }
       }
 

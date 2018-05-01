@@ -151,6 +151,8 @@ typedef struct {
 
 extern guiInterface_t guiInfo;
 
+void reset_stream_ids(void);
+
 /// @name MPlayer -> GUI
 //@{
 int gui(int what, void *data);

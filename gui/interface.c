@@ -201,6 +201,17 @@ static void remove_vf(char *vf)
     }
 }
 
+/**
+ * @brief Reset the audio, video and subtitles stream IDs.
+ */
+void reset_stream_ids(void)
+{
+    audio_id  = -1;
+    video_id  = -1;
+    dvdsub_id = -1;
+    vobsub_id = -1;
+}
+
 /* MPlayer -> GUI */
 
 /**
@@ -504,11 +515,7 @@ int gui(int what, void *data)
         wsEvents();
 
         if (guiInfo.MediumChanged == GUI_MEDIUM_NEW) {
-            audio_id  = -1;
-            video_id  = -1;
-            dvdsub_id = -1;
-            vobsub_id = -1;
-
+            reset_stream_ids();
             stream_cache_size = -1;
             autosync  = 0;
             force_fps = 0;

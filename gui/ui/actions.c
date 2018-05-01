@@ -169,12 +169,14 @@ void uiEvent(int ev, float param)
         guiInfo.Track   = iparam;
         guiInfo.Chapter = 1;
         guiInfo.Angle   = 1;
+        reset_stream_ids();
         uiEvent(ivPlayDVD, 0);
         break;
 
     case evPlayDVD:
         guiInfo.Chapter = 1;
         guiInfo.Angle   = 1;
+        reset_stream_ids();
         if (guiInfo.StreamType != STREAMTYPE_DVD)
             guiInfo.Track = 0;
 
@@ -872,6 +874,7 @@ void uiPrev(void)
 
         if (--guiInfo.Chapter == 0) {
             guiInfo.Chapter = 1;
+            reset_stream_ids();
 
             if (--guiInfo.Track == 0) {
                 guiInfo.Track = 1;
@@ -948,6 +951,7 @@ void uiNext(void)
 
         if (guiInfo.Chapter++ >= guiInfo.Chapters) {
             guiInfo.Chapter = 1;
+            reset_stream_ids();
 
             if (++guiInfo.Track > guiInfo.Tracks) {
                 guiInfo.Track   = guiInfo.Tracks;

@@ -37,8 +37,6 @@ CpuCaps gCpuCaps;
 #elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__DragonFly__) || defined(__APPLE__)
 #include <sys/types.h>
 #include <sys/sysctl.h>
-#elif defined(__linux__)
-#include <signal.h>
 #elif defined(__MINGW32__) || defined(__CYGWIN__)
 #include <windows.h>
 #elif defined(__OS2__)
@@ -57,23 +55,15 @@ CpuCaps gCpuCaps;
 /* I believe this code works.  However, it has only been used on a PII and PIII */
 
 #if defined(__linux__) && !ARCH_X86_64
-static void sigill_handler_sse( int signal, struct sigcontext sc )
+#include <signal.h>
+#include <setjmp.h>
+
+static sigjmp_buf sigill_longjmp;
+
+static void sigill_handler_sse( int signal )
 {
    mp_msg(MSGT_CPUDETECT,MSGL_V, "SIGILL, " );
-
-   /* Both the "xorps %%xmm0,%%xmm0" and "divps %xmm0,%%xmm1"
-    * instructions are 3 bytes long.  We must increment the instruction
-    * pointer manually to avoid repeated execution of the offending
-    * instruction.
-    *
-    * If the SIGILL is caused by a divide-by-zero when unmasked
-    * exceptions aren't supported, the SIMD FPU status and control
-    * word will be restored at the end of the test, so we don't need
-    * to worry about doing it here.  Besides, we may not be able to...
-    */
-   sc.eip += 3;
-
-   gCpuCaps.hasSSE=0;
+   siglongjmp(sigill_longjmp, 1);
 }
 #endif /* __linux__ */
 
@@ -178,12 +168,11 @@ static void check_os_katmai_support( void )
     }
 #elif defined(__linux__)
     struct sigaction saved_sigill;
+    struct sigaction new_sigill = { .sa_handler = sigill_handler_sse };
 
     /* Save the original signal handlers.
      */
-    sigaction( SIGILL, NULL, &saved_sigill );
-
-    signal( SIGILL, (void (*)(int))sigill_handler_sse );
+    sigaction( SIGILL, &new_sigill, &saved_sigill );
 
     /* Emulate test for OSFXSR in CR4.  The OS will set this bit if it
      * supports the extended FPU save and restore required for SSE.  If
@@ -194,8 +183,10 @@ static void check_os_katmai_support( void )
     if ( gCpuCaps.hasSSE ) {
         mp_msg(MSGT_CPUDETECT,MSGL_V, "Testing OS support for SSE... " );
 
-//      __asm__ volatile ("xorps %%xmm0, %%xmm0");
-        __asm__ volatile ("xorps %xmm0, %xmm0");
+        if (sigsetjmp(sigill_longjmp, 1))
+            gCpuCaps.hasSSE = 0;
+        else
+            __asm__ volatile ("xorps %xmm0, %xmm0");
 
         mp_msg(MSGT_CPUDETECT,MSGL_V, gCpuCaps.hasSSE ? "yes.\n" : "no!\n" );
     }

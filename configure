@@ -652,6 +652,9 @@ _ranlib=ranlib
 _windres=windres
 _cc=cc
 _ar=ar
+_arflags=rc
+# create thin archive to save disk space and I/O
+$_ar 2>&1 | grep -q "\[T\] " && _arflags=rcT
 test "$CC" && _cc="$CC"
 _as=auto
 _nm=auto
@@ -8375,7 +8378,7 @@ MANDIR  = \$(DESTDIR)$_mandir
 CONFDIR = \$(DESTDIR)$_confdir
 
 AR      = $_ar
-ARFLAGS = rc
+ARFLAGS = $_arflags
 AR_O    = \$@
 AS      = $_cc
 CC      = $_cc

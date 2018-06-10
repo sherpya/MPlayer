@@ -52,6 +52,7 @@
 #include "config.h"
 #include "help_mp.h"
 #include "mpcommon.h"
+#include "mplayer.h"
 #include "libavutil/common.h"
 #include "stream/stream.h"
 
@@ -870,6 +871,7 @@ void ShowFileSelector(int type)
         fsList_items = NULL;
 
         for (i = 0; fsVideoAudioFilterNames[i][0]; i++)
+            if ((strcmp(fsVideoAudioFilterNames[i][0], MSGTR_GUI_FilterFilePlaylist) != 0) || allow_playlist_parsing)
             fsList_items = g_list_append(fsList_items, fsVideoAudioFilterNames[i][0]);
 
         k = fsLastVideoAudioFilterSelected;

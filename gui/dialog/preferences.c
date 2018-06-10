@@ -116,6 +116,7 @@ static GtkWidget * CBStopXScreenSaver;
 static GtkWidget * CBPlayBar;
 static GtkWidget * CBNoIdle;
 static GtkWidget * CBTVDigital;
+static GtkWidget * CBPlaylists;
 
 static GtkWidget * SBCache;
 static GtkAdjustment * SBCacheadj;
@@ -382,6 +383,7 @@ static void prButton( GtkButton * button, gpointer user_data )
         gtkEnablePlayBar=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBPlayBar ) );
         gui_tv_digital=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBTVDigital ) );
         player_idle_mode=!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBNoIdle ) );
+        allow_playlist_parsing = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBPlaylists));
         mplayer( MPLAYER_SET_AUTO_QUALITY,HSPPQualityadj->value,0 );
 
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBCache ) ) ) { gtkCacheSize=(int)SBCacheadj->value; gtkCacheOn=True; }
@@ -1092,6 +1094,7 @@ static GtkWidget * CreatePreferences( void )
   CBStopXScreenSaver=gtkAddCheckButton( MSGTR_GUI_TurnOffXScreenSaver,vbox602 );
   CBPlayBar=gtkAddCheckButton( MSGTR_GUI_EnablePlaybar,vbox602 );
   CBTVDigital=gtkAddCheckButton( MSGTR_GUI_EnableDigitalTV,vbox602 );
+  CBPlaylists = gtkAddCheckButton(MSGTR_GUI_PlaylistSupport, vbox602);
   CBNoIdle=gtkAddCheckButton( MSGTR_GUI_QuitAfterPlaying,vbox602 );
 
   gtkAddHSeparator( vbox602 );
@@ -1411,6 +1414,7 @@ void ShowPreferences( void )
    gtk_widget_set_sensitive( CBTVDigital,FALSE );
 #endif
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBNoIdle ),!player_idle_mode );
+ gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(CBPlaylists), allow_playlist_parsing);
 
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBCache ),0 );
  gtk_adjustment_set_value( SBCacheadj,gtkCacheSize );

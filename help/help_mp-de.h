@@ -980,6 +980,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Play "Abspielen"
 #define MSGTR_GUI_Playback "Wiedergabe"
 #define MSGTR_GUI_Playlist "Wiedergabeliste"
+#define MSGTR_GUI_PlaylistSupport "Laden von Wiedergabelisten erlauben"
 #define MSGTR_GUI_Position "Position"
 #define MSGTR_GUI_PostProcessing "Nachbearbeitung"
 #define MSGTR_GUI_Preferences "Einstellungen"

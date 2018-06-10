@@ -771,6 +771,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Play "Play"
 #define MSGTR_GUI_Playback "Playback"
 #define MSGTR_GUI_Playlist "Playlist"
+#define MSGTR_GUI_PlaylistSupport "Allow loading of playlists"
 #define MSGTR_GUI_Position "Position"
 #define MSGTR_GUI_PostProcessing "Post-processing"
 #define MSGTR_GUI_Preferences "Preferences"

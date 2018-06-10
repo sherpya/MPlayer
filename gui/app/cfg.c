@@ -251,6 +251,8 @@ static const m_option_t gui_opts[] = {
     { "ass_bottom_margin",           &ass_bottom_margin,       CONF_TYPE_INT,         CONF_RANGE,  0,     2000,       NULL },
 #endif
 
+    { "playlist_support",            &allow_playlist_parsing,  CONF_TYPE_FLAG,        0,           0,     1,          NULL },
+
     { NULL,                          NULL,                     0,                     0,           0,     0,          NULL }
 };
 

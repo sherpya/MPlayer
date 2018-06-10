@@ -43,6 +43,8 @@ extern int progbar_align;
 extern int auto_quality;
 extern int disable_gui_conf;
 
+extern int allow_playlist_parsing;
+
 extern int capture_dump;
 extern int stream_dump_type;
 extern char *stream_dump_name;

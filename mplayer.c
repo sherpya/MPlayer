@@ -330,7 +330,7 @@ static char *prog_path;
 static int crash_debug;
 #endif
 
-static int allow_playlist_parsing;
+int allow_playlist_parsing;
 
 /* This header requires all the global variable declarations. */
 #include "cfg-mplayer.h"

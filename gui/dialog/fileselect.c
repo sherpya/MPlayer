@@ -872,7 +872,7 @@ void ShowFileSelector(int type)
 
         for (i = 0; fsVideoAudioFilterNames[i][0]; i++)
             if ((strcmp(fsVideoAudioFilterNames[i][0], MSGTR_GUI_FilterFilePlaylist) != 0) || allow_playlist_parsing)
-            fsList_items = g_list_append(fsList_items, fsVideoAudioFilterNames[i][0]);
+                fsList_items = g_list_append(fsList_items, fsVideoAudioFilterNames[i][0]);
 
         k = fsLastVideoAudioFilterSelected;
         gtk_combo_set_popdown_strings(GTK_COMBO(List), fsList_items);

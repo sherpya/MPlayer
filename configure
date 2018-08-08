@@ -1554,7 +1554,7 @@ list_subparts_filters() {
 echocheck "ffmpeg/libavcodec/allcodecs.c"
 libavdecoders_all=$(list_subparts_extern  AVCodec       decoder  codec/allcodecs.c)
 libavencoders_all=$(list_subparts_extern  AVCodec       encoder  codec/allcodecs.c)
-libavparsers_all=$(list_subparts_extern   AVCodecParser parser   codec/parser.c)
+libavparsers_all=$(list_subparts_extern   AVCodecParser parser   codec/parsers.c)
 test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
 

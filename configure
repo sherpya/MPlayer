@@ -1854,6 +1854,8 @@ if os2 ; then
   # And ensure that $ld_static should be at first in a library list because it
   # has effects only libraries after it.
   test -n "$ld_static" && ld_static='-Wl,-static'
+  # OS/2 linker does not support a thin archive. Remove 'T' flag.
+  _arflags=$(echo $_arflags | tr -d T)
 fi
 
 if wine ; then

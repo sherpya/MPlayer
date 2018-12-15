@@ -785,6 +785,7 @@ _tv_dshow=auto
 _pvr=auto
 networking=yes
 _winsock2_h=auto
+_struct_pollfd=auto
 _struct_addrinfo=auto
 _getaddrinfo=auto
 _struct_sockaddr_storage=auto
@@ -3562,6 +3563,26 @@ else
   cc_check_winsock2_h='-DHAVE_WINSOCK2_H=0'
 fi
 
+echocheck "struct pollfd"
+if test "$_struct_pollfd" = auto; then
+  _struct_pollfd=no
+  cat > $TMPC << EOF
+#if HAVE_WINSOCK2_H
+#include <winsock2.h>
+#else
+#include <poll.h>
+#endif
+int main(void) { struct pollfd p; return 0; }
+EOF
+  cc_check $cc_check_winsock2_h && _struct_pollfd=yes
+fi
+echores "$_struct_pollfd"
+
+if test "$_struct_pollfd" = yes; then
+  def_struct_pollfd="#define HAVE_STRUCT_POLLFD 1"
+else
+  def_struct_pollfd="#define HAVE_STRUCT_POLLFD 0"
+fi
 
 echocheck "netdb.h, struct addrinfo"
 if test "$_struct_addrinfo" = auto; then
@@ -9330,7 +9351,7 @@ $def_simd_align_32
 #define HAVE_SIMD_ALIGN_64 0
 #define HAVE_STRERROR_R 0
 #define HAVE_STRPTIME 0
-#define HAVE_STRUCT_POLLFD 0
+$def_struct_pollfd
 #define HAVE_SYMVER_ASM_LABEL 0
 #define HAVE_SYMVER_GNU_ASM 0
 #define HAVE_SYNC_SYNCHRONIZE 1

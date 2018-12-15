@@ -142,7 +142,7 @@ static void id2str(const uint8_t *id, int idlen, char dst[ID_STR_LEN])
     int i;
     idlen = FFMIN(idlen, 20);
     for (i = 0; i < idlen; i++)
-        snprintf(dst + 2*i, 3, "%02"PRIX8, id[i]);
+        snprintf(dst + 2*i, 3, "%02"PRIx8, id[i]);
 }
 
 static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
@@ -153,17 +153,35 @@ static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
     int vukfound = 0;
     stream_t *file;
     char idstr[ID_STR_LEN];
+    id2str(discid, 20, idstr);
 
     // look up discid in KEYDB.cfg to get VUK
     home = getenv("HOME");
-    snprintf(filename, sizeof(filename), "%s/.dvdcss/KEYDB.cfg", home);
+    snprintf(filename, sizeof(filename), "%s/.cache/aacs/vuk/%s", home, idstr);
     file = open_stream(filename, NULL, NULL);
+    if (file) {
+        vukfound = 1;
+        memset(line, 0, sizeof(line));
+        vukfound &= stream_read(file, line, 32) == 32;
+        vukfound &= sscanf(line,      "%16"SCNx64, &bd->vuk.u64[0]) == 1;
+        vukfound &= sscanf(line + 16, "%16"SCNx64, &bd->vuk.u64[1]) == 1;
+        bd->vuk.u64[0] = av_be2ne64(bd->vuk.u64[0]);
+        bd->vuk.u64[1] = av_be2ne64(bd->vuk.u64[1]);
+        free_stream(file);
+        if (vukfound)
+            return 1;
+    }
+    snprintf(filename, sizeof(filename), "%s/.config/aacs/KEYDB.cfg", home);
+    file = open_stream(filename, NULL, NULL);
+    if (!file) {
+        snprintf(filename, sizeof(filename), "%s/.dvdcss/KEYDB.cfg", home);
+        file = open_stream(filename, NULL, NULL);
+    }
     if (!file) {
         mp_msg(MSGT_OPEN,MSGL_ERR,
                "Cannot open VUK database file %s\n", filename);
         return 0;
     }
-    id2str(discid, 20, idstr);
     while (stream_read_line(file, line, sizeof(line), 0)) {
         char *vst;
 
@@ -356,6 +374,7 @@ static int is_audio_type(int type)
     case 4:
     case 0x0f:
     case 0x11:
+    case 0x80:
     case 0x81:
     case 0x8A:
     case 0x82:

@@ -291,6 +291,7 @@ static const Languages_t Languages[] =
   { lng( 'n','l' ), "nld", "Nederlands"                      },
   { lng( 'n','l' ), "dut", "Nederlands"                      },
   { lng( 'n','n' ), "nno", "Nynorsk"                         },
+  { lng( 'n','o' ), "nor", "Norsk"                           },
   { lng( 'n','r' ), "nbl", "isiNdebele"                      },
   { lng( 'n','v' ), "nav", "Diné bizaad"                    },
   { lng( 'n','y' ), "nya", "Chichewa"                        },

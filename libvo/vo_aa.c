@@ -92,6 +92,7 @@ static int osdx, osdy;
 static int osd_text_length = 0;
 int aaconfigmode=1;
 font_desc_t* vo_font_save = NULL;
+font_desc_t* sub_font_save = NULL;
 static struct SwsContext *sws=NULL;
 
 /* configuration */
@@ -250,7 +251,8 @@ config(uint32_t width, uint32_t height, uint32_t d_width,
     /* now init our own 'font' */
     if(!vo_font_save) vo_font_save = vo_font;
     if(vo_font == vo_font_save) {
-      vo_font=malloc(sizeof(font_desc_t));//if(!desc) return NULL;
+      sub_font_save = sub_font;
+      sub_font=vo_font=malloc(sizeof(font_desc_t));//if(!desc) return NULL;
       memset(vo_font,0,sizeof(font_desc_t));
       vo_font->pic_a[0]=malloc(sizeof(raw_file));
       memset(vo_font->pic_a[0],0,sizeof(raw_file));
@@ -516,6 +518,10 @@ uninit(void) {
       free(vo_font);
       vo_font = vo_font_save;
       vo_font_save = NULL;
+    }
+    if(sub_font_save) {
+      sub_font = sub_font_save;
+      sub_font_save = NULL;
     }
     aa_close(c);
 }

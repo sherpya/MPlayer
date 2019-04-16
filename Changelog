@@ -12,7 +12,8 @@ MPlayer
     * support GBR pixel formats for HEVC
     * FFmpeg audio decoders: g721, g732
     * FFmpeg video decoders: more Matrox mpeg2 formats (M702-3-4-5), Truemotion
-      RT, Matrox Uncompressed SD/HD
+      RT, Matrox Uncompressed SD/HD, BitJazz SheerVideo, YUY2 Lossless Codec
+      Apple Pixlet, ScreenPressor, FM Screen Capture Codec
     * FFmpeg IFF video/image decoders: ANIM, ILBM, PBM, RGB8, RGBN
 
     Fixes:
@@ -21,10 +22,15 @@ MPlayer
     * fix -subcp enca: with external ASS subtitles (#2281)
     * fix reading of bitmap fonts
     * fix -subdelay applied inverted
+    * some fixes for video filter bmovl (#2304, #2308)
+    * fix timing of first and last frame (#2315)
 
     Other:
     * MPlayer can link against OpenSSL instead of GnuTLS for https support
       (Warning: the resulting binary can not be redistributed)
+    * OSD: NV12/NV21 support
+    * video output xv: NV12/NV21 support
+    * video outputs for OSX: fix a few issues with newer OSX versions
 
     GUI:
     * No limitation on the number of entries in a font description file

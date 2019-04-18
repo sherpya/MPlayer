@@ -1,5 +1,7 @@
 MPlayer
 
+  1.4: "SubCounter" April 18, 2019
+
     Decoders, demuxers, streams:
     * More pixel formats are supported for VP9, RSCC, Screenpresso
     * pvr:// support for the Hauppauge HD PVR model 1212

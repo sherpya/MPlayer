@@ -216,7 +216,7 @@ static void set_next_str(const char * const *list, const char **str,
 
 static const struct mp_keymap keysym_map[] = {
     {CACA_KEY_RETURN, KEY_ENTER}, {CACA_KEY_ESCAPE, KEY_ESC},
-    {CACA_KEY_UP, KEY_DOWN}, {CACA_KEY_DOWN, KEY_DOWN},
+    {CACA_KEY_UP, KEY_UP}, {CACA_KEY_DOWN, KEY_DOWN},
     {CACA_KEY_LEFT, KEY_LEFT}, {CACA_KEY_RIGHT, KEY_RIGHT},
     {CACA_KEY_PAGEUP, KEY_PAGE_UP}, {CACA_KEY_PAGEDOWN, KEY_PAGE_DOWN},
     {CACA_KEY_HOME, KEY_HOME}, {CACA_KEY_END, KEY_END},

@@ -48,6 +48,4 @@ Add the new release version and release date to Trac (Admin - Ticket System - Ve
 
 Update release version in #mplayer and #mplayerdev topics.
 
-Update project page on Freshmeat
-
 Done.

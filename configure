@@ -3897,6 +3897,14 @@ fi
 echores "$_fast_inttypes"
 
 
+echocheck "stdatomic.h"
+stdatomic_h=no
+header_check stdatomic.h && stdatomic_h=yes
+echores "$stdatomic_h"
+if test "$stdatomic_h" = no ; then
+  CFLAGS="-Icompat/atomics/gcc $CFLAGS"
+fi
+
 echocheck "malloc.h"
 _malloc=no
 header_check malloc.h && _malloc=yes

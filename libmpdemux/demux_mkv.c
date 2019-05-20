@@ -402,7 +402,7 @@ static int demux_mkv_read_info(demuxer_t *demuxer)
     uint64_t length, l;
     int il;
     uint64_t tc_scale = 1000000;
-    long double duration = 0.;
+    double duration = 0.;
 
     length = ebml_read_length(s, NULL);
     while (length > 0) {
@@ -420,11 +420,11 @@ static int demux_mkv_read_info(demuxer_t *demuxer)
 
         case MATROSKA_ID_DURATION:
         {
-            long double num = ebml_read_float(s, &l);
+            double num = ebml_read_float(s, &l);
             if (num == EBML_FLOAT_INVALID)
                 return 1;
             duration = num;
-            mp_msg(MSGT_DEMUX, MSGL_V, "[mkv] | + duration: %.3Lfs\n",
+            mp_msg(MSGT_DEMUX, MSGL_V, "[mkv] | + duration: %.3fs\n",
                    duration * tc_scale / 1000000000.0);
             break;
         }
@@ -615,7 +615,7 @@ static int demux_mkv_read_trackaudio(demuxer_t *demuxer, mkv_track_t *track)
         switch (ebml_read_id(s, &il)) {
         case MATROSKA_ID_AUDIOSAMPLINGFREQ:
         {
-            long double num = ebml_read_float(s, &l);
+            double num = ebml_read_float(s, &l);
             if (num == EBML_FLOAT_INVALID)
                 return 0;
             track->a_sfreq = num;
@@ -667,7 +667,7 @@ static int demux_mkv_read_trackvideo(demuxer_t *demuxer, mkv_track_t *track)
         switch (ebml_read_id(s, &il)) {
         case MATROSKA_ID_VIDEOFRAMERATE:
         {
-            long double num = ebml_read_float(s, &l);
+            double num = ebml_read_float(s, &l);
             if (num == EBML_FLOAT_INVALID)
                 return 0;
             track->v_frate = num;

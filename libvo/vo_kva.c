@@ -608,7 +608,7 @@ static int preinit(const char *arg)
         {NULL,              0, NULL,      NULL}
     };
 
-    PCSZ pcszVideoModeStr[3] = {"DIVE", "WarpOverlay!", "SNAP", "VMAN"};
+    PCSZ pcszVideoModeStr[] = {"DIVE", "WarpOverlay!", "SNAP", "VMAN"};
 
     if (subopt_parse(arg, subopts) != 0)
         return -1;

@@ -270,9 +270,16 @@ alpha() {
   esac
 }
 
+aarch64() {
+  case "$host_arch" in
+    aarch64*) return 0;;
+    *) return 1;;
+  esac
+}
+
 arm() {
   case "$host_arch" in
-    arm*) return 0;;
+    arm*|aarch64*) return 0;;
     *) return 1;;
   esac
 }
@@ -1895,6 +1902,9 @@ fi
 if sparc ; then
   cc_check && host_arch=sparc64 || host_arch=sparc
 fi
+if arm ; then
+  cc_check && host_arch=aarch64 || host_arch=arm
+fi
 fi
 
 echo "Detected operating system: $system_name"
@@ -3223,6 +3233,7 @@ if arm ; then
   if test $_armvfp = "auto" ; then
     _armvfp=no
     inline_asm_check '"fadds s0, s0, s0"' && _armvfp=yes
+    inline_asm_check '"fmadd d0,    d0,    d1,    d2"' && _armvfp=yes
   fi
   echores "$_armvfp"
 
@@ -3254,8 +3265,14 @@ if arm ; then
   if test $neon = "auto" ; then
     neon=no
     inline_asm_check '"vadd.i16 q0, q0, q0"' && neon=yes
+    inline_asm_check '"ext   v0.8B, v0.8B, v1.8B, #1"' && neon=yes
   fi
   echores "$neon"
+
+  echocheck "ARM NEON intrinsics"
+  neon_intrinsics=no
+  statement_check "arm_neon.h" "int16x8_t test = vdupq_n_s16(0)" && neon_intrinsics=yes
+  echores "$neon_intrinsics"
 
   echocheck "ARM THUMB"
   if test $armthumb = "auto" ; then
@@ -3265,7 +3282,7 @@ if arm ; then
     extra_cflags="$extra_cflags -mthumb"
     def_armthumb='#define CONFIG_THUMB 1'
   else
-    extra_cflags="$extra_cflags -marm"
+    aarch64 || extra_cflags="$extra_cflags -marm"
     def_armthumb='#define CONFIG_THUMB 0'
   fi
   echores "$armthumb"
@@ -3278,7 +3295,8 @@ if arm ; then
   echores "$_iwmmxt"
 fi
 
-cpuexts_all='ALTIVEC XOP AVX AVX2 AVX512 FMA3 FMA4 MMX MMX2 MMXEXT AMD3DNOW AMD3DNOWEXT SSE SSE2 SSE3 SSSE3 SSE4 SSE42 FAST_CMOV I686 FAST_CLZ ARMV5TE ARMV6 ARMV6T2 VFP VFPV3 SETEND NEON IWMMXT MMI VIS MVI'
+intrinsics="none"
+cpuexts_all='ALTIVEC XOP AVX AVX2 AVX512 FMA3 FMA4 MMX MMX2 MMXEXT AMD3DNOW AMD3DNOWEXT SSE SSE2 SSE3 SSSE3 SSE4 SSE42 FAST_CMOV I686 FAST_CLZ ARMV5TE ARMV6 ARMV6T2 ARMV8 VFP VFPV3 SETEND NEON INTRINSICS_NEON IWMMXT MMI VIS MVI'
 test "$_altivec"   = yes && cpuexts="ALTIVEC $cpuexts"
 test "$_mmx"       = yes && cpuexts="MMX $cpuexts"
 test "$_mmxext"    = yes && cpuexts="MMX2 $cpuexts"
@@ -3303,10 +3321,12 @@ test "$_fast_clz"  = yes && cpuexts="FAST_CLZ $cpuexts"
 test "$_armv5te"   = yes && cpuexts="ARMV5TE $cpuexts"
 test "$_armv6"     = yes && cpuexts="ARMV6 $cpuexts"
 test "$_armv6t2"   = yes && cpuexts="ARMV6T2 $cpuexts"
+aarch64 && cpuexts="ARMV8 $cpuexts"
 test "$_armvfp"    = yes && cpuexts="VFP $cpuexts"
 test "$vfpv3"      = yes && cpuexts="VFPV3 $cpuexts"
 test "$setend"     = yes && cpuexts="SETEND $cpuexts"
 test "$neon"       = yes && cpuexts="NEON $cpuexts"
+test "$neon_intrinsics" = yes && cpuexts="INTRINSICS_NEON $cpuexts" && intrinsics="neon"
 test "$_iwmmxt"    = yes && cpuexts="IWMMXT $cpuexts"
 test "$_vis"       = yes && cpuexts="VIS $cpuexts"
 test "$_mvi"       = yes && cpuexts="MVI $cpuexts"
@@ -8790,7 +8810,7 @@ HAVE_W32THREADS = $_w32threads
 HAVE_THREADS    = $_threads
 HAVE_YASM       = $have_yasm
 HAVE_X86ASM     = $have_yasm
-INTRINSICS      = none
+INTRINSICS      = $intrinsics
 
 CONFIG_LIBXVID = $_xvid_lavc
 $(mak_enable "$libavdecoders_all"  "$libavdecoders"  CONFIG)
@@ -9340,7 +9360,6 @@ $def_openssl
 #define HAVE_INLINE_ASM 1
 #define HAVE_INLINE_ASM_NONLOCAL_LABELS 1
 #define HAVE_INLINE_ASM_DIRECT_SYMBOL_REFS 1
-#define HAVE_INTRINSICS_NEON 0
 #define HAVE_ISATTY 0
 #define HAVE_LDBRX 0
 #define HAVE_LIBC_MSVCRT 0

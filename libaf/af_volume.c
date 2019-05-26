@@ -125,7 +125,7 @@ static av_always_inline void s16_inner_loop(int16_t *data, int len, int offset, 
 static av_always_inline void float_inner_loop(float *data, int len, int offset, int step, float level, int softclip)
 {
   int i;
-#if HAVE_NEON
+#if HAVE_NEON && !ARCH_AARCH64
   if (offset == 0 && step == 1 && !softclip && len >= 8)
   {
     __asm__(

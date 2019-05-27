@@ -104,6 +104,45 @@ static void process_MMX(unsigned char *dest, int dstride, unsigned char *src, in
 }
 #endif
 
+#if HAVE_EMMINTRIN_H
+#include <emmintrin.h>
+
+ATTR_TARGET_SSE2
+static void process_SSE2(unsigned char *dest, int dstride, unsigned char *src, int sstride,
+                    int w, int h, int brightness, int contrast)
+{
+    int scaled_contrast = ((contrast+100)*256*16)/100;
+    int scaled_brightness = ((brightness+100)*511)/200-128 - scaled_contrast/32;
+    __m128i mmcontrast = _mm_set1_epi16(scaled_contrast);
+    __m128i mmbrightness = _mm_set1_epi16(scaled_brightness);
+    __m128i zero = _mm_setzero_si128();
+    while (h--) {
+        int i;
+        for (i = 0; i < w - 15; i += 16)
+        {
+            __m128i mmsrc = _mm_loadu_si128((const __m128i *)(src + i));
+            __m128i srclo = _mm_unpacklo_epi8(mmsrc, zero);
+            __m128i srchi = _mm_unpackhi_epi8(mmsrc, zero);
+            srclo = _mm_slli_epi16(srclo, 4);
+            srchi = _mm_slli_epi16(srchi, 4);
+            srclo = _mm_mulhi_epu16(srclo, mmcontrast);
+            srchi = _mm_mulhi_epu16(srchi, mmcontrast);
+            srclo = _mm_add_epi16(srclo, mmbrightness);
+            srchi = _mm_add_epi16(srchi, mmbrightness);
+            _mm_storeu_si128((__m128i *)(dest + i), _mm_packus_epi16(srclo, srchi));
+        }
+        for (; i < w; i++)
+        {
+            int pel = ((src[i] * scaled_contrast)>>12) + scaled_brightness;
+            if(pel&768) pel = (-pel)>>31;
+            dest[i] = pel;
+        }
+        src += sstride;
+        dest += dstride;
+    }
+}
+#endif
+
 static void process_C(unsigned char *dest, int dstride, unsigned char *src, int sstride,
                     int w, int h, int brightness, int contrast)
 {
@@ -229,6 +268,9 @@ static int vf_open(vf_instance_t *vf, char *args)
         process = process_C;
 #if HAVE_MMX_INLINE
         if(gCpuCaps.hasMMX) process = process_MMX;
+#endif
+#if HAVE_EMMINTRIN_H
+        if(gCpuCaps.hasSSE2) process = process_SSE2;
 #endif
 
         return 1;

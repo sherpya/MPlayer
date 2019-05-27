@@ -152,7 +152,7 @@ static void alloc_buf(mp_osd_obj_t* obj)
     int len;
     if (obj->bbox.x2 < obj->bbox.x1) obj->bbox.x2 = obj->bbox.x1;
     if (obj->bbox.y2 < obj->bbox.y1) obj->bbox.y2 = obj->bbox.y1;
-    obj->stride = ((obj->bbox.x2-obj->bbox.x1)+7)&(~7);
+    obj->stride = ((obj->bbox.x2-obj->bbox.x1)+15)&(~15);
     len = obj->stride*(obj->bbox.y2-obj->bbox.y1);
     if (obj->allocated<len) {
 	obj->allocated = len;

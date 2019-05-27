@@ -44,9 +44,60 @@
 #define EMMS     "emms"
 #endif
 
+#if HAVE_SSE2
+ATTR_TARGET_SSE2
+static inline __m128i muladd_src_unpacked(__m128i dstlo, __m128i dsthi, __m128i src, __m128i srcalo, __m128i srcahi)
+{
+    // (mmhigh,mmlow) = (dst * (srca * 256)) / 65536 (= (dst * srca) >> 8)
+    __m128i mmlow = _mm_mulhi_epu16(dstlo, srcalo);
+    __m128i mmhigh = _mm_mulhi_epu16(dsthi, srcahi);
+
+    __m128i res = _mm_packus_epi16(mmlow, mmhigh);
+
+    return _mm_add_epi8(res, src);
+}
+
+ATTR_TARGET_SSE2
+static inline __m128i muladd_src(__m128i dst, __m128i src, __m128i srca)
+{
+    __m128i zero = _mm_setzero_si128();
+    __m128i dstlo = _mm_unpacklo_epi8(dst, zero);
+    __m128i dsthi = _mm_unpackhi_epi8(dst, zero);
+    __m128i srcalo = _mm_unpacklo_epi8(zero, srca);
+    __m128i srcahi = _mm_unpackhi_epi8(zero, srca);
+    return muladd_src_unpacked(dstlo, dsthi, src, srcalo, srcahi);
+}
+
+ATTR_TARGET_SSE2
+static inline __m128i alphamask(__m128i orig, __m128i blended, __m128i srca)
+{
+    __m128i zero = _mm_setzero_si128();
+    // if (!srca) res |= dst --- assumes srca == 0 implies src == 0,
+    // thus no need to mask res
+    __m128i mask = _mm_cmpeq_epi8(srca, zero);
+    orig = _mm_and_si128(orig, mask);
+    return _mm_or_si128(blended, orig);
+}
+
+// Special version that compares alpha in 16 bit chunks instead of bytewise
+ATTR_TARGET_SSE2
+static inline __m128i alphamask16(__m128i orig, __m128i blended, __m128i srca)
+{
+    __m128i zero = _mm_setzero_si128();
+    // if (!srca) res |= dst --- assumes srca == 0 implies src == 0,
+    // thus no need to mask res
+    __m128i mask = _mm_cmpeq_epi16(srca, zero);
+    orig = _mm_and_si128(orig, mask);
+    return _mm_or_si128(blended, orig);
+}
+#endif
+
+#if HAVE_SSE2
+ATTR_TARGET_SSE2
+#endif
 static inline void RENAME(vo_draw_alpha_yv12)(int w,int h, unsigned char* src, unsigned char *srca, int srcstride, unsigned char* dstbase,int dststride){
     int y;
-#if defined(FAST_OSD) && !HAVE_MMX
+#if defined(FAST_OSD) && !HAVE_MMX && !HAVE_SSE2
     w=w>>1;
 #endif
 #if HAVE_MMX
@@ -94,7 +145,28 @@ static inline void RENAME(vo_draw_alpha_yv12)(int w,int h, unsigned char* src, u
 		:: "m" (dstbase[x]), "m" (srca[x]), "m" (src[x])
 		: "%eax");
 	}
-#else
+#elif HAVE_SSE2
+        __m128i zero = _mm_setzero_si128();
+        for(x=0;x+8<w;x+=16){
+            __m128i mmsrc, mmdst, res;
+            __m128i mmsrca = _mm_load_si128((const __m128i *)(srca + x));
+
+            int alpha = _mm_movemask_epi8(_mm_cmpeq_epi8(mmsrca, zero));
+            if (alpha == 0xffff) continue;
+
+            mmdst = _mm_loadu_si128((const __m128i *)(dstbase + x));
+            mmsrc = _mm_load_si128((const __m128i *)(src + x));
+
+            res = muladd_src(mmdst, mmsrc, mmsrca);
+
+            // _mm_maskmoveu_s128 would be an alternative but slower
+            res = alphamask(mmdst, res, mmsrca);
+            _mm_storeu_si128((__m128i *)(dstbase + x), res);
+        }
+        for(;x<w;x++){
+            if(srca[x]) dstbase[x]=((dstbase[x]*srca[x])>>8)+src[x];
+        }
+#else /* HAVE_SSE2 */
         for(x=0;x<w;x++){
 #ifdef FAST_OSD
             if(srca[2*x+0]) dstbase[2*x+0]=src[2*x+0];
@@ -114,6 +186,9 @@ static inline void RENAME(vo_draw_alpha_yv12)(int w,int h, unsigned char* src, u
     return;
 }
 
+#if HAVE_SSE2
+ATTR_TARGET_SSE2
+#endif
 static inline void RENAME(vo_draw_alpha_yuy2)(int w,int h, unsigned char* src, unsigned char *srca, int srcstride, unsigned char* dstbase,int dststride){
     int y;
 #if defined(FAST_OSD) && !HAVE_MMX
@@ -155,7 +230,7 @@ static inline void RENAME(vo_draw_alpha_yuy2)(int w,int h, unsigned char* src, u
 		"psrlw	$8, %%mm0\n\t"
 		"pand %%mm5, %%mm1\n\t" 	//U0V0U0V0
 		"movd %2, %%mm2\n\t"		//src 0000DCBA
-		"punpcklbw %%mm7, %%mm2\n\t"	//srca 0D0C0B0A
+		"punpcklbw %%mm7, %%mm2\n\t"	//src 0D0C0B0A
 		"por %%mm1, %%mm0\n\t"
 		"paddb	%%mm2, %%mm0\n\t"
 		"movq	%%mm0, %0\n\t"
@@ -163,7 +238,56 @@ static inline void RENAME(vo_draw_alpha_yuy2)(int w,int h, unsigned char* src, u
 		:: "m" (dstbase[x*2]), "m" (srca[x]), "m" (src[x])
 		: "%eax");
 	}
-#else
+#elif HAVE_SSE2
+        __m128i zero = _mm_setzero_si128();
+        __m128i ymask = _mm_set1_epi16(0xff);
+        __m128i uvofs = _mm_set1_epi16(0x8000);
+        for(x=0;x+12<w;x+=16){
+            __m128i mmsrc, mmsrcalo, mmsrcahi, mmdst, mmdst2, mmlow, mmhigh, mmy, mmuv, res;
+            __m128i mmsrca = _mm_load_si128((const __m128i *)(srca + x));
+            int alpha = _mm_movemask_epi8(_mm_cmpeq_epi8(mmsrca, zero));
+            if (alpha == 0xffff) continue;
+
+            mmdst = _mm_loadu_si128((const __m128i *)(dstbase + 2*x));
+            mmdst2 = _mm_loadu_si128((const __m128i *)(dstbase + 2*x + 16));
+
+            // convert UV to signed
+            mmdst = _mm_xor_si128(mmdst, uvofs);
+            mmdst2 = _mm_xor_si128(mmdst2, uvofs);
+
+            mmsrc = _mm_load_si128((const __m128i *)(src + x));
+            mmsrcalo = _mm_unpacklo_epi8(zero, mmsrca);
+            mmsrcahi = _mm_unpackhi_epi8(zero, mmsrca);
+
+            mmy = muladd_src_unpacked(_mm_and_si128(mmdst, ymask), _mm_and_si128(mmdst2, ymask), mmsrc, mmsrcalo, mmsrcahi);
+
+            // mmuv = ((dst(uv) ^ 128) * (srca * 256)) / 65536 ^ 128 (= (((dst - 128) * srca) >> 8)) + 128
+            mmlow = _mm_srai_epi16(mmdst, 8);
+            mmlow = _mm_mulhi_epi16(mmlow, mmsrcalo);
+            mmhigh = _mm_srai_epi16(mmdst2, 8);
+            mmhigh = _mm_mulhi_epi16(mmhigh, mmsrcahi);
+
+            mmuv = _mm_packs_epi16(mmlow, mmhigh);
+
+            res = _mm_unpacklo_epi8(mmy, mmuv);
+            res = alphamask16(mmdst, res, mmsrcalo);
+            // convert UV to unsigned
+            res = _mm_xor_si128(res, uvofs);
+            _mm_storeu_si128((__m128i *)(dstbase + 2 * x), res);
+
+            res = _mm_unpackhi_epi8(mmy, mmuv);
+            res = alphamask16(mmdst2, res, mmsrcahi);
+            // convert UV to unsigned
+            res = _mm_xor_si128(res, uvofs);
+            _mm_storeu_si128((__m128i *)(dstbase + 2 * x + 16), res);
+        }
+        for(;x<w;x++){
+            if(srca[x]) {
+               dstbase[2*x]=((dstbase[2*x]*srca[x])>>8)+src[x];
+               dstbase[2*x+1]=((((signed)dstbase[2*x+1]-128)*srca[x])>>8)+128;
+            }
+        }
+#else /* HAVE_SSE2 */
         for(x=0;x<w;x++){
 #ifdef FAST_OSD
             if(srca[2*x+0]) dstbase[4*x+0]=src[2*x+0];
@@ -186,6 +310,9 @@ static inline void RENAME(vo_draw_alpha_yuy2)(int w,int h, unsigned char* src, u
     return;
 }
 
+#if HAVE_SSE2
+ATTR_TARGET_SSE2
+#endif
 static inline void RENAME(vo_draw_alpha_uyvy)(int w,int h, unsigned char* src, unsigned char *srca, int srcstride, unsigned char* dstbase,int dststride){
   int y;
 #if defined(FAST_OSD)
@@ -193,6 +320,58 @@ static inline void RENAME(vo_draw_alpha_uyvy)(int w,int h, unsigned char* src, u
 #endif
   for(y=0;y<h;y++){
     register int x;
+#if HAVE_SSE2
+        __m128i zero = _mm_setzero_si128();
+        __m128i uvofs = _mm_set1_epi16(0x80);
+        for(x=0;x+12<w;x+=16){
+            __m128i mmsrc, mmsrcalo, mmsrcahi, mmdst, mmdst2, mmlow, mmhigh, mmy, mmuv, res;
+            __m128i mmsrca = _mm_load_si128((const __m128i *)(srca + x));
+            int alpha = _mm_movemask_epi8(_mm_cmpeq_epi8(mmsrca, zero));
+            if (alpha == 0xffff) continue;
+
+            mmdst = _mm_loadu_si128((const __m128i *)(dstbase + 2*x));
+            mmdst2 = _mm_loadu_si128((const __m128i *)(dstbase + 2*x + 16));
+
+            // convert UV to signed
+            mmdst = _mm_xor_si128(mmdst, uvofs);
+            mmdst2 = _mm_xor_si128(mmdst2, uvofs);
+
+            mmsrc = _mm_load_si128((const __m128i *)(src + x));
+            mmsrcalo = _mm_unpacklo_epi8(zero, mmsrca);
+            mmsrcahi = _mm_unpackhi_epi8(zero, mmsrca);
+
+            mmy = muladd_src_unpacked(_mm_srli_epi16(mmdst, 8), _mm_srli_epi16(mmdst2, 8), mmsrc, mmsrcalo, mmsrcahi);
+
+            // mmuv = ((dst(uv) ^ 128) * (srca * 256)) / 65536 ^ 128 (= (((dst - 128) * srca) >> 8)) + 128
+            // sign-extend and multiply
+            mmlow = _mm_slli_epi16(mmdst, 8);
+            mmlow = _mm_srai_epi16(mmlow, 8);
+            mmlow = _mm_mulhi_epi16(mmlow, mmsrcalo);
+            mmhigh = _mm_slli_epi16(mmdst2, 8);
+            mmhigh = _mm_srai_epi16(mmhigh, 8);
+            mmhigh = _mm_mulhi_epi16(mmhigh, mmsrcahi);
+
+            mmuv = _mm_packs_epi16(mmlow, mmhigh);
+
+            res = _mm_unpacklo_epi8(mmuv, mmy);
+            res = alphamask16(mmdst, res, mmsrcalo);
+            // convert UV to unsigned
+            res = _mm_xor_si128(res, uvofs);
+            _mm_storeu_si128((__m128i *)(dstbase + 2 * x), res);
+
+            res = _mm_unpackhi_epi8(mmuv, mmy);
+            res = alphamask16(mmdst2, res, mmsrcahi);
+            // convert UV to unsigned
+            res = _mm_xor_si128(res, uvofs);
+            _mm_storeu_si128((__m128i *)(dstbase + 2 * x + 16), res);
+        }
+        for(;x<w;x++){
+            if(srca[x]) {
+	       dstbase[2*x+1]=((dstbase[2*x+1]*srca[x])>>8)+src[x];
+               dstbase[2*x]=((((signed)dstbase[2*x]-128)*srca[x])>>8)+128;
+            }
+        }
+#else /* HAVE_SSE2 */
     for(x=0;x<w;x++){
 #ifdef FAST_OSD
       if(srca[2*x+0]) dstbase[4*x+2]=src[2*x+0];
@@ -204,12 +383,25 @@ static inline void RENAME(vo_draw_alpha_uyvy)(int w,int h, unsigned char* src, u
       }
 #endif
     }
+#endif
     src+=srcstride;
     srca+=srcstride;
     dstbase+=dststride;
   }
 }
 
+#define REPL3X(out, sd1, sa1, sd2, sa2, in) \
+do { \
+   __m128i shuf012 = _mm_shufflelo_epi16(in, 0x40); \
+   __m128i shuf345 = _mm_shufflelo_epi16(in, 0xA5); \
+   __m128i repl3x_mmtmp = _mm_unpacklo_epi64(shuf012, shuf345); \
+   repl3x_mmtmp = _mm_and_si128(repl3x_mmtmp, one_in_three_mask); \
+   out = _mm_or_si128(_mm_or_si128(repl3x_mmtmp, _mm_s##sd1##li_si128(repl3x_mmtmp, sa1)), _mm_s##sd2##li_si128(repl3x_mmtmp, sa2)); \
+} while (0)
+
+#if HAVE_SSE2
+ATTR_TARGET_SSE2
+#endif
 static inline void RENAME(vo_draw_alpha_rgb24)(int w,int h, unsigned char* src, unsigned char *srca, int srcstride, unsigned char* dstbase,int dststride){
     int y;
 #if HAVE_MMX
@@ -221,7 +413,7 @@ static inline void RENAME(vo_draw_alpha_rgb24)(int w,int h, unsigned char* src, 
     for(y=0;y<h;y++){
         register unsigned char *dst = dstbase;
         register int x;
-#if ARCH_X86 && (!ARCH_X86_64 || HAVE_MMX)
+#if ARCH_X86 && (!ARCH_X86_64 || HAVE_MMX || HAVE_SSE2)
 #if HAVE_MMX
     __asm__ volatile(
 	PREFETCHW" %0\n\t"
@@ -264,7 +456,62 @@ static inline void RENAME(vo_draw_alpha_rgb24)(int w,int h, unsigned char* src, 
 		:: "m" (dst[0]), "m" (srca[x]), "m" (src[x]), "m"(mask24hl), "m"(mask24lh));
 		dst += 6;
 	}
-#else /* HAVE_MMX */
+#elif HAVE_SSE2
+        __m128i one_in_three_mask = _mm_set_epi32(0xff0000ffu, 0x0000ff00u, 0x00ff0000u, 0xff0000ffu);
+        __m128i zero = _mm_setzero_si128();
+        for(x=0;x+14<w;x+=16){
+            __m128i mmsrc, mmtmp, mmtmpa, mmdst, res;
+            __m128i mmsrca = _mm_load_si128((const __m128i *)(srca + x));
+            int alpha = _mm_movemask_epi8(_mm_cmpeq_epi8(mmsrca, zero));
+            if (alpha == 0xffff) { dst += 48; continue; }
+
+            mmsrc = _mm_load_si128((const __m128i *)(src + x));
+
+            if ((alpha & 0x3f) != 0x3f) {
+                mmdst = _mm_loadu_si128((const __m128i *)dst);
+                REPL3X(mmtmpa, l, 1, l, 2, mmsrca);
+                REPL3X(mmtmp, l, 1, l, 2, mmsrc);
+                res = muladd_src(mmdst, mmtmp, mmtmpa);
+                res = alphamask(mmdst, res, mmtmpa);
+                _mm_storeu_si128((__m128i *)dst, res);
+            }
+            dst += 16;
+
+            mmsrca = _mm_srli_si128(mmsrca, 5);
+            mmsrc = _mm_srli_si128(mmsrc, 5);
+
+            if ((alpha & 0x7e0) != 0x7e0) {
+                mmdst = _mm_loadu_si128((const __m128i *)dst);
+                REPL3X(mmtmpa, l, 1, r, 1, mmsrca);
+                REPL3X(mmtmp, l, 1, r, 1, mmsrc);
+                res = muladd_src(mmdst, mmtmp, mmtmpa);
+                res = alphamask(mmdst, res, mmtmpa);
+                _mm_storeu_si128((__m128i *)dst, res);
+            }
+            dst += 16;
+
+            mmsrc = _mm_srli_si128(mmsrc, 5);
+            mmsrca = _mm_srli_si128(mmsrca, 5);
+
+            if ((alpha & 0xfc00) != 0xfc00) {
+                mmdst = _mm_loadu_si128((const __m128i *)dst);
+                REPL3X(mmtmpa, r, 1, r, 2, mmsrca);
+                REPL3X(mmtmp, r, 1, r, 2, mmsrc);
+                res = muladd_src(mmdst, mmtmp, mmtmpa);
+                res = alphamask(mmdst, res, mmtmpa);
+                _mm_storeu_si128((__m128i *)dst, res);
+            }
+            dst += 16;
+        }
+        for(;x<w;x++){
+            if(srca[x]){
+		dst[0]=((dst[0]*srca[x])>>8)+src[x];
+		dst[1]=((dst[1]*srca[x])>>8)+src[x];
+		dst[2]=((dst[2]*srca[x])>>8)+src[x];
+            }
+            dst+=3; // 24bpp
+        }
+#else /* HAVE_SSE2 */
     for(x=0;x<w;x++){
         if(srca[x]){
 	    __asm__ volatile(
@@ -294,7 +541,7 @@ static inline void RENAME(vo_draw_alpha_rgb24)(int w,int h, unsigned char* src, 
 	    dst += 3;
         }
 #endif /* !HAVE_MMX */
-#else /*non x86 arch or x86_64 with MMX disabled */
+#else /*non x86 arch or x86_64 with MMX and SSE2 disabled */
         for(x=0;x<w;x++){
             if(srca[x]){
 #ifdef FAST_OSD
@@ -318,6 +565,9 @@ static inline void RENAME(vo_draw_alpha_rgb24)(int w,int h, unsigned char* src, 
     return;
 }
 
+#if HAVE_SSE2
+ATTR_TARGET_SSE2
+#endif
 static inline void RENAME(vo_draw_alpha_rgb32)(int w,int h, unsigned char* src, unsigned char *srca, int srcstride, unsigned char* dstbase,int dststride){
     int y;
 #if HAVE_BIGENDIAN
@@ -341,7 +591,7 @@ static inline void RENAME(vo_draw_alpha_rgb32)(int w,int h, unsigned char* src, 
 #endif /* HAVE_MMX */
     for(y=0;y<h;y++){
         register int x;
-#if ARCH_X86 && (!ARCH_X86_64 || HAVE_MMX)
+#if ARCH_X86 && (!ARCH_X86_64 || HAVE_MMX || HAVE_SSE2)
 #if HAVE_MMX
 #if HAVE_AMD3DNOW
     __asm__ volatile(
@@ -431,7 +681,42 @@ static inline void RENAME(vo_draw_alpha_rgb32)(int w,int h, unsigned char* src, 
 		: "%eax");
 	}
 #endif
-#else /* HAVE_MMX */
+#elif HAVE_SSE2
+        __m128i zero = _mm_setzero_si128();
+        __m128i mmsrca = _mm_setzero_si128();
+        for(x=0;x<w;x+=4){
+            __m128i mmsrc, mmdst, mmsrcexp, mmsrcaexp, res;
+            if ((x & 15) == 0) {
+                int alpha;
+                mmsrca = _mm_load_si128((const __m128i *)(srca + x));
+                alpha = _mm_movemask_epi8(_mm_cmpeq_epi8(mmsrca, zero));
+                if (alpha == 0xffff) { x += 12; continue; }
+                mmsrc = _mm_load_si128((const __m128i *)(src + x));
+            }
+
+            mmdst = _mm_loadu_si128((const __m128i *)(dstbase + 4*x));
+
+            mmsrcaexp = _mm_unpacklo_epi8(mmsrca, mmsrca);
+            mmsrcaexp = _mm_unpacklo_epi8(mmsrcaexp, mmsrcaexp);
+            mmsrcexp = _mm_unpacklo_epi8(mmsrc, mmsrc);
+            mmsrcexp = _mm_unpacklo_epi8(mmsrcexp, mmsrcexp);
+
+            res = muladd_src(mmdst, mmsrcexp, mmsrcaexp);
+
+            res = alphamask(mmdst, res, mmsrcaexp);
+            _mm_storeu_si128((__m128i *)(dstbase + 4*x), res);
+
+            mmsrca = _mm_srli_si128(mmsrca, 4);
+            mmsrc = _mm_srli_si128(mmsrc, 4);
+        }
+        for(;x<w;x++){
+            if(srca[x]){
+		dstbase[4*x+0]=((dstbase[4*x+0]*srca[x])>>8)+src[x];
+		dstbase[4*x+1]=((dstbase[4*x+1]*srca[x])>>8)+src[x];
+		dstbase[4*x+2]=((dstbase[4*x+2]*srca[x])>>8)+src[x];
+	    }
+        }
+#else /* HAVE_SSE2 */
     for(x=0;x<w;x++){
         if(srca[x]){
 	    __asm__ volatile(

@@ -3883,6 +3883,26 @@ header_check sys/poll.h && poll_h=yes &&
   def_poll_h='#define HAVE_POLL_H 1'
 echores "$poll_h"
 
+echocheck "emmintrin.h (SSE intrinsics)"
+emmintrin_h=no
+def_emmintrin_h='#define HAVE_EMMINTRIN_H 0'
+  cat > $TMPC << EOF
+#include <emmintrin.h>
+
+__attribute__((target("sse2")))
+static int sse2test(int i) {
+    __m128i mmi = _mm_set1_epi16(i);
+    mmi = _mm_add_epi16(mmi, mmi);
+    return _mm_extract_epi16(mmi, 2);
+}
+
+int main(int argc, char **argv) {
+    return sse2test(argc);
+}
+EOF
+cc_check && emmintrin_h=yes &&
+  def_emmintrin_h='#define HAVE_EMMINTRIN_H 1'
+echores "$emmintrin_h"
 
 echocheck "inttypes.h (required)"
 _inttypes=no
@@ -9243,6 +9263,12 @@ $def_direct_h
 $def_io_h
 $def_poll_h
 $def_windows_h
+$def_emmintrin_h
+#if ARCH_X86_32
+#define ATTR_TARGET_SSE2 __attribute__((target("sse2")))
+#else
+#define ATTR_TARGET_SSE2
+#endif
 
 /* external libraries */
 $def_bzlib

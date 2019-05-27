@@ -31,7 +31,12 @@
 #include "libmpcodecs/img_format.h"
 #include "cpudetect.h"
 
-#if ARCH_X86
+#if !HAVE_EMMINTRIN_H
+#undef HAVE_SSE2
+#define HAVE_SSE2 0
+#endif
+
+#if ARCH_X86 && (!HAVE_SSE2 || CONFIG_RUNTIME_CPUDETECT)
 static const uint64_t bFF __attribute__((aligned(8))) = 0xFFFFFFFFFFFFFFFFULL;
 static const unsigned long long mask24lh  __attribute__((aligned(8))) = 0xFFFF000000000000ULL;
 static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FFFFFFFFFFFFULL;
@@ -39,22 +44,26 @@ static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FF
 
 //Note: we have C, X86-nommx, MMX, MMX2, 3DNOW version therse no 3DNOW+MMX2 one
 //Plain C versions
-#if !HAVE_MMX || CONFIG_RUNTIME_CPUDETECT
+#if (!HAVE_MMX && !HAVE_SSE2) || CONFIG_RUNTIME_CPUDETECT
 #define COMPILE_C
 #endif
 
 #if ARCH_X86
 
-#if (HAVE_MMX && !HAVE_AMD3DNOW && !HAVE_MMX2) || CONFIG_RUNTIME_CPUDETECT
+#if (HAVE_MMX && !HAVE_AMD3DNOW && !HAVE_MMX2 && !HAVE_SSE2) || CONFIG_RUNTIME_CPUDETECT
 #define COMPILE_MMX
 #endif
 
-#if HAVE_MMX2 || CONFIG_RUNTIME_CPUDETECT
+#if (HAVE_MMX2 && !HAVE_SSE2) || CONFIG_RUNTIME_CPUDETECT
 #define COMPILE_MMX2
 #endif
 
-#if (HAVE_AMD3DNOW && !HAVE_MMX2) || CONFIG_RUNTIME_CPUDETECT
+#if (HAVE_AMD3DNOW && !HAVE_MMX2 && !HAVE_SSE2) || CONFIG_RUNTIME_CPUDETECT
 #define COMPILE_3DNOW
+#endif
+
+#if HAVE_SSE2 || CONFIG_RUNTIME_CPUDETECT
+#define COMPILE_SSE2
 #endif
 
 #endif /* ARCH_X86 */
@@ -62,9 +71,11 @@ static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FF
 #undef HAVE_MMX
 #undef HAVE_MMX2
 #undef HAVE_AMD3DNOW
+#undef HAVE_SSE2
 #define HAVE_MMX 0
 #define HAVE_MMX2 0
 #define HAVE_AMD3DNOW 0
+#define HAVE_SSE2 0
 
 #if ! ARCH_X86
 
@@ -72,9 +83,11 @@ static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FF
 #undef HAVE_MMX
 #undef HAVE_MMX2
 #undef HAVE_AMD3DNOW
+#undef HAVE_SSE2
 #define HAVE_MMX 0
 #define HAVE_MMX2 0
 #define HAVE_AMD3DNOW 0
+#define HAVE_SSE2 0
 #define RENAME(a) a ## _C
 #include "osd_template.c"
 #endif
@@ -87,9 +100,11 @@ static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FF
 #undef HAVE_MMX
 #undef HAVE_MMX2
 #undef HAVE_AMD3DNOW
+#undef HAVE_SSE2
 #define HAVE_MMX 0
 #define HAVE_MMX2 0
 #define HAVE_AMD3DNOW 0
+#define HAVE_SSE2 0
 #define RENAME(a) a ## _X86
 #include "osd_template.c"
 #endif
@@ -100,9 +115,11 @@ static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FF
 #undef HAVE_MMX
 #undef HAVE_MMX2
 #undef HAVE_AMD3DNOW
+#undef HAVE_SSE2
 #define HAVE_MMX 1
 #define HAVE_MMX2 0
 #define HAVE_AMD3DNOW 0
+#define HAVE_SSE2 0
 #define RENAME(a) a ## _MMX
 #include "osd_template.c"
 #endif
@@ -113,9 +130,11 @@ static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FF
 #undef HAVE_MMX
 #undef HAVE_MMX2
 #undef HAVE_AMD3DNOW
+#undef HAVE_SSE2
 #define HAVE_MMX 1
 #define HAVE_MMX2 1
 #define HAVE_AMD3DNOW 0
+#define HAVE_SSE2 0
 #define RENAME(a) a ## _MMX2
 #include "osd_template.c"
 #endif
@@ -126,20 +145,39 @@ static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FF
 #undef HAVE_MMX
 #undef HAVE_MMX2
 #undef HAVE_AMD3DNOW
+#undef HAVE_SSE2
 #define HAVE_MMX 1
 #define HAVE_MMX2 0
 #define HAVE_AMD3DNOW 1
+#define HAVE_SSE2 0
 #define RENAME(a) a ## _3DNow
 #include "osd_template.c"
 #endif
 
+//SSE2 versions
+#ifdef COMPILE_SSE2
+#undef RENAME
+#undef HAVE_MMX
+#undef HAVE_MMX2
+#undef HAVE_AMD3DNOW
+#undef HAVE_SSE2
+#define HAVE_MMX 0
+#define HAVE_MMX2 0
+#define HAVE_AMD3DNOW 0
+#define HAVE_SSE2 1
+#define RENAME(a) a ## _SSE2
+#include <emmintrin.h>
+#include "osd_template.c"
+#endif
 #endif /* ARCH_X86 */
 
 void vo_draw_alpha_yv12(int w,int h, unsigned char* src, unsigned char *srca, int srcstride, unsigned char* dstbase,int dststride){
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(gCpuCaps.hasMMX2)
+	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+		vo_draw_alpha_yv12_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+	else if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_yv12_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_yv12_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -151,7 +189,9 @@ void vo_draw_alpha_yv12(int w,int h, unsigned char* src, unsigned char *srca, in
 		vo_draw_alpha_yv12_C(w, h, src, srca, srcstride, dstbase, dststride);
 #endif
 #else //CONFIG_RUNTIME_CPUDETECT
-#if HAVE_MMX2
+#if HAVE_SSE2
+		vo_draw_alpha_yv12_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+#elif HAVE_MMX2
 		vo_draw_alpha_yv12_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 #elif HAVE_AMD3DNOW
 		vo_draw_alpha_yv12_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -169,7 +209,9 @@ void vo_draw_alpha_yuy2(int w,int h, unsigned char* src, unsigned char *srca, in
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(gCpuCaps.hasMMX2)
+	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+		vo_draw_alpha_yuy2_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+	else if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_yuy2_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_yuy2_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -181,7 +223,9 @@ void vo_draw_alpha_yuy2(int w,int h, unsigned char* src, unsigned char *srca, in
 		vo_draw_alpha_yuy2_C(w, h, src, srca, srcstride, dstbase, dststride);
 #endif
 #else //CONFIG_RUNTIME_CPUDETECT
-#if HAVE_MMX2
+#if HAVE_SSE2
+		vo_draw_alpha_yuy2_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+#elif HAVE_MMX2
 		vo_draw_alpha_yuy2_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 #elif HAVE_AMD3DNOW
 		vo_draw_alpha_yuy2_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -199,7 +243,9 @@ void vo_draw_alpha_uyvy(int w,int h, unsigned char* src, unsigned char *srca, in
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(gCpuCaps.hasMMX2)
+	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+		vo_draw_alpha_uyvy_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+	else if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_uyvy_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_uyvy_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -211,7 +257,9 @@ void vo_draw_alpha_uyvy(int w,int h, unsigned char* src, unsigned char *srca, in
 		vo_draw_alpha_uyvy_C(w, h, src, srca, srcstride, dstbase, dststride);
 #endif
 #else //CONFIG_RUNTIME_CPUDETECT
-#if HAVE_MMX2
+#if HAVE_SSE2
+		vo_draw_alpha_uyvy_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+#elif HAVE_MMX2
 		vo_draw_alpha_uyvy_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 #elif HAVE_AMD3DNOW
 		vo_draw_alpha_uyvy_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -229,7 +277,9 @@ void vo_draw_alpha_rgb24(int w,int h, unsigned char* src, unsigned char *srca, i
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(gCpuCaps.hasMMX2)
+	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+		vo_draw_alpha_rgb24_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+	else if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_rgb24_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_rgb24_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -241,7 +291,9 @@ void vo_draw_alpha_rgb24(int w,int h, unsigned char* src, unsigned char *srca, i
 		vo_draw_alpha_rgb24_C(w, h, src, srca, srcstride, dstbase, dststride);
 #endif
 #else //CONFIG_RUNTIME_CPUDETECT
-#if HAVE_MMX2
+#if HAVE_SSE2
+		vo_draw_alpha_rgb24_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+#elif HAVE_MMX2
 		vo_draw_alpha_rgb24_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 #elif HAVE_AMD3DNOW
 		vo_draw_alpha_rgb24_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -259,7 +311,9 @@ void vo_draw_alpha_rgb32(int w,int h, unsigned char* src, unsigned char *srca, i
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(gCpuCaps.hasMMX2)
+	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+		vo_draw_alpha_rgb32_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+	else if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_rgb32_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_rgb32_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -271,7 +325,9 @@ void vo_draw_alpha_rgb32(int w,int h, unsigned char* src, unsigned char *srca, i
 		vo_draw_alpha_rgb32_C(w, h, src, srca, srcstride, dstbase, dststride);
 #endif
 #else //CONFIG_RUNTIME_CPUDETECT
-#if HAVE_MMX2
+#if HAVE_SSE2
+		vo_draw_alpha_rgb32_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
+#elif HAVE_MMX2
 		vo_draw_alpha_rgb32_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 #elif HAVE_AMD3DNOW
 		vo_draw_alpha_rgb32_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -306,7 +362,9 @@ void vo_draw_alpha_init(void){
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 		// ordered per speed fasterst first
-		if(gCpuCaps.hasMMX2)
+		if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+			mp_msg(MSGT_OSD,MSGL_INFO,"Using SSE2 Optimized OnScreenDisplay\n");
+		else if(gCpuCaps.hasMMX2)
 			mp_msg(MSGT_OSD,MSGL_INFO,"Using MMX (with tiny bit MMX2) Optimized OnScreenDisplay\n");
 		else if(gCpuCaps.has3DNow)
 			mp_msg(MSGT_OSD,MSGL_INFO,"Using MMX (with tiny bit 3DNow) Optimized OnScreenDisplay\n");
@@ -318,7 +376,9 @@ void vo_draw_alpha_init(void){
 			mp_msg(MSGT_OSD,MSGL_INFO,"Using Unoptimized OnScreenDisplay\n");
 #endif
 #else //CONFIG_RUNTIME_CPUDETECT
-#if HAVE_MMX2
+#if HAVE_SSE2
+			mp_msg(MSGT_OSD,MSGL_INFO,"Using SSE2 Optimized OnScreenDisplay\n");
+#elif HAVE_MMX2
 			mp_msg(MSGT_OSD,MSGL_INFO,"Using MMX (with tiny bit MMX2) Optimized OnScreenDisplay\n");
 #elif HAVE_AMD3DNOW
 			mp_msg(MSGT_OSD,MSGL_INFO,"Using MMX (with tiny bit 3DNow) Optimized OnScreenDisplay\n");

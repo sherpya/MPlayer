@@ -24,8 +24,6 @@
 #include "config.h"
 #include "pullup.h"
 
-
-
 #if ARCH_X86
 #if HAVE_MMX_INLINE
 static int diff_y_mmx(unsigned char *a, unsigned char *b, int s)
@@ -212,6 +210,106 @@ static int var_y_mmx(unsigned char *a, unsigned char *b, int s)
 #endif
 #endif
 
+#if HAVE_EMMINTRIN_H
+#include <emmintrin.h>
+
+ATTR_TARGET_SSE2
+static int diff_y_sse2(unsigned char *a, unsigned char *b, int s)
+{
+    __m128i res;
+    __m128i mma = _mm_loadl_epi64((const __m128i *)a);
+    __m128i mmb = _mm_loadl_epi64((const __m128i *)b);
+    a+=s; b+=s;
+    mma = _mm_castpd_si128(_mm_loadh_pd(_mm_castsi128_pd(mma), (const double *)a));
+    mmb = _mm_castpd_si128(_mm_loadh_pd(_mm_castsi128_pd(mmb), (const double *)b));
+    a+=s; b+=s;
+    res = _mm_sad_epu8(mma, mmb);
+
+    mma = _mm_loadl_epi64((const __m128i *)a);
+    mmb = _mm_loadl_epi64((const __m128i *)b);
+    a+=s; b+=s;
+    mma = _mm_castpd_si128(_mm_loadh_pd(_mm_castsi128_pd(mma), (const double *)a));
+    mmb = _mm_castpd_si128(_mm_loadh_pd(_mm_castsi128_pd(mmb), (const double *)b));
+    a+=s; b+=s;
+    res = _mm_add_epi16(res, _mm_sad_epu8(mma, mmb));
+
+    // sum high and low result
+    res = _mm_add_epi16(res, _mm_srli_si128(res, 8));
+
+    return _mm_extract_epi16(res, 0);
+}
+
+ATTR_TARGET_SSE2
+static inline __m128i loadu8u16(const unsigned char *p)
+{
+    __m128i res = _mm_loadl_epi64((const __m128i *)p);
+    res = _mm_unpacklo_epi8(res, _mm_setzero_si128());
+    return res;
+}
+
+ATTR_TARGET_SSE2
+static inline __m128i mmabs16(__m128i v)
+{
+    // For the cases this is used, the subtraction
+    // cannot overflow, so skip saturation for slight
+    // better performance on some architectures
+    __m128i neg = _mm_sub_epi16(_mm_setzero_si128(), v);
+    return _mm_max_epi16(neg, v);
+}
+
+ATTR_TARGET_SSE2
+static int licomb_y_sse2(unsigned char *a, unsigned char *b, int s)
+{
+    int i;
+    __m128i res = _mm_setzero_si128();
+    __m128i mmbprev = loadu8u16(b-s);
+    __m128i mma = loadu8u16(a);
+
+    for (i=4; i; i--) {
+        __m128i tmpa, tmpb;
+        __m128i mmb = loadu8u16(b);
+        __m128i mmanext = loadu8u16(a+s);
+
+        tmpa = _mm_add_epi16(mma, mma);
+        tmpa = _mm_sub_epi16(tmpa, mmbprev);
+        tmpa = _mm_sub_epi16(tmpa, mmb);
+
+        res = _mm_add_epi16(res, mmabs16(tmpa));
+
+        tmpb = _mm_add_epi16(mmb, mmb);
+        tmpb = _mm_sub_epi16(tmpb, mma);
+        tmpb = _mm_sub_epi16(tmpb, mmanext);
+
+        res = _mm_add_epi16(res, mmabs16(tmpb));
+
+        mma = mmanext;
+        mmbprev = mmb;
+        a += s; b += s;
+    }
+
+    // Sum reduce 8 to 4 to 2 to 1 elements.
+    // A bit wasteful to do 8 adds for a single result we
+    // care about, but _mm_extract_epi16 has high latency.
+    res = _mm_add_epi16(res, _mm_srli_si128(res, 8));
+    res = _mm_add_epi16(res, _mm_srli_si128(res, 4));
+    res = _mm_add_epi16(res, _mm_srli_si128(res, 2));
+    return _mm_extract_epi16(res, 0);
+}
+
+ATTR_TARGET_SSE2
+static int var_y_sse2(unsigned char *a, unsigned char *b, int s)
+{
+    __m128i a0 = _mm_loadl_epi64((const __m128i *)a);
+    __m128i a1 = _mm_loadl_epi64((const __m128i *)(a + s));
+    __m128i a2 = _mm_loadl_epi64((const __m128i *)(a + 2*s));
+    __m128i a3 = _mm_loadl_epi64((const __m128i *)(a + 3*s));
+    __m128i res = _mm_sad_epu8(a0, a1);
+    res = _mm_add_epi16(res, _mm_sad_epu8(a1, a2));
+    res = _mm_add_epi16(res, _mm_sad_epu8(a2, a3));
+    return 4*_mm_extract_epi16(res, 0);
+}
+#endif
+
 #define ABS(a) (((a)^((a)>>31))-((a)>>31))
 
 static int diff_y(unsigned char *a, unsigned char *b, int s)
@@ -252,8 +350,10 @@ static int licomb_y_test(unsigned char *a, unsigned char *b, int s)
 {
     int c = licomb_y(a,b,s);
     int m = licomb_y_mmx(a,b,s);
+    int sse2 = licomb_y_sse2(a,b,s);
     if (c != m) printf("%d != %d\n", c, m);
-    return m;
+    if (c != sse2) printf("%d != %d (SSE2)\n", c, sse2);
+    return sse2;
 }
 #endif
 
@@ -790,6 +890,13 @@ void pullup_init_context(struct pullup_context *c)
             c->diff = diff_y_mmx;
             c->comb = licomb_y_mmx;
             c->var = var_y_mmx;
+        }
+#endif
+#if HAVE_EMMINTRIN_H
+        if (c->cpu & PULLUP_CPU_SSE) {
+            c->diff = diff_y_sse2;
+            c->comb = licomb_y_sse2;
+            c->var = var_y_sse2;
         }
 #endif
 #endif

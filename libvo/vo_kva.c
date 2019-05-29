@@ -608,7 +608,9 @@ static int preinit(const char *arg)
         {NULL,              0, NULL,      NULL}
     };
 
-    PCSZ pcszVideoModeStr[] = {"DIVE", "WarpOverlay!", "SNAP", "VMAN"};
+    PCSZ pcszVideoModeStr[] = {"UNKNOWN", "DIVE", "WarpOverlay!", "SNAP",
+                               "VMAN"};
+    int nVideoModeStr = sizeof(pcszVideoModeStr) / sizeof(*pcszVideoModeStr);
 
     if (subopt_parse(arg, subopts) != 0)
         return -1;
@@ -688,7 +690,8 @@ static int preinit(const char *arg)
     kvaCaps(&m_int.kvac);
 
     mp_msg(MSGT_VO, MSGL_V, "KVA: Selected video mode = %s\n",
-           pcszVideoModeStr[m_int.kvac.ulMode - 1]);
+           pcszVideoModeStr[m_int.kvac.ulMode >= nVideoModeStr ?
+                                0 : m_int.kvac.ulMode]);
 
     kvaDisableScreenSaver();
 

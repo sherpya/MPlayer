@@ -166,7 +166,8 @@ static int init(int rate, int channels, int format, int flags)
         {NULL}
     };
 
-    const char *audioDriver[] = {"DART", "UNIAUD",};
+    const char *audioDriver[] = {"UNKNOWN", "DART", "UNIAUD",};
+    int nAudioDriver = sizeof(audioDriver) / sizeof(*audioDriver);
 
     if (subopt_parse(ao_subdevice, subopts) != 0) {
         print_help();
@@ -190,7 +191,7 @@ static int init(int rate, int channels, int format, int flags)
 
     kaiCaps(&kc);
     mp_msg(MSGT_AO, MSGL_V, "KAI: selected audio driver = %s\n",
-           audioDriver[kc.ulMode - 1]);
+           audioDriver[kc.ulMode >= nAudioDriver ? 0 : kc.ulMode]);
     mp_msg(MSGT_AO, MSGL_V, "KAI: PDD name = %s, maximum channels = %lu\n",
            kc.szPDDName, kc.ulMaxChannels);
 

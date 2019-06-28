@@ -509,7 +509,6 @@ SRCS_MPLAYER-$(GUI_WIN32)    += gui/win32/dialogs.c                     \
                                 gui/win32/widgetrender.c                \
                                 gui/win32/wincfg.c                      \
 
-SRCS_MPLAYER-$(IVTV)         += libao2/ao_ivtv.c libvo/vo_ivtv.c
 SRCS_MPLAYER-$(JACK)         += libao2/ao_jack.c
 SRCS_MPLAYER-$(JOYSTICK)     += input/joystick.c
 SRCS_MPLAYER-$(JPEG)         += libvo/vo_jpeg.c

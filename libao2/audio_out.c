@@ -50,7 +50,6 @@ extern const ao_functions_t audio_out_dsound;
 extern const ao_functions_t audio_out_kai;
 extern const ao_functions_t audio_out_dart;
 extern const ao_functions_t audio_out_dxr2;
-extern const ao_functions_t audio_out_ivtv;
 extern const ao_functions_t audio_out_v4l2;
 extern const ao_functions_t audio_out_mpegpes;
 extern const ao_functions_t audio_out_pcm;
@@ -114,9 +113,6 @@ const ao_functions_t* const audio_out_drivers[] =
         &audio_out_mpegpes,
 #ifdef CONFIG_DXR2
         &audio_out_dxr2,
-#endif
-#ifdef CONFIG_IVTV
-        &audio_out_ivtv,
 #endif
 #ifdef CONFIG_V4L2_DECODER
         &audio_out_v4l2,

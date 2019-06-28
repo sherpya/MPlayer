@@ -1,8 +1,6 @@
 /*
  * stream layer for hardware MPEG 1/2/4 encoders a.k.a PVR
  *  (such as WinTV PVR-150/250/350/500 (a.k.a IVTV), pvrusb2 and cx88)
- * See http://ivtvdriver.org/index.php/Main_Page for more details on the
- *  cards supported by the ivtv driver.
  *
  * Copyright (C) 2006 Benjamin Zores
  * Copyright (C) 2007 Sven Gothel (Channel Navigation)

@@ -485,7 +485,6 @@ Video output:
   --enable-directx         enable DirectX video output [autodetect]
   --enable-dxr2            enable DXR2 video output [autodetect]
   --enable-dxr3            enable DXR3/H+ video output [autodetect]
-  --enable-ivtv            enable IVTV TV-Out video output [autodetect]
   --enable-v4l2            enable V4L2 Decoder audio/video output [autodetect]
   --enable-dvb             enable DVB video output [autodetect]
   --enable-mga             enable mga_vid video output [autodetect]
@@ -713,7 +712,6 @@ _fbdev=auto
 _dvb=auto
 _dxr2=auto
 _dxr3=auto
-_ivtv=auto
 _v4l2=auto
 _iconv=auto
 _langinfo=auto
@@ -1090,8 +1088,6 @@ for ac_option do
   --disable-dxr2)       _dxr2=no        ;;
   --enable-dxr3)        _dxr3=yes       ;;
   --disable-dxr3)       _dxr3=no        ;;
-  --enable-ivtv)        _ivtv=yes       ;;
-  --disable-ivtv)       _ivtv=no        ;;
   --enable-v4l2)        _v4l2=yes       ;;
   --disable-v4l2)       _v4l2=no        ;;
   --enable-iconv)       _iconv=yes      ;;
@@ -5883,35 +5879,6 @@ fi
 echores "$_dxr3"
 
 
-echocheck "IVTV TV-Out (pre linux-2.6.24)"
-if test "$_ivtv" = auto ; then
-  cat > $TMPC << EOF
-#include <sys/time.h>
-#include <linux/videodev2.h>
-#include <linux/ivtv.h>
-#include <sys/ioctl.h>
-int main(void) {
-struct ivtv_cfg_stop_decode sd;
-struct ivtv_cfg_start_decode sd1;
-ioctl(0, IVTV_IOC_START_DECODE, &sd1);
-ioctl(0, IVTV_IOC_STOP_DECODE, &sd);
-return 0; }
-EOF
-  _ivtv=no
-  cc_check && _ivtv=yes
-fi
-if test "$_ivtv" = yes ; then
-  def_ivtv='#define CONFIG_IVTV 1'
-  vomodules="ivtv $vomodules"
-  aomodules="ivtv $aomodules"
-else
-  def_ivtv='#undef CONFIG_IVTV'
-  novomodules="ivtv $novomodules"
-  noaomodules="ivtv $noaomodules"
-fi
-echores "$_ivtv"
-
-
 echocheck "V4L2 MPEG Decoder"
 if test "$_v4l2" = auto ; then
   cat > $TMPC << EOF
@@ -8546,7 +8513,6 @@ GUI_WIN32 = $_gui_win32
 HAVE_POSIX_SELECT = $_posix_select
 HAVE_SYS_MMAN_H = $_mman
 HAVE_WINDOWS_H = $windows_h
-IVTV = $_ivtv
 JACK = $_jack
 JOYSTICK = $_joystick
 JPEG = $_jpeg
@@ -9187,7 +9153,6 @@ $def_gl_egl_x11
 $def_gl_sdl
 $def_gl_osx
 $def_matrixview
-$def_ivtv
 $def_jpeg
 $def_kva
 $def_md5sum

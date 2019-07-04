@@ -147,7 +147,7 @@ static inline void RENAME(vo_draw_alpha_yv12)(int w,int h, unsigned char* src, u
 	}
 #elif HAVE_SSE2
         __m128i zero = _mm_setzero_si128();
-        for(x=0;x+8<w;x+=16){
+        for(x=0;x+15<w;x+=16){
             __m128i mmsrc, mmdst, res;
             __m128i mmsrca = _mm_load_si128((const __m128i *)(srca + x));
 
@@ -242,7 +242,7 @@ static inline void RENAME(vo_draw_alpha_yuy2)(int w,int h, unsigned char* src, u
         __m128i zero = _mm_setzero_si128();
         __m128i ymask = _mm_set1_epi16(0xff);
         __m128i uvofs = _mm_set1_epi16(0x8000);
-        for(x=0;x+12<w;x+=16){
+        for(x=0;x+15<w;x+=16){
             __m128i mmsrc, mmsrcalo, mmsrcahi, mmdst, mmdst2, mmlow, mmhigh, mmy, mmuv, res;
             __m128i mmsrca = _mm_load_si128((const __m128i *)(srca + x));
             int alpha = _mm_movemask_epi8(_mm_cmpeq_epi8(mmsrca, zero));
@@ -323,7 +323,7 @@ static inline void RENAME(vo_draw_alpha_uyvy)(int w,int h, unsigned char* src, u
 #if HAVE_SSE2
         __m128i zero = _mm_setzero_si128();
         __m128i uvofs = _mm_set1_epi16(0x80);
-        for(x=0;x+12<w;x+=16){
+        for(x=0;x+15<w;x+=16){
             __m128i mmsrc, mmsrcalo, mmsrcahi, mmdst, mmdst2, mmlow, mmhigh, mmy, mmuv, res;
             __m128i mmsrca = _mm_load_si128((const __m128i *)(srca + x));
             int alpha = _mm_movemask_epi8(_mm_cmpeq_epi8(mmsrca, zero));
@@ -459,7 +459,7 @@ static inline void RENAME(vo_draw_alpha_rgb24)(int w,int h, unsigned char* src, 
 #elif HAVE_SSE2
         __m128i one_in_three_mask = _mm_set_epi32(0xff0000ffu, 0x0000ff00u, 0x00ff0000u, 0xff0000ffu);
         __m128i zero = _mm_setzero_si128();
-        for(x=0;x+14<w;x+=16){
+        for(x=0;x+15<w;x+=16){
             __m128i mmsrc, mmtmp, mmtmpa, mmdst, res;
             __m128i mmsrca = _mm_load_si128((const __m128i *)(srca + x));
             int alpha = _mm_movemask_epi8(_mm_cmpeq_epi8(mmsrca, zero));

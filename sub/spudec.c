@@ -148,7 +148,7 @@ static packet_t *spudec_dequeue_packet(spudec_handle_t *this)
 
 static void spudec_free_packet(packet_t *packet)
 {
-  free(packet->packet);
+  av_freep(&packet->packet);
   free(packet);
 }
 
@@ -228,19 +228,19 @@ static int spudec_alloc_image(spudec_handle_t *this, int stride, int height)
   this->height = height;
   if (this->image_size < this->stride * this->height) {
     if (this->image != NULL) {
-      free(this->image);
+      av_freep(&this->image);
       this->image = NULL;
-      free(this->pal_image);
+      av_freep(&this->pal_image);
       this->pal_image = NULL;
       this->image_size = 0;
       this->pal_width = this->pal_height  = 0;
     }
-    this->image = malloc(2 * this->stride * this->height);
+    this->image = av_malloc(2 * this->stride * this->height);
     if (this->image) {
       this->image_size = this->stride * this->height;
       this->aimage = this->image + this->image_size;
       // use stride here as well to simplify reallocation checks
-      this->pal_image = malloc(this->stride * this->height);
+      this->pal_image = av_malloc(this->stride * this->height);
     }
   }
   return this->image != NULL;
@@ -279,7 +279,7 @@ static int apply_palette_crop(spudec_handle_t *this,
   int i;
   uint8_t *src;
   uint16_t pal[4];
-  unsigned stride = (crop_w + 7) & ~7;
+  unsigned stride = (crop_w + 15) & ~15;
   int ret = 1;
   if (crop_x > this->pal_width || crop_y > this->pal_height ||
       crop_w > this->pal_width - crop_x || crop_h > this->pal_width - crop_y ||
@@ -530,7 +530,7 @@ static void spudec_process_control(spudec_handle_t *this, int pts100)
 	start_col = a >> 12;
 	end_col = a & 0xfff;
 	width = (end_col < start_col) ? 0 : end_col - start_col + 1;
-	stride = (width + 7) & ~7; /* Kludge: draw_alpha needs width multiple of 8 */
+	stride = (width + 15) & ~15; /* Kludge: draw_alpha needs width multiple of 16 */
 	start_row = b >> 12;
 	end_row = b & 0xfff;
 	height = (end_row < start_row) ? 0 : end_row - start_row /* + 1 */;
@@ -577,7 +577,7 @@ static void spudec_process_control(spudec_handle_t *this, int pts100)
 	packet->alpha[i] = this->alpha[i];
 	packet->palette[i] = this->palette[i];
       }
-      packet->packet = malloc(this->packet_size);
+      packet->packet = av_malloc(this->packet_size);
       memcpy(packet->packet, this->packet, this->packet_size);
       spudec_queue_packet(this, packet);
     }
@@ -698,7 +698,7 @@ void spudec_heartbeat(void *this, unsigned int pts100)
     spu->start_pts = packet->start_pts;
     spu->end_pts = packet->end_pts;
     if (packet->is_decoded) {
-      free(spu->image);
+      av_freep(&spu->image);
       spu->image_size = packet->data_len;
       spu->image      = packet->packet;
       spu->aimage     = packet->packet + packet->stride * packet->height;
@@ -928,14 +928,14 @@ void spudec_draw_scaled(void *me, unsigned int dxs, unsigned int dys, void (*dra
 	spu->scaled_start_row = spu->start_row * scaley / 0x100;
 	spu->scaled_width = spu->width * scalex / 0x100;
 	spu->scaled_height = spu->height * scaley / 0x100;
-	/* Kludge: draw_alpha needs width multiple of 8 */
-	spu->scaled_stride = (spu->scaled_width + 7) & ~7;
+	/* Kludge: draw_alpha needs width multiple of 16 */
+	spu->scaled_stride = (spu->scaled_width + 15) & ~15;
 	if (spu->scaled_image_size < spu->scaled_stride * spu->scaled_height) {
 	  if (spu->scaled_image) {
-	    free(spu->scaled_image);
+	    av_freep(&spu->scaled_image);
 	    spu->scaled_image_size = 0;
 	  }
-	  spu->scaled_image = malloc(2 * spu->scaled_stride * spu->scaled_height);
+	  spu->scaled_image = av_malloc(2 * spu->scaled_stride * spu->scaled_height);
 	  if (spu->scaled_image) {
 	    spu->scaled_image_size = spu->scaled_stride * spu->scaled_height;
 	    spu->scaled_aimage = spu->scaled_image + spu->scaled_image_size;
@@ -1347,12 +1347,12 @@ void spudec_free(void *this)
       spudec_free_packet(spudec_dequeue_packet(spu));
     free(spu->packet);
     spu->packet = NULL;
-    free(spu->scaled_image);
+    av_freep(&spu->scaled_image);
     spu->scaled_image = NULL;
-    free(spu->image);
+    av_freep(&spu->image);
     spu->image = NULL;
     spu->aimage = NULL;
-    free(spu->pal_image);
+    av_freep(&spu->pal_image);
     spu->pal_image = NULL;
     spu->image_size = 0;
     spu->pal_width = spu->pal_height  = 0;
@@ -1374,7 +1374,7 @@ void spudec_set_hw_spu(void *this, const vo_functions_t *hw_spu)
 packet_t *spudec_packet_create(int x, int y, int w, int h)
 {
   packet_t *packet;
-  int stride = (w + 7) & ~7;
+  int stride = (w + 15) & ~15;
   if ((unsigned)w >= 0x8000 || (unsigned)h > 0x4000)
     return NULL;
   packet = calloc(1, sizeof(packet_t));
@@ -1386,7 +1386,7 @@ packet_t *spudec_packet_create(int x, int y, int w, int h)
   packet->start_row = y;
   packet->data_len = 2 * stride * h;
   if (packet->data_len) { // size 0 is a special "clear" packet
-    packet->packet = malloc(packet->data_len);
+    packet->packet = av_malloc(packet->data_len);
     if (!packet->packet) {
       free(packet);
       packet = NULL;

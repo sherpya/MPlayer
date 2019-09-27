@@ -839,7 +839,7 @@ static int demux_lavf_control(demuxer_t *demuxer, int cmd, void *arg)
 	    else
 	    {
 	        ds_free_packs(ds);
-	        if(ds->id >= 0)
+	        if(ds->id >= 0 && ds->id < nstreams)
 	            priv->avfc->streams[ds->id]->discard = AVDISCARD_ALL;
 	        *((int*)arg) = ds->id = newid;
 	        if(newid >= 0)

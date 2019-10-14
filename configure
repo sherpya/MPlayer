@@ -878,6 +878,7 @@ _sctp=auto
 _gethostbyname2=auto
 _gnutls=auto
 _openssl=no
+_mbedtls=no
 _ftp=auto
 _musepack=no
 _vstream=auto
@@ -1384,6 +1385,8 @@ for ac_option do
   --enable-gnutls)       _gnutls=yes    ;;
   --disable-gnutls)      _gnutls=no     ;;
   --enable-openssl-nondistributable) _openssl=yes ;;
+  --enable-mbedtls)     _mbedtls=yes    ;;
+  --disable-mbedtls)    _mbedtls=no     ;;
 
   --enable-fribidi)     _fribidi=yes    ;;
   --disable-fribidi)    _fribidi=no     ;;
@@ -1677,7 +1680,7 @@ libavencoders=$(filter_out_component encoder 'LIB[A-Z0-9_]* [A-Z0-9]*_QSV [A-Z0-
 libavbsfs=$(filter_out_component bsf 'TRACE_HEADERS [A-Z0-9_]*_METADATA H264_REDUNDANT_PPS FILTER_UNITS')
 libavdemuxers=$(filter_out_component demuxer 'AVISYNTH LIB[A-Z0-9_]* REDIR VAPOURSYNTH')
 libavmuxers=$(filter_out_component muxer 'CHROMAPRINT LIB[A-Z0-9_]* RTP RTSP SAP')
-libavprotocols=$(filter_out_component protocol 'BLURAY FFRTMPCRYPT HTTPS LIB[A-Z0-9_]* TLS TLS_GNUTLS TLS_OPENSSL TLS_SECURETRANSPORT TLS_SCHANNEL ANDROID_CONTENT')
+libavprotocols=$(filter_out_component protocol 'BLURAY FFRTMPCRYPT HTTPS LIB[A-Z0-9_]* TLS TLS_GNUTLS TLS_OPENSSL TLS_MBEDTLS TLS_SECURETRANSPORT TLS_SCHANNEL ANDROID_CONTENT')
 libavfilters=$(filter_out_component filter 'VF_FREI0R[A-Z0-9_]* LIB[A-Z0-9_]* MP VF_OCV')
 
 libavwrappers_all="DEFLATE_WRAPPER INFLATE_WRAPPER"
@@ -4786,6 +4789,21 @@ else
   def_openssl='#define CONFIG_OPENSSL 0'
 fi
 echores "$_openssl"
+
+echocheck "mbedTLS"
+if test "$_mbedtls" = yes ; then
+  def_mbedtls='#define CONFIG_MBEDTLS 1'
+  libavprotocols="$libavprotocols HTTPS_PROTOCOL"
+  if contains_item "$libavprotocols_all" 'TLS_MBEDTLS_PROTOCOL' ; then
+      libavprotocols="$libavprotocols TLS_MBEDTLS_PROTOCOL"
+  else
+      libavprotocols="$libavprotocols TLS_PROTOCOL"
+  fi
+  extra_ldflags="$extra_ldflags -lmbedtls -lmbedx509 -lmbedcrypto"
+else
+  def_mbedtls='#define CONFIG_MBEDTLS 0'
+fi
+echores "$_mbedtls"
 
 echocheck "Samba support (libsmbclient)"
 if test "$_smb" = yes; then
@@ -9081,6 +9099,7 @@ CONFIG_CRYSTALHD= $crystalhd
 CONFIG_ENCODERS = yes
 CONFIG_GNUTLS   = $_gnutls
 CONFIG_OPENSSL  = $_openssl
+CONFIG_MBEDTLS  = $_mbedtls
 CONFIG_GPL      = yes
 CONFIG_ICONV    = $_iconv
 CONFIG_MLIB     = $_mlib
@@ -9631,6 +9650,7 @@ $def_erf
 #define CONFIG_FTRAPV 0
 $def_gnutls
 $def_openssl
+$def_mbedtls
 #define CONFIG_GPL 1
 #define CONFIG_GRAY 0
 #define CONFIG_LCMS2 0

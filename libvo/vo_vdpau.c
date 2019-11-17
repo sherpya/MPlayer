@@ -824,6 +824,38 @@ static void check_events(void)
     }
 }
 
+#if HAVE_EMMINTRIN_H
+#include <emmintrin.h>
+
+#include "cpudetect.h"
+
+ATTR_TARGET_SSE2
+static void copyosd_SSE2(int w, int h, unsigned char *src, unsigned char *srca, int stride)
+{
+    unsigned char *dst = index_data;
+    __m128i zero = _mm_setzero_si128();
+    while (h--) {
+        int i;
+        for (i = 0; i < w - 15; i += 16)
+        {
+            __m128i mmsrc = _mm_loadu_si128((const __m128i *)(src + i));
+            __m128i mmsrca = _mm_loadu_si128((const __m128i *)(srca + i));
+            mmsrca = _mm_sub_epi8(zero, mmsrca);
+            _mm_storeu_si128((__m128i *)(dst + 0), _mm_unpacklo_epi8(mmsrc, mmsrca));
+            _mm_storeu_si128((__m128i *)(dst + 16), _mm_unpackhi_epi8(mmsrc, mmsrca));
+            dst += 32;
+        }
+        for (; i < w; i++)
+        {
+            *dst++ = src  [i];
+            *dst++ = -srca[i];
+        }
+        src += stride;
+        srca += stride;
+    }
+}
+#endif
+
 static void draw_osd_I8A8(int x0,int y0, int w,int h, unsigned char *src,
                           unsigned char *srca, int stride)
 {
@@ -845,11 +877,18 @@ static void draw_osd_I8A8(int x0,int y0, int w,int h, unsigned char *src,
     }
 
     // index_data creation, component order - I, A, I, A, .....
-    for (i = 0; i < h; i++)
-        for (j = 0; j < w; j++) {
-            index_data[i*2*w + j*2]     =  src [i*stride + j];
-            index_data[i*2*w + j*2 + 1] = -srca[i*stride + j];
-        }
+#if HAVE_EMMINTRIN_H
+    if (gCpuCaps.hasSSE2) copyosd_SSE2(w, h, src, srca, stride);
+    else
+#endif
+    {
+        unsigned char *dst = index_data;
+        for (i = 0; i < h; i++)
+            for (j = 0; j < w; j++) {
+                *dst++ = src [i*stride + j];
+                *dst++ = -srca[i*stride + j];
+            }
+    }
 
     output_indexed_rect_vid.x0 = x0;
     output_indexed_rect_vid.y0 = y0;

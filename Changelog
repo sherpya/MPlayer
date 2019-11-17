@@ -1,5 +1,9 @@
 MPlayer
 
+    Decoders, demuxers, streams:
+    * ffmpeg12vpdau is no longer supported by FFmpeg,
+      provide separate ffmpeg1vpdau and ffmpeg2vdpau instead
+
   1.4: "SubCounter" April 18, 2019
 
     Decoders, demuxers, streams:

@@ -412,6 +412,7 @@ Codecs:
   --disable-x264            disable x264 [autodetect]
   --disable-x264-lavc       disable x264 in libavcodec [autodetect]
   --disable-libvpx-lavc     disable libvpx in libavcodec [autodetect]
+  --disable-libdav1d-lavc   disable libdav1d in libavcodec [autodetect]
   --disable-libnut          disable libnut [autodetect]
   --disable-ffmpeg_a        disable static FFmpeg [autodetect]
   --disable-ffmpeg_so       disable shared FFmpeg [autodetect]
@@ -806,6 +807,7 @@ _xvid_lavc=auto
 _x264=auto
 _x264_lavc=auto
 _libvpx_lavc=auto
+_libdav1d_lavc=auto
 _libnut=auto
 _lirc=auto
 _lircc=auto
@@ -1258,6 +1260,8 @@ for ac_option do
   --disable-x264-lavc)  _x264_lavc=no   ;;
   --enable-libvpx-lavc)   _libvpx_lavc=yes  ;;
   --disable-libvpx-lavc)  _libvpx_lavc=no   ;;
+  --enable-libdav1d-lavc)   _libdav1d_lavc=yes  ;;
+  --disable-libdav1d-lavc)  _libdav1d_lavc=no   ;;
   --enable-libnut)      _libnut=yes     ;;
   --disable-libnut)     _libnut=no      ;;
   --enable-libopencore_amrnb)   _libopencore_amrnb=yes  ;;
@@ -7493,6 +7497,36 @@ else
 fi
 echores "$_libvpx_lavc"
 
+
+echocheck "libdav1d"
+if test "$_libdav1d_lavc" = auto; then
+  _libdav1d_lavc=no
+  if test "$ffmpeg_a" != yes; then
+    res_comment="dynamic linking to libdav1d is irrelevant when using dynamic FFmpeg"
+  else
+    cat > $TMPC << EOF
+#include <dav1d/dav1d.h>
+int main(void) {
+    const char *version_lib = dav1d_version();
+    return version_lib[0];
+}
+EOF
+    for ld_tmp in "-ldav1d" "-ldav1d $ld_pthread" ; do
+      cc_check $ld_tmp && _libdav1d_lavc=yes && extra_ldflags="$extra_ldflags $ld_tmp" && break
+    done
+  fi
+fi
+if test "$_libdav1d_lavc" = yes ; then
+  def_libdav1d_lavc='#define CONFIG_LIBDAV1D 1'
+  libavdecoders="$libavdecoders LIBDAV1D_DECODER"
+  codecmodules="libdav1d $codecmodules"
+else
+  def_libdav1d_lavc='#define CONFIG_LIBDAV1D 0'
+  nocodecmodules="libdav1d $nocodecmodules"
+fi
+echores "$_libdav1d_lavc"
+
+
 echocheck "libnut"
 if test "$_libnut" = auto ; then
   _libnut=no
@@ -9238,6 +9272,7 @@ $def_emmintrin_h
 /* external libraries */
 $def_bzlib
 $def_crystalhd
+$def_libdav1d_lavc
 $def_libgsm
 $def_libopencore_amrnb
 $def_libopencore_amrwb

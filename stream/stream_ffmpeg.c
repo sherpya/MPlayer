@@ -158,7 +158,7 @@ const stream_info_t stream_info_ffmpeg = {
   "",
   "",
   open_f,
-  { "ffmpeg", "rtmp", "rtsp", "https", NULL },
+  { "ffmpeg", "rtmp", "rtsp", "https", "gopher", NULL },
   NULL,
   1 // Urls are an option string
 };

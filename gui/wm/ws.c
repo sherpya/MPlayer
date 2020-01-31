@@ -343,6 +343,25 @@ static int wsWindowListSearch(Window win)
     return -1;
 }
 
+static void wsClearWindowParts(Display *display, wsWindow *win)
+{
+    int W_leftover, H_leftover;
+
+    if (win->Width <= win->xImage->width && win->Height <= win->xImage->height)
+        return;
+
+    W_leftover = (win->Width - win->xImage->width) / 2;
+    H_leftover = (win->Height - win->xImage->height) / 2;
+
+    XFillRectangle(display, win->WindowID, win->wGC, 0, 0, win->Width, H_leftover);
+    XFillRectangle(display, win->WindowID, win->wGC, 0, win->Height - H_leftover - 1, win->Width, H_leftover + 1);
+
+    if (win->Width > win->xImage->width) {
+        XFillRectangle(display, win->WindowID, win->wGC, 0, H_leftover, W_leftover, win->xImage->height);
+        XFillRectangle(display, win->WindowID, win->wGC, win->Width - W_leftover - 1, H_leftover, W_leftover + 1, win->xImage->height);
+    }
+}
+
 void wsEvent(XEvent *event)
 {
     unsigned long i = 0;
@@ -443,8 +462,10 @@ expose:
 
         wsWindowList[l]->State = wsWindowExpose;
 
-        if ((wsWindowList[l]->DrawHandler) && (!event->xexpose.count))
+        if ((wsWindowList[l]->DrawHandler) && (!event->xexpose.count)) {
+            wsClearWindowParts(wsDisplay, wsWindowList[l]);
             wsWindowList[l]->DrawHandler();
+        }
 
         break;
 

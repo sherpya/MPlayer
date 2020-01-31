@@ -4,6 +4,9 @@ MPlayer
     * ffmpeg12vpdau is no longer supported by FFmpeg,
       provide separate ffmpeg1vpdau and ffmpeg2vdpau instead
 
+    GUI:
+    * Fix wrongly sized video window after leaving fullscreen mode
+
   1.4: "SubCounter" April 18, 2019
 
     Decoders, demuxers, streams:

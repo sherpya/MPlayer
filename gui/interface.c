@@ -1140,7 +1140,7 @@ int gui(int what, void *data)
                     wsWindowVisibility(&guiApp.videoWindow, wsShowWindow);
 
                 if (gtkLoadFullscreen ^ guiApp.videoWindow.isFullScreen)
-                    uiEvent(evFullScreen, False);
+                    uiEvent(evFullScreen, -1);
             } else {
                 wsWindowVisibility(&guiApp.videoWindow, wsHideWindow);
                 guiInfo.VideoWindow = False;

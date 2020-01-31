@@ -439,7 +439,7 @@ play:
             uiFullScreen();
 
             if (!guiApp.videoWindow.isFullScreen)
-                wsWindowResize(&guiApp.videoWindow, iparam ? guiInfo.VideoWidth : guiApp.video.width, iparam ? guiInfo.VideoHeight : guiApp.video.height);
+                wsWindowResize(&guiApp.videoWindow, iparam >= 0 ? guiInfo.VideoWidth : guiApp.video.width, iparam >= 0 ? guiInfo.VideoHeight : guiApp.video.height);
         }
 
         if (guiApp.videoWindow.isFullScreen)

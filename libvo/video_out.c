@@ -270,11 +270,11 @@ const vo_functions_t* const video_out_drivers[] =
 #endif
         &video_out_cvidix,
 #endif
-        &video_out_null,
         // should not be auto-selected
 #if CONFIG_XVMC
         &video_out_xvmc,
 #endif
+        &video_out_null,
         &video_out_mpegpes,
 #ifdef CONFIG_YUV4MPEG
         &video_out_yuv4mpeg,

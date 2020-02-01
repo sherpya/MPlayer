@@ -1222,6 +1222,7 @@ void ShowPreferences( void )
   while ( audio_out_drivers[i] )
    {
     const ao_info_t *info = audio_out_drivers[i++]->info;
+    if ( !strcmp( info->short_name,"mpegpes" ) ) continue;
     if ( !strcmp( info->short_name,"plugin" ) ) continue;
     if ( audio_driver_list )
      {

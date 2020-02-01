@@ -8,6 +8,7 @@ MPlayer
     * Fix wrongly sized video window after leaving fullscreen mode
     * Clear screen when switching to fullscreen mode using the x11
       video output driver
+    * Enable video output drivers which write to files
 
   1.4: "SubCounter" April 18, 2019
 

@@ -658,7 +658,7 @@ static GtkWidget * CreatePreferences( void )
   CLADrivers=gtk_clist_new( 2 );
   gtk_widget_show( CLADrivers );
   gtk_container_add( GTK_CONTAINER( scrolledwindow3 ),CLADrivers );
-  gtk_clist_set_column_width( GTK_CLIST( CLADrivers ),0,50 );
+  gtk_clist_set_column_width( GTK_CLIST( CLADrivers ),0,65 );
   gtk_clist_column_titles_show( GTK_CLIST( CLADrivers ) );
   gtk_clist_set_shadow_type( GTK_CLIST( CLADrivers ),GTK_SHADOW_NONE );
   gtk_widget_set_usize( CLADrivers,250,-2 );
@@ -725,7 +725,7 @@ static GtkWidget * CreatePreferences( void )
   CLVDrivers=gtk_clist_new( 2 );
   gtk_widget_show( CLVDrivers );
   gtk_container_add( GTK_CONTAINER( scrolledwindow2 ),CLVDrivers );
-  gtk_clist_set_column_width( GTK_CLIST( CLVDrivers ),0,50 );
+  gtk_clist_set_column_width( GTK_CLIST( CLVDrivers ),0,65 );
   gtk_clist_column_titles_show( GTK_CLIST( CLVDrivers ) );
   gtk_clist_set_shadow_type( GTK_CLIST( CLVDrivers ),GTK_SHADOW_NONE );
   gtk_widget_set_usize( CLVDrivers,250,-2 );

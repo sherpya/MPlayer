@@ -828,7 +828,7 @@ static int http_streaming_start(stream_t *stream, int* file_format) {
 				if( next_url!=NULL ) {
 					int is_ultravox = strcasecmp(stream->streaming_ctrl->url->protocol, "unsv") == 0;
 					stream->streaming_ctrl->url = url_redirect( &url, next_url );
-					if (url_is_protocol(url, "mms")) {
+					if (url_is_protocol(url, "https") || url_is_protocol(url, "mms")) {
 						res = STREAM_REDIRECTED;
 						goto err_out;
 					}

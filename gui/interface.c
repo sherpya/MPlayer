@@ -344,8 +344,10 @@ void guiInit(void)
     } else
         wsWindowBackground(&guiApp.videoWindow, 0, 0, 0);
 
-    if (gtkLoadFullscreen)
+    if (gtkLoadFullscreen) {
+        guiApp.videoWindow.isFullScreen = True;
         btnSet(evFullScreen, btnPressed);
+    }
 
     guiInfo.Playing = GUI_STOP;
 

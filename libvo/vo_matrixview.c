@@ -286,6 +286,8 @@ static int control(uint32_t request, void *data)
     case VOCTRL_UPDATE_SCREENINFO:
         glctx.update_xinerama_info();
         return VO_TRUE;
+    case VOCTRL_GUISUPPORT:
+        return VO_TRUE;
     }
     return VO_NOTIMPL;
 }

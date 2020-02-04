@@ -458,6 +458,15 @@ static void draw_alpha(int x0,int y0, int w,int h, unsigned char* src, unsigned 
 #ifdef CONFIG_GL_X11
 static int choose_glx_visual(Display *dpy, int scr, XVisualInfo *res_vi)
 {
+#ifdef CONFIG_GUI
+  int value;
+
+  if (glXGetConfig(mDisplay, gl_vinfo, GLX_USE_GL, &value) == 0 && value == True) {
+    *res_vi = *gl_vinfo;
+    return 0;
+  } else
+    return -1;
+#else
   XVisualInfo template, *vi_list;
   int vi_num, i, best_i, best_weight;
 
@@ -510,6 +519,7 @@ static int choose_glx_visual(Display *dpy, int scr, XVisualInfo *res_vi)
   if (best_weight < 1000000) *res_vi = vi_list[best_i];
   XFree(vi_list);
   return (best_weight < 1000000) ? 0 : -1;
+#endif
 }
 
 static int config_glx(uint32_t d_width, uint32_t d_height, uint32_t flags, char *title) {
@@ -519,6 +529,8 @@ static int config_glx(uint32_t d_width, uint32_t d_height, uint32_t flags, char 
       mp_msg(MSGT_VO, MSGL_FATAL, "[gl_tiled] no GLX support present\n");
       return -1;
     }
+
+  mp_msg(MSGT_VO, MSGL_V, "[gl_tiled] GLX chose visual with ID 0x%x\n", (int)vinfo->visualid);
 
   vo_x11_create_vo_window(vinfo, vo_dx, vo_dy, d_width, d_height,
           flags, vo_x11_create_colormap(vinfo), "gl_tiled", title);

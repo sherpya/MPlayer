@@ -316,4 +316,6 @@ extern void (GLAPIENTRY *mpglTexImage3D)(GLenum, GLint, GLenum, GLsizei, GLsizei
 extern void* (GLAPIENTRY *mpglAllocateMemoryMESA)(void *, int, size_t, float, float, float);
 extern void (GLAPIENTRY *mpglFreeMemoryMESA)(void *, int, void *);
 
+extern XVisualInfo *gl_vinfo;
+
 #endif /* MPLAYER_GL_COMMON_H */

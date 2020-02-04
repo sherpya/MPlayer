@@ -64,6 +64,8 @@ int wsOrgX;                          // Screen origin x.
 int wsOrgY;                          // Screen origin y.
 
 Display *wsDisplay;
+XVisualInfo *gl_vinfo;
+
 static int wsScreen;
 static Window wsRootWin;
 
@@ -827,6 +829,8 @@ void wsWindowCreate(wsWindow *win, int x, int y, int w, int h, int p, int c, cha
     }
 
     XMatchVisualInfo(wsDisplay, wsScreen, depth, TrueColor, &win->VisualInfo);
+
+    gl_vinfo = &win->VisualInfo;
 
     mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[ws] visual: ID %#lx\n", win->VisualInfo.visualid);
 

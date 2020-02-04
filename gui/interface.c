@@ -339,12 +339,12 @@ void guiInit(void)
 
         guiInfo.VideoWindow = True;
 
-        if (gtkLoadFullscreen)
+        if (fullscreen)
             uiFullScreen();
     } else
         wsWindowBackground(&guiApp.videoWindow, 0, 0, 0);
 
-    if (gtkLoadFullscreen) {
+    if (fullscreen) {
         guiApp.videoWindow.isFullScreen = True;
         btnSet(evFullScreen, btnPressed);
     }
@@ -979,19 +979,13 @@ int gui(int what, void *data)
         if (guiInfo.Start)
             uiAbsSeek(guiInfo.Start);
 
-        // These must be done here (in the last call from MPlayer before
-        // playback starts) and not in GUI_SETUP_VIDEO_WINDOW, because...
-
-        // ...without video there will be no call to GUI_SETUP_VIDEO_WINDOW
+        // This must be done here (in the last call from MPlayer before
+        // playback starts) and not in GUI_SETUP_VIDEO_WINDOW, because
+        // without video there will be no call to GUI_SETUP_VIDEO_WINDOW
         if (!guiInfo.VideoWindow) {
             wsWindowVisibility(&guiApp.videoWindow, wsHideWindow);
-            btnSet(evFullScreen, gtkLoadFullscreen ? btnPressed : btnReleased);
+            btnSet(evFullScreen, fullscreen ? btnPressed : btnReleased);
         }
-
-        // ...option variable fullscreen determines whether MPlayer will handle
-        //    the window given by WinID as fullscreen window (and will do aspect
-        //    scaling then) or not - quite rubbish
-        fullscreen = gtkLoadFullscreen;
 
         break;
 
@@ -1027,7 +1021,7 @@ int gui(int what, void *data)
                 wsWindowVisibility(&guiApp.videoWindow, wsShowWindow);
         }
 
-        if (gtkLoadFullscreen ^ guiApp.videoWindow.isFullScreen)
+        if (fullscreen ^ guiApp.videoWindow.isFullScreen)
             uiEvent(evFullScreen, True);
 
         if (guiWinID >= 0)
@@ -1141,12 +1135,12 @@ int gui(int what, void *data)
                 if (!guiApp.videoWindow.Mapped)
                     wsWindowVisibility(&guiApp.videoWindow, wsShowWindow);
 
-                if (gtkLoadFullscreen ^ guiApp.videoWindow.isFullScreen)
+                if (fullscreen ^ guiApp.videoWindow.isFullScreen)
                     uiEvent(evFullScreen, -1);
             } else {
                 wsWindowVisibility(&guiApp.videoWindow, wsHideWindow);
                 guiInfo.VideoWindow = False;
-                btnSet(evFullScreen, gtkLoadFullscreen ? btnPressed : btnReleased);
+                btnSet(evFullScreen, fullscreen ? btnPressed : btnReleased);
             }
 
             gui(GUI_SET_STATE, (void *)GUI_STOP);

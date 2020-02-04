@@ -93,8 +93,7 @@ gtkASS_t gtkASS;
 int gtkReplayGainOn;
 int gtkReplayGainAdjustment;
 
-int gtkEnablePlayBar = True;
-int gtkLoadFullscreen;
+int gtkEnablePlayBar   = True;
 int gtkShowVideoWindow = True;
 
 int gui_save_pos    = True;
@@ -179,7 +178,7 @@ static const m_option_t gui_opts[] = {
     { "replay_gain_adjustment",      &gtkReplayGainAdjustment, CONF_TYPE_INT,         CONF_RANGE,  -30,   10,         NULL },
 
     { "playbar",                     &gtkEnablePlayBar,        CONF_TYPE_FLAG,        0,           0,     1,          NULL },
-    { "load_fullscreen",             &gtkLoadFullscreen,       CONF_TYPE_FLAG,        0,           0,     1,          NULL },
+    { "load_fullscreen",             &fullscreen,              CONF_TYPE_FLAG,        0,           0,     1,          NULL },
     { "show_videowin",               &gtkShowVideoWindow,      CONF_TYPE_FLAG,        0,           0,     1,          NULL },
 
     { "gui_save_pos",                &gui_save_pos,            CONF_TYPE_FLAG,        0,           0,     1,          NULL },

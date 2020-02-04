@@ -9,6 +9,8 @@ MPlayer
     * Clear screen when switching to fullscreen mode using the x11
       video output driver
     * Enable video output drivers which write to files
+    * Command line option -fs is now recognized in addition to the
+      GUI option load_fullscreen
 
   1.4: "SubCounter" April 18, 2019
 

@@ -2769,13 +2769,6 @@ int mpglcontext_create_window(MPGLContext *ctx, uint32_t d_width, uint32_t d_hei
 #endif
 #ifdef CONFIG_GL_X11
   if (ctx->type == GLTYPE_X11) {
-    XVisualInfo *vinfo = NULL;
-#ifdef CONFIG_GUI
-    int value;
-
-    if (glXGetConfig(mDisplay, gl_vinfo, GLX_USE_GL, &value) == 0 && value == True)
-      vinfo = gl_vinfo;
-#else
     int default_glx_attribs[] = {
       GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1,
       GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, (flags & VOFLAG_DEPTH) ? 1 : 0, None
@@ -2784,7 +2777,21 @@ int mpglcontext_create_window(MPGLContext *ctx, uint32_t d_width, uint32_t d_hei
       GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1,
       GLX_DOUBLEBUFFER, GLX_STEREO, None
     };
+    XVisualInfo *vinfo = NULL;
+#ifdef CONFIG_GUI
+    int value;
+
+    if (gl_vinfo && glXGetConfig(mDisplay, gl_vinfo, GLX_USE_GL, &value) == 0 && value == True)
+      vinfo = gl_vinfo;
+#endif
     if (flags & VOFLAG_STEREO) {
+#ifdef CONFIG_GUI
+      if (vinfo) {
+        if (glXGetConfig(mDisplay, vinfo, GLX_STEREO, &value) != 0 || value == False)
+          vinfo = NULL;
+      }
+      else
+#endif
       vinfo = glXChooseVisual(mDisplay, mScreen, stereo_glx_attribs);
       if (!vinfo)
         mp_msg(MSGT_VO, MSGL_ERR, "[gl] Could not find a stereo visual, "
@@ -2792,7 +2799,6 @@ int mpglcontext_create_window(MPGLContext *ctx, uint32_t d_width, uint32_t d_hei
     }
     if (!vinfo)
       vinfo = glXChooseVisual(mDisplay, mScreen, default_glx_attribs);
-#endif
     if (!vinfo) {
       mp_msg(MSGT_VO, MSGL_ERR, "[gl] no GLX support present\n");
       return -1;

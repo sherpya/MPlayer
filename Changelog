@@ -8,7 +8,6 @@ MPlayer
     * Fix wrongly sized video window after leaving fullscreen mode
     * Clear screen when switching to fullscreen mode using the x11
       video output driver
-    * Enable video output drivers which write to files
     * Command line option -fs is now recognized in addition to the
       GUI option load_fullscreen
     * Use correct visual in OpenGL video output driver for X11

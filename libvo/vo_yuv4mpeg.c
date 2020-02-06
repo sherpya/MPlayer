@@ -301,8 +301,6 @@ static int control(uint32_t request, void *data)
     return query_format(*((uint32_t*)data));
   case VOCTRL_DUPLICATE_FRAME:
     return write_last_frame();
-  case VOCTRL_GUISUPPORT:
-      return VO_TRUE;
   }
   return VO_NOTIMPL;
 }

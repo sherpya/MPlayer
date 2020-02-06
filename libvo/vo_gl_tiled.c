@@ -464,9 +464,9 @@ static int choose_glx_visual(Display *dpy, int scr, XVisualInfo *res_vi)
 #ifdef CONFIG_GUI
   int value;
 
-  if (gl_vinfo) {
-    if (glXGetConfig(mDisplay, gl_vinfo, GLX_USE_GL, &value) == 0 && value == True) {
-      *res_vi = *gl_vinfo;
+  if (gui_vinfo) {
+    if (glXGetConfig(mDisplay, gui_vinfo, GLX_USE_GL, &value) == 0 && value == True) {
+      *res_vi = *gui_vinfo;
       return 0;
     } else
       return -1;

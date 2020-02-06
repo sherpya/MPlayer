@@ -2781,8 +2781,8 @@ int mpglcontext_create_window(MPGLContext *ctx, uint32_t d_width, uint32_t d_hei
 #ifdef CONFIG_GUI
     int value;
 
-    if (gl_vinfo && glXGetConfig(mDisplay, gl_vinfo, GLX_USE_GL, &value) == 0 && value == True)
-      vinfo = gl_vinfo;
+    if (gui_vinfo && glXGetConfig(mDisplay, gui_vinfo, GLX_USE_GL, &value) == 0 && value == True)
+      vinfo = gui_vinfo;
 #endif
     if (flags & VOFLAG_STEREO) {
 #ifdef CONFIG_GUI

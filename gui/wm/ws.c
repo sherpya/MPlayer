@@ -20,10 +20,12 @@
  */
 
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ipc.h>
 #include <X11/Xatom.h>
+#include <X11/Xlibint.h>
 
 #include "ws.h"
 #include "wsxdnd.h"
@@ -311,12 +313,40 @@ void wsDone(void)
 static int wsErrorHandler(Display *display, XErrorEvent *event)
 {
     char type[128];
+    _XExtension *ext = NULL;
 
     XGetErrorText(display, event->error_code, type, sizeof(type));
 
     mp_msg(MSGT_GPLAYER, MSGL_ERR, "[ws] " MSGTR_GUI_MSG_X11Error);
     mp_msg(MSGT_GPLAYER, MSGL_ERR, "[ws]  Error code: %d - %s\n", event->error_code, type);
-    mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[ws]  Request code: %d (minor code: %d)\n", event->request_code, event->minor_code);
+
+    if (event->request_code < 128) {
+        snprintf(type, sizeof(type), "%d", event->request_code);
+        XGetErrorDatabaseText(display, "XRequest", type, "?", type, sizeof(type));
+    } else {
+        ext = display->ext_procs;
+
+        while (ext && (ext->codes.major_opcode != event->request_code))
+            ext = ext->next;
+
+        if (ext)
+            snprintf(type, sizeof(type), "%s", ext->name);
+        else
+            strcpy(type, "?");
+    }
+
+    mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[ws]  Request code: %d (%s)\n", event->request_code, type);
+
+    if (event->request_code >= 128) {
+        if (ext) {
+            snprintf(type, sizeof(type), "%s.%d", ext->name, event->minor_code);
+            XGetErrorDatabaseText(display, "XRequest", type, "?", type, sizeof(type));
+        } else
+            strcpy(type, "?");
+
+        mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[ws]  Minor code: %d (%s)\n", event->minor_code, type);
+    }
+
     mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[ws]  MPlayer module: %s\n", current_module ? current_module : "(none)");
 
     return 0;

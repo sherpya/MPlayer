@@ -1872,6 +1872,7 @@ fi
 
 if wine ; then
   extra_cflags="-fno-pic -UWIN32 -U_WIN32 -U__WIN32 -U__WIN32__ -DWINE_NOWINSOCK $extra_cflags"
+  libs_mplayer="$libs_mplayer -lshell32"
 fi
 
 if darwin && test "$cc_vendor" != "clang" ; then

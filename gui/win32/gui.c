@@ -63,6 +63,13 @@
 /* Globals / Externs */
 float video_aspect;
 
+#ifdef __WINE__
+#ifdef CONFIG_GL_X11
+#include <X11/Xutil.h>
+XVisualInfo *gui_vinfo;
+#endif
+#endif
+
 DWORD oldtime;
 NOTIFYICONDATA nid;
 int console_state = FALSE;

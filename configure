@@ -558,6 +558,7 @@ Miscellaneous options:
   --as=ASSEMBLER         assembler to build MPlayer [as]
   --nm=NM                nm tool to build MPlayer [nm]
   --yasm=YASM            Yasm assembler to build MPlayer [yasm]
+  --strip=STRIP          use strip tool STRIP [strip]
   --ar=AR                librarian to build MPlayer [ar]
   --ranlib=RANLIB        ranlib to build MPlayer [ranlib]
   --windres=WINDRES      windres to build MPlayer [windres]
@@ -659,6 +660,7 @@ _install=install
 _ranlib=ranlib
 _windres=windres
 _cc=cc
+_strip=
 _ar=ar
 _arflags=rc
 # create thin archive to save disk space and I/O
@@ -957,6 +959,9 @@ for ac_option do
     ;;
   --cc=*)
     _cc=$(option_value $ac_option)
+    ;;
+  --strip=*)
+    _strip=$(option_value $ac_option)
     ;;
   --host-cc=*)
     _host_cc=$(option_value $ac_option)
@@ -2849,6 +2854,11 @@ fi # if darwin && test "$cc_vendor" = "gnu" ; then
 
 # Checking for CFLAGS
 _install_strip="-s"
+if test -z "$_strip"; then
+  _strip=strip
+else
+  _install_strip="$_install_strip --strip-program=$_strip"
+fi
 if test -z "$CFLAGS" || test "$_profile" != "" || test "$_debug" != ""; then
   if test "$cc_vendor" = "intel" ; then
     CFLAGS="-O2 $_march $_mcpu $_pipe -fomit-frame-pointer"
@@ -8727,7 +8737,7 @@ DEPX86ASM  = $_yasm
 YASMFLAGS  = $YASMFLAGS
 X86ASMFLAGS = $YASMFLAGS -o\$@
 DEPX86ASMFLAGS=\$(X86ASMFLAGS)
-STRIP      = strip
+STRIP      = $_strip
 
 CONFIG_FFPROBE       = no
 CONFIG_LAVFI_INDEV   = no

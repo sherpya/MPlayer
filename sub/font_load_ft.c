@@ -107,7 +107,7 @@ static const FT_ULong osd_charcodes[OSD_CHARSET_SIZE] =
 #define f1616ToInt(x)		(((x)+0x8000)>>16)	// 16.16
 #define floatTof266(x)		((int)((x)*(1<<6)+0.5))
 
-#define ALIGN(x)                (((x)+7)&~7)    // 8 byte align
+#define ALIGN(x)                (((x)+15)&~15)    // 16 byte align
 
 #define WARNING(msg, args...)      mp_msg(MSGT_OSD, MSGL_WARN, msg "\n", ## args)
 

@@ -31,11 +31,6 @@
 #include "libmpcodecs/img_format.h"
 #include "cpudetect.h"
 
-#if !HAVE_EMMINTRIN_H
-#undef HAVE_SSE2
-#define HAVE_SSE2 0
-#endif
-
 #if ARCH_X86 && (!HAVE_SSE2 || CONFIG_RUNTIME_CPUDETECT)
 static const uint64_t bFF __attribute__((aligned(8))) = 0xFFFFFFFFFFFFFFFFULL;
 static const unsigned long long mask24lh  __attribute__((aligned(8))) = 0xFFFF000000000000ULL;
@@ -62,10 +57,12 @@ static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FF
 #define COMPILE_3DNOW
 #endif
 
-#if HAVE_SSE2 || CONFIG_RUNTIME_CPUDETECT
+#if HAVE_EMMINTRIN_H && (HAVE_SSE2 || CONFIG_RUNTIME_CPUDETECT)
+// crashes on win32 due to alignment issues of unclear cause
+#if !defined(_WIN32) || !ARCH_X86_32
 #define COMPILE_SSE2
 #endif
-
+#endif
 #endif /* ARCH_X86 */
 
 #undef HAVE_MMX
@@ -175,9 +172,12 @@ void vo_draw_alpha_yv12(int w,int h, unsigned char* src, unsigned char *srca, in
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+#ifdef COMPILE_SSE2
+	if(gCpuCaps.hasSSE2)
 		vo_draw_alpha_yv12_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
-	else if(gCpuCaps.hasMMX2)
+	else
+#endif
+	if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_yv12_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_yv12_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -209,9 +209,12 @@ void vo_draw_alpha_yuy2(int w,int h, unsigned char* src, unsigned char *srca, in
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+#ifdef COMPILE_SSE2
+	if(gCpuCaps.hasSSE2)
 		vo_draw_alpha_yuy2_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
-	else if(gCpuCaps.hasMMX2)
+	else
+#endif
+	if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_yuy2_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_yuy2_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -243,9 +246,12 @@ void vo_draw_alpha_uyvy(int w,int h, unsigned char* src, unsigned char *srca, in
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+#ifdef COMPILE_SSE2
+	if(gCpuCaps.hasSSE2)
 		vo_draw_alpha_uyvy_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
-	else if(gCpuCaps.hasMMX2)
+	else
+#endif
+	if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_uyvy_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_uyvy_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -277,9 +283,12 @@ void vo_draw_alpha_rgb24(int w,int h, unsigned char* src, unsigned char *srca, i
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+#ifdef COMPILE_SSE2
+	if(gCpuCaps.hasSSE2)
 		vo_draw_alpha_rgb24_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
-	else if(gCpuCaps.hasMMX2)
+	else
+#endif
+	if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_rgb24_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_rgb24_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -311,9 +320,12 @@ void vo_draw_alpha_rgb32(int w,int h, unsigned char* src, unsigned char *srca, i
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
 	// ordered by speed / fastest first
-	if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+#ifdef COMPILE_SSE2
+	if(gCpuCaps.hasSSE2)
 		vo_draw_alpha_rgb32_SSE2(w, h, src, srca, srcstride, dstbase, dststride);
-	else if(gCpuCaps.hasMMX2)
+	else
+#endif
+	if(gCpuCaps.hasMMX2)
 		vo_draw_alpha_rgb32_MMX2(w, h, src, srca, srcstride, dstbase, dststride);
 	else if(gCpuCaps.has3DNow)
 		vo_draw_alpha_rgb32_3DNow(w, h, src, srca, srcstride, dstbase, dststride);
@@ -361,10 +373,13 @@ void vo_draw_alpha_init(void){
 	{
 #if CONFIG_RUNTIME_CPUDETECT
 #if ARCH_X86
-		// ordered per speed fasterst first
-		if(HAVE_EMMINTRIN_H && gCpuCaps.hasSSE2)
+		// ordered per speed fastest first
+#ifdef COMPILE_SSE2
+		if(gCpuCaps.hasSSE2)
 			mp_msg(MSGT_OSD,MSGL_INFO,"Using SSE2 Optimized OnScreenDisplay\n");
-		else if(gCpuCaps.hasMMX2)
+		else
+#endif
+		if(gCpuCaps.hasMMX2)
 			mp_msg(MSGT_OSD,MSGL_INFO,"Using MMX (with tiny bit MMX2) Optimized OnScreenDisplay\n");
 		else if(gCpuCaps.has3DNow)
 			mp_msg(MSGT_OSD,MSGL_INFO,"Using MMX (with tiny bit 3DNow) Optimized OnScreenDisplay\n");

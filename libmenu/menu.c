@@ -37,6 +37,7 @@
 
 #include "libmpcodecs/img_format.h"
 #include "libmpcodecs/mp_image.h"
+#include "libavutil/mem.h"
 #include "m_option.h"
 #include "m_struct.h"
 #include "menu.h"

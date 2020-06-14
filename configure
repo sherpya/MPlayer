@@ -3988,8 +3988,6 @@ if test "$_memalign" = yes ; then
   def_memalign='#define HAVE_MEMALIGN 1'
 else
   def_memalign='#define HAVE_MEMALIGN 0'
-  def_map_memalign='#define memalign(a, b) malloc(b)'
-  darwin || def_memalign_hack='#define CONFIG_MEMALIGN_HACK 1'
 fi
 echores "$_memalign"
 
@@ -9008,7 +9006,6 @@ $def_glob
 $def_gmtime_r
 $def_langinfo
 $def_localtime_r
-$def_map_memalign
 $def_memalign
 $def_nanosleep
 $def_posix_select
@@ -9036,7 +9033,6 @@ $def_kstat
 $def_macosx_bundle
 $def_macosx_finder
 $def_maemo
-$def_memalign_hack
 $def_path_max_check
 $def_priority
 $def_quicktime

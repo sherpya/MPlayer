@@ -3960,7 +3960,9 @@ echores "$_fast_inttypes"
 
 echocheck "stdatomic.h"
 stdatomic_h=no
-header_check stdatomic.h && stdatomic_h=yes
+# need to use statement_check because some implementations (Rasbian) create a dependency
+# on libatomic, in which case we rather want to use the fallback
+statement_check stdatomic.h "atomic_int_least64_t a; atomic_fetch_add_explicit(&a, 5, memory_order_relaxed)" && stdatomic_h=yes
 echores "$stdatomic_h"
 if test "$stdatomic_h" = no ; then
   CFLAGS="-Icompat/atomics/gcc $CFLAGS"

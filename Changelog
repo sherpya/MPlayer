@@ -12,6 +12,13 @@ MPlayer
       GUI option load_fullscreen
     * Use correct visual in OpenGL video output driver for X11
 
+    Other:
+    * Building on Arm now compiles for the ISA and extensions of the
+      host CPU by default. This should avoid issues like builds on
+      e.g. Raspbian not using NEON by default.
+      Can use --enable-runtime-cpudetection to restore the previous
+      behaviour, though full runtime CPU detection is not supported.
+
   1.4: "SubCounter" April 18, 2019
 
     Decoders, demuxers, streams:

@@ -1920,7 +1920,7 @@ fi
 echo "Detected operating system: $system_name"
 echo "Detected host architecture: $host_arch"
 
-if test "$_runtime_cpudetection" = yes && ! x86 && ! ppc; then
+if test "$_runtime_cpudetection" = yes && ! x86 && ! ppc && ! arm; then
   die "Runtime CPU detection only works for x86, x86-64 and PPC!"
 fi
 
@@ -9715,6 +9715,14 @@ make sure you have passed the necessary compiler/linker flags to configure.
 If you suspect a bug, please read DOCS/HTML/$language_doc/bugreports.html.
 
 EOF
+
+if test "$_runtime_cpudetection" = yes && arm; then
+  cat << EOF
+WARNING: --enable-runtime-cpudetection is not fully supported on Arm,
+it only compiles for your compilers default target instead of the host
+CPU (-match=native).
+EOF
+fi
 
 if test "$warn_cflags" = yes; then
   cat <<EOF

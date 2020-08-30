@@ -2478,6 +2478,9 @@ case "$host_arch" in
   aarch64)
     arch='aarch64'
     iproc='aarch64'
+    if test "$_runtime_cpudetection" = no ; then
+      cflag_check -march=native -mcpu=native -mfpu=auto && _march="-march=native -mcpu=native -mfpu=auto"
+    fi
     ;;
 
   arm*)
@@ -2487,6 +2490,9 @@ case "$host_arch" in
     def_av_fast_unaligned='#define AV_HAVE_FAST_UNALIGNED 1'
     def_local_aligned='#define HAVE_LOCAL_ALIGNED 1'
     test $_fast_clz = "auto" && _fast_clz=yes
+    if test "$_runtime_cpudetection" = no ; then
+      cflag_check -march=native -mcpu=native -mfpu=auto && _march="-march=native -mcpu=native -mfpu=auto"
+    fi
     ;;
 
   avr32)
@@ -9416,8 +9422,11 @@ $def_openssl
 #define CONFIG_VAAPI 0
 
 #define HAVE_ALIGNED_STACK 1
+#define HAVE_AS_ARCH_DIRECTIVE 1
 #define HAVE_AS_DN_DIRECTIVE 1
+#define HAVE_AS_FPU_DIRECTIVE 1
 #define HAVE_AS_FUNC 1
+#define HAVE_AS_OBJECT_ARCH 1
 #define HAVE_ASM_MOD_Q 1
 #define HAVE_ATOMICS_GCC 1
 #define HAVE_COPYSIGN 1

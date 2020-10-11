@@ -82,6 +82,7 @@ for DLL to know too much about its environment.
 #include "osdep/mmap.h"
 #endif
 #include "osdep/mmap_anon.h"
+#include "libavutil/mem.h"
 #include "libavutil/avstring.h"
 #include "cpudetect.h"
 

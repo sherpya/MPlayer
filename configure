@@ -9722,7 +9722,7 @@ if test "$_runtime_cpudetection" = yes && arm; then
   cat << EOF
 WARNING: --enable-runtime-cpudetection is not fully supported on Arm,
 it only compiles for your compilers default target instead of the host
-CPU (-match=native).
+CPU (-march=native).
 EOF
 fi
 

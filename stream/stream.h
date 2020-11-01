@@ -392,6 +392,7 @@ extern char *dvd_device;
 extern const m_option_t dvbin_opts_conf[];
 
 extern char *rtsp_destination;
+extern char *lavfstreamopts;
 
 typedef struct {
  int id; // 0 - 31 mpeg; 128 - 159 ac3; 160 - 191 pcm

@@ -27,6 +27,8 @@
 #include "av_helpers.h"
 #include "libmpdemux/demuxer.h"
 
+char *lavfstreamopts;
+
 static int fill_buffer(stream_t *s, char *buffer, int max_len)
 {
     int r = avio_read(s->priv, buffer, max_len);
@@ -90,6 +92,7 @@ static int open_f(stream_t *stream, int mode, void *opts, int *file_format)
 {
     int flags = 0;
     const char *filename;
+    AVDictionary *avopts = NULL;
     AVIOContext *ctx = NULL;
     int res = STREAM_ERROR;
     int64_t size;
@@ -125,8 +128,22 @@ static int open_f(stream_t *stream, int mode, void *opts, int *file_format)
     dummy = !strncmp(filename, "rtsp:", 5) || !strncmp(filename, "dummy:", 6);
     mp_msg(MSGT_OPEN, MSGL_V, "[ffmpeg] Opening %s\n", filename);
 
-    if (!dummy && avio_open(&ctx, filename, flags) < 0)
+    if (lavfstreamopts && av_dict_parse_string(&avopts, lavfstreamopts, "=", ",", 0) < 0) {
+        mp_msg(MSGT_HEADER,MSGL_ERR, "Your options /%s/ look like gibberish to me pal\n", lavfstreamopts);
         goto out;
+    }
+
+    if (!dummy && avio_open2(&ctx, filename, flags, NULL, &avopts) < 0)
+        goto out;
+
+    if (!dummy && av_dict_count(avopts)) {
+        AVDictionaryEntry *e = NULL;
+        while ((e = av_dict_get(avopts, "", e, AV_DICT_IGNORE_SUFFIX))) {
+            mp_msg(MSGT_HEADER,MSGL_ERR,"Unknown option %s\n", e->key);
+        }
+        goto out;
+    }
+    av_dict_free(&avopts);
 
     stream->priv = ctx;
     size = dummy ? 0 : avio_size(ctx);

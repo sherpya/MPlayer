@@ -521,6 +521,7 @@ const m_option_t common_opts[] = {
 
     // scaling:
     {"sws", &sws_flags, CONF_TYPE_INT, 0, 0, 2, NULL},
+    {"swsopts", &sws_opts, CONF_TYPE_STRING, 0, 0, 0, NULL},
     {"ssf", scaler_filter_conf, CONF_TYPE_SUBCONFIG, 0, 0, 0, NULL},
     {"zoom", &softzoom, CONF_TYPE_FLAG, 0, 0, 1, NULL},
     {"nozoom", &softzoom, CONF_TYPE_FLAG, 0, 1, 0, NULL},

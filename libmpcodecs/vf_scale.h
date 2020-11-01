@@ -28,6 +28,7 @@ extern float sws_chr_sharpen;
 extern float sws_lum_sharpen;
 
 extern int sws_flags;
+extern char *sws_opts;
 
 struct SwsContext *sws_getContextFromCmdLine(int srcW, int srcH, int srcFormat, int dstW, int dstH, int dstFormat);
 

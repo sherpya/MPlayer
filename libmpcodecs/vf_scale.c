@@ -32,9 +32,11 @@
 #include "fmt-conversion.h"
 #include "mpbswap.h"
 
+#include "libavutil/opt.h"
 #include "libswscale/swscale.h"
 #include "vf_scale.h"
 
+#include "av_opts.h"
 #include "m_option.h"
 #include "m_struct.h"
 
@@ -588,6 +590,7 @@ static int vf_open(vf_instance_t *vf, char *args){
 
 //global sws_flags from the command line
 int sws_flags=2;
+char *sws_opts;
 
 //global srcFilter
 static SwsFilter *src_filter= NULL;
@@ -648,6 +651,7 @@ struct SwsContext *sws_getContextFromCmdLine(int srcW, int srcH, int srcFormat, 
 {
         int flags;
         SwsFilter *dstFilterParam, *srcFilterParam;
+        struct SwsContext *ctx;
         enum AVPixelFormat dfmt, sfmt;
 
         dfmt = imgfmt2pixfmt(dstFormat);
@@ -655,7 +659,26 @@ struct SwsContext *sws_getContextFromCmdLine(int srcW, int srcH, int srcFormat, 
         if (srcFormat == IMGFMT_RGB8 || srcFormat == IMGFMT_BGR8) sfmt = AV_PIX_FMT_PAL8;
         sws_getFlagsAndFilterFromCmdLine(&flags, &srcFilterParam, &dstFilterParam);
 
-        return sws_getContext(srcW, srcH, sfmt, dstW, dstH, dfmt, flags, srcFilterParam, dstFilterParam, NULL);
+        ctx = sws_alloc_context();
+        if (!ctx) return NULL;
+        // set it first to allow swsopts to override/add to it
+        av_opt_set_int(ctx, "sws_flags", flags, 0);
+        if (parse_avopts(ctx, sws_opts) < 0) {
+            mp_msg(MSGT_VFILTER, MSGL_ERR, "Your options /%s/ look like gibberish to me pal.\n", sws_opts);
+            return NULL;
+        }
+        // always override these
+        av_opt_set_int(ctx, "srcw", srcW, 0);
+        av_opt_set_int(ctx, "srch", srcH, 0);
+        av_opt_set_int(ctx, "src_format", sfmt, 0);
+        av_opt_set_int(ctx, "dstw", dstW, 0);
+        av_opt_set_int(ctx, "dsth", dstH, 0);
+        av_opt_set_int(ctx, "dst_format", dfmt, 0);
+        if (sws_init_context(ctx, srcFilterParam, dstFilterParam) < 0) {
+            sws_freeContext(ctx);
+            return NULL;
+        }
+        return ctx;
 }
 
 /// An example of presets usage

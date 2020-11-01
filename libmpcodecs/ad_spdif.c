@@ -298,14 +298,8 @@ static void uninit(sh_audio_t *sh)
         if (spdif_ctx->header_written)
             av_write_trailer(lavf_ctx);
         av_freep(&lavf_ctx->pb);
-        if (lavf_ctx->streams) {
-            av_freep(&lavf_ctx->streams[0]->codec);
-            av_freep(&lavf_ctx->streams[0]->info);
-            av_freep(&lavf_ctx->streams[0]);
-        }
-        av_freep(&lavf_ctx->streams);
-        av_freep(&lavf_ctx->priv_data);
+        avformat_free_context(lavf_ctx);
+        lavf_ctx = NULL;
     }
-    av_freep(&lavf_ctx);
     av_freep(&spdif_ctx);
 }

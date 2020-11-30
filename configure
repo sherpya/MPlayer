@@ -2291,8 +2291,8 @@ case "$host_arch" in
     fi
   else # if test "$_runtime_cpudetection" = no
     _mcpu="$cpuopt=generic"
-    # at least i486 required, for bswap instruction
-    _march="-march=i486"
+    # at least i586 required, for __atomic_fetch_add builtin
+    _march="-march=i586"
     cflag_check $_mcpu || _mcpu="$cpuopt=i686"
     cflag_check $_mcpu || _mcpu=""
     cflag_check $_march $_mcpu || _march=""

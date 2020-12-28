@@ -3159,6 +3159,13 @@ else
   have_yasm="no"
 fi #if x86
 
+echocheck "as_func"
+def_as_func='#define HAVE_AS_FUNC 0'
+echo '.func test
+.endfunc' > $TMPS
+$_as $TMPS -o $TMPEXE > /dev/null 2>&1 && def_as_func='#define HAVE_AS_FUNC 1' && as_func=yes || as_func=no
+echores "$as_func"
+
 #FIXME: This should happen before the check for CFLAGS..
 def_altivec_h='#define HAVE_ALTIVEC_H 0'
 if ppc && ( test "$_altivec" = yes || test "$_runtime_cpudetection" = yes ) ; then
@@ -9427,7 +9434,7 @@ $def_openssl
 #define HAVE_AS_ARCH_DIRECTIVE 1
 #define HAVE_AS_DN_DIRECTIVE 1
 #define HAVE_AS_FPU_DIRECTIVE 1
-#define HAVE_AS_FUNC 1
+$def_as_func
 #define HAVE_AS_OBJECT_ARCH 1
 #define HAVE_ASM_MOD_Q 1
 #define HAVE_ATOMICS_GCC 1

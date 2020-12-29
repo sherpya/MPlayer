@@ -278,55 +278,39 @@ void vo_osx_swap_buffers(void)
 
 //Create Movie Menu
 	menu = [[NSMenu alloc] initWithTitle:@"Movie"];
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Half Size" action:@selector(menuAction:) keyEquivalent:@"0"]; [menu addItem:menuItem];
-	kHalfScreenCmd = menuItem;
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Normal Size" action:@selector(menuAction:) keyEquivalent:@"1"]; [menu addItem:menuItem];
-	kNormalScreenCmd = menuItem;
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Double Size" action:@selector(menuAction:) keyEquivalent:@"2"]; [menu addItem:menuItem];
-	kDoubleScreenCmd = menuItem;
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Full Size" action:@selector(menuAction:) keyEquivalent:@"f"]; [menu addItem:menuItem];
-	kFullScreenCmd = menuItem;
-	menuItem = [NSMenuItem separatorItem]; [menu addItem:menuItem];
+	kHalfScreenCmd = [menu addItemWithTitle:@"Half Size" action:@selector(menuAction:) keyEquivalent:@"0"];
+	kNormalScreenCmd = [menu addItemWithTitle:@"Normal Size" action:@selector(menuAction:) keyEquivalent:@"1"];
+	kDoubleScreenCmd = [menu addItemWithTitle:@"Double Size" action:@selector(menuAction:) keyEquivalent:@"2"];
+	kFullScreenCmd = [menu addItemWithTitle:@"Full Size" action:@selector(menuAction:) keyEquivalent:@"f"];
+	[menu addItem: [NSMenuItem separatorItem]];
 
 	aspectMenu = [[NSMenu alloc] initWithTitle:@"Aspect Ratio"];
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Keep" action:@selector(menuAction:) keyEquivalent:@""]; [aspectMenu addItem:menuItem];
-	if(vo_keepaspect) [menuItem setState:NSOnState];
-	kKeepAspectCmd = menuItem;
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Pan-Scan" action:@selector(menuAction:) keyEquivalent:@""]; [aspectMenu addItem:menuItem];
-	if(vo_panscan) [menuItem setState:NSOnState];
-	kPanScanCmd = menuItem;
-	menuItem = [NSMenuItem separatorItem]; [aspectMenu addItem:menuItem];
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Original" action:@selector(menuAction:) keyEquivalent:@""]; [aspectMenu addItem:menuItem];
-	kAspectOrgCmd = menuItem;
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"4:3" action:@selector(menuAction:) keyEquivalent:@""]; [aspectMenu addItem:menuItem];
-	kAspectFullCmd = menuItem;
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"16:9" action:@selector(menuAction:) keyEquivalent:@""];	[aspectMenu addItem:menuItem];
-	kAspectWideCmd = menuItem;
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Aspect Ratio" action:nil keyEquivalent:@""];
+	kKeepAspectCmd = [aspectMenu addItemWithTitle:@"Keep" action:@selector(menuAction:) keyEquivalent:@""];
+	if(vo_keepaspect) [kKeepAspectCmd setState:NSOnState];
+	kPanScanCmd = [aspectMenu addItemWithTitle:@"Pan-Scan" action:@selector(menuAction:) keyEquivalent:@""];
+	if(vo_panscan) [kPanScanCmd setState:NSOnState];
+	[aspectMenu addItem:[NSMenuItem separatorItem]];
+	kAspectOrgCmd = [aspectMenu addItemWithTitle:@"Original" action:@selector(menuAction:) keyEquivalent:@""];
+	kAspectFullCmd = [aspectMenu addItemWithTitle:@"4:3" action:@selector(menuAction:) keyEquivalent:@""];
+	kAspectWideCmd = [aspectMenu addItemWithTitle:@"16:9" action:@selector(menuAction:) keyEquivalent:@""];
+	menuItem = [menu addItemWithTitle:@"Aspect Ratio" action:nil keyEquivalent:@""];
 	[menuItem setSubmenu:aspectMenu];
-	[menu addItem:menuItem];
-	[aspectMenu release];
 
 	//Add to menubar
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Movie" action:nil keyEquivalent:@""];
+	menuItem = [mainMenu addItemWithTitle:@"Movie" action:nil keyEquivalent:@""];
 	[menuItem setSubmenu:menu];
-	[mainMenu addItem:menuItem];
 
 //Create Window Menu
 	menu = [[NSMenu alloc] initWithTitle:@"Window"];
 
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Minimize" action:@selector(performMiniaturize:) keyEquivalent:@"m"]; [menu addItem:menuItem];
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Zoom" action:@selector(performZoom:) keyEquivalent:@""]; [menu addItem:menuItem];
+	[menu addItemWithTitle:@"Minimize" action:@selector(performMiniaturize:) keyEquivalent:@"m"];
+	[menu addItemWithTitle:@"Zoom" action:@selector(performZoom:) keyEquivalent:@""];
 
 	//Add to menubar
-	menuItem = [[NSMenuItem alloc] initWithTitle:@"Window" action:nil keyEquivalent:@""];
+	menuItem = [mainMenu addItemWithTitle:@"Window" action:nil keyEquivalent:@""];
 	[menuItem setSubmenu:menu];
-	[mainMenu addItem:menuItem];
 	[NSApp setWindowsMenu:menu];
 	[NSApp setMainMenu:mainMenu];
-
-	[menu release];
-	[menuItem release];
 }
 
 - (void)set_winSizeMult:(float)mult

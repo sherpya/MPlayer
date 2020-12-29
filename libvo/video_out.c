@@ -171,7 +171,9 @@ const vo_functions_t* const video_out_drivers[] =
         &video_out_kva,
 #endif
 #ifdef CONFIG_COREVIDEO
+#ifdef CONFIG_GL
         &video_out_gl_nosw,
+#endif
         &video_out_corevideo,
 #endif
 #ifdef CONFIG_QUARTZ

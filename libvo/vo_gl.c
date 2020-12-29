@@ -540,8 +540,10 @@ static void autodetectGlExtensions(void) {
   if (force_pbo     == -1) {
     force_pbo = 0;
     // memcpy is just too slow at least on PPC.
-    if (ARCH_X86 && extensions && strstr(extensions, "_pixel_buffer_object"))
-      force_pbo = is_ati;
+    // PBO is vastly faster on Apple Silicon, assume that is the
+    // same for all AArch64 SOCs
+    if ((ARCH_X86 || ARCH_AARCH64) && extensions && strstr(extensions, "_pixel_buffer_object"))
+      force_pbo = is_ati || ARCH_AARCH64;
   }
   if (use_rectangle == -1) {
     use_rectangle = 0;

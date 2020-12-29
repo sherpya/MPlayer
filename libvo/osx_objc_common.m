@@ -20,6 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#define GL_SILENCE_DEPRECATION
+
 #import "osx_objc_common.h"
 #include <Carbon/Carbon.h>
 #include <CoreServices/CoreServices.h>
@@ -241,9 +243,13 @@ void vo_osx_swap_buffers(void)
 
 - (void)reshape
 {
+	[super reshape];
 	NSRect frame = [self frame];
-	vo_dwidth  = frame.size.width;
-	vo_dheight = frame.size.height;
+	NSSize size = frame.size;
+	if ([self respondsToSelector:@selector(convertSizeToBacking:)])
+		size = [self convertSizeToBacking:size];
+	vo_dwidth  = size.width;
+	vo_dheight = size.height;
 	event_flags |= VO_EVENT_RESIZE;
 }
 

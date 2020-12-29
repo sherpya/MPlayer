@@ -19,6 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#define GL_SILENCE_DEPRECATION
+
 #import "vo_corevideo.h"
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -244,6 +246,7 @@ static void flip_page(void)
 			image_page = 1 - image_page;
 			image_data = image_datas[image_page];
 		}
+		[mpGLView display];
 	}
 }
 
@@ -458,6 +461,7 @@ static int control(uint32_t request, void *data)
 */
 - (void)prepareOpenGL
 {
+	[super prepareOpenGL];
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);

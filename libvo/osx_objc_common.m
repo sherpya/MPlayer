@@ -141,8 +141,11 @@ void vo_osx_swap_buffers(void)
 {
 	NSScreen *screen_handle = [self fullscreen_screen];
 	NSRect screen_frame = [screen_handle frame];
-	vo_screenwidth = screen_frame.size.width;
-	vo_screenheight = screen_frame.size.height;
+	NSSize size = screen_frame.size;
+	if ([self respondsToSelector:@selector(convertSizeToBacking:)])
+		size = [self convertSizeToBacking:size];
+	vo_screenwidth = size.width;
+	vo_screenheight = size.height;
 	xinerama_x = screen_frame.origin.x;
 	xinerama_y = screen_frame.origin.y;
 	aspect_save_screenres(vo_screenwidth, vo_screenheight);
@@ -419,10 +422,13 @@ void vo_osx_swap_buffers(void)
 		old_frame = [window frame];	//save main window size & position
 		[self update_screen_info];
 
-		[window setFrame:NSMakeRect(xinerama_x, xinerama_y, vo_screenwidth, vo_screenheight) display:YES animate:animate]; //zoom-in window with nice useless sfx
+		NSSize size = { vo_screenwidth, vo_screenheight };
+		if ([self respondsToSelector:@selector(convertSizeFromBacking:)])
+			size = [self convertSizeFromBacking:size];
+		[window setFrame:NSMakeRect(xinerama_x, xinerama_y, size.width, size.height) display:YES animate:animate]; //zoom-in window with nice useless sfx
 		old_view_frame = [self bounds];
 
-		[self setFrame:NSMakeRect(0, 0, vo_screenwidth, vo_screenheight)];
+		[self setFrame:NSMakeRect(0, 0, size.width, size.height)];
 		[self setNeedsDisplay:YES];
 		[window setHasShadow:NO];
 	}

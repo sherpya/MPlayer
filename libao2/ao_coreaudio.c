@@ -55,6 +55,14 @@
 #include "libavutil/fifo.h"
 #include "subopt-helper.h"
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#define Component AudioComponent
+#define FindNextComponent AudioComponentFindNext
+#define ComponentDescription AudioComponentDescription
+#define OpenAComponent AudioComponentInstanceNew
+#define CloseComponent AudioComponentInstanceDispose
+#endif
+
 static const ao_info_t info =
   {
     "Darwin/Mac OS X native audio output",

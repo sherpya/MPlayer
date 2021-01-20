@@ -133,7 +133,8 @@ static int decode_audio(sh_audio_t *sh,unsigned char *buf,int minlen,int maxlen)
                 break;
 	}
 
-	memset(&buf[tot], 0, tot2-tot);
+	if (tot > tot2) mp_msg(MSGT_DECAUDIO,MSGL_ERR,"MPEG audio frame is larger than decoded data (%i > %i)!\n", tot, tot2);
+	else memset(&buf[tot], 0, tot2-tot);
 	return tot2;
 }
 

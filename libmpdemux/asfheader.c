@@ -437,7 +437,9 @@ int read_asf_header(demuxer_t *demuxer,struct asf_priv* asf){
       audio_pos = pos - 16 - 8;
       streamh = (ASF_stream_header_t *)&hdr[sh_pos];
       le2me_ASF_stream_header_t(streamh);
+      if (streamh->type_size > hdr_len) goto len_err_out;
       audio_pos += 64; //16+16+4+4+4+16+4;
+      if (audio_pos + streamh->type_size > hdr_len) goto len_err_out;
       buffer = &hdr[audio_pos];
       sh_audio=new_sh_audio(demuxer,streamh->stream_no & 0x7F, NULL);
       sh_audio->needs_parsing = 1;
@@ -461,6 +463,7 @@ int read_asf_header(demuxer_t *demuxer,struct asf_priv* asf){
     pos += sizeof(ASF_stream_header_t);
     if (pos > hdr_len) goto len_err_out;
     le2me_ASF_stream_header_t(streamh);
+    if (streamh->type_size > hdr_len) goto len_err_out;
     mp_msg(MSGT_HEADER, MSGL_V, "stream type: %s\n",
             asf_chunk_type(streamh->type));
     mp_msg(MSGT_HEADER, MSGL_V, "stream concealment: %s\n",
@@ -491,6 +494,7 @@ int read_asf_header(demuxer_t *demuxer,struct asf_priv* asf){
         sh_video_t* sh_video=new_sh_video(demuxer,streamh->stream_no & 0x7F);
         mp_msg(MSGT_DEMUX, MSGL_INFO, MSGTR_VideoID, "asfheader", streamh->stream_no & 0x7F);
         len=streamh->type_size-(4+4+1+2);
+        if (len > streamh->type_size) goto len_err_out;
 	++video_streams;
 //        sh_video->bih=malloc(chunksize); memset(sh_video->bih,0,chunksize);
         sh_video->bih=calloc((len<sizeof(*sh_video->bih))?sizeof(*sh_video->bih):len,1);

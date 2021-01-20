@@ -310,34 +310,41 @@ static int copy_samples(AVCodecContext *avc, AVFrame *frame,
 
 static int decode_audio(sh_audio_t *sh_audio,unsigned char *buf,int minlen,int maxlen)
 {
+    int draining_started = 0;
     unsigned char *start=NULL;
-    int y,len=-1, got_frame;
+    int y,len=-1;
     AVFrame *frame = av_frame_alloc();
 
     if (!frame)
         return AVERROR(ENOMEM);
 
     while(len<minlen){
-	AVPacket pkt;
 	int len2=maxlen;
+	y = avcodec_receive_frame(sh_audio->context, frame);
+	if (y == AVERROR(EAGAIN) || y == AVERROR_EOF) {
+	AVPacket pkt;
 	double pts;
 	int x=ds_get_packet_pts(sh_audio->ds,&start, &pts);
 	if(x<=0) {
 	    start = NULL;
 	    x = 0;
 	    ds_parse(sh_audio->ds, &start, &x, MP_NOPTS_VALUE, 0);
-	    if (x <= 0)
-	        break; // error
 	} else {
 	    int in_size = x;
 	    int consumed = ds_parse(sh_audio->ds, &start, &x, pts, 0);
 	    sh_audio->ds->buffer_pos -= in_size - consumed;
-	    // Note: hopefully below is correct, it was only
+	    // Note: hopefully the following x <= 0 handling is correct, it was only
 	    // added because FFmpeg broke the API and 0-sized
 	    // packets started to break e.g. AC3 decode.
-	    if (x <= 0)
-	        break; // error or not enough data
 	}
+	    if (x <= 0) {
+	        if (sh_audio->ds->eof && !draining_started) {
+	            avcodec_send_packet(sh_audio->context, NULL);
+	            draining_started = 1;
+	            continue;
+	        }
+	        break; // error or not enough data
+	    }
 
 	av_init_packet(&pkt);
 	pkt.data = start;
@@ -346,16 +353,18 @@ static int decode_audio(sh_audio_t *sh_audio,unsigned char *buf,int minlen,int m
 	    sh_audio->pts = pts;
 	    sh_audio->pts_bytes = 0;
 	}
-	y=avcodec_decode_audio4(sh_audio->context, frame, &got_frame, &pkt);
-//printf("return:%d samples_out:%d bitstream_in:%d sample_sum:%d\n", y, len2, x, len); fflush(stdout);
-	// LATM may need many packets to find mux info
-	if (y == AVERROR(EAGAIN))
-	    continue;
+	y=avcodec_send_packet(sh_audio->context, &pkt);
 	if(y<0){ mp_msg(MSGT_DECAUDIO,MSGL_V,"lavc_audio: error\n");break; }
+	continue;
+	}
+	if(y<0){ mp_msg(MSGT_DECAUDIO,MSGL_V,"lavc_audio: error\n");break; }
+//printf("return:%d samples_out:%d bitstream_in:%d sample_sum:%d\n", y, len2, x, len); fflush(stdout);
+#if 0
+	// this should be obsolete since the new API does no support it
+	// and we support inserting parsers as necessary instead.
 	if(!sh_audio->parser && y<x)
 	    sh_audio->ds->buffer_pos+=y-x;  // put back data (HACK!)
-        if (!got_frame)
-            continue;
+#endif
         len2 = copy_samples(sh_audio->context, frame, buf, maxlen);
         if (len2 < 0)
             return len2;

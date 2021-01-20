@@ -2434,7 +2434,7 @@ int reinit_video_chain(void)
     return 1;
 
 err_out:
-    mpctx->sh_video = mpctx->d_video->sh = NULL;
+    mpctx->sh_video = mpctx->sh_video->ds = NULL;
     return 0;
 }
 

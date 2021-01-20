@@ -925,9 +925,11 @@ static mp_image_t *decode(sh_video_t *sh, void *data, int len, int flags){
         }
         ctx->palette_sent = 1;
     }
+    if (sh->ds->buffer_pos < len)
+        mp_msg(MSGT_DECVIDEO, MSGL_ERR, "Bad stream state, please report as bug!\n");
     ret = avcodec_send_packet(avctx, !pkt.data && !pkt.size ? NULL : &pkt);
     if (ret == AVERROR(EAGAIN)) {
-        mp_msg(MSGT_DECVIDEO, MSGL_ERR, "Too many frames buffered in decode, MPlayer cannot handle that yet!\n");
+        if (sh->ds->buffer_pos >= len) sh->ds->buffer_pos -= len;
         ret = 0;
     }
     if (ret >= 0 || ret == AVERROR_EOF) {

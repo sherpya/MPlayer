@@ -157,13 +157,25 @@ static int demux_ra_fill_buffer(demuxer_t *demuxer, demux_stream_t *dsds)
 }
 
 
+static void read_demux_info(demuxer_t *demuxer, const char *name)
+{
+	char *buf = NULL;
+	int len = stream_read_char(demuxer->stream);
+	if (len <= 0) return;
+	buf = malloc(len+1);
+	if (!buf) return;
+	if (stream_read(demuxer->stream, buf, len) != len) goto out;
+	buf[len] = 0;
+	demux_info_add(demuxer, name, buf);
+out:
+	free(buf);
+}
 
 static demuxer_t* demux_open_ra(demuxer_t* demuxer)
 {
 	ra_priv_t* ra_priv = demuxer->priv;
 	sh_audio_t *sh;
 	int i;
-	char *buf;
 
   if ((ra_priv = malloc(sizeof(ra_priv_t))) == NULL) {
     mp_msg(MSGT_DEMUX, MSGL_ERR, "[RealAudio] Can't allocate memory for private data.\n");
@@ -229,35 +241,10 @@ static demuxer_t* demux_open_ra(demuxer_t* demuxer)
 		stream_skip(demuxer->stream, 3);
 	}
 
-	if ((i = stream_read_char(demuxer->stream)) != 0) {
-		buf = malloc(i+1);
-		stream_read(demuxer->stream, buf, i);
-		buf[i] = 0;
-		demux_info_add(demuxer, "Title", buf);
-		free(buf);
-	}
-	if ((i = stream_read_char(demuxer->stream)) != 0) {
-		buf = malloc(i+1);
-		stream_read(demuxer->stream, buf, i);
-		buf[i] = 0;
-		demux_info_add(demuxer, "Author", buf);
-		free(buf);
-	}
-	if ((i = stream_read_char(demuxer->stream)) != 0) {
-		buf = malloc(i+1);
-		stream_read(demuxer->stream, buf, i);
-		buf[i] = 0;
-		demux_info_add(demuxer, "Copyright", buf);
-		free(buf);
-	}
-
-	if ((i = stream_read_char(demuxer->stream)) != 0) {
-		buf = malloc(i+1);
-		stream_read(demuxer->stream, buf, i);
-		buf[i] = 0;
-		demux_info_add(demuxer, "Comment", buf);
-		free(buf);
-	}
+	read_demux_info(demuxer, "Title");
+	read_demux_info(demuxer, "Author");
+	read_demux_info(demuxer, "Copyright");
+	read_demux_info(demuxer, "Comment");
 
 	if (ra_priv->version == 3) {
 	    if(ra_priv->hdr_size + 8 > stream_tell(demuxer->stream)) {

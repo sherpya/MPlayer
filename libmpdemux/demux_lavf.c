@@ -146,9 +146,10 @@ static int64_t mp_read_seek(void *opaque, int stream_idx, int64_t ts, int flags)
 }
 
 static void list_formats(void) {
-    AVInputFormat *fmt;
+    void *i = 0;
+    const AVInputFormat *fmt;
     mp_msg(MSGT_DEMUX, MSGL_INFO, "Available lavf input formats:\n");
-    for (fmt = av_iformat_next(NULL); fmt; fmt = av_iformat_next(fmt))
+    while ((fmt = av_demuxer_iterate(&i)))
         mp_msg(MSGT_DEMUX, MSGL_INFO, "%15s : %s\n", fmt->name, fmt->long_name);
 }
 
@@ -288,7 +289,7 @@ static void parse_cryptokey(AVFormatContext *avfc, const char *str) {
 static void handle_stream(demuxer_t *demuxer, AVFormatContext *avfc, int i) {
     lavf_priv_t *priv= demuxer->priv;
     AVStream *st= avfc->streams[i];
-    AVCodecContext *codec= st->codec;
+    AVCodecParameters *codec= st->codecpar;
     char *stream_type = NULL;
     int stream_id;
     AVDictionaryEntry *lang = av_dict_get(st->metadata, "language", NULL, 0);
@@ -396,7 +397,7 @@ static void handle_stream(demuxer_t *demuxer, AVFormatContext *avfc, int i) {
                 if (codec->bits_per_coded_sample && codec->bits_per_coded_sample > 0 &&
                     codec->codec_tag == MKTAG('r', 'a', 'w', 32))
                     codec->codec_tag = 0;
-                switch (codec->pix_fmt) {
+                switch (codec->format) {
                     case AV_PIX_FMT_RGB24:
                         codec->codec_tag= MKTAG(24, 'B', 'G', 'R');
                         break;
@@ -420,8 +421,8 @@ static void handle_stream(demuxer_t *demuxer, AVFormatContext *avfc, int i) {
                 sh_video->video.dwRate= st->time_base.den;
                 sh_video->video.dwScale= st->time_base.num;
             } else {
-                sh_video->video.dwRate= codec->time_base.den;
-                sh_video->video.dwScale= codec->time_base.num;
+                sh_video->video.dwRate= st->codec->time_base.den;
+                sh_video->video.dwScale= st->codec->time_base.num;
             }
             sh_video->fps=av_q2d(st->r_frame_rate);
             sh_video->frametime=1/av_q2d(st->r_frame_rate);
@@ -513,7 +514,7 @@ static void handle_stream(demuxer_t *demuxer, AVFormatContext *avfc, int i) {
             break;
         }
         case AVMEDIA_TYPE_ATTACHMENT:{
-            if (st->codec->codec_id == AV_CODEC_ID_TTF || st->codec->codec_id == AV_CODEC_ID_OTF) {
+            if (st->codecpar->codec_id == AV_CODEC_ID_TTF || st->codecpar->codec_id == AV_CODEC_ID_OTF) {
                 AVDictionaryEntry *fnametag = av_dict_get(st->metadata, "filename", NULL, 0);
                 AVDictionaryEntry *mimetype = av_dict_get(st->metadata, "mimetype", NULL, 0);
                 demuxer_add_attachment(demuxer, fnametag ? fnametag->value : NULL,
@@ -716,23 +717,19 @@ static int demux_lavf_fill_buffer(demuxer_t *demux, demux_stream_t *dsds){
         ds=demux->sub;
         sub_utf8=1;
     } else {
-        av_free_packet(&pkt);
+        av_packet_unref(&pkt);
         return 1;
     }
 
         av_packet_merge_side_data(&pkt);
         dp=new_demux_packet(pkt.size);
         memcpy(dp->buffer, pkt.data, pkt.size);
-        av_free_packet(&pkt);
 
     if(pkt.pts != AV_NOPTS_VALUE){
         dp->pts=pkt.pts * av_q2d(priv->avfc->streams[id]->time_base);
         priv->last_pts= dp->pts * AV_TIME_BASE;
         if(pkt.duration > 0)
             dp->endpts = dp->pts + pkt.duration * av_q2d(priv->avfc->streams[id]->time_base);
-        /* subtitle durations are sometimes stored in convergence_duration */
-        if(ds == demux->sub && pkt.convergence_duration > 0)
-            dp->endpts = dp->pts + pkt.convergence_duration * av_q2d(priv->avfc->streams[id]->time_base);
     }
     dp->pos=demux->filepos;
     dp->flags= !!(pkt.flags&AV_PKT_FLAG_KEY);
@@ -741,6 +738,7 @@ static int demux_lavf_fill_buffer(demuxer_t *demux, demux_stream_t *dsds){
         dp->stream_pts = stream_pts;
     // append packet to DS stream:
     ds_add_packet(ds,dp);
+    av_packet_unref(&pkt);
     return 1;
 }
 
@@ -879,7 +877,7 @@ redo:
             program = priv->avfc->programs[p];
             for(i=0; i<program->nb_stream_indexes; i++)
             {
-                switch(priv->avfc->streams[program->stream_index[i]]->codec->codec_type)
+                switch(priv->avfc->streams[program->stream_index[i]]->codecpar->codec_type)
                 {
                     case AVMEDIA_TYPE_VIDEO:
                         if(prog->vid == -2)

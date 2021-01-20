@@ -98,7 +98,6 @@ void init_avcodec(void)
     if (!avcodec_initialized) {
         show_av_version(MSGT_DECVIDEO, "libavcodec", LIBAVCODEC_VERSION_INT,
                         avcodec_version(), avcodec_configuration());
-        avcodec_register_all();
         avcodec_initialized = 1;
         av_log_set_callback(mp_msp_av_log_callback);
     }
@@ -109,7 +108,6 @@ void init_avformat(void)
     if (!avformat_initialized) {
         show_av_version(MSGT_DEMUX, "libavformat", LIBAVFORMAT_VERSION_INT,
                         avformat_version(), avformat_configuration());
-        av_register_all();
         avformat_initialized = 1;
         av_log_set_callback(mp_msp_av_log_callback);
     }
@@ -132,8 +130,6 @@ int lavc_encode_audio(AVCodecContext *ctx, void *src, int src_len, void *dst, in
                             ctx->channels,
                             src_len / bps, bps);
     }
-    pkt.data = dst;
-    pkt.size = dst_len;
     frame->nb_samples = src_len / ctx->channels / bps;
     if (planar) {
         // TODO: this is horribly inefficient.
@@ -150,11 +146,22 @@ int lavc_encode_audio(AVCodecContext *ctx, void *src, int src_len, void *dst, in
             }
         }
     }
+    frame->format = ctx->sample_fmt;
+    frame->channels = ctx->channels;
     n = avcodec_fill_audio_frame(frame, ctx->channels, ctx->sample_fmt, src, src_len, 1);
     if (n < 0) return 0;
-    n = avcodec_encode_audio2(ctx, &pkt, frame, &got);
+    n = avcodec_send_frame(ctx, frame);
+    av_init_packet(&pkt);
+    got = avcodec_receive_packet(ctx, &pkt);
     av_frame_free(&frame);
     if (planar) av_free(src);
     if (n < 0) return n;
-    return got ? pkt.size : 0;
+    if (got >= 0) {
+        int size = pkt.size;
+        if (size > dst_len) return -1;
+        memcpy(dst, pkt.data, size);
+        av_packet_unref(&pkt);
+        return size;
+    }
+    return 0;
 }

@@ -31,10 +31,6 @@
 #include "libavutil/intfloat.h"
 
 
-#ifndef SIZE_MAX
-#define SIZE_MAX ((size_t)-1)
-#endif
-
 /*
  * Read: the element content data ID.
  * Return: the ID.
@@ -214,7 +210,7 @@ char *ebml_read_ascii(stream_t *s, uint64_t *length)
     len = ebml_read_length(s, &l);
     if (len == EBML_UINT_INVALID)
         return NULL;
-    if (len > SIZE_MAX - 1)
+    if (len >= INT_MAX)
         return NULL;
     if (length)
         *length = len + l;

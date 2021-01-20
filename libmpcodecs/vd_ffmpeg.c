@@ -484,7 +484,7 @@ static int init(sh_video_t *sh){
     set_dr_slice_settings(avctx, lavc_codec);
     avctx->thread_count = lavc_param_threads;
     avctx->thread_type = FF_THREAD_FRAME | FF_THREAD_SLICE;
-    avctx->refcounted_frames = 1;
+    av_dict_set(&opts, "refcounted_frames", "1", 0);
 
     /* open it */
     if (avcodec_open2(avctx, lavc_codec, &opts) < 0) {
@@ -925,7 +925,16 @@ static mp_image_t *decode(sh_video_t *sh, void *data, int len, int flags){
         }
         ctx->palette_sent = 1;
     }
-    ret = avcodec_decode_video2(avctx, pic, &got_picture, &pkt);
+    ret = avcodec_send_packet(avctx, !pkt.data && !pkt.size ? NULL : &pkt);
+    if (ret == AVERROR(EAGAIN)) {
+        mp_msg(MSGT_DECVIDEO, MSGL_ERR, "Too many frames buffered in decode, MPlayer cannot handle that yet!\n");
+        ret = 0;
+    }
+    if (ret >= 0 || ret == AVERROR_EOF) {
+        ret = avcodec_receive_frame(avctx, pic);
+        got_picture = ret >= 0;
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) ret = 0;
+    }
     ctx->refcount_frame = pic;
     pkt.data = NULL;
     pkt.size = 0;
@@ -935,7 +944,7 @@ static mp_image_t *decode(sh_video_t *sh, void *data, int len, int flags){
     // FFmpeg allocate - this mostly happens with nonref_dr.
     // Ensure we treat it correctly.
     dr1= ctx->do_dr1 && pic->opaque != NULL;
-    if(ret<0) mp_msg(MSGT_DECVIDEO, MSGL_WARN, "Error while decoding frame!\n");
+    if(ret<0) mp_msg(MSGT_DECVIDEO, MSGL_WARN, "Error while decoding frame! (%i)\n", ret);
 //printf("repeat: %d\n", pic->repeat_pict);
 //-- vstats generation
     while(lavc_param_vstats){ // always one time loop

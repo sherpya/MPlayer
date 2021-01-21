@@ -719,16 +719,16 @@ GUI_ICONSIZES = 16x16 22x22 24x24 32x32 48x48 256x256
 all: $(ALL_PRG-yes)
 
 %.o: %.S
-	$(CC) $(CC_DEPFLAGS) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CC_DEPFLAGS) $(CFLAGS) $(AS_C) $(AS_O) $<
 
 %.o: %.c
-	$(CC) $(CC_DEPFLAGS) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CC_DEPFLAGS) $(CFLAGS) $(CC_C) $(CC_O) $<
 
 %.o: %.cpp
-	$(CC) $(CC_DEPFLAGS) $(CXXFLAGS) -c -o $@ $<
+	$(CC) $(CC_DEPFLAGS) $(CXXFLAGS) $(CXX_C) $(CXX_O) $<
 
 %.o: %.m
-	$(CC) $(CC_DEPFLAGS) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CC_DEPFLAGS) $(CFLAGS) $(CC_C) $(CC_O) $<
 
 %-rc.o: %.rc
 	$(WINDRES) -I. $< -o $@

@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 
 #include "config.h"
 #include "libaf/af_format.h"
@@ -37,28 +36,19 @@ static const ao_info_t info =
 
 LIBAO_EXTERN(null)
 
-static struct	timeval last_tv;
+static unsigned last;
 static int	buffer;
 
 static void drain(void){
-
-    struct timeval now_tv;
-    int temp, temp2;
-
-    gettimeofday(&now_tv, 0);
-    temp = now_tv.tv_sec - last_tv.tv_sec;
+    unsigned now = GetTimerMS();
+    unsigned long long temp = now - last;
     temp *= ao_data.bps;
+    temp /= 1000;
 
-    temp2 = now_tv.tv_usec - last_tv.tv_usec;
-    temp2 /= 1000;
-    temp2 *= ao_data.bps;
-    temp2 /= 1000;
-    temp += temp2;
+    if (temp > buffer) buffer=0;
+    else buffer-=temp;
 
-    buffer-=temp;
-    if (buffer<0) buffer=0;
-
-    if(temp>0) last_tv = now_tv;//mplayer is fast
+    last = now;
 }
 
 // to set/get/query special features/parameters
@@ -79,7 +69,7 @@ static int init(int rate,int channels,int format,int flags){
     ao_data.format=format;
     ao_data.bps=channels*rate*samplesize;
     buffer=0;
-    gettimeofday(&last_tv, 0);
+    last = GetTimerMS();
 
     return 1;
 }

@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include "config.h"
+#include "osdep/timer.h"
 #include "libaf/af_format.h"
 #include "audio_out.h"
 #include "audio_out_internal.h"

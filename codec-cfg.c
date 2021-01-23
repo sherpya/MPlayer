@@ -40,7 +40,6 @@
 #include <ctype.h>
 #include <assert.h>
 #include <string.h>
-#include <strings.h>
 
 #include "config.h"
 #include "mp_msg.h"
@@ -50,6 +49,10 @@
 #else
 #define mp_msg(t, l, ...) fprintf(stderr, __VA_ARGS__)
 #endif
+#include <strings.h>
+#define av_strcasecmp(a, b) strcasecmp(a, b)
+#else
+#include <libavutil/avstring.h>
 #endif
 
 #include "help_mp.h"
@@ -816,13 +819,13 @@ int parse_codec_cfg(const char *cfgfile)
         } else if (!strcmp(token[0], "status")) {
             if (get_token(1, 1) < 0)
                 goto err_out_parse_error;
-            if (!strcasecmp(token[0], "working"))
+            if (!av_strcasecmp(token[0], "working"))
                 codec->status = CODECS_STATUS_WORKING;
-            else if (!strcasecmp(token[0], "crashing"))
+            else if (!av_strcasecmp(token[0], "crashing"))
                 codec->status = CODECS_STATUS_NOT_WORKING;
-            else if (!strcasecmp(token[0], "untested"))
+            else if (!av_strcasecmp(token[0], "untested"))
                 codec->status = CODECS_STATUS_UNTESTED;
-            else if (!strcasecmp(token[0], "buggy"))
+            else if (!av_strcasecmp(token[0], "buggy"))
                 codec->status = CODECS_STATUS_PROBLEMS;
             else
                 goto err_out_parse_error;

@@ -21,10 +21,10 @@
 #include <inttypes.h>
 #include <unistd.h>
 #include <string.h>
-#include <strings.h>
 #include <sys/types.h>
 #include <twolame.h>
 
+#include "libavutil/avstring.h"
 #include "m_option.h"
 #include "mp_msg.h"
 #include "libmpdemux/aviheader.h"
@@ -154,11 +154,11 @@ int mpae_init_twolame(audio_encoder_t *encoder)
 	}
 	else if(encoder->params.channels == 2)
 	{
-		if(! strcasecmp(param_mode, "dual"))
+		if(! av_strcasecmp(param_mode, "dual"))
 			mode = TWOLAME_DUAL_CHANNEL;
-		else if(! strcasecmp(param_mode, "jstereo"))
+		else if(! av_strcasecmp(param_mode, "jstereo"))
 			mode = TWOLAME_JOINT_STEREO;
-		else if(! strcasecmp(param_mode, "stereo"))
+		else if(! av_strcasecmp(param_mode, "stereo"))
 			mode = TWOLAME_STEREO;
 		else
 		{

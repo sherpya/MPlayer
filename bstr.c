@@ -17,8 +17,8 @@
  */
 
 #include <string.h>
-#include <strings.h>
 #include <libavutil/avutil.h>
+#include "libavutil/avstring.h"
 #include <libavutil/common.h>
 
 #include "bstr.h"
@@ -40,7 +40,7 @@ int bstrcmp(struct bstr str1, struct bstr str2)
 
 int bstrcasecmp(struct bstr str1, struct bstr str2)
 {
-    int ret = strncasecmp(str1.start, str2.start, FFMIN(str1.len, str2.len));
+    int ret = av_strncasecmp(str1.start, str2.start, FFMIN(str1.len, str2.len));
 
     if (!ret) {
         if (str1.len == str2.len)

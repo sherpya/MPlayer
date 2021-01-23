@@ -23,8 +23,8 @@
 #include <inttypes.h>
 #include <ft2build.h>
 #include FT_GLYPH_H
-#include <strings.h>
 
+#include "libavutil/avstring.h"
 #include "ass_library.h"
 #include "ass.h"
 #include "ass_utils.h"
@@ -115,7 +115,7 @@ char parse_bool(char *str)
 {
     while (*str == ' ' || *str == '\t')
         str++;
-    if (!strncasecmp(str, "yes", 3))
+    if (!av_strncasecmp(str, "yes", 3))
         return 1;
     else if (strtol(str, NULL, 10) > 0)
         return 1;
@@ -141,23 +141,23 @@ int parse_ycbcr_matrix(char *str)
     strncpy(buffer, str, n);
     buffer[n] = '\0';
 
-    if (!strcasecmp(buffer, "none"))
+    if (!av_strcasecmp(buffer, "none"))
         return YCBCR_NONE;
-    if (!strcasecmp(buffer, "tv.601"))
+    if (!av_strcasecmp(buffer, "tv.601"))
         return YCBCR_BT601_TV;
-    if (!strcasecmp(buffer, "pc.601"))
+    if (!av_strcasecmp(buffer, "pc.601"))
         return YCBCR_BT601_PC;
-    if (!strcasecmp(buffer, "tv.709"))
+    if (!av_strcasecmp(buffer, "tv.709"))
         return YCBCR_BT709_TV;
-    if (!strcasecmp(buffer, "pc.709"))
+    if (!av_strcasecmp(buffer, "pc.709"))
         return YCBCR_BT709_PC;
-    if (!strcasecmp(buffer, "tv.240m"))
+    if (!av_strcasecmp(buffer, "tv.240m"))
         return YCBCR_SMPTE240M_TV;
-    if (!strcasecmp(buffer, "pc.240m"))
+    if (!av_strcasecmp(buffer, "pc.240m"))
         return YCBCR_SMPTE240M_PC;
-    if (!strcasecmp(buffer, "tv.fcc"))
+    if (!av_strcasecmp(buffer, "tv.fcc"))
         return YCBCR_FCC_TV;
-    if (!strcasecmp(buffer, "pc.fcc"))
+    if (!av_strcasecmp(buffer, "pc.fcc"))
         return YCBCR_FCC_PC;
     return YCBCR_UNKNOWN;
 }
@@ -245,7 +245,7 @@ void *ass_guess_buffer_cp(ASS_Library *library, unsigned char *buffer,
     for (i = 0; i < langcnt; i++) {
         const char *tmp;
 
-        if (strcasecmp(languages[i], preferred_language) != 0)
+        if (av_strcasecmp(languages[i], preferred_language) != 0)
             continue;
         analyser = enca_analyser_alloc(languages[i]);
         encoding = enca_analyse_const(analyser, buffer, buflen);

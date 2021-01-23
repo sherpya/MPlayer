@@ -27,7 +27,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -41,6 +40,7 @@
 #include "path.h"
 #include "unrar_exec.h"
 #include "libavutil/common.h"
+#include "libavutil/avstring.h"
 #include "libavutil/intreadwrite.h"
 #include "osdep/osdep.h"
 
@@ -116,7 +116,7 @@ static rar_stream_t *rar_open(const char *const filename,
                     int demanded_ext_len = strlen (demanded_ext);
                     for (i = 0, lp = list; i < num_files; i++, lp = lp->next) {
                         name_len = strlen (lp->item.Name);
-                        if (name_len >= demanded_ext_len && !strcasecmp (lp->item.Name + name_len - demanded_ext_len, demanded_ext)) {
+                        if (name_len >= demanded_ext_len && !av_strcasecmp (lp->item.Name + name_len - demanded_ext_len, demanded_ext)) {
                             rc = unrar_exec_get(&stream->data, &stream->size,
                                                 lp->item.Name, rar_filename);
                             if (rc)

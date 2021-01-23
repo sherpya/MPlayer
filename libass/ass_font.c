@@ -25,8 +25,8 @@
 #include FT_GLYPH_H
 #include FT_TRUETYPE_TABLES_H
 #include FT_OUTLINE_H
-#include <strings.h>
 
+#include "libavutil/avstring.h"
 #include "ass.h"
 #include "ass_library.h"
 #include "ass_font.h"
@@ -83,7 +83,7 @@ static int find_font(ASS_Library *library, char *name)
 {
     int i;
     for (i = 0; i < library->num_fontdata; ++i)
-        if (strcasecmp(name, library->fontdata[i].name) == 0)
+        if (av_strcasecmp(name, library->fontdata[i].name) == 0)
             return i;
     return -1;
 }

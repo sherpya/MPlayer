@@ -19,7 +19,6 @@
 #include <glob.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -54,6 +53,7 @@
 #include "mpcommon.h"
 #include "mplayer.h"
 #include "libavutil/common.h"
+#include "libavutil/avstring.h"
 #include "stream/stream.h"
 
 #ifdef __linux__
@@ -413,7 +413,7 @@ static void CheckDir(GtkWidget *list)
 
             if (ext || !fext[0]) {
                 for (j = 0; j < fn; j++) {
-                    if (fext[j] == NULL || strcasecmp(fext[j], ext) == 0) {
+                    if (fext[j] == NULL || av_strcasecmp(fext[j], ext) == 0) {
                         fs_get_pixmap(ext, &fpixmap, &fmask);
                         clist_append_fname(list, gg.gl_pathv[i], fpixmap, fmask);
                         break;

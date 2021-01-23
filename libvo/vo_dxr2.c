@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
@@ -31,6 +30,7 @@
 #include <errno.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "aspect.h"
 #include "video_out.h"
 #define NO_DRAW_SLICE
@@ -824,7 +824,7 @@ static int preinit(const char *arg) {
 	const vo_info_t* vi = video_out_drivers[n]->info;
 	if(!vi)
 	  continue;
-	if(strcasecmp(arg,vi->short_name) == 0)
+	if(av_strcasecmp(arg,vi->short_name) == 0)
 	  break;
       }
       sub_vo = video_out_drivers[n];

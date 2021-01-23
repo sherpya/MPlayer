@@ -33,7 +33,6 @@
  */
 
 #include <stdio.h>
-#include <strings.h>
 #include <vdpau/vdpau_x11.h>
 
 #include "config.h"
@@ -54,6 +53,7 @@
 #include "libavcodec/vdpau.h"
 
 #include "libavutil/common.h"
+#include "libavutil/avstring.h"
 #include "libavutil/mathematics.h"
 
 
@@ -1386,13 +1386,13 @@ static int preinit(const char *arg)
 
 static int get_equalizer(const char *name, int *value)
 {
-    if (!strcasecmp(name, "brightness"))
+    if (!av_strcasecmp(name, "brightness"))
         *value = procamp.brightness * 100;
-    else if (!strcasecmp(name, "contrast"))
+    else if (!av_strcasecmp(name, "contrast"))
         *value = (procamp.contrast-1.0) * 100;
-    else if (!strcasecmp(name, "saturation"))
+    else if (!av_strcasecmp(name, "saturation"))
         *value = (procamp.saturation-1.0) * 100;
-    else if (!strcasecmp(name, "hue"))
+    else if (!av_strcasecmp(name, "hue"))
         *value = procamp.hue * 100 / M_PI;
     else
         return VO_NOTIMPL;
@@ -1401,13 +1401,13 @@ static int get_equalizer(const char *name, int *value)
 
 static int set_equalizer(const char *name, int value)
 {
-    if (!strcasecmp(name, "brightness"))
+    if (!av_strcasecmp(name, "brightness"))
         procamp.brightness = value / 100.0;
-    else if (!strcasecmp(name, "contrast"))
+    else if (!av_strcasecmp(name, "contrast"))
         procamp.contrast = value / 100.0 + 1.0;
-    else if (!strcasecmp(name, "saturation"))
+    else if (!av_strcasecmp(name, "saturation"))
         procamp.saturation = value / 100.0 + 1.0;
-    else if (!strcasecmp(name, "hue"))
+    else if (!av_strcasecmp(name, "hue"))
         procamp.hue = value / 100.0 * M_PI;
     else
         return VO_NOTIMPL;

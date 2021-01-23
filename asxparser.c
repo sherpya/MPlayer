@@ -22,9 +22,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 
+#include "libavutil/avstring.h"
 #include "playtree.h"
 #include "playtreeparser.h"
 #include "stream/stream.h"
@@ -56,7 +56,7 @@ asx_get_attrib(const char* attrib,char** attribs) {
 
   if(attrib == NULL || attribs == NULL) return NULL;
   for(ptr = attribs; ptr[0] != NULL; ptr += 2){
-    if(strcasecmp(ptr[0],attrib) == 0)
+    if(av_strcasecmp(ptr[0],attrib) == 0)
       return strdup(ptr[1]);
   }
   return NULL;
@@ -69,7 +69,7 @@ asx_attrib_to_enum(const char* val,char** valid_vals) {
 
   if(valid_vals == NULL || val == NULL) return -2;
   for(ptr = valid_vals ; ptr[0] != NULL ; ptr++) {
-    if(strcasecmp(val,ptr[0]) == 0) return r;
+    if(av_strcasecmp(val,ptr[0]) == 0) return r;
     r++;
   }
 
@@ -323,11 +323,11 @@ asx_get_element(ASX_Parser_t* parser,char** _buffer,
         free(attribs);
         return -1;
       }
-      if(ptr4[1] != '/' && strncasecmp(element,ptr4+1,strlen(element)) == 0) {
+      if(ptr4[1] != '/' && av_strncasecmp(element,ptr4+1,strlen(element)) == 0) {
         in++;
         ptr4+=2;
         continue;
-      } else if(strncasecmp(element,ptr4+2,strlen(element)) == 0) { // Extract body
+      } else if(av_strncasecmp(element,ptr4+2,strlen(element)) == 0) { // Extract body
         if(in > 0) {
           in--;
           ptr4 += 2+strlen(element);
@@ -498,7 +498,7 @@ asx_parse_entry(ASX_Parser_t* parser,char* buffer,char** _attribs) {
     } else if (r == 0) { // No more element
       break;
     }
-    if(strcasecmp(element,"REF") == 0) {
+    if(av_strcasecmp(element,"REF") == 0) {
       asx_parse_ref(parser,attribs,ref);
       mp_msg(MSGT_PLAYTREE,MSGL_DBG2,"Adding element %s to entry\n",element);
       nref++;
@@ -547,28 +547,28 @@ asx_parse_repeat(ASX_Parser_t* parser,char* buffer,char** _attribs) {
     } else if (r == 0) { // No more element
       break;
     }
-    if(strcasecmp(element,"ENTRY") == 0) {
+    if(av_strcasecmp(element,"ENTRY") == 0) {
        entry = asx_parse_entry(parser,body,attribs);
        if(entry) {
          if(!list) list =  entry;
          else play_tree_append_entry(list,entry);
          mp_msg(MSGT_PLAYTREE,MSGL_DBG2,"Adding element %s to repeat\n",element);
        }
-    } else if(strcasecmp(element,"ENTRYREF") == 0) {
+    } else if(av_strcasecmp(element,"ENTRYREF") == 0) {
        entry = asx_parse_entryref(parser,body,attribs);
        if(entry) {
          if(!list) list =  entry;
          else play_tree_append_entry(list,entry);
          mp_msg(MSGT_PLAYTREE,MSGL_DBG2,"Adding element %s to repeat\n",element);
        }
-     } else if(strcasecmp(element,"REPEAT") == 0) {
+     } else if(av_strcasecmp(element,"REPEAT") == 0) {
        entry = asx_parse_repeat(parser,body,attribs);
        if(entry) {
          if(!list) list =  entry;
          else play_tree_append_entry(list,entry);
          mp_msg(MSGT_PLAYTREE,MSGL_DBG2,"Adding element %s to repeat\n",element);
        }
-     } else if(strcasecmp(element,"PARAM") == 0) {
+     } else if(av_strcasecmp(element,"PARAM") == 0) {
        asx_parse_param(parser,attribs,repeat);
      } else
        mp_msg(MSGT_PLAYTREE,MSGL_DBG2,"Ignoring element %s\n",element);
@@ -610,7 +610,7 @@ asx_parser_build_tree(char* buffer,int deep) {
     return NULL;
   }
 
-  if(strcasecmp(element,"ASX") != 0) {
+  if(av_strcasecmp(element,"ASX") != 0) {
     mp_msg(MSGT_PLAYTREE,MSGL_ERR,"first element isn't ASX, it's %s\n",element);
     free(element);
     free(asx_body);
@@ -645,21 +645,21 @@ asx_parser_build_tree(char* buffer,int deep) {
      } else if (r == 0) { // No more element
        break;
      }
-     if(strcasecmp(element,"ENTRY") == 0) {
+     if(av_strcasecmp(element,"ENTRY") == 0) {
        entry = asx_parse_entry(parser,body,attribs);
        if(entry) {
          if(!list) list =  entry;
          else play_tree_append_entry(list,entry);
          mp_msg(MSGT_PLAYTREE,MSGL_DBG2,"Adding element %s to asx\n",element);
        }
-     } else if(strcasecmp(element,"ENTRYREF") == 0) {
+     } else if(av_strcasecmp(element,"ENTRYREF") == 0) {
        entry = asx_parse_entryref(parser,body,attribs);
        if(entry) {
          if(!list) list =  entry;
          else play_tree_append_entry(list,entry);
          mp_msg(MSGT_PLAYTREE,MSGL_DBG2,"Adding element %s to asx\n",element);
        }
-     } else if(strcasecmp(element,"REPEAT") == 0) {
+     } else if(av_strcasecmp(element,"REPEAT") == 0) {
        entry = asx_parse_repeat(parser,body,attribs);
        if(entry) {
          if(!list) list =  entry;

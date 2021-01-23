@@ -19,7 +19,6 @@
  */
 
 #include <string.h>
-#include <strings.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,6 +29,7 @@
 #include "bstr.h"
 #include "subassconvert.h"
 #include "libavutil/common.h"
+#include "libavutil/avstring.h"
 
 struct line {
     char *buf;
@@ -223,7 +223,7 @@ void subassconvert_subrip(const char *orig, char *dest, size_t dest_buffer_size)
                         for (i = 0; i < FF_ARRAY_ELEMS(subrip_web_colors); i++) {
                             const char *color = subrip_web_colors[i].s;
                             const int len = strlen(color);
-                            if (strncasecmp(line, color, len) == 0) {
+                            if (av_strncasecmp(line, color, len) == 0) {
                                 tag->color = SUBRIP_FLAG_COLOR | subrip_web_colors[i].v;
                                 line += len;
                                 break;

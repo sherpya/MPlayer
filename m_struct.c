@@ -23,8 +23,8 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 
+#include "libavutil/avstring.h"
 #include "m_option.h"
 #include "m_struct.h"
 #include "mp_msg.h"
@@ -34,7 +34,7 @@ m_struct_get_field(const m_struct_t* st,const char* f) {
   int i;
 
   for(i = 0 ; st->fields[i].name ; i++) {
-    if(strcasecmp(st->fields[i].name,f) == 0)
+    if(av_strcasecmp(st->fields[i].name,f) == 0)
       return &st->fields[i];
   }
   return NULL;

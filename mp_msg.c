@@ -20,9 +20,9 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <strings.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "osdep/getch2.h"
 
 #ifdef CONFIG_ICONV
@@ -59,8 +59,8 @@ const char* filename_recode(const char* filename)
     size_t filename_len, max_path;
     char* precoded;
     if (!mp_msg_charset ||
-        !strcasecmp(mp_msg_charset, MSG_CHARSET) ||
-        !strcasecmp(mp_msg_charset, "noconv"))
+        !av_strcasecmp(mp_msg_charset, MSG_CHARSET) ||
+        !av_strcasecmp(mp_msg_charset, "noconv"))
         return filename;
     if (inv_msgiconv == (iconv_t)(-1)) {
         inv_msgiconv = iconv_open(MSG_CHARSET, mp_msg_charset);
@@ -216,7 +216,7 @@ void mp_msg_va(int mod, int lev, const char *format, va_list va){
     tmp[MSGSIZE_MAX-1] = 0;
 
 #if defined(CONFIG_ICONV) && defined(MSG_CHARSET)
-    if (mp_msg_charset && strcasecmp(mp_msg_charset, "noconv")) {
+    if (mp_msg_charset && av_strcasecmp(mp_msg_charset, "noconv")) {
       char tmp2[MSGSIZE_MAX];
       size_t inlen = strlen(tmp), outlen = MSGSIZE_MAX;
       char *in = tmp, *out = tmp2;

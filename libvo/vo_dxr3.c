@@ -29,13 +29,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "help_mp.h"
 #include "fastmemcpy.h"
@@ -256,11 +256,11 @@ static int control(uint32_t request, void *data)
 
 		if (ioctl(fd_control, EM8300_IOCTL_GETBCS, &bcs) < 0)
 		    return VO_FALSE;
-		if (!strcasecmp(eq->item, "brightness"))
+		if (!av_strcasecmp(eq->item, "brightness"))
 		    bcs.brightness = (eq->value+100)*5;
-		else if (!strcasecmp(eq->item, "contrast"))
+		else if (!av_strcasecmp(eq->item, "contrast"))
 		    bcs.contrast = (eq->value+100)*5;
-		else if (!strcasecmp(eq->item, "saturation"))
+		else if (!av_strcasecmp(eq->item, "saturation"))
 		    bcs.saturation = (eq->value+100)*5;
 		else return VO_FALSE;
 
@@ -276,11 +276,11 @@ static int control(uint32_t request, void *data)
 		if (ioctl(fd_control, EM8300_IOCTL_GETBCS, &bcs) < 0)
 		    return VO_FALSE;
 
-		if (!strcasecmp(eq->item, "brightness"))
+		if (!av_strcasecmp(eq->item, "brightness"))
 		    eq->value = (bcs.brightness/5)-100;
-		else if (!strcasecmp(eq->item, "contrast"))
+		else if (!av_strcasecmp(eq->item, "contrast"))
 		    eq->value = (bcs.contrast/5)-100;
-		else if (!strcasecmp(eq->item, "saturation"))
+		else if (!av_strcasecmp(eq->item, "saturation"))
 		    eq->value = (bcs.saturation/5)-100;
 		else return VO_FALSE;
 

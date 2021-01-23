@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <strings.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
@@ -32,6 +31,7 @@
 #include "help_mp.h"
 #include "cpudetect.h"
 #include "libswscale/swscale.h"
+#include "libavutil/avstring.h"
 #include "libavutil/attributes.h"
 #include "libavutil/common.h"
 #include "libavutil/imgutils.h"
@@ -147,7 +147,7 @@ static image *pngRead(skin_t *skin, const char *fname)
     char *filename = NULL;
     FILE *fp;
 
-    if(!strcasecmp(fname, "NULL")) return 0;
+    if(!av_strcasecmp(fname, "NULL")) return 0;
 
     /* find filename in order file file.png */
     if(!(fp = fopen(fname, "rb")))

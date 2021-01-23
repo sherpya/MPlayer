@@ -21,11 +21,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <inttypes.h>
 #include <limits.h>
 
 #include "af.h"
+#include "libavutil/avstring.h"
 #include "help_mp.h"
 
 // Convert from string to format
@@ -215,7 +215,7 @@ int af_str2fmt_short(const char* str)
     int i;
 
     for (i = 0; af_fmtstr_table[i].name; i++)
-	if (!strcasecmp(str, af_fmtstr_table[i].name))
+	if (!av_strcasecmp(str, af_fmtstr_table[i].name))
 	    return af_fmtstr_table[i].format;
 
     return -1;

@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 #include <errno.h>
 #include <limits.h>
@@ -43,6 +42,7 @@
 #include "network.h"
 #include "tcp.h"
 
+#include "libavutil/avstring.h"
 #include "libavutil/attributes.h"
 #include "libavutil/intreadwrite.h"
 
@@ -78,7 +78,7 @@ static int asf_streaming_start( stream_t *stream, int *demuxer_type) {
     int port = stream->streaming_ctrl->url->port;
 
     //Is protocol mms or mmst?
-    if (!strcasecmp(proto, "mmst") || !strcasecmp(proto, "mms"))
+    if (!av_strcasecmp(proto, "mmst") || !av_strcasecmp(proto, "mms"))
     {
 		mp_msg(MSGT_NETWORK,MSGL_V,"Trying ASF/TCP...\n");
 		fd = asf_mmst_streaming_start( stream );
@@ -89,9 +89,9 @@ static int asf_streaming_start( stream_t *stream, int *demuxer_type) {
 	}
 
     //Is protocol http, http_proxy, or mms?
-    if (!strcasecmp(proto, "http_proxy") || !strcasecmp(proto, "http") ||
-	!strcasecmp(proto, "mms") || !strcasecmp(proto, "mmsh") ||
-	!strcasecmp(proto, "mmshttp"))
+    if (!av_strcasecmp(proto, "http_proxy") || !av_strcasecmp(proto, "http") ||
+	!av_strcasecmp(proto, "mms") || !av_strcasecmp(proto, "mmsh") ||
+	!av_strcasecmp(proto, "mmshttp"))
     {
 		mp_msg(MSGT_NETWORK,MSGL_V,"Trying ASF/HTTP...\n");
 		fd = asf_http_streaming_start( stream, demuxer_type );
@@ -470,11 +470,11 @@ static int asf_header_check( HTTP_header_t *http_hdr ) {
 
 static int asf_http_streaming_type(char *content_type, char *features, HTTP_header_t *http_hdr ) {
 	if( content_type==NULL ) return ASF_Unknown_e;
-	if( 	!strcasecmp(content_type, "application/octet-stream") ||
-		!strcasecmp(content_type, "application/vnd.ms.wms-hdr.asfv1") ||        // New in Corona, first request
-		!strcasecmp(content_type, "application/x-mms-framed") ||                // New in Corana, second request
-		!strcasecmp(content_type, "video/x-ms-wmv") ||
-		!strcasecmp(content_type, "video/x-ms-asf")) {
+	if( 	!av_strcasecmp(content_type, "application/octet-stream") ||
+		!av_strcasecmp(content_type, "application/vnd.ms.wms-hdr.asfv1") ||        // New in Corona, first request
+		!av_strcasecmp(content_type, "application/x-mms-framed") ||                // New in Corana, second request
+		!av_strcasecmp(content_type, "video/x-ms-wmv") ||
+		!av_strcasecmp(content_type, "video/x-ms-asf")) {
 
 		if( strstr(features, "broadcast") ) {
 			mp_msg(MSGT_NETWORK,MSGL_V,"=====> ASF Live stream\n");
@@ -492,7 +492,7 @@ static int asf_http_streaming_type(char *content_type, char *features, HTTP_head
 			if( asf_header_check( http_hdr )==0 ) {
 				mp_msg(MSGT_NETWORK,MSGL_V,"=====> ASF Plain text\n");
 				return ASF_PlainText_e;
-			} else if( (!strcasecmp(content_type, "text/html")) ) {
+			} else if( (!av_strcasecmp(content_type, "text/html")) ) {
 				mp_msg(MSGT_NETWORK,MSGL_V,"=====> HTML, MPlayer is not a browser...yet!\n");
 				return ASF_Unknown_e;
 			} else {
@@ -500,15 +500,15 @@ static int asf_http_streaming_type(char *content_type, char *features, HTTP_head
 				return ASF_Redirector_e;
 			}
 		} else {
-			if(	(!strcasecmp(content_type, "audio/x-ms-wax")) ||
-				(!strcasecmp(content_type, "audio/x-ms-wma")) ||
-				(!strcasecmp(content_type, "video/x-ms-asf")) ||
-				(!strcasecmp(content_type, "video/x-ms-afs")) ||
-				(!strcasecmp(content_type, "video/x-ms-wmv")) ||
-				(!strcasecmp(content_type, "video/x-ms-wma")) ) {
+			if(	(!av_strcasecmp(content_type, "audio/x-ms-wax")) ||
+				(!av_strcasecmp(content_type, "audio/x-ms-wma")) ||
+				(!av_strcasecmp(content_type, "video/x-ms-asf")) ||
+				(!av_strcasecmp(content_type, "video/x-ms-afs")) ||
+				(!av_strcasecmp(content_type, "video/x-ms-wmv")) ||
+				(!av_strcasecmp(content_type, "video/x-ms-wma")) ) {
 				mp_msg(MSGT_NETWORK,MSGL_ERR,MSGTR_MPDEMUX_ASF_ASFRedirector);
 				return ASF_Redirector_e;
-			} else if( !strcasecmp(content_type, "text/plain") ) {
+			} else if( !av_strcasecmp(content_type, "text/plain") ) {
 				mp_msg(MSGT_NETWORK,MSGL_V,"=====> ASF Plain text\n");
 				return ASF_PlainText_e;
 			} else {
@@ -545,7 +545,7 @@ static HTTP_header_t *asf_http_request(streaming_ctrl_t *streaming_ctrl) {
 	http_add_basic_authentication( http_hdr, url->username, url->password );
 
 	// Check if we are using a proxy
-	if( !strcasecmp( url->protocol, "http_proxy" ) ) {
+	if( !av_strcasecmp( url->protocol, "http_proxy" ) ) {
 		server_url = url_new( (url->file)+1 );
 		if( server_url==NULL ) {
 			mp_msg(MSGT_NETWORK,MSGL_ERR,MSGTR_MPDEMUX_ASF_InvalidProxyURL);
@@ -647,7 +647,7 @@ static int asf_http_parse_response(asf_http_streaming_ctrl_t *asf_http_ctrl, HTT
 		// The pragma line can get severals attributes
 		// separeted with a comma ','.
 		do {
-			if( !strncasecmp( pragma, "features=", 9) ) {
+			if( !av_strncasecmp( pragma, "features=", 9) ) {
 				pragma += 9;
 				end = strstr( pragma, "," );
 				if( end==NULL ) {
@@ -700,7 +700,7 @@ static int asf_http_streaming_start( stream_t *stream, int *demuxer_type ) {
 		done = 1;
 		if( fd>0 ) closesocket( fd );
 
-		if( !strcasecmp( url->protocol, "http_proxy" ) ) {
+		if( !av_strcasecmp( url->protocol, "http_proxy" ) ) {
 			if( url->port==0 ) url->port = 8080;
 		} else {
 			if( url->port==0 ) url->port = 80;

@@ -24,9 +24,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h> /* strtok */
-#include <strings.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "help_mp.h"
 
@@ -672,9 +672,9 @@ if (demuxer->audio->id >= -1){
 		}
 		if (vivo_param_acodec != NULL)
 		{
-		    if (!strcasecmp(vivo_param_acodec, "g723"))
+		    if (!av_strcasecmp(vivo_param_acodec, "g723"))
 			priv->audio_codec = VIVO_AUDIO_G723;
-		    if (!strcasecmp(vivo_param_acodec, "siren"))
+		    if (!av_strcasecmp(vivo_param_acodec, "siren"))
 			priv->audio_codec = VIVO_AUDIO_SIREN;
 		}
 

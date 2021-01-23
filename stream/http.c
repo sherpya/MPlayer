@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 
 #if !HAVE_WINSOCK2_H
@@ -43,6 +42,7 @@
 #include "network.h"
 #include "help_mp.h"
 
+#include "libavutil/avstring.h"
 #include "libavutil/base64.h"
 
 typedef struct {
@@ -187,7 +187,7 @@ static int scast_streaming_start(stream_t *stream) {
   int metaint;
   scast_data_t *scast_data;
   HTTP_header_t *http_hdr = stream->streaming_ctrl->data;
-  int is_ultravox = strcasecmp(stream->streaming_ctrl->url->protocol, "unsv") == 0;
+  int is_ultravox = av_strcasecmp(stream->streaming_ctrl->url->protocol, "unsv") == 0;
   if (!stream || stream->fd < 0 || !http_hdr)
     return -1;
   if (is_ultravox)
@@ -378,7 +378,7 @@ http_response_parse( HTTP_header_t *http_hdr ) {
 	}
 	strncpy( http_hdr->protocol, http_hdr->buffer, len );
 	http_hdr->protocol[len]='\0';
-	if( !strncasecmp( http_hdr->protocol, "HTTP", 4) ) {
+	if( !av_strncasecmp( http_hdr->protocol, "HTTP", 4) ) {
 		if( sscanf( http_hdr->protocol+5,"1.%d", &(http_hdr->http_minor_version) )!=1 ) {
 			mp_msg(MSGT_NETWORK,MSGL_ERR,"Malformed answer. Unable to get HTTP minor version.\n");
 			return -1;
@@ -435,7 +435,7 @@ http_response_parse( HTTP_header_t *http_hdr ) {
 			hdr_sep_len = 0;
 			break;
 		}
-		if (len > 16 && !strncasecmp(hdr_ptr + 4, "icy-metaint:", 12))
+		if (len > 16 && !av_strncasecmp(hdr_ptr + 4, "icy-metaint:", 12))
 		{
 			mp_msg(MSGT_NETWORK, MSGL_WARN, "Server sent a severely broken icy-metaint HTTP header!\n");
 			hdr_ptr += 4;
@@ -545,7 +545,7 @@ http_get_next_field( HTTP_header_t *http_hdr ) {
 	while( field!=NULL ) {
 		ptr = strstr( field->field_name, ":" );
 		if( ptr==NULL ) return NULL;
-		if( !strncasecmp( field->field_name, http_hdr->field_search, ptr-(field->field_name) ) ) {
+		if( !av_strncasecmp( field->field_name, http_hdr->field_search, ptr-(field->field_name) ) ) {
 			ptr++;	// Skip the column
 			while( ptr[0]==' ' ) ptr++; // Skip the spaces if there is some
 			http_hdr->field_search_pos = field->next;
@@ -756,7 +756,7 @@ static int http_streaming_start(stream_t *stream, int* file_format) {
 		print_icy_metadata(http_hdr);
 
 		// Check if the response is an ICY status_code reason_phrase
-		if( !strcasecmp(http_hdr->protocol, "ICY") ||
+		if( !av_strcasecmp(http_hdr->protocol, "ICY") ||
 		     http_get_field(http_hdr, "Icy-MetaInt") ) {
 			switch( http_hdr->status_code ) {
 				case 200: { // OK
@@ -807,7 +807,7 @@ static int http_streaming_start(stream_t *stream, int* file_format) {
 					mp_msg(MSGT_NETWORK,MSGL_V,"Content-Type: [%s]\n", content_type );
 					// Check in the mime type table for a demuxer type
 					for (i = 0; mime_type_table[i].mime_type != NULL; i++) {
-						if( !strcasecmp( content_type, mime_type_table[i].mime_type ) ) {
+						if( !av_strcasecmp( content_type, mime_type_table[i].mime_type ) ) {
 							*file_format = mime_type_table[i].demuxer_type;
 							res = seekable;
 							goto out;
@@ -826,7 +826,7 @@ static int http_streaming_start(stream_t *stream, int* file_format) {
 				// TODO: RFC 2616, recommand to detect infinite redirection loops
 				next_url = http_get_field( http_hdr, "Location" );
 				if( next_url!=NULL ) {
-					int is_ultravox = strcasecmp(stream->streaming_ctrl->url->protocol, "unsv") == 0;
+					int is_ultravox = av_strcasecmp(stream->streaming_ctrl->url->protocol, "unsv") == 0;
 					stream->streaming_ctrl->url = url_redirect( &url, next_url );
 					if (url_is_protocol(url, "https") || url_is_protocol(url, "mms")) {
 						res = STREAM_REDIRECTED;
@@ -866,7 +866,7 @@ out:
 static int fixup_open(stream_t *stream,int seekable) {
 	HTTP_header_t *http_hdr = stream->streaming_ctrl->data;
 	int is_icy = http_hdr && http_get_field(http_hdr, "Icy-MetaInt");
-	int is_ultravox = strcasecmp(stream->streaming_ctrl->url->protocol, "unsv") == 0;
+	int is_ultravox = av_strcasecmp(stream->streaming_ctrl->url->protocol, "unsv") == 0;
 
 	stream->type = STREAMTYPE_STREAM;
 	if(!is_icy && !is_ultravox && seekable)

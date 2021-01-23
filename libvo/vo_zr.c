@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -36,6 +35,7 @@
 #include <linux/types.h>
 #include <linux/videodev.h>
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "videodev_mjpeg.h"
 #include "video_out.h"
 #include "video_out_internal.h"
@@ -671,7 +671,7 @@ vo_zr_parseoption(const m_option_t* conf, const char *opt, const char *param){
     zr_info_t *zr = &zr_info[zr_parsing];
     int i;
     /* do WE need it ?, always */
-    if (!strcasecmp(opt, "zrdev")) {
+    if (!av_strcasecmp(opt, "zrdev")) {
 	if (param == NULL) return ERR_MISSING_PARAM;
 	//if ((i=getcolor(param))==-1) return ERR_OUT_OF_RANGE;
 	//aaopt_osdcolor=i;
@@ -680,19 +680,19 @@ vo_zr_parseoption(const m_option_t* conf, const char *opt, const char *param){
 	strcpy(zr->device, param);
 	mp_msg(MSGT_VO, MSGL_V, "zr: using device %s\n", zr->device);
 	return 1;
-    } else if (!strcasecmp(opt, "zrbw")) {
+    } else if (!av_strcasecmp(opt, "zrbw")) {
 	    if (param != NULL) {
 		    return ERR_OUT_OF_RANGE;
 	    }
 	    zr->bw = 1;
 	    return 1;
-    } else if (!strcasecmp(opt, "zrfd")) {
+    } else if (!av_strcasecmp(opt, "zrfd")) {
 	    if (param != NULL) {
 		    return ERR_OUT_OF_RANGE;
 	    }
 	    zr->fd = 1;
 	    return 1;
-    } else if (!strcasecmp(opt, "zrcrop")){
+    } else if (!av_strcasecmp(opt, "zrcrop")){
         geo_t *g = &zr->g;
 	if (g->set == 1) {
 		zr_parsing++;
@@ -716,43 +716,43 @@ vo_zr_parseoption(const m_option_t* conf, const char *opt, const char *param){
 	g->set = 1;
 	mp_msg(MSGT_VO, MSGL_V, "zr: cropping %s\n", param);
 	return 1;
-    }else if (!strcasecmp(opt, "zrhdec")) {
+    }else if (!av_strcasecmp(opt, "zrhdec")) {
         i = atoi(param);
 	if (i != 1 && i != 2 && i != 4) return ERR_OUT_OF_RANGE;
 	zr->hdec = i;
 	return 1;
-    }else if (!strcasecmp(opt, "zrvdec")) {
+    }else if (!av_strcasecmp(opt, "zrvdec")) {
         i = atoi(param);
 	if (i != 1 && i != 2 && i != 4) return ERR_OUT_OF_RANGE;
 	zr->vdec = i;
 	return 1;
-    }else if (!strcasecmp(opt, "zrxdoff")) {
+    }else if (!av_strcasecmp(opt, "zrxdoff")) {
         i = atoi(param);
 	zr->xdoff = i;
 	return 1;
-    }else if (!strcasecmp(opt, "zrydoff")) {
+    }else if (!av_strcasecmp(opt, "zrydoff")) {
         i = atoi(param);
 	zr->ydoff = i;
 	return 1;
-    }else if (!strcasecmp(opt, "zrquality")) {
+    }else if (!av_strcasecmp(opt, "zrquality")) {
         i = atoi(param);
 	if (i < 1 || i > 20) return ERR_OUT_OF_RANGE;
 	zr->quality = i;
 	return 1;
-    }else if (!strcasecmp(opt, "zrnorm")) {
+    }else if (!av_strcasecmp(opt, "zrnorm")) {
 	if (param == NULL) return ERR_MISSING_PARAM;
-	if (!strcasecmp(param, "NTSC")) {
+	if (!av_strcasecmp(param, "NTSC")) {
             mp_msg(MSGT_VO, MSGL_V, "zr: Norm set to NTSC\n");
             zr->norm = VIDEO_MODE_NTSC;
 	    return 1;
-	} else if (!strcasecmp(param, "PAL")) {
+	} else if (!av_strcasecmp(param, "PAL")) {
 	    mp_msg(MSGT_VO, MSGL_V, "zr: Norm set to PAL\n");
             zr->norm = VIDEO_MODE_PAL;
 	    return 1;
 	} else {
            return ERR_OUT_OF_RANGE;
         }
-    }else if (!strcasecmp(opt, "zrhelp")){
+    }else if (!av_strcasecmp(opt, "zrhelp")){
 	printf("Help for -vo zr: Zoran ZR360[56]7/ZR36060 based MJPEG capture/playback cards\n");
 	printf("\n");
 	printf("Here are the zr options:\n");
@@ -798,26 +798,26 @@ void vo_zr_revertoption(const m_option_t* opt,const char* param) {
   zr_count = 1;
   zr_parsing = 0;
 
-  if (!strcasecmp(param, "zrdev")) {
+  if (!av_strcasecmp(param, "zrdev")) {
     free(zr->device);
     zr->device=NULL;
-  } else if (!strcasecmp(param, "zrbw"))
+  } else if (!av_strcasecmp(param, "zrbw"))
     zr->bw=0;
-  else if (!strcasecmp(param, "zrfd"))
+  else if (!av_strcasecmp(param, "zrfd"))
     zr->fd=0;
-  else if (!strcasecmp(param, "zrcrop"))
+  else if (!av_strcasecmp(param, "zrcrop"))
     zr->g.set = zr->g.xoff = zr->g.yoff = 0;
-  else if (!strcasecmp(param, "zrhdec"))
+  else if (!av_strcasecmp(param, "zrhdec"))
     zr->hdec = 1;
-  else if (!strcasecmp(param, "zrvdec"))
+  else if (!av_strcasecmp(param, "zrvdec"))
     zr->vdec = 1;
-  else if (!strcasecmp(param, "zrxdoff"))
+  else if (!av_strcasecmp(param, "zrxdoff"))
     zr->xdoff = -1;
-  else if (!strcasecmp(param, "zrydoff"))
+  else if (!av_strcasecmp(param, "zrydoff"))
     zr->ydoff = -1;
-  else if (!strcasecmp(param, "zrquality"))
+  else if (!av_strcasecmp(param, "zrquality"))
     zr->quality = 2;
-  else if (!strcasecmp(param, "zrnorm"))
+  else if (!av_strcasecmp(param, "zrnorm"))
     zr->norm = VIDEO_MODE_AUTO;
 
 }

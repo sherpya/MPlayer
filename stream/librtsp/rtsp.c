@@ -34,7 +34,6 @@
 #include <assert.h>
 #include "config.h"
 #include <string.h>
-#include <strings.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -48,6 +47,7 @@
 #else
 #include <sys/socket.h>
 #endif
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "rtsp.h"
 #include "rtsp_session.h"
@@ -280,7 +280,7 @@ static int rtsp_get_answers(rtsp_t *s) {
     if (!answer)
       return 0;
 
-    if (!strncasecmp(answer,"CSeq:",5)) {
+    if (!av_strncasecmp(answer,"CSeq:",5)) {
       sscanf(answer,"%*s %u",&answer_seq);
       if (s->cseq != answer_seq) {
 #ifdef LOG
@@ -289,14 +289,14 @@ static int rtsp_get_answers(rtsp_t *s) {
         s->cseq=answer_seq;
       }
     }
-    if (!strncasecmp(answer,"Server:",7)) {
+    if (!av_strncasecmp(answer,"Server:",7)) {
       char *buf = malloc(strlen(answer));
       sscanf(answer,"%*s %s",buf);
       free(s->server);
       s->server=strdup(buf);
       free(buf);
     }
-    if (!strncasecmp(answer,"Session:",8)) {
+    if (!av_strncasecmp(answer,"Session:",8)) {
       char *buf = calloc(1, strlen(answer));
       sscanf(answer,"%*s %s",buf);
       if (s->session) {
@@ -484,7 +484,7 @@ int rtsp_read_data(rtsp_t *s, char *buffer, unsigned int size) {
         rest=rtsp_get(s);
         if (!rest)
           return -1;
-        if (!strncasecmp(rest,"CSeq:",5))
+        if (!av_strncasecmp(rest,"CSeq:",5))
           sscanf(rest,"%*s %u",&seq);
       } while (strlen(rest)!=0);
       free(rest);
@@ -594,7 +594,7 @@ char *rtsp_search_answers(rtsp_t *s, const char *tag) {
   answer=s->answers;
 
   while (*answer) {
-    if (!strncasecmp(*answer,tag,strlen(tag))) {
+    if (!av_strncasecmp(*answer,tag,strlen(tag))) {
       ptr=strchr(*answer,':');
       if (!ptr) return NULL;
       ptr++;

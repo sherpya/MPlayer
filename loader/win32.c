@@ -55,7 +55,6 @@ for DLL to know too much about its environment.
 #include "path.h"
 
 #include <stdlib.h>
-#include <strings.h>
 #include <assert.h>
 #include <stdarg.h>
 #include <ctype.h>
@@ -587,10 +586,10 @@ static HMODULE WINAPI expGetModuleHandleA(const char* name)
     }
     if(!result)
     {
-	if(name && (strcasecmp(name, "kernel32")==0 || !strcasecmp(name, "kernel32.dll")))
+	if(name && (av_strcasecmp(name, "kernel32")==0 || !av_strcasecmp(name, "kernel32.dll")))
 	    result=MODULE_HANDLE_kernel32;
 #ifdef CONFIG_QTX_CODECS
-	if(name && strcasecmp(name, "user32")==0)
+	if(name && av_strcasecmp(name, "user32")==0)
 	    result=MODULE_HANDLE_user32;
 #endif
     }
@@ -2147,7 +2146,7 @@ static double linux_cpuinfo_freq(void)
 	    if ((s=strchr(value,'\n')))
 		*s='\0';
 
-	    if (!strncasecmp(line, "cpu MHz",strlen("cpu MHz"))
+	    if (!av_strncasecmp(line, "cpu MHz",strlen("cpu MHz"))
 		&& sscanf(value, "%lf", &freq) == 1) {
 		freq*=1000;
 		break;
@@ -2532,33 +2531,33 @@ static int WINAPI expLoadLibraryA(char* name)
     dbgprintf("Entering LoadLibraryA(%s)\n", name);
 
     // PIMJ and VIVO audio are loading  kernel32.dll
-    if (strcasecmp(name, "kernel32.dll") == 0 || strcasecmp(name, "kernel32") == 0)
+    if (av_strcasecmp(name, "kernel32.dll") == 0 || av_strcasecmp(name, "kernel32") == 0)
 	return MODULE_HANDLE_kernel32;
 //	return ERROR_SUCCESS; /* yeah, we have also the kernel32 calls */
 			      /* exported -> do not return failed! */
 
-    if (strcasecmp(name, "user32.dll") == 0 || strcasecmp(name, "user32") == 0)
+    if (av_strcasecmp(name, "user32.dll") == 0 || av_strcasecmp(name, "user32") == 0)
 //	return MODULE_HANDLE_kernel32;
 	return MODULE_HANDLE_user32;
 
 #ifdef CONFIG_QTX_CODECS
-    if (strcasecmp(name, "wininet.dll") == 0 || strcasecmp(name, "wininet") == 0)
+    if (av_strcasecmp(name, "wininet.dll") == 0 || av_strcasecmp(name, "wininet") == 0)
 	return MODULE_HANDLE_wininet;
-    if (strcasecmp(name, "ddraw.dll") == 0 || strcasecmp(name, "ddraw") == 0)
+    if (av_strcasecmp(name, "ddraw.dll") == 0 || av_strcasecmp(name, "ddraw") == 0)
 	return MODULE_HANDLE_ddraw;
-    if (strcasecmp(name, "advapi32.dll") == 0 || strcasecmp(name, "advapi32") == 0)
+    if (av_strcasecmp(name, "advapi32.dll") == 0 || av_strcasecmp(name, "advapi32") == 0)
 	return MODULE_HANDLE_advapi32;
 #endif
 
-    if (strcasecmp(name, "comdlg32.dll") == 0 || strcasecmp(name, "comdlg32") == 0)
+    if (av_strcasecmp(name, "comdlg32.dll") == 0 || av_strcasecmp(name, "comdlg32") == 0)
 	return MODULE_HANDLE_comdlg32;
-    if (strcasecmp(name, "msvcrt.dll") == 0 || strcasecmp(name, "msvcrt") == 0)
+    if (av_strcasecmp(name, "msvcrt.dll") == 0 || av_strcasecmp(name, "msvcrt") == 0)
 	return MODULE_HANDLE_msvcrt;
-    if (strcasecmp(name, "ole32.dll") == 0 || strcasecmp(name, "ole32") == 0)
+    if (av_strcasecmp(name, "ole32.dll") == 0 || av_strcasecmp(name, "ole32") == 0)
 	return MODULE_HANDLE_ole32;
-    if (strcasecmp(name, "winmm.dll") == 0 || strcasecmp(name, "winmm") == 0)
+    if (av_strcasecmp(name, "winmm.dll") == 0 || av_strcasecmp(name, "winmm") == 0)
 	return MODULE_HANDLE_winmm;
-    if (strcasecmp(name, "psapi.dll") == 0 || strcasecmp(name, "psapi") == 0)
+    if (av_strcasecmp(name, "psapi.dll") == 0 || av_strcasecmp(name, "psapi") == 0)
 	return MODULE_HANDLE_psapi;
 
     result=LoadLibraryA(name);
@@ -3955,7 +3954,7 @@ static int WINAPI expMulDiv(int nNumber, int nNumerator, int nDenominator)
 
 static LONG WINAPI explstrcmpiA(const char* str1, const char* str2)
 {
-    LONG result=strcasecmp(str1, str2);
+    LONG result=av_strcasecmp(str1, str2);
     dbgprintf("strcmpi(0x%x='%s', 0x%x='%s') => %d\n", str1, str1, str2, str2, result);
     return result;
 }
@@ -4615,7 +4614,7 @@ static char *exp_mbsupr(char *str)
 
 static int exp_stricmp(const char* s1, const char* s2)
 {
-    return strcasecmp(s1, s2);
+    return av_strcasecmp(s1, s2);
 }
 
 static uint64_t exp_time64(void)
@@ -5748,7 +5747,7 @@ void* LookupExternal(const char* library, int ordinal)
 
     for(i=0; i<sizeof(libraries)/sizeof(struct libs); i++)
     {
-	if(strcasecmp(library, libraries[i].name))
+	if(av_strcasecmp(library, libraries[i].name))
 	    continue;
 	for(j=0; j<libraries[i].length; j++)
 	{
@@ -5815,7 +5814,7 @@ void* LookupExternalByName(const char* library, const char* name)
     dbgprintf("External func %s:%s\n", library, name);
     for(i=0; i<sizeof(libraries)/sizeof(struct libs); i++)
     {
-	if(strcasecmp(library, libraries[i].name))
+	if(av_strcasecmp(library, libraries[i].name))
 	    continue;
 	for(j=0; j<libraries[i].length; j++)
 	{

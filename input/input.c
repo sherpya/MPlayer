@@ -20,7 +20,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
@@ -820,7 +819,7 @@ mp_input_parse_cmd(char* str) {
     return NULL;
 
   for(i=0; mp_cmds[i].name[0]; i++) {
-    if(strncasecmp(mp_cmds[i].name,str,l) == 0)
+    if(av_strncasecmp(mp_cmds[i].name,str,l) == 0)
       break;
   }
 
@@ -1488,11 +1487,11 @@ mp_input_get_key_from_name(const char *name) {
   if(len == 1) { // Direct key code
     ret = (unsigned char)name[0];
     return ret;
-  } else if(len > 2 && strncasecmp("0x",name,2) == 0)
+  } else if(len > 2 && av_strncasecmp("0x",name,2) == 0)
     return strtol(name,NULL,16);
 
   for(i = 0; key_names[i].name[0]; i++) {
-    if(strcasecmp(key_names[i].name,name) == 0)
+    if(av_strcasecmp(key_names[i].name,name) == 0)
       return key_names[i].key;
   }
 

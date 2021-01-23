@@ -21,12 +21,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
-#include <strings.h>
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "help_mp.h"
 #include "mixer.h"
 #include "mpcommon.h"
@@ -856,7 +856,7 @@ static GtkWidget * CreatePreferences( void )
      CBSubEncoding_items=g_list_append( CBSubEncoding_items,lEncoding[i].comment );
 
      if ( !listed )
-      if ( strcasecmp ( lEncoding[i].name, sub_cp ) == 0 ) listed=True;
+      if ( av_strcasecmp ( lEncoding[i].name, sub_cp ) == 0 ) listed=True;
     }
    }
    if ( !listed ) CBSubEncoding_items=g_list_insert( CBSubEncoding_items,sub_cp,1 );
@@ -945,7 +945,7 @@ static GtkWidget * CreatePreferences( void )
    int i, append, listed=(subtitle_font_encoding == NULL);
    for ( i=0;lEncoding[i].name;i++ )
    {
-    append=(strcasecmp( lEncoding[i].name,ENC_UNICODE ) == 0);
+    append=(av_strcasecmp( lEncoding[i].name,ENC_UNICODE ) == 0);
 #ifdef CONFIG_ICONV
     cd=iconv_open( "ucs-4",lEncoding[i].name );
 
@@ -960,7 +960,7 @@ static GtkWidget * CreatePreferences( void )
      CBFontEncoding_items=g_list_append( CBFontEncoding_items,lEncoding[i].comment );
 
      if ( !listed )
-      if ( strcasecmp ( lEncoding[i].name, subtitle_font_encoding ) == 0 ) listed=True;
+      if ( av_strcasecmp ( lEncoding[i].name, subtitle_font_encoding ) == 0 ) listed=True;
     }
    }
    if ( !listed ) CBFontEncoding_items=g_list_insert( CBFontEncoding_items,subtitle_font_encoding,1 );
@@ -1326,7 +1326,7 @@ void ShowPreferences( void )
   {
    int i;
    for ( i=0;lEncoding[i].name;i++ )
-    if ( !strcasecmp( sub_cp,lEncoding[i].name ) ) break;
+    if ( !av_strcasecmp( sub_cp,lEncoding[i].name ) ) break;
    if ( lEncoding[i].name ) gtk_entry_set_text( GTK_ENTRY( ESubEncoding ),lEncoding[i].comment );
    else gtk_entry_set_text( GTK_ENTRY( ESubEncoding ),sub_cp );
    gtk_widget_set_sensitive( CBSubUtf8,FALSE );
@@ -1347,7 +1347,7 @@ void ShowPreferences( void )
   int i;
   const char *s = (subtitle_font_encoding ? subtitle_font_encoding : ENC_UNICODE);
   for ( i=0;lEncoding[i].name;i++ )
-   if ( !strcasecmp( s,lEncoding[i].name ) ) break;
+   if ( !av_strcasecmp( s,lEncoding[i].name ) ) break;
   if ( lEncoding[i].name ) gtk_entry_set_text( GTK_ENTRY( EFontEncoding ),lEncoding[i].comment );
   else gtk_entry_set_text( GTK_ENTRY( EFontEncoding ),s );
  }

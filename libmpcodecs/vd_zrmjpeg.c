@@ -23,9 +23,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "vfcap.h"
 
@@ -209,7 +209,7 @@ static unsigned int guess_mjpeg_type(unsigned char *data, unsigned int size,
 
 
 	if (app0 && get_int2(data + app0 + 2) >= 5 &&
-			strncasecmp((char*)(data + app0 + 4), "AVI1", 4) == 0) {
+			av_strncasecmp((char*)(data + app0 + 4), "AVI1", 4) == 0) {
 		if (data[app0+8] == 1) {
 			VERBOSE("data is interlaced, APP0: top-first (1)\n");
 			return IMGFMT_ZRMJPEGIT;

@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <strings.h>
 
 #ifdef CONFIG_ICONV
 #include <iconv.h>
@@ -44,6 +43,7 @@
 #endif
 
 #include "libavutil/common.h"
+#include "libavutil/avstring.h"
 #include "mpbswap.h"
 #include "font_load.h"
 #include "mp_msg.h"
@@ -986,7 +986,7 @@ static font_desc_t* read_font_desc_ft(const char *fname, int face_index, int mov
     if (subtitle_font_ppem > 128) subtitle_font_ppem = 128;
     if (osd_font_ppem > 128) osd_font_ppem = 128;
 
-    unicode = !subtitle_font_encoding || strcasecmp(subtitle_font_encoding, "unicode") == 0;
+    unicode = !subtitle_font_encoding || av_strcasecmp(subtitle_font_encoding, "unicode") == 0;
 
     desc = init_font_desc();
     if(!desc) goto err_out;

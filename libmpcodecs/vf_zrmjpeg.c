@@ -36,10 +36,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <inttypes.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "av_helpers.h"
 #include "mp_msg.h"
 #include "img_format.h"
@@ -54,7 +54,7 @@
 
 #undef malloc
 #undef free
-#undef strcasecmp
+#undef av_strcasecmp
 
 /* some convenient #define's, is this portable enough? */
 /// Printout  with vf_zrmjpeg: prefix at VERBOSE level
@@ -993,35 +993,35 @@ static int vf_open(vf_instance_t *vf, char *args){
 					VERBOSE(
 			"setting vertical decimation to %d\n", priv->maxwidth);
 				}
-			} else if (!strcasecmp("dc10+-PAL", ptr) ||
-					!strcasecmp("dc10-PAL", ptr)) {
+			} else if (!av_strcasecmp("dc10+-PAL", ptr) ||
+					!av_strcasecmp("dc10-PAL", ptr)) {
 				priv->maxwidth = 768;
 				priv->maxheight = 576;
 				VERBOSE("setting DC10(+) PAL profile\n");
-			} else if (!strcasecmp("fd", ptr)) {
+			} else if (!av_strcasecmp("fd", ptr)) {
 				priv->fd = 1;
 				VERBOSE("forcing decimation\n");
-			} else if (!strcasecmp("nofd", ptr)) {
+			} else if (!av_strcasecmp("nofd", ptr)) {
 				priv->fd = 0;
 				VERBOSE("decimate only if beautiful\n");
-			} else if (!strcasecmp("bw", ptr)) {
+			} else if (!av_strcasecmp("bw", ptr)) {
 				priv->bw = 1;
 				VERBOSE("setting black and white encoding\n");
-			} else if (!strcasecmp("color", ptr)) {
+			} else if (!av_strcasecmp("color", ptr)) {
 				priv->bw = 0;
 				VERBOSE("setting color encoding\n");
-			} else if (!strcasecmp("dc10+-NTSC", ptr) ||
-					!strcasecmp("dc10-NTSC", ptr)) {
+			} else if (!av_strcasecmp("dc10+-NTSC", ptr) ||
+					!av_strcasecmp("dc10-NTSC", ptr)) {
 				priv->maxwidth = 640;
 				priv->maxheight = 480;
 				VERBOSE("setting DC10(+) NTSC profile\n");
-			} else if (!strcasecmp("buz-PAL", ptr) ||
-					!strcasecmp("lml33-PAL", ptr)) {
+			} else if (!av_strcasecmp("buz-PAL", ptr) ||
+					!av_strcasecmp("lml33-PAL", ptr)) {
 				priv->maxwidth = 720;
 				priv->maxheight = 576;
 				VERBOSE("setting buz/lml33 PAL profile\n");
-			} else if (!strcasecmp("buz-NTSC", ptr) ||
-					!strcasecmp("lml33-NTSC", ptr)) {
+			} else if (!av_strcasecmp("buz-NTSC", ptr) ||
+					!av_strcasecmp("lml33-NTSC", ptr)) {
 				priv->maxwidth = 720;
 				priv->maxheight = 480;
 				VERBOSE("setting buz/lml33 NTSC profile\n");

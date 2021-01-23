@@ -1,7 +1,6 @@
 #ifndef MPLAYER_WINESTRING_H
 #define MPLAYER_WINESTRING_H
 
-#include <strings.h>
 
 #include "windef.h"
 
@@ -10,6 +9,6 @@ LPSTR       WINAPI lstrcpyWtoA(LPSTR,LPCWSTR);
 LPWSTR      WINAPI lstrcpynAtoW(LPWSTR,LPCSTR,INT);
 LPSTR       WINAPI lstrcpynWtoA(LPSTR,LPCWSTR,INT);
 
-#define lstrncmpiA strncasecmp
+#define lstrncmpiA av_strncasecmp
 
 #endif /* MPLAYER_WINESTRING_H */

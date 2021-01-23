@@ -21,7 +21,6 @@
 #include <dirent.h>
 #include <errno.h>
 #include <string.h>
-#include <strings.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -283,7 +282,7 @@ static int open_dir(menu_t* menu,char* args) {
       ext++;
       elem = extensions;
       do {
-        if (!strcasecmp(ext, *elem))
+        if (!av_strcasecmp(ext, *elem))
           break;
       } while (*++elem);
       if (*elem == NULL)

@@ -28,7 +28,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <strings.h>
 #include <ctype.h>
 #include <sys/time.h>
 #include <errno.h>
@@ -301,7 +300,7 @@ set_station (struct pvr_t *pvr, const char *station,
   /* select channel */
   for (i = 0; i < pvr->stationlist.used; i++)
   {
-    if (channel && !strcasecmp (pvr->stationlist.list[i].name, channel))
+    if (channel && !av_strcasecmp (pvr->stationlist.list[i].name, channel))
       break; /* found existing channel entry */
 
     if (freq > 0 && pvr->stationlist.list[i].freq == freq)
@@ -416,7 +415,7 @@ parse_setup_stationlist (struct pvr_t *pvr)
     /* select channel list */
     for (i = 0; chanlists[i].name != NULL; i++)
     {
-      if (!strcasecmp (chanlists[i].name, stream_tv_defaults.chanlist))
+      if (!av_strcasecmp (chanlists[i].name, stream_tv_defaults.chanlist))
       {
         chantab = i;
         break;
@@ -682,7 +681,7 @@ set_station_by_channelname_or_freq (struct pvr_t *pvr, const char *channel,
     /* select by channel */
     for (i = 0; i < pvr->stationlist.used ; i++)
     {
-      if (!strcasecmp (pvr->stationlist.list[i].name, channel))
+      if (!av_strcasecmp (pvr->stationlist.list[i].name, channel))
       {
         if (!pvr->stationlist.list[i].enabled)
         {

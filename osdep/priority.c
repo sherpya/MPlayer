@@ -26,8 +26,8 @@
 #include <windows.h>
 #endif
 #include <string.h>
-#include <strings.h>
 
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "help_mp.h"
 
@@ -58,7 +58,7 @@ void set_priority(void)
         int i;
 
         for (i = 0; priority_presets_defs[i].name; i++) {
-            if (strcasecmp(priority_presets_defs[i].name, proc_priority) == 0)
+            if (av_strcasecmp(priority_presets_defs[i].name, proc_priority) == 0)
                 break;
         }
         mp_msg(MSGT_CPLAYER, MSGL_STATUS, MSGTR_SettingProcessPriority,

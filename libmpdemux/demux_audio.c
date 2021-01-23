@@ -33,7 +33,6 @@
 #include "libavutil/intreadwrite.h"
 
 #include <string.h>
-#include <strings.h>
 
 #define MP3 1
 #define WAV 2
@@ -220,19 +219,19 @@ get_flac_metadata (demuxer_t* demuxer)
           c = comment[length];
           comment[length] = 0;
 
-          if (!strncasecmp ("TITLE=", comment, 6) && (length - 6 > 0))
+          if (!av_strncasecmp ("TITLE=", comment, 6) && (length - 6 > 0))
             demux_info_add (demuxer, "Title", comment + 6);
-          else if (!strncasecmp ("ARTIST=", comment, 7) && (length - 7 > 0))
+          else if (!av_strncasecmp ("ARTIST=", comment, 7) && (length - 7 > 0))
             demux_info_add (demuxer, "Artist", comment + 7);
-          else if (!strncasecmp ("ALBUM=", comment, 6) && (length - 6 > 0))
+          else if (!av_strncasecmp ("ALBUM=", comment, 6) && (length - 6 > 0))
             demux_info_add (demuxer, "Album", comment + 6);
-          else if (!strncasecmp ("DATE=", comment, 5) && (length - 5 > 0))
+          else if (!av_strncasecmp ("DATE=", comment, 5) && (length - 5 > 0))
             demux_info_add (demuxer, "Year", comment + 5);
-          else if (!strncasecmp ("GENRE=", comment, 6) && (length - 6 > 0))
+          else if (!av_strncasecmp ("GENRE=", comment, 6) && (length - 6 > 0))
             demux_info_add (demuxer, "Genre", comment + 6);
-          else if (!strncasecmp ("Comment=", comment, 8) && (length - 8 > 0))
+          else if (!av_strncasecmp ("Comment=", comment, 8) && (length - 8 > 0))
             demux_info_add (demuxer, "Comment", comment + 8);
-          else if (!strncasecmp ("TRACKNUMBER=", comment, 12)
+          else if (!av_strncasecmp ("TRACKNUMBER=", comment, 12)
                    && (length - 12 > 0))
           {
             char buf[31];

@@ -22,7 +22,6 @@
 #include <inttypes.h>
 #include <unistd.h>
 #include <string.h>
-#include <strings.h>
 
 #include "config.h"
 #include "command.h"
@@ -3423,7 +3422,7 @@ int run_command(MPContext *mpctx, mp_cmd_t *cmd)
 
                 for (i = 0; mp_dvdnav_bindings[i].name; i++)
                   if (cmd->args[0].v.s &&
-                      !strcasecmp (cmd->args[0].v.s,
+                      !av_strcasecmp (cmd->args[0].v.s,
                                    mp_dvdnav_bindings[i].name))
                     command = mp_dvdnav_bindings[i].cmd;
 

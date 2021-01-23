@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <math.h>
 #include <limits.h>
 #include <time.h>
@@ -32,6 +31,7 @@
 #endif
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mencoder.h"
 #include "mp_msg.h"
 #include "help_mp.h"
@@ -865,29 +865,29 @@ static int vf_open(vf_instance_t *vf, char* args){
     /* XXX: hack: some of the MJPEG decoder DLL's needs exported huffman
        table, so we define a zero-table, also lavc mjpeg encoder is putting
        huffman tables into the stream, so no problem */
-    if (lavc_param_vcodec && !strcasecmp(lavc_param_vcodec, "mjpeg"))
+    if (lavc_param_vcodec && !av_strcasecmp(lavc_param_vcodec, "mjpeg"))
     {
 	mux_v->bih=calloc(1, sizeof(*mux_v->bih)+28);
 	mux_v->bih->biSize=sizeof(*mux_v->bih)+28;
     }
-    else if (lavc_param_vcodec && (!strcasecmp(lavc_param_vcodec, "huffyuv")
-                                || !strcasecmp(lavc_param_vcodec, "ffvhuff")))
+    else if (lavc_param_vcodec && (!av_strcasecmp(lavc_param_vcodec, "huffyuv")
+                                || !av_strcasecmp(lavc_param_vcodec, "ffvhuff")))
     {
     /* XXX: hack: huffyuv needs to store huffman tables (allthough we dunno the size yet ...) */
 	mux_v->bih=calloc(1, sizeof(*mux_v->bih)+1000);
 	mux_v->bih->biSize=sizeof(*mux_v->bih)+1000;
     }
-    else if (lavc_param_vcodec && !strcasecmp(lavc_param_vcodec, "asv1"))
+    else if (lavc_param_vcodec && !av_strcasecmp(lavc_param_vcodec, "asv1"))
     {
 	mux_v->bih=calloc(1, sizeof(*mux_v->bih)+8);
 	mux_v->bih->biSize=sizeof(*mux_v->bih)+8;
     }
-    else if (lavc_param_vcodec && !strcasecmp(lavc_param_vcodec, "asv2"))
+    else if (lavc_param_vcodec && !av_strcasecmp(lavc_param_vcodec, "asv2"))
     {
 	mux_v->bih=calloc(1, sizeof(*mux_v->bih)+8);
 	mux_v->bih->biSize=sizeof(*mux_v->bih)+8;
     }
-    else if (lavc_param_vcodec && !strcasecmp(lavc_param_vcodec, "wmv2"))
+    else if (lavc_param_vcodec && !av_strcasecmp(lavc_param_vcodec, "wmv2"))
     {
 	mux_v->bih=calloc(1, sizeof(*mux_v->bih)+4);
 	mux_v->bih->biSize=sizeof(*mux_v->bih)+4;
@@ -907,51 +907,51 @@ static int vf_open(vf_instance_t *vf, char* args){
 	return 0;
     }
 
-    if (!strcasecmp(lavc_param_vcodec, "mpeg1") || !strcasecmp(lavc_param_vcodec, "mpeg1video"))
+    if (!av_strcasecmp(lavc_param_vcodec, "mpeg1") || !av_strcasecmp(lavc_param_vcodec, "mpeg1video"))
 	mux_v->bih->biCompression = mmioFOURCC('m', 'p', 'g', '1');
-    else if (!strcasecmp(lavc_param_vcodec, "mpeg2") || !strcasecmp(lavc_param_vcodec, "mpeg2video"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "mpeg2") || !av_strcasecmp(lavc_param_vcodec, "mpeg2video"))
 	mux_v->bih->biCompression = mmioFOURCC('m', 'p', 'g', '2');
-    else if (!strcasecmp(lavc_param_vcodec, "h263") || !strcasecmp(lavc_param_vcodec, "h263p"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "h263") || !av_strcasecmp(lavc_param_vcodec, "h263p"))
 	mux_v->bih->biCompression = mmioFOURCC('h', '2', '6', '3');
-    else if (!strcasecmp(lavc_param_vcodec, "rv10"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "rv10"))
 	mux_v->bih->biCompression = mmioFOURCC('R', 'V', '1', '0');
-    else if (!strcasecmp(lavc_param_vcodec, "mjpeg"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "mjpeg"))
 	mux_v->bih->biCompression = mmioFOURCC('M', 'J', 'P', 'G');
-    else if (!strcasecmp(lavc_param_vcodec, "ljpeg"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "ljpeg"))
 	mux_v->bih->biCompression = mmioFOURCC('L', 'J', 'P', 'G');
-    else if (!strcasecmp(lavc_param_vcodec, "mpeg4"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "mpeg4"))
 	mux_v->bih->biCompression = mmioFOURCC('F', 'M', 'P', '4');
-    else if (!strcasecmp(lavc_param_vcodec, "msmpeg4"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "msmpeg4"))
 	mux_v->bih->biCompression = mmioFOURCC('d', 'i', 'v', '3');
-    else if (!strcasecmp(lavc_param_vcodec, "msmpeg4v2"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "msmpeg4v2"))
 	mux_v->bih->biCompression = mmioFOURCC('M', 'P', '4', '2');
-    else if (!strcasecmp(lavc_param_vcodec, "wmv1"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "wmv1"))
 	mux_v->bih->biCompression = mmioFOURCC('W', 'M', 'V', '1');
-    else if (!strcasecmp(lavc_param_vcodec, "wmv2"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "wmv2"))
 	mux_v->bih->biCompression = mmioFOURCC('W', 'M', 'V', '2');
-    else if (!strcasecmp(lavc_param_vcodec, "huffyuv"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "huffyuv"))
 	mux_v->bih->biCompression = mmioFOURCC('H', 'F', 'Y', 'U');
-    else if (!strcasecmp(lavc_param_vcodec, "ffvhuff"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "ffvhuff"))
 	mux_v->bih->biCompression = mmioFOURCC('F', 'F', 'V', 'H');
-    else if (!strcasecmp(lavc_param_vcodec, "asv1"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "asv1"))
 	mux_v->bih->biCompression = mmioFOURCC('A', 'S', 'V', '1');
-    else if (!strcasecmp(lavc_param_vcodec, "asv2"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "asv2"))
 	mux_v->bih->biCompression = mmioFOURCC('A', 'S', 'V', '2');
-    else if (!strcasecmp(lavc_param_vcodec, "ffv1"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "ffv1"))
 	mux_v->bih->biCompression = mmioFOURCC('F', 'F', 'V', '1');
-    else if (!strcasecmp(lavc_param_vcodec, "snow"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "snow"))
 	mux_v->bih->biCompression = mmioFOURCC('S', 'N', 'O', 'W');
-    else if (!strcasecmp(lavc_param_vcodec, "flv"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "flv"))
 	mux_v->bih->biCompression = mmioFOURCC('F', 'L', 'V', '1');
-    else if (!strcasecmp(lavc_param_vcodec, "dvvideo"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "dvvideo"))
 	mux_v->bih->biCompression = mmioFOURCC('d', 'v', 's', 'd');
-    else if (!strcasecmp(lavc_param_vcodec, "libx264"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "libx264"))
 	mux_v->bih->biCompression = mmioFOURCC('h', '2', '6', '4');
-    else if (!strcasecmp(lavc_param_vcodec, "libschroedinger"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "libschroedinger"))
 	mux_v->bih->biCompression = mmioFOURCC('d', 'r', 'a', 'c');
-    else if (!strcasecmp(lavc_param_vcodec, "libdirac"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "libdirac"))
 	mux_v->bih->biCompression = mmioFOURCC('d', 'r', 'a', 'c');
-    else if (!strcasecmp(lavc_param_vcodec, "libvpx"))
+    else if (!av_strcasecmp(lavc_param_vcodec, "libvpx"))
 	mux_v->bih->biCompression = mmioFOURCC('V', 'P', '8', '0');
     else
 	mux_v->bih->biCompression = mmioFOURCC(lavc_param_vcodec[0],

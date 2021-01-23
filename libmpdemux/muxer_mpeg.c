@@ -20,13 +20,13 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <string.h>
-#include <strings.h>
 #include <sys/types.h>
 
 #include "config.h"
 #include "mp_msg.h"
 #include "help_mp.h"
 
+#include "libavutil/avstring.h"
 #include "libavutil/intreadwrite.h"
 #include "aviheader.h"
 #include "ms_hdr.h"
@@ -2502,21 +2502,21 @@ int muxer_init_muxer_mpeg(muxer_t *muxer)
 
 	if(conf_mux != NULL)
 	{
-		if(! strcasecmp(conf_mux, "mpeg1"))
+		if(! av_strcasecmp(conf_mux, "mpeg1"))
 		{
 			priv->mux = MUX_MPEG1;
 			priv->packet_size = 2048;
 			priv->is_genmpeg1 = 1;
 			priv->muxrate = 1800 * 125;	//Constrained parameters
 		}
-		else if(! strcasecmp(conf_mux, "dvd"))
+		else if(! av_strcasecmp(conf_mux, "dvd"))
 		{
 			priv->mux = MUX_MPEG2;
 			priv->is_dvd = 1;
 			priv->packet_size = 2048;
 			priv->muxrate = 10080 * 125;
 		}
-		else if(! strcasecmp(conf_mux, "xsvcd"))
+		else if(! av_strcasecmp(conf_mux, "xsvcd"))
 		{
 			priv->mux = MUX_MPEG2;
 			priv->is_xsvcd = 1;
@@ -2524,7 +2524,7 @@ int muxer_init_muxer_mpeg(muxer_t *muxer)
 			priv->muxrate = 150*2324;
 			priv->ts_allframes = 1;
 		}
-		else if(! strcasecmp(conf_mux, "xvcd"))
+		else if(! av_strcasecmp(conf_mux, "xvcd"))
 		{
 			priv->mux = MUX_MPEG1;
 			priv->is_xvcd = 1;
@@ -2532,7 +2532,7 @@ int muxer_init_muxer_mpeg(muxer_t *muxer)
 			priv->muxrate = 75*2352;
 			priv->ts_allframes = 1;
 		}
-		else if(! strcasecmp(conf_mux, "pes1"))
+		else if(! av_strcasecmp(conf_mux, "pes1"))
 		{
 			priv->mux = MUX_MPEG1;
 			priv->rawpes = 1;
@@ -2540,7 +2540,7 @@ int muxer_init_muxer_mpeg(muxer_t *muxer)
 			priv->muxrate = 10080 * 125;
 			priv->ts_allframes = 1;
 		}
-		else if(! strcasecmp(conf_mux, "pes2"))
+		else if(! av_strcasecmp(conf_mux, "pes2"))
 		{
 			priv->mux = MUX_MPEG2;
 			priv->rawpes = 1;
@@ -2550,7 +2550,7 @@ int muxer_init_muxer_mpeg(muxer_t *muxer)
 		}
 		else
 		{
-			if(strcasecmp(conf_mux, "mpeg2"))
+			if(av_strcasecmp(conf_mux, "mpeg2"))
 				mp_msg(MSGT_MUXER, MSGL_ERR, "Unknown format %s, default to mpeg2\n", conf_mux);
 			priv->mux = MUX_MPEG2;
 			priv->is_genmpeg2 = 1;

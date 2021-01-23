@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 
 #include "config.h"
 #include "help_mp.h"
@@ -396,7 +395,7 @@ static const char * GetLanguage( void *language, int type )
     else if ( p[3] != 0) return language;
   }
  for ( i=0;i<sizeof( Languages ) / sizeof( Languages_t );i++ )
-  if ( type == GET_LANG_INT ? Languages[i].id == l : strncasecmp(Languages[i].id2, p, sizeof(Languages[i].id2)) == 0 ) return Languages[i].name;
+  if ( type == GET_LANG_INT ? Languages[i].id == l : av_strncasecmp(Languages[i].id2, p, sizeof(Languages[i].id2)) == 0 ) return Languages[i].name;
  return MSGTR_GUI_Unknown;
 }
 #undef lng

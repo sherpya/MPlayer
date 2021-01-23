@@ -23,10 +23,10 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <string.h>
-#include <strings.h>
 #include <stdarg.h>
 #include <ctype.h>
 
+#include "libavutil/avstring.h"
 #include "osdep/mmap_anon.h"
 #include "wine/windef.h"
 #include "wine/winbase.h"
@@ -120,7 +120,7 @@ WIN_BOOL WINAPI ReadFile(HANDLE handle, LPVOID mem, DWORD size, LPDWORD result, 
 }
 INT WINAPI lstrcmpiA(LPCSTR c1, LPCSTR c2)
 {
-    return strcasecmp(c1,c2);
+    return av_strcasecmp(c1,c2);
 }
 LPSTR WINAPI lstrcpynA(LPSTR dest, LPCSTR src, INT num)
 {

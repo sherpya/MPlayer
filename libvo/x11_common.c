@@ -27,10 +27,10 @@
 #include "mp_msg.h"
 #include "mp_fifo.h"
 #include "libavutil/common.h"
+#include "libavutil/avstring.h"
 #include "x11_common.h"
 
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 #include <assert.h>
 
@@ -1903,11 +1903,11 @@ uint32_t vo_x11_set_equalizer(const char *name, int value)
     if (cmap == None)
         return VO_NOTAVAIL;
 
-    if (!strcasecmp(name, "brightness"))
+    if (!av_strcasecmp(name, "brightness"))
         vo_brightness = value;
-    else if (!strcasecmp(name, "contrast"))
+    else if (!av_strcasecmp(name, "contrast"))
         vo_contrast = value;
-    else if (!strcasecmp(name, "gamma"))
+    else if (!av_strcasecmp(name, "gamma"))
         vo_gamma = value;
     else
         return VO_NOTIMPL;
@@ -1938,11 +1938,11 @@ uint32_t vo_x11_get_equalizer(const char *name, int *value)
 {
     if (cmap == None)
         return VO_NOTAVAIL;
-    if (!strcasecmp(name, "brightness"))
+    if (!av_strcasecmp(name, "brightness"))
         *value = vo_brightness;
-    else if (!strcasecmp(name, "contrast"))
+    else if (!av_strcasecmp(name, "contrast"))
         *value = vo_contrast;
-    else if (!strcasecmp(name, "gamma"))
+    else if (!av_strcasecmp(name, "gamma"))
         *value = vo_gamma;
     else
         return VO_NOTIMPL;
@@ -1970,29 +1970,29 @@ int vo_xv_set_eq(uint32_t xv_port, const char *name, int value)
                 int hue = 0, port_value, port_min, port_max;
 
                 if (!strcmp(attributes[i].name, "XV_BRIGHTNESS") &&
-                    (!strcasecmp(name, "brightness")))
+                    (!av_strcasecmp(name, "brightness")))
                     port_value = value;
                 else if (!strcmp(attributes[i].name, "XV_CONTRAST") &&
-                         (!strcasecmp(name, "contrast")))
+                         (!av_strcasecmp(name, "contrast")))
                     port_value = value;
                 else if (!strcmp(attributes[i].name, "XV_SATURATION") &&
-                         (!strcasecmp(name, "saturation")))
+                         (!av_strcasecmp(name, "saturation")))
                     port_value = value;
                 else if (!strcmp(attributes[i].name, "XV_HUE") &&
-                         (!strcasecmp(name, "hue")))
+                         (!av_strcasecmp(name, "hue")))
                 {
                     port_value = value;
                     hue = 1;
                 } else
                     /* Note: since 22.01.2002 GATOS supports these attrs for radeons (NK) */
                 if (!strcmp(attributes[i].name, "XV_RED_INTENSITY") &&
-                        (!strcasecmp(name, "red_intensity")))
+                        (!av_strcasecmp(name, "red_intensity")))
                     port_value = value;
                 else if (!strcmp(attributes[i].name, "XV_GREEN_INTENSITY")
-                         && (!strcasecmp(name, "green_intensity")))
+                         && (!av_strcasecmp(name, "green_intensity")))
                     port_value = value;
                 else if (!strcmp(attributes[i].name, "XV_BLUE_INTENSITY")
-                         && (!strcasecmp(name, "blue_intensity")))
+                         && (!av_strcasecmp(name, "blue_intensity")))
                     port_value = value;
                 else
                     continue;
@@ -2048,16 +2048,16 @@ int vo_xv_get_eq(uint32_t xv_port, const char *name, int *value)
                     100;
 
                 if (!strcmp(attributes[i].name, "XV_BRIGHTNESS") &&
-                    (!strcasecmp(name, "brightness")))
+                    (!av_strcasecmp(name, "brightness")))
                     *value = val;
                 else if (!strcmp(attributes[i].name, "XV_CONTRAST") &&
-                         (!strcasecmp(name, "contrast")))
+                         (!av_strcasecmp(name, "contrast")))
                     *value = val;
                 else if (!strcmp(attributes[i].name, "XV_SATURATION") &&
-                         (!strcasecmp(name, "saturation")))
+                         (!av_strcasecmp(name, "saturation")))
                     *value = val;
                 else if (!strcmp(attributes[i].name, "XV_HUE") &&
-                         (!strcasecmp(name, "hue")))
+                         (!av_strcasecmp(name, "hue")))
                 {
                     /* nasty nvidia detect */
                     if (port_min == 0 && port_max == 360)
@@ -2067,13 +2067,13 @@ int vo_xv_get_eq(uint32_t xv_port, const char *name, int *value)
                 } else
                     /* Note: since 22.01.2002 GATOS supports these attrs for radeons (NK) */
                 if (!strcmp(attributes[i].name, "XV_RED_INTENSITY") &&
-                        (!strcasecmp(name, "red_intensity")))
+                        (!av_strcasecmp(name, "red_intensity")))
                     *value = val;
                 else if (!strcmp(attributes[i].name, "XV_GREEN_INTENSITY")
-                         && (!strcasecmp(name, "green_intensity")))
+                         && (!av_strcasecmp(name, "green_intensity")))
                     *value = val;
                 else if (!strcmp(attributes[i].name, "XV_BLUE_INTENSITY")
-                         && (!strcasecmp(name, "blue_intensity")))
+                         && (!av_strcasecmp(name, "blue_intensity")))
                     *value = val;
                 else
                     continue;

@@ -31,10 +31,10 @@
 #include <stdarg.h>
 #include <time.h>
 #include <string.h>
-#include <strings.h>
 #include <errno.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "video_out.h"
 #include "video_out_internal.h"
 #include "libmpcodecs/vf.h"
@@ -572,11 +572,11 @@ getcolor(char * s){
     if  (s==NULL) return -1;
     i=strtol(s, &rest, 10);
     if ((rest==NULL || strlen(rest)==0) && i>=0 && i<=5) return i;
-    if (!strcasecmp(s, "normal")) return AA_NORMAL;
-    else if (!strcasecmp(s, "dim")) return AA_DIM;
-    else if (!strcasecmp(s, "bold")) return AA_BOLD;
-    else if (!strcasecmp(s, "boldfont")) return AA_BOLDFONT;
-    else if (!strcasecmp(s, "special")) return AA_SPECIAL;
+    if (!av_strcasecmp(s, "normal")) return AA_NORMAL;
+    else if (!av_strcasecmp(s, "dim")) return AA_DIM;
+    else if (!av_strcasecmp(s, "bold")) return AA_BOLD;
+    else if (!av_strcasecmp(s, "boldfont")) return AA_BOLDFONT;
+    else if (!av_strcasecmp(s, "special")) return AA_SPECIAL;
     else return -1;
 }
 

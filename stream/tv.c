@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <strings.h>
 #include <ctype.h>
 #include <sys/time.h>
 
@@ -280,19 +279,19 @@ static int norm_from_string(tvi_handle_t *tvh, char* norm)
         return 0;
     }
 
-    if (!strcasecmp(norm, "pal"))
+    if (!av_strcasecmp(norm, "pal"))
         return TV_NORM_PAL;
-    else if (!strcasecmp(norm, "ntsc"))
+    else if (!av_strcasecmp(norm, "ntsc"))
         return TV_NORM_NTSC;
-    else if (!strcasecmp(norm, "secam"))
+    else if (!av_strcasecmp(norm, "secam"))
         return TV_NORM_SECAM;
-    else if (!strcasecmp(norm, "palnc"))
+    else if (!av_strcasecmp(norm, "palnc"))
         return TV_NORM_PALNC;
-    else if (!strcasecmp(norm, "palm"))
+    else if (!av_strcasecmp(norm, "palm"))
         return TV_NORM_PALM;
-    else if (!strcasecmp(norm, "paln"))
+    else if (!av_strcasecmp(norm, "paln"))
         return TV_NORM_PALN;
-    else if (!strcasecmp(norm, "ntscjp"))
+    else if (!av_strcasecmp(norm, "ntscjp"))
         return TV_NORM_NTSCJP;
     else {
         mp_msg(MSGT_TV, MSGL_WARN, MSGTR_TV_BogusNormParameter, norm, "PAL");
@@ -337,7 +336,7 @@ static void parse_channels(tvi_handle_t *tvh)
             tv_channel_current->freq = 0;
             for (i = 0; i < chanlists[tvh->chanlist].count; i++) {
                 cl = tvh->chanlist_s[i];
-                if (!strcasecmp(cl.name, tv_channel_current->number)) {
+                if (!av_strcasecmp(cl.name, tv_channel_current->number)) {
                     tv_channel_current->freq=cl.freq;
                     break;
                 }
@@ -544,7 +543,7 @@ static int open_tv(tvi_handle_t *tvh)
     /* select channel list */
     for (i = 0; chanlists[i].name != NULL; i++)
     {
-	if (!strcasecmp(chanlists[i].name, tvh->tv_param->chanlist))
+	if (!av_strcasecmp(chanlists[i].name, tvh->tv_param->chanlist))
 	{
 	    tvh->chanlist = i;
 	    tvh->chanlist_s = chanlists[i].list;
@@ -629,7 +628,7 @@ static int open_tv(tvi_handle_t *tvh)
 	    cl = tvh->chanlist_s[i];
 		    //  printf("count%d: name: %s, freq: %d\n",
 		    //	i, cl.name, cl.freq);
-	    if (!strcasecmp(cl.name, tvh->tv_param->channel))
+	    if (!av_strcasecmp(cl.name, tvh->tv_param->channel))
 	    {
 			strcpy(tv_channel_last_real, cl.name);
 		tvh->channel = i;
@@ -1058,7 +1057,7 @@ int tv_set_channel_real(tvi_handle_t *tvh, char *channel) {
 	    cl = tvh->chanlist_s[i];
 //	    printf("count%d: name: %s, freq: %d\n",
 //		i, cl.name, cl.freq);
-	    if (!strcasecmp(cl.name, channel))
+	    if (!av_strcasecmp(cl.name, channel))
 	    {
 		tvh->channel = i;
 		mp_msg(MSGT_TV, MSGL_INFO, MSGTR_TV_SelectedChannel2,
@@ -1104,7 +1103,7 @@ int tv_last_channel(tvi_handle_t *tvh) {
 		for (i = 0; i < chanlists[tvh->chanlist].count; i++)
 		{
 		    cl = tvh->chanlist_s[i];
-		    if (!strcasecmp(cl.name, tv_channel_last_real))
+		    if (!av_strcasecmp(cl.name, tv_channel_last_real))
 		    {
 			strcpy(tv_channel_last_real, tvh->chanlist_s[tvh->channel].name);
 			tvh->channel = i;

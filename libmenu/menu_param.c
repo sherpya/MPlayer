@@ -23,10 +23,11 @@
 #include <dirent.h>
 #include <errno.h>
 #include <string.h>
-#include <strings.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
+
+#include "libavutil/avstring.h"
 
 #include "mp_msg.h"
 #include "help_mp.h"
@@ -168,9 +169,9 @@ static int parse_args(menu_t* menu,char* args) {
     auto_update = asx_get_attrib("auto-update", attribs);
     if (auto_update) {
       if (!strcmp(auto_update, "1") ||
-          !strcasecmp(auto_update, "on") ||
-          !strcasecmp(auto_update, "yes") ||
-          !strcasecmp(auto_update, "true"))
+          !av_strcasecmp(auto_update, "on") ||
+          !av_strcasecmp(auto_update, "yes") ||
+          !av_strcasecmp(auto_update, "true"))
         m->auto_update = 1;
       free(auto_update);
     }

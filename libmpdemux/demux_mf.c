@@ -19,13 +19,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "help_mp.h"
 
@@ -151,7 +151,7 @@ static demuxer_t* demux_open_mf(demuxer_t* demuxer){
   demuxer->video->sh = sh_video;
 
   for (i = 0; type2format[i].type; i++)
-    if (strcasecmp(mf_type, type2format[i].type) == 0)
+    if (av_strcasecmp(mf_type, type2format[i].type) == 0)
       break;
   if (!type2format[i].type) {
     mp_msg(MSGT_DEMUX, MSGL_INFO, "[demux_mf] unknown input file type.\n" );

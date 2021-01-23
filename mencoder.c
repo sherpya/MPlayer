@@ -50,12 +50,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <sys/time.h>
 #if defined(__MINGW32__) || defined(__CYGWIN__)
 #include <windows.h>
 #endif
 
+#include "libavutil/avstring.h"
 #include "input/input.h"
 #include "libaf/af_format.h"
 #include "libao2/audio_out.h"
@@ -616,14 +616,14 @@ user_correct_pts = 0;
 		switch (out_file_format)
 		{
 			case MUXER_TYPE_AVI:
-			if (strcasecmp(extension,"avi"))
+			if (av_strcasecmp(extension,"avi"))
 				mp_msg(MSGT_MENCODER, MSGL_WARN, MSGTR_MencoderWrongFormatAVI);
 			break;
 
 			case MUXER_TYPE_MPEG:
-			if (strcasecmp(extension,"mpg") &&
-				strcasecmp(extension,"mpeg") &&
-				strcasecmp(extension,"vob"))
+			if (av_strcasecmp(extension,"mpg") &&
+				av_strcasecmp(extension,"mpeg") &&
+				av_strcasecmp(extension,"vob"))
 				mp_msg(MSGT_MENCODER, MSGL_WARN, MSGTR_MencoderWrongFormatMPG);
 			break;
 		}

@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <time.h>
 #include <unistd.h>
 #include <assert.h>
@@ -429,7 +428,7 @@ static char *get_demuxer_info(char *tag)
         return NULL;
 
     for (n = 0; info[2 * n] != NULL; n++)
-        if (!strcasecmp(info[2 * n], tag))
+        if (!av_strcasecmp(info[2 * n], tag))
             break;
 
     return info[2 * n + 1] ? strdup(info[2 * n + 1]) : NULL;

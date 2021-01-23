@@ -39,7 +39,6 @@
 #include <fcntl.h>
 #include <sys/fbio.h>
 #include <sys/visual_io.h>
-#include <strings.h>
 #include <sys/mman.h>
 
 #include "config.h"

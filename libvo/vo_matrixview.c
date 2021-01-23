@@ -25,7 +25,8 @@
 #include "config.h"
 
 #include <stdint.h>
-#include <strings.h>
+
+#include "libavutil/avstring.h"
 
 #include "mp_msg.h"
 #include "subopt-helper.h"
@@ -266,9 +267,9 @@ static int control(uint32_t request, void *data)
         {
             vf_equalizer_t *eq=data;
 
-            if (strcasecmp(eq->item, "contrast") == 0) {
+            if (av_strcasecmp(eq->item, "contrast") == 0) {
                 eq->value = eq_contrast;
-            } else if (strcasecmp(eq->item, "brightness") == 0) {
+            } else if (av_strcasecmp(eq->item, "brightness") == 0) {
                 eq->value = eq_brightness;
             }
         }
@@ -276,9 +277,9 @@ static int control(uint32_t request, void *data)
     case VOCTRL_SET_EQUALIZER:
         {
             vf_equalizer_t *eq=data;
-            if (strcasecmp(eq->item, "contrast") == 0) {
+            if (av_strcasecmp(eq->item, "contrast") == 0) {
                 contrast_set(eq->value);
-            } else if (strcasecmp(eq->item, "brightness") == 0) {
+            } else if (av_strcasecmp(eq->item, "brightness") == 0) {
                 brightness_set(eq->value);
             }
         }

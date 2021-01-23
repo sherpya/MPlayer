@@ -22,13 +22,13 @@
 #include "config.h"
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
 #ifdef MP_DEBUG
 #include <assert.h>
 #endif
+#include "libavutil/avstring.h"
 #include "m_config.h"
 #include "playtree.h"
 #include "mp_msg.h"
@@ -382,7 +382,7 @@ play_tree_unset_param(play_tree_t* pt, const char* name) {
 #endif
 
   for(n = 0 ; pt->params[n].name != NULL ; n++) {
-    if(strcasecmp(pt->params[n].name,name) == 0)
+    if(av_strcasecmp(pt->params[n].name,name) == 0)
       ni = n;
   }
 

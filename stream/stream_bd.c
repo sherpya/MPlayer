@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <limits.h>
 #include <ctype.h>
-#include <strings.h>
 
 #include "libavutil/common.h"
 #include "libavutil/aes.h"
@@ -195,7 +194,7 @@ static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
         // or         I | I-Key
         // can be followed by ; and comment
 
-        if (strncasecmp(line, idstr, 40))
+        if (av_strncasecmp(line, idstr, 40))
             continue;
         mp_msg(MSGT_OPEN, MSGL_V, "KeyDB found Entry for DiscID:\n%s\n", line);
 

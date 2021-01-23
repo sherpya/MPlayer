@@ -25,11 +25,11 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-#include <strings.h>
 #ifdef MP_DEBUG
 #include <assert.h>
 #endif
 
+#include "libavutil/avstring.h"
 #include "m_config.h"
 #include "m_option.h"
 #include "mp_msg.h"
@@ -390,9 +390,9 @@ m_config_get_co(const m_config_t *config, char *arg) {
     int l = strlen(co->name) - 1;
     if((co->opt->type->flags & M_OPT_TYPE_ALLOW_WILDCARD) &&
        (co->name[l] == '*')) {
-      if(strncasecmp(co->name,arg,l) == 0)
+      if(av_strncasecmp(co->name,arg,l) == 0)
 	return co;
-    } else if(strcasecmp(co->name,arg) == 0)
+    } else if(av_strcasecmp(co->name,arg) == 0)
       return co;
   }
   return NULL;

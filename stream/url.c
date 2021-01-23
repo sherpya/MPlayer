@@ -21,12 +21,12 @@
  */
 
 #include <string.h>
-#include <strings.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <inttypes.h>
 
+#include "libavutil/avstring.h"
 #include "url.h"
 #include "mp_msg.h"
 #include "mp_strings.h"
@@ -37,18 +37,18 @@
 #endif
 
 static int is_proxy(const URL_t *url) {
-  return !strcasecmp(url->protocol, "http_proxy") && url->file && strstr(url->file, "://");
+  return !av_strcasecmp(url->protocol, "http_proxy") && url->file && strstr(url->file, "://");
 }
 
 int url_is_protocol(const URL_t *url, const char *proto) {
   int proxy = is_proxy(url);
   if (proxy) {
     URL_t *tmp = url_new(url->file + 1);
-    int res = !strcasecmp(tmp->protocol, proto);
+    int res = !av_strcasecmp(tmp->protocol, proto);
     url_free(tmp);
     return res;
   }
-  return !strcasecmp(url->protocol, proto);
+  return !av_strcasecmp(url->protocol, proto);
 }
 
 void url_set_protocol(URL_t *url, const char *proto) {

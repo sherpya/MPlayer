@@ -19,10 +19,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "help_mp.h"
 #include "path.h"
@@ -1053,7 +1053,7 @@ static int ifo_stream_open (stream_t *stream, int mode, void *opts, int *file_fo
     struct stream_priv_s *spriv;
     int len = strlen(stream->url);
 
-    if (len < 4 || strcasecmp (stream->url + len - 4, ".ifo"))
+    if (len < 4 || av_strcasecmp (stream->url + len - 4, ".ifo"))
         return STREAM_UNSUPPORTED;
 
     mp_msg(MSGT_DVD, MSGL_INFO, ".IFO detected. Redirecting to dvd://\n");
@@ -1062,7 +1062,7 @@ static int ifo_stream_open (stream_t *stream, int mode, void *opts, int *file_fo
 
     spriv=calloc(1, sizeof(struct stream_priv_s));
     spriv->device = mp_dirname(stream->url);
-    if(!strncasecmp(filename,"vts_",4))
+    if(!av_strncasecmp(filename,"vts_",4))
     {
         if(sscanf(filename+3, "_%02d_", &spriv->title)!=1)
             spriv->title=1;

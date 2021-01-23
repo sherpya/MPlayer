@@ -28,13 +28,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <errno.h>
 #include <math.h>
 #include <limits.h>
 #include <time.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "mencoder.h"
 #include "codec-cfg.h"
@@ -150,7 +150,7 @@ static const profile_t profiles[] =
 static const profile_t *profileFromName(const char *str)
 {
 	profile_t *cur = profiles;
-	while (cur->name && strcasecmp(cur->name, str)) cur++;
+	while (cur->name && av_strcasecmp(cur->name, str)) cur++;
 	if(!cur->name) return NULL;
 	return cur;
 }
@@ -851,7 +851,7 @@ static int dispatch_settings(xvid_mplayer_module_t *mod)
 	// MPEG quantisation is only supported in ASP and unrestricted profiles
 	if((selected_profile->flags & PROFILE_MPEGQUANT) &&
 		(xvidenc_quant_method != NULL) &&
-		!strcasecmp(xvidenc_quant_method, "mpeg"))
+		!av_strcasecmp(xvidenc_quant_method, "mpeg"))
 	{
 		frame->vol_flags |= XVID_VOL_MPEGQUANT;
 	if(xvidenc_intra_matrix_file != NULL) {
@@ -965,15 +965,15 @@ static int dispatch_settings(xvid_mplayer_module_t *mod)
 		}
 
 	} else if(xvidenc_par != NULL) {
-		if(strcasecmp(xvidenc_par, "pal43") == 0)
+		if(av_strcasecmp(xvidenc_par, "pal43") == 0)
 			frame->par = XVID_PAR_43_PAL;
-		else if(strcasecmp(xvidenc_par, "pal169") == 0)
+		else if(av_strcasecmp(xvidenc_par, "pal169") == 0)
 			frame->par = XVID_PAR_169_PAL;
-		else if(strcasecmp(xvidenc_par, "ntsc43") == 0)
+		else if(av_strcasecmp(xvidenc_par, "ntsc43") == 0)
 			frame->par = XVID_PAR_43_NTSC;
-		else if(strcasecmp(xvidenc_par, "ntsc169") == 0)
+		else if(av_strcasecmp(xvidenc_par, "ntsc169") == 0)
 			frame->par = XVID_PAR_169_NTSC;
-		else if(strcasecmp(xvidenc_par, "ext") == 0)
+		else if(av_strcasecmp(xvidenc_par, "ext") == 0)
 			frame->par = XVID_PAR_EXT;
 
 	if(frame->par == XVID_PAR_EXT) {

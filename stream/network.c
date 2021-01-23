@@ -23,13 +23,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 #include <errno.h>
 #include <ctype.h>
 
 #include "config.h"
 
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "help_mp.h"
 
@@ -140,12 +140,12 @@ check4proxies( const URL_t *url ) {
 	URL_t *url_out = NULL;
 	if( url==NULL ) return NULL;
 	url_out = url_new( url->url );
-	if( !strcasecmp(url->protocol, "http_proxy") ) {
+	if( !av_strcasecmp(url->protocol, "http_proxy") ) {
 		mp_msg(MSGT_NETWORK,MSGL_V,"Using HTTP proxy: http://%s:%d\n", url->hostname, url->port );
 		return url_out;
 	}
 	// Check if the http_proxy environment variable is set.
-	if( !strcasecmp(url->protocol, "http") ) {
+	if( !av_strcasecmp(url->protocol, "http") ) {
 		char *proxy;
 		proxy = getenv("http_proxy");
 		if( proxy!=NULL ) {
@@ -210,7 +210,7 @@ http_send_request( URL_t *url, int64_t pos ) {
 
 	http_hdr = http_new_header();
 
-	if( !strcasecmp(url->protocol, "http_proxy") ) {
+	if( !av_strcasecmp(url->protocol, "http_proxy") ) {
 		proxy = 1;
 		server_url = url_new( (url->file)+1 );
 		if (!server_url) {
@@ -250,7 +250,7 @@ http_send_request( URL_t *url, int64_t pos ) {
 	    }
 	}
 
-	if( strcasecmp(url->protocol, "noicyx") )
+	if( av_strcasecmp(url->protocol, "noicyx") )
 	    http_set_field(http_hdr, "Icy-MetaData: 1");
 
 	if(pos>0) {

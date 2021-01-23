@@ -32,10 +32,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <errno.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "help_mp.h"
 
@@ -599,22 +599,22 @@ uint32_t vidix_control(uint32_t request, void *data)
 //    printf("vidix seteq %s -> %d  \n",eq->item,eq->value);
 
     /* vidix eq ranges are -1000..1000 */
-    if (!strcasecmp(eq->item, "brightness"))
+    if (!av_strcasecmp(eq->item, "brightness"))
     {
 	info.brightness = eq->value*10;
 	info.cap = VEQ_CAP_BRIGHTNESS;
     }
-    else if (!strcasecmp(eq->item, "contrast"))
+    else if (!av_strcasecmp(eq->item, "contrast"))
     {
 	info.contrast = eq->value*10;
 	info.cap = VEQ_CAP_CONTRAST;
     }
-    else if (!strcasecmp(eq->item, "saturation"))
+    else if (!av_strcasecmp(eq->item, "saturation"))
     {
 	info.saturation = eq->value*10;
 	info.cap = VEQ_CAP_SATURATION;
     }
-    else if (!strcasecmp(eq->item, "hue"))
+    else if (!av_strcasecmp(eq->item, "hue"))
     {
 	info.hue = eq->value*10;
 	info.cap = VEQ_CAP_HUE;
@@ -634,22 +634,22 @@ uint32_t vidix_control(uint32_t request, void *data)
 	return VO_FALSE;
 
     /* vidix eq ranges are -1000..1000 */
-    if (!strcasecmp(eq->item, "brightness"))
+    if (!av_strcasecmp(eq->item, "brightness"))
     {
 	if (info.cap & VEQ_CAP_BRIGHTNESS)
 	    eq->value = info.brightness/10;
     }
-    else if (!strcasecmp(eq->item, "contrast"))
+    else if (!av_strcasecmp(eq->item, "contrast"))
     {
 	if (info.cap & VEQ_CAP_CONTRAST)
 	    eq->value = info.contrast/10;
     }
-    else if (!strcasecmp(eq->item, "saturation"))
+    else if (!av_strcasecmp(eq->item, "saturation"))
     {
 	if (info.cap & VEQ_CAP_SATURATION)
 	    eq->value = info.saturation/10;
     }
-    else if (!strcasecmp(eq->item, "hue"))
+    else if (!av_strcasecmp(eq->item, "hue"))
     {
 	if (info.cap & VEQ_CAP_HUE)
 	    eq->value = info.hue/10;

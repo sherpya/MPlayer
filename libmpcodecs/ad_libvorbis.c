@@ -18,12 +18,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
 #include <unistd.h>
 #include <stdarg.h>
 #include <math.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "ad_internal.h"
 #include "libaf/reorder_ch.h"
@@ -68,7 +68,7 @@ static int read_vorbis_comment( char* ptr, const char* comment, const char* form
 
   va_start( va, format );
   clen = strlen( comment );
-  ret = strncasecmp( ptr, comment, clen) == 0 ? vsscanf( ptr+clen, format, va ) : 0;
+  ret = av_strncasecmp( ptr, comment, clen) == 0 ? vsscanf( ptr+clen, format, va ) : 0;
   va_end( va );
 
   return ret;

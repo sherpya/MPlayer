@@ -26,9 +26,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "video_out.h"
 #define NO_DRAW_FRAME
 #include "video_out_internal.h"
@@ -1339,19 +1339,19 @@ set_equalizer( const char *data, int value )
 
      ca.flags = DCAF_NONE;
 
-     if (!strcasecmp( data, "brightness" )) {
+     if (!av_strcasecmp( data, "brightness" )) {
           ca.flags      |= DCAF_BRIGHTNESS;
           ca.brightness  = value * factor + 0x8000;
      }
-     if (!strcasecmp( data, "contrast" )) {
+     if (!av_strcasecmp( data, "contrast" )) {
           ca.flags    |= DCAF_CONTRAST;
           ca.contrast  = value * factor + 0x8000;
      }
-     if (!strcasecmp( data, "hue" )) {
+     if (!av_strcasecmp( data, "hue" )) {
           ca.flags |= DCAF_HUE;
           ca.hue    = value * factor + 0x8000;
      }
-     if (!strcasecmp( data, "saturation" )) {
+     if (!av_strcasecmp( data, "saturation" )) {
           ca.flags      |= DCAF_SATURATION;
           ca.saturation  = value * factor + 0x8000;
      }
@@ -1388,16 +1388,16 @@ get_equalizer( const char *data, int *value )
      if (res != DFB_OK)
           return VO_FALSE;
 
-     if (!strcasecmp( data, "brightness" ) &&
+     if (!av_strcasecmp( data, "brightness" ) &&
          (ca.flags & DCAF_BRIGHTNESS))
           *value = (ca.brightness - 0x8000) * factor;
-     if (!strcasecmp( data, "contrast" ) &&
+     if (!av_strcasecmp( data, "contrast" ) &&
          (ca.flags & DCAF_CONTRAST))
           *value = (ca.contrast - 0x8000) * factor;
-     if (!strcasecmp( data, "hue" ) &&
+     if (!av_strcasecmp( data, "hue" ) &&
          (ca.flags & DCAF_HUE))
           *value = (ca.hue - 0x8000) * factor;
-     if (!strcasecmp( data, "saturation" ) &&
+     if (!av_strcasecmp( data, "saturation" ) &&
          (ca.flags & DCAF_SATURATION))
           *value = (ca.saturation - 0x8000) * factor;
 

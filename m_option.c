@@ -23,7 +23,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -50,9 +49,9 @@ const m_option_t* m_option_list_find(const m_option_t* list,const char* name) {
     int l = strlen(list[i].name) - 1;
     if((list[i].type->flags & M_OPT_TYPE_ALLOW_WILDCARD) &&
        (l > 0) && (list[i].name[l] == '*')) {
-      if(strncasecmp(list[i].name,name,l) == 0)
+      if(av_strncasecmp(list[i].name,name,l) == 0)
 	return &list[i];
-    } else if(strcasecmp(list[i].name,name) == 0)
+    } else if(av_strcasecmp(list[i].name,name) == 0)
       return &list[i];
   }
   return NULL;
@@ -99,28 +98,28 @@ static char* dup_printf(const char *fmt, ...) {
 static int parse_flag(const m_option_t* opt,const char *name, const char *param, void* dst, int src) {
   if (src == M_CONFIG_FILE) {
     if(!param) return M_OPT_MISSING_PARAM;
-    if (!strcasecmp(param, "yes") ||	/* any other language? */
-	!strcasecmp(param, "on") ||
-	!strcasecmp(param, "ja") ||
-	!strcasecmp(param, "si") ||
-	!strcasecmp(param, "igen") ||
-	!strcasecmp(param, "y") ||
-	!strcasecmp(param, "j") ||
-	!strcasecmp(param, "i") ||
-	!strcasecmp(param, "tak") ||
-	!strcasecmp(param, "ja") ||
-	!strcasecmp(param, "true") ||
+    if (!av_strcasecmp(param, "yes") ||	/* any other language? */
+	!av_strcasecmp(param, "on") ||
+	!av_strcasecmp(param, "ja") ||
+	!av_strcasecmp(param, "si") ||
+	!av_strcasecmp(param, "igen") ||
+	!av_strcasecmp(param, "y") ||
+	!av_strcasecmp(param, "j") ||
+	!av_strcasecmp(param, "i") ||
+	!av_strcasecmp(param, "tak") ||
+	!av_strcasecmp(param, "ja") ||
+	!av_strcasecmp(param, "true") ||
 	!strcmp(param, "1")) {
       if(dst) VAL(dst) = opt->max;
-    } else if (!strcasecmp(param, "no") ||
-	       !strcasecmp(param, "off") ||
-	       !strcasecmp(param, "nein") ||
-	       !strcasecmp(param, "nicht") ||
-	       !strcasecmp(param, "nem") ||
-	       !strcasecmp(param, "n") ||
-	       !strcasecmp(param, "nie") ||
-	       !strcasecmp(param, "nej") ||
-	       !strcasecmp(param, "false") ||
+    } else if (!av_strcasecmp(param, "no") ||
+	       !av_strcasecmp(param, "off") ||
+	       !av_strcasecmp(param, "nein") ||
+	       !av_strcasecmp(param, "nicht") ||
+	       !av_strcasecmp(param, "nem") ||
+	       !av_strcasecmp(param, "n") ||
+	       !av_strcasecmp(param, "nie") ||
+	       !av_strcasecmp(param, "nej") ||
+	       !av_strcasecmp(param, "false") ||
 	       !strcmp(param, "0")) {
       if(dst) VAL(dst) = opt->min;
     } else {
@@ -569,13 +568,13 @@ static int parse_str_list(const m_option_t* opt,const char *name, const char *pa
 
   if(opt->name[len-1] == '*' && ((int)strlen(name) > len - 1)) {
     const char* n = &name[len-1];
-    if(strcasecmp(n,"-add") == 0)
+    if(av_strcasecmp(n,"-add") == 0)
       op = OP_ADD;
-    else if(strcasecmp(n,"-pre") == 0)
+    else if(av_strcasecmp(n,"-pre") == 0)
       op = OP_PRE;
-    else if(strcasecmp(n,"-del") == 0)
+    else if(av_strcasecmp(n,"-del") == 0)
       op = OP_DEL;
-    else if(strcasecmp(n,"-clr") == 0)
+    else if(av_strcasecmp(n,"-clr") == 0)
       op = OP_CLR;
     else
       return M_OPT_UNKNOWN;
@@ -1196,7 +1195,7 @@ static int parse_imgfmt(const m_option_t* opt,const char *name, const char *para
   if (sscanf(param, "0x%x", &fmt) != 1)
   {
   for(i = 0 ; mp_imgfmt_list[i].name ; i++) {
-    if(!strcasecmp(param,mp_imgfmt_list[i].name)) {
+    if(!av_strcasecmp(param,mp_imgfmt_list[i].name)) {
       fmt=mp_imgfmt_list[i].fmt;
       break;
     }
@@ -1286,7 +1285,7 @@ static int parse_afmt(const m_option_t* opt,const char *name, const char *param,
   if (sscanf(param, "0x%x", &fmt) != 1)
   {
   for(i = 0 ; mp_afmt_list[i].name ; i++) {
-    if(!strcasecmp(param,mp_afmt_list[i].name)) {
+    if(!av_strcasecmp(param,mp_afmt_list[i].name)) {
       fmt=mp_afmt_list[i].fmt;
       break;
     }
@@ -1328,7 +1327,7 @@ int parse_timestring(const char *str, double *time, char endchar)
     *time = 60*a + d;
   else if (sscanf(str, "%lf%n", &d, &len) >= 1)
     *time = d;
-  else if (strncasecmp(str, "nopts", 5) == 0) {
+  else if (av_strncasecmp(str, "nopts", 5) == 0) {
     *time = MP_NOPTS_VALUE;
     len = 5;
   } else
@@ -1385,13 +1384,13 @@ static int parse_time_size(const m_option_t* opt,const char *name, const char *p
   /* End at size parsing */
   if(sscanf(param, "%lf%3s", &end_at, unit) == 2) {
     ts.type = END_AT_SIZE;
-    if(!strcasecmp(unit, "b"))
+    if(!av_strcasecmp(unit, "b"))
       ;
-    else if(!strcasecmp(unit, "kb"))
+    else if(!av_strcasecmp(unit, "kb"))
       end_at *= 1024;
-    else if(!strcasecmp(unit, "mb"))
+    else if(!av_strcasecmp(unit, "mb"))
       end_at *= 1024*1024;
-    else if(!strcasecmp(unit, "gb"))
+    else if(!av_strcasecmp(unit, "gb"))
       end_at *= 1024*1024*1024;
     else
       ts.type = END_AT_NONE;
@@ -1805,13 +1804,13 @@ static int parse_obj_settings_list(const m_option_t* opt,const char *name,
 
   if(opt->name[len-1] == '*' && ((int)strlen(name) > len - 1)) {
     const char* n = &name[len-1];
-    if(strcasecmp(n,"-add") == 0)
+    if(av_strcasecmp(n,"-add") == 0)
       op = OP_ADD;
-    else if(strcasecmp(n,"-pre") == 0)
+    else if(av_strcasecmp(n,"-pre") == 0)
       op = OP_PRE;
-    else if(strcasecmp(n,"-del") == 0)
+    else if(av_strcasecmp(n,"-del") == 0)
       op = OP_DEL;
-    else if(strcasecmp(n,"-clr") == 0)
+    else if(av_strcasecmp(n,"-clr") == 0)
       op = OP_CLR;
     else {
       char prefix[len];

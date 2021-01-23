@@ -33,7 +33,6 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <string.h>
-#include <strings.h>
 #include <netdb.h>
 #include <signal.h>
 #else

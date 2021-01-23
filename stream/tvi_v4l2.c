@@ -40,7 +40,6 @@ known issues:
 #include <pthread.h>
 #include <stdio.h>
 #include <string.h>
-#include <strings.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/time.h>
@@ -56,6 +55,7 @@ known issues:
 #include <linux/types.h>
 #include <linux/videodev2.h>
 #endif
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "libmpcodecs/img_format.h"
 #include "libmpcodecs/dec_teletext.h"
@@ -1003,7 +1003,7 @@ static int control(priv_t *priv, int cmd, void *arg)
                 standard.index = i;
                 if (-1 == ioctl(priv->video_fd, VIDIOC_ENUMSTD, &standard))
                     return TVI_CONTROL_FALSE;
-                if (!strcasecmp(standard.name, (char *)arg)) {
+                if (!av_strcasecmp(standard.name, (char *)arg)) {
                     *(int *)arg = i;
                     return TVI_CONTROL_TRUE;
                 }

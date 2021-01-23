@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <ctype.h>
 
 #include <sys/types.h>
@@ -111,7 +110,7 @@ static char *stristr(const char *haystack, const char *needle) {
 
     len=strlen(needle);
     while (*p != '\0') {
-	if (strncasecmp(p, needle, len) == 0) return (char*)p;
+	if (av_strncasecmp(p, needle, len) == 0) return (char*)p;
 	p++;
     }
 
@@ -179,13 +178,13 @@ static subtitle *sub_read_line_sami(stream_t* st, subtitle *current, int utf16) 
 	    if (p - text >= LINE_LEN)
 	        sami_add_line(current, text, &p);
 	    if (*s == '\0') break;
-	    else if (!strncasecmp (s, "<br>", 4)) {
+	    else if (!av_strncasecmp (s, "<br>", 4)) {
                 sami_add_line(current, text, &p);
 		s += 4;
 	    }
 	    else if ((*s == '{') && !sub_no_text_pp) { state = 5; ++s; continue; }
 	    else if (*s == '<') { state = 4; }
-	    else if (!strncasecmp (s, "&nbsp;", 6)) { *p++ = ' '; s += 6; }
+	    else if (!av_strncasecmp (s, "&nbsp;", 6)) { *p++ = ' '; s += 6; }
 	    else if (*s == '\t') { *p++ = ' '; s++; }
 	    else if (*s == '\r' || *s == '\n') { s++; }
 	    else *p++ = *s++;
@@ -1180,7 +1179,7 @@ static int sub_autodetect (stream_t* st, int *uses_time, int utf16) {
 		{*uses_time=1;return SUB_VPLAYER;}
 	if (sscanf (line, "%d:%d:%d ",     &i, &i, &i )==3)
 		{*uses_time=1;return SUB_VPLAYER;}
-	if (!strncasecmp(line, "<window", 7))
+	if (!av_strncasecmp(line, "<window", 7))
 		{*uses_time=1;return SUB_RT;}
 	if (!memcmp(line, "Dialogue: Marked", 16))
 		{*uses_time=1; return SUB_SSA;}
@@ -1441,7 +1440,7 @@ const char* guess_buffer_cp(unsigned char* buffer, int buflen, const char *prefe
     mp_msg(MSGT_SUBREADER, MSGL_V, "\n");
 
     for (i = 0; i < langcnt; i++) {
-	if (strcasecmp(languages[i], preferred_language) != 0) continue;
+	if (av_strcasecmp(languages[i], preferred_language) != 0) continue;
 	analyser = enca_analyser_alloc(languages[i]);
 	encoding = enca_analyse_const(analyser, buffer, buflen);
 	enca_analyser_free(analyser);
@@ -1535,7 +1534,7 @@ sub_data* sub_read_file (const char *filename, float fps) {
 	    if ((l=strlen(filename))>4){
 		    static const char exts[][8] = {".utf", ".utf8", ".utf-8" };
 		    for (k=3;--k>=0;)
-			if (l >= strlen(exts[k]) && !strcasecmp(filename+(l - strlen(exts[k])), exts[k])){
+			if (l >= strlen(exts[k]) && !av_strcasecmp(filename+(l - strlen(exts[k])), exts[k])){
 			    sub_utf8 = 1;
 			    break;
 			}
@@ -2024,7 +2023,7 @@ static void append_dir_subtitles(struct sub_list *slist, const char *path,
 
             // If it's a .sub, check if there is a .idx with the same name. If
             // there is one, it's certainly a vobsub so we skip it.
-            if (strcasecmp(tmp_fname_ext, "sub") == 0) {
+            if (av_strcasecmp(tmp_fname_ext, "sub") == 0) {
                 char *idx, *idxname = strdup(de->d_name);
 
                 strcpy(idxname + strlen(de->d_name) - sizeof("idx") + 1, "idx");
@@ -2042,14 +2041,14 @@ static void append_dir_subtitles(struct sub_list *slist, const char *path,
             found = 0;
 #ifdef CONFIG_ICONV
 #ifdef CONFIG_ENCA
-            for (i = ((sub_cp && strncasecmp(sub_cp, "enca", 4) != 0) ? 3 : 0); sub_exts[i]; i++) {
+            for (i = ((sub_cp && av_strncasecmp(sub_cp, "enca", 4) != 0) ? 3 : 0); sub_exts[i]; i++) {
 #else
             for (i = (sub_cp ? 3 : 0); sub_exts[i]; i++) {
 #endif
 #else
             for (i = 0; sub_exts[i]; i++) {
 #endif
-                if (strcasecmp(sub_exts[i], tmp_fname_ext) == 0) {
+                if (av_strcasecmp(sub_exts[i], tmp_fname_ext) == 0) {
                     found = 1;
                     break;
                 }

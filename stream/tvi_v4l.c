@@ -48,12 +48,12 @@
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <pthread.h>
 #ifdef HAVE_SYS_SYSINFO_H
 #include <sys/sysinfo.h>
 #endif
 
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "libaf/af_format.h"
 #include "libmpcodecs/img_format.h"
@@ -541,11 +541,11 @@ static int init(priv_t *priv)
                bparm.HorDcm, bparm.VerDcm, bparm.TmpDcm);
 
         bparm.input = priv->tv_param->input; /* tv */
-        if (!strcasecmp(priv->tv_param->norm, "pal"))
+        if (!av_strcasecmp(priv->tv_param->norm, "pal"))
             bparm.norm =  0; /* PAL */
-        else if (!strcasecmp(priv->tv_param->norm, "ntsc"))
+        else if (!av_strcasecmp(priv->tv_param->norm, "ntsc"))
             bparm.norm =  1; /* NTSC */
-        else if (!strcasecmp(priv->tv_param->norm, "secam"))
+        else if (!av_strcasecmp(priv->tv_param->norm, "secam"))
             bparm.norm =  2; /* SECAM */
         bparm.quality = priv->tv_param->quality;
         bparm.decimation = priv->tv_param->decimation;

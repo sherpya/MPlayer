@@ -23,12 +23,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
 #include "libavutil/intreadwrite.h"
+#include "libavutil/avstring.h"
 
 #include "font_load.h"
 #include "sub.h"
@@ -120,7 +120,7 @@ for(i=0;i<65536;i++) desc->start[i]=desc->width[i]=desc->font[i]=-1;
 
 section[0]=0;
 
-unicode = !subtitle_font_encoding || strcasecmp(subtitle_font_encoding, "unicode") == 0;
+unicode = !subtitle_font_encoding || av_strcasecmp(subtitle_font_encoding, "unicode") == 0;
 
 while(fgets(sor,1020,f)){
   unsigned char* p[8];

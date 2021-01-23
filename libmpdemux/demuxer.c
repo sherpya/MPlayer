@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 
 #include <sys/types.h>
@@ -1437,7 +1436,7 @@ int demux_info_add(demuxer_t *demuxer, const char *opt, const char *param)
 
 
     for (n = 0; info && info[2 * n] != NULL; n++) {
-        if (!strcasecmp(opt, info[2 * n])) {
+        if (!av_strcasecmp(opt, info[2 * n])) {
             if (!strcmp(param, info[2 * n + 1])) {
                 mp_msg(MSGT_DEMUX, MSGL_V, "Demuxer info %s set to unchanged value %s\n", opt, param);
                 return 0;
@@ -1486,7 +1485,7 @@ char *demux_info_get(demuxer_t *demuxer, const char *opt)
     char **info = demuxer->info;
 
     for (i = 0; info && info[2 * i] != NULL; i++) {
-        if (!strcasecmp(opt, info[2 * i]))
+        if (!av_strcasecmp(opt, info[2 * i]))
             return info[2 * i + 1];
     }
 

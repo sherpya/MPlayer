@@ -36,11 +36,11 @@
  */
 
 #include "subopt-helper.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <limits.h>
 #include <assert.h>
 
@@ -337,9 +337,9 @@ int strargcmp(strarg_t *arg, const char *str) {
   return res;
 }
 
-/** \brief compare the stings just as strcasecmp does */
+/** \brief compare the stings just as av_strcasecmp does */
 int strargcasecmp(strarg_t *arg, char *str) {
-  int res = strncasecmp(arg->str, str, arg->len);
+  int res = av_strncasecmp(arg->str, str, arg->len);
   if (!res && arg->len != strlen(str))
     res = arg->len - strlen(str);
   return res;

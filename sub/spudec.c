@@ -28,6 +28,7 @@
  */
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 
 #include <errno.h>
@@ -36,7 +37,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <strings.h>
 #include <math.h>
 #include "sub.h"
 #include "libvo/video_out.h"
@@ -1292,7 +1292,7 @@ static void spudec_parse_extradata(spudec_handle_t *this,
         pal[i] = vobsub_palette_to_yuv(pal[i]);
       this->auto_palette = 0;
     }
-    if (!strncasecmp(ptr, "forced subs: on", 15))
+    if (!av_strncasecmp(ptr, "forced subs: on", 15))
       this->forced_subs_only = 1;
     if (!strncmp(ptr, "custom colors: ON, tridx: ", 26) &&
         sscanf(ptr + 26, "%x, colors: %x, %x, %x, %x",

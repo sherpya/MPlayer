@@ -75,8 +75,8 @@
 #include "config.h"
 
 #include <stdio.h>
-#include <strings.h>
 
+#include "libavutil/avstring.h"
 #include "libmpcodecs/img_format.h"
 #include "libmpcodecs/dec_teletext.h"
 #include "libaf/af_format.h"
@@ -3463,7 +3463,7 @@ static int control(priv_t * priv, int cmd, void *arg)
 	    if (!priv->pTVTuner)
 		return TVI_CONTROL_FALSE;
 	    for (i = 0; i < tv_available_norms_count; i++) {
-		if (!strcasecmp
+		if (!av_strcasecmp
 		    (tv_norms[tv_available_norms[i]].name, (char *) arg)) {
 		    *(int *) arg = i + 1;
 		    return TVI_CONTROL_TRUE;

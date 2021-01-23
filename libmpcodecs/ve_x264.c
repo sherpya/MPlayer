@@ -30,10 +30,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 #include <errno.h>
 
 #include "config.h"
+#include "libavutil/avstring.h"
 #include "mp_msg.h"
 #include "mencoder.h"
 #include "m_option.h"
@@ -91,9 +91,9 @@ void x264enc_set_param(const m_option_t* opt, char* arg)
         if (!value)
             continue;
         *value++ = 0;
-        if (!strcasecmp(name, "preset"))
+        if (!av_strcasecmp(name, "preset"))
             preset = value;
-        else if (!strcasecmp(name, "tune"))
+        else if (!av_strcasecmp(name, "tune"))
             tune = value;
     }
     if (x264_param_default_preset(&param, preset, tune) < 0) {
@@ -109,16 +109,16 @@ void x264enc_set_param(const m_option_t* opt, char* arg)
 
         if (value)
             *value++ = 0;
-        if (!strcasecmp(name, "profile"))
+        if (!av_strcasecmp(name, "profile"))
             profile = value;
-        else if (!strcasecmp(name, "turbo")) {
+        else if (!av_strcasecmp(name, "turbo")) {
             mp_msg(MSGT_CFGPARSER, MSGL_WARN, "Option x264encopts: turbo option is deprecated; "
                                               "use slow_firstpass to disable turbo\n");
             if (value && *value == '0')
                 slow_firstpass = 1;
-        } else if (!strcasecmp(name, "slow_firstpass"))
+        } else if (!av_strcasecmp(name, "slow_firstpass"))
             slow_firstpass = 1;
-        else if (strcasecmp(name, "preset") && strcasecmp(name, "tune")) {
+        else if (av_strcasecmp(name, "preset") && av_strcasecmp(name, "tune")) {
             ret = x264_param_parse(&param, name, value);
             if (ret == X264_PARAM_BAD_NAME)
                 mp_msg(MSGT_CFGPARSER, MSGL_ERR, "Option x264encopts: Unknown suboption %s\n", name);

@@ -32,6 +32,8 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include "libavutil/mem.h"
+#include "libavutil/avstring.h"
 #include "libmpcodecs/img_format.h"
 #include "libmpcodecs/mp_image.h"
 
@@ -217,12 +219,12 @@ static void draw(menu_t* menu, mp_image_t* mpi) {
     menu_draw_box(mpi,mpriv->bg,mpriv->bg_alpha,0,0,mpi->w,h);
 
   if(!mpriv->child || !mpriv->raw_child){
-    char input[strlen(mpriv->cur_history->buffer) + strlen(mpriv->prompt) + 1];
-    sprintf(input,"%s%s",mpriv->prompt,mpriv->cur_history->buffer);
+    char *input = av_asprintf("%s%s",mpriv->prompt,mpriv->cur_history->buffer);
     menu_text_size(input,w,mpriv->vspace,1,&lw,&lh);
     menu_draw_text_full(mpi,input,x,y,w,h,mpriv->vspace,1,
 			MENU_TEXT_BOT|MENU_TEXT_LEFT,
 			MENU_TEXT_BOT|MENU_TEXT_LEFT);
+    av_freep(&input);
     y -= lh + mpriv->vspace;
   }
 
@@ -342,10 +344,9 @@ static int run_shell_cmd(menu_t* menu, char* cmd) {
 
 static void enter_cmd(menu_t* menu) {
   history_t* h;
-  char input[strlen(mpriv->cur_history->buffer) + strlen(mpriv->prompt) + 1];
-
-  sprintf(input,"%s%s",mpriv->prompt,mpriv->cur_history->buffer);
+  char *input = av_asprintf("%s%s",mpriv->prompt,mpriv->cur_history->buffer);
   add_line(mpriv,input);
+  av_freep(&input);
 
   if(mpriv->history == mpriv->cur_history) {
     if(mpriv->history_size >= mpriv->history_max) {

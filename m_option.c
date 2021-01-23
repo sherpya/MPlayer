@@ -36,6 +36,7 @@
 #include "stream/url.h"
 #include "libavutil/avstring.h"
 #include "libavutil/attributes.h"
+#include "libavutil/mem.h"
 
 // Don't free for 'production' atm
 #ifndef MP_DEBUG
@@ -1813,9 +1814,7 @@ static int parse_obj_settings_list(const m_option_t* opt,const char *name,
     else if(av_strcasecmp(n,"-clr") == 0)
       op = OP_CLR;
     else {
-      char prefix[len];
-      strncpy(prefix,opt->name,len-1);
-      prefix[len-1] = '\0';
+      char *prefix = av_strndup(opt->name, len-1);
       mp_msg(MSGT_VFILTER,MSGL_ERR, "Option %s: unknown postfix %s\n"
 	     "Supported postfixes are:\n"
 	     "  %s-add\n"
@@ -1827,6 +1826,7 @@ static int parse_obj_settings_list(const m_option_t* opt,const char *name,
 	     " Negative index can be used (i.e. -1 is the last element)\n\n"
 	     "  %s-clr\n"
 	     " Clear the current list.\n",name,n,prefix,prefix,prefix,prefix);
+      av_freep(&prefix);
 
       return M_OPT_UNKNOWN;
     }
@@ -2196,10 +2196,9 @@ static int parse_custom_url(const m_option_t* opt,const char *name,
       mp_msg(MSGT_CFGPARSER, MSGL_WARN, "Option %s: This URL doesn't have a hostname part.\n",name);
       // skip
     } else {
-      char tmp[pos2-pos1+1];
-      strncpy(tmp,ptr1, pos2-pos1);
-      tmp[pos2-pos1] = '\0';
+      char *tmp = av_strndup(ptr1, pos2-pos1);
       r = m_struct_set(desc,dst,"hostname",tmp);
+      av_freep(&tmp);
       if(r < 0) {
 	mp_msg(MSGT_CFGPARSER, MSGL_ERR, "Option %s: Error while setting hostname.\n",name);
 	return r;

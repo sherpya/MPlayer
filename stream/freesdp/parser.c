@@ -67,10 +67,10 @@ fsdp_parse (const char *text_description, fsdp_description_t * dsc)
   const char *p = text_description, *p2;
   unsigned int j;
   /* temps for sscanf */
-  const unsigned int TEMPCHARS = 6;
+#define TEMPCHARS 6
   char fsdp_buf[TEMPCHARS][MAXSHORTFIELDLEN];
   char longfsdp_buf[MAXLONGFIELDLEN];
-  const unsigned int TEMPINTS = 2;
+#define TEMPINTS 2
   unsigned long int wuint[TEMPINTS];
 
   if ((NULL == text_description) || (NULL == dsc))
@@ -912,7 +912,8 @@ fsdp_parse_c (const char **p, fsdp_network_type_t * ntype,
 	      fsdp_address_type_t * atype,
 	      fsdp_connection_address_t * address)
 {
-  const unsigned int TEMPCHARS = 3;
+#undef TEMPCHARS
+#define TEMPCHARS 3
   char fsdp_buf[TEMPCHARS][MAXSHORTFIELDLEN];
 
   if (!strncmp (*p, "c=", 2))

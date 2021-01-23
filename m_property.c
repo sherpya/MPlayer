@@ -27,6 +27,7 @@
 #include <inttypes.h>
 #include <unistd.h>
 
+#include "libavutil/mem.h"
 #include "m_option.h"
 #include "m_property.h"
 #include "mp_msg.h"
@@ -41,10 +42,9 @@ static int do_action(const m_option_t* prop_list, const char* name,
     int r;
     if((sep = strchr(name,'/')) && sep[1]) {
         int len = sep-name;
-        char base[len+1];
-        memcpy(base,name,len);
-        base[len] = 0;
+        char *base = av_strndup(name, len);
         prop = m_option_list_find(prop_list, base);
+        av_freep(&base);
         ka.key = sep+1;
         ka.action = action;
         ka.arg = arg;
@@ -150,29 +150,27 @@ char* m_properties_expand_string(const m_option_t* prop_list,char* str, void *ct
             lvl--, str++, l = 0;
         } else if(str[0] == '$' && str[1] == '{' && (e = strchr(str+2,'}'))) {
             int pl = e-str-2;
-            char pname[pl+1];
-            memcpy(pname,str+2,pl);
-            pname[pl] = 0;
+            char *pname = av_strndup(str+2, pl);
             if(m_property_do(prop_list, pname,
                              M_PROPERTY_PRINT, &p, ctx) >= 0 && p)
                 l = strlen(p), fr = 1;
             else
                 l = 0;
+            av_freep(&pname);
             str = e+1;
         } else if(str[0] == '?' && str[1] == '(' && (e = strchr(str+2,':'))) {
             lvl++;
             if(!skip) {
                 int is_not = str[2] == '!';
                 int pl = e - str - (is_not ? 3 : 2);
-                char pname[pl+1];
-                memcpy(pname, str + (is_not ? 3 : 2), pl);
-                pname[pl] = 0;
+                char *pname = av_strndup(str + (is_not ? 3 : 2), pl);
                 if(m_property_do(prop_list,pname,M_PROPERTY_GET,NULL,ctx) < 0) {
                     if (!is_not)
                         skip = 1, skip_lvl = lvl;
                 }
                 else if (is_not)
                     skip = 1, skip_lvl = lvl;
+                av_freep(&pname);
             }
             str = e+1, l = 0;
         } else

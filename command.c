@@ -1314,10 +1314,10 @@ static int mp_property_gamma(m_option_t *prop, int action, void *arg,
 
 #ifdef CONFIG_TV
     if (mpctx->demuxer->type == DEMUXER_TYPE_TV) {
-        int l = strlen(prop->name);
-        char tv_prop[3 + l + 1];
-        sprintf(tv_prop, "tv_%s", prop->name);
-        return mp_property_do(tv_prop, action, arg, mpctx);
+        char *tv_prop = av_asprintf("tv_%s", prop->name);
+        r = mp_property_do(tv_prop, action, arg, mpctx);
+        av_freep(&tv_prop);
+        return r;
     }
 #endif
 

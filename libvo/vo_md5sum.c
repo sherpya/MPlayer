@@ -66,6 +66,7 @@ const LIBVO_EXTERN (md5sum)
 
 char *md5sum_outfile = NULL;
 
+struct AVMD5 *md5_context;
 FILE *md5sum_fd;
 int framenum = 0;
 
@@ -153,6 +154,8 @@ static int config(uint32_t width, uint32_t height, uint32_t d_width,
         exit_player(EXIT_ERROR);
     }
 
+    md5_context = av_md5_alloc();
+
     return 0;
 }
 
@@ -195,8 +198,6 @@ static uint32_t draw_image(mp_image_t *mpi)
     uint32_t strideU = mpi->stride[1];
     uint32_t strideV = mpi->stride[2];
 
-    uint8_t md5_context_memory[av_md5_size];
-    struct AVMD5 *md5_context = (struct AVMD5*) md5_context_memory;
     unsigned int i;
 
     if (mpi->flags & MP_IMGFLAG_PLANAR) { /* Planar */
@@ -266,6 +267,7 @@ static void uninit(void)
     free(md5sum_outfile);
     md5sum_outfile = NULL;
     if (md5sum_fd && md5sum_fd != stdout) fclose(md5sum_fd);
+    av_freep(&md5_context);
 }
 
 /* ------------------------------------------------------------------------- */

@@ -1527,8 +1527,9 @@ static void lschunks(demuxer_t* demuxer,int level,off_t endpos,mov_track_t* trak
 		    case MOV_FOURCC(0xa9,'s','w','r'):
 		    {
 			off_t text_len = stream_read_word(demuxer->stream);
-			char text[text_len+2+1];
-			stream_read(demuxer->stream, (char *)&text, text_len+2);
+			if (text_len >> 16) { udta_size = 0; break; } // eof
+			char *text = malloc(text_len+2+1);
+			stream_read(demuxer->stream, text, text_len+2);
 			text[text_len+2] = 0x0;
 			switch(udta_id)
 			{
@@ -1581,6 +1582,7 @@ static void lschunks(demuxer_t* demuxer,int level,off_t endpos,mov_track_t* trak
 				mp_msg(MSGT_DEMUX, MSGL_V, " Source providers: %s\n", &text[2]);
 				break;
 			}
+			free(text);
 			udta_size -= 4+text_len;
 			break;
 		    }

@@ -268,9 +268,9 @@ static void check_events(void) {}
 
 static int gif_reduce(int width, int height, uint8_t *src, uint8_t *dst, GifColorType *colors)
 {
-	unsigned char Ra[width * height];
-	unsigned char Ga[width * height];
-	unsigned char Ba[width * height];
+	unsigned char *Ra = malloc(3*width * height);
+	unsigned char *Ga = Ra + width * height;
+	unsigned char *Ba = Ga + width * height;
 	unsigned char *R, *G, *B;
 	int size = 256;
 	int i;
@@ -284,7 +284,9 @@ static int gif_reduce(int width, int height, uint8_t *src, uint8_t *dst, GifColo
 	}
 
 	R = Ra; G = Ga; B = Ba;
-	return QuantizeBuffer(width, height, &size, R, G, B, dst, colors);
+	i = QuantizeBuffer(width, height, &size, R, G, B, dst, colors);
+	free(Ra);
+	return i;
 }
 
 static void flip_page(void)

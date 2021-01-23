@@ -890,7 +890,7 @@ static void parse_cfgfiles(m_config_t *conf)
 static void load_per_protocol_config(m_config_t *conf, const char *const file)
 {
     char *str;
-    char protocol[strlen(PROFILE_CFG_PROTOCOL) + strlen(file) + 1];
+    char *protocol;
     m_profile_t *p;
 
     /* does filename actually uses a protocol ? */
@@ -898,13 +898,14 @@ static void load_per_protocol_config(m_config_t *conf, const char *const file)
     if (!str)
         return;
 
-    sprintf(protocol, "%s%s", PROFILE_CFG_PROTOCOL, file);
-    protocol[strlen(PROFILE_CFG_PROTOCOL) + strlen(file) - strlen(str)] = '\0';
+    protocol = av_asprintf("%s%s", PROFILE_CFG_PROTOCOL, file);
+    *strstr(protocol, "://") = 0;
     p = m_config_get_profile(conf, protocol);
     if (p) {
         mp_msg(MSGT_CPLAYER, MSGL_INFO, MSGTR_LoadingProtocolProfile, protocol);
         m_config_set_profile(conf, p);
     }
+    av_freep(&protocol);
 }
 
 #define PROFILE_CFG_EXTENSION "extension."
@@ -912,7 +913,7 @@ static void load_per_protocol_config(m_config_t *conf, const char *const file)
 static void load_per_extension_config(m_config_t *conf, const char *const file)
 {
     char *str;
-    char extension[strlen(PROFILE_CFG_EXTENSION) + 8];
+    char extension[sizeof(PROFILE_CFG_EXTENSION) + 7];
     m_profile_t *p;
 
     /* does filename actually have an extension ? */
@@ -920,8 +921,7 @@ static void load_per_extension_config(m_config_t *conf, const char *const file)
     if (!str)
         return;
 
-    sprintf(extension, PROFILE_CFG_EXTENSION);
-    strncat(extension, ++str, 7);
+    snprintf(extension, sizeof(extension), "%s%s", PROFILE_CFG_EXTENSION, ++str);
     p = m_config_get_profile(conf, extension);
     if (p) {
         mp_msg(MSGT_CPLAYER, MSGL_INFO, MSGTR_LoadingExtensionProfile, extension);
@@ -934,15 +934,15 @@ static void load_per_extension_config(m_config_t *conf, const char *const file)
 
 static void load_per_output_config(m_config_t *conf, char *cfg, char *out)
 {
-    char profile[strlen(cfg) + strlen(out) + 1];
     m_profile_t *p;
 
-    sprintf(profile, "%s%s", cfg, out);
+    char *profile = av_asprintf("%s%s", cfg, out);
     p = m_config_get_profile(conf, profile);
     if (p) {
         mp_msg(MSGT_CPLAYER, MSGL_INFO, MSGTR_LoadingExtensionProfile, profile);
         m_config_set_profile(conf, p);
     }
+    av_freep(&profile);
 }
 
 /**

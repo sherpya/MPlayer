@@ -142,12 +142,13 @@ static char* replace_path(char* title , char* dir , int escape) {
 }
 
 static int mylstat(char *dir, char *file,struct stat* st) {
-  int l = strlen(dir) + strlen(file);
-  char s[l+2];
+  int res;
+  char *s = av_asprintf("%s/%s",dir,file);
+  int l = strlen(s);
   if (!strcmp("..", file)) {
     char *slash;
     l -= 3;
-    strcpy(s, dir);
+    s[l+1] = 0;
 #if HAVE_DOS_PATHS
     if (s[l] == '/' || s[l] == '\\')
 #else
@@ -159,13 +160,12 @@ static int mylstat(char *dir, char *file,struct stat* st) {
     if (!slash)
       slash = strrchr(s,'\\');
 #endif
-    if (!slash)
-      return stat(dir,st);
-    slash[1] = '\0';
-    return stat(s,st);
+    if (slash)
+      slash[1] = '\0';
   }
-  sprintf(s,"%s/%s",dir,file);
-  return stat(s,st);
+  res = stat(s,st);
+  av_freep(&s);
+  return res;
 }
 
 static int compare(const void *av, const void *bv){
@@ -373,26 +373,22 @@ static void read_cmd(menu_t* menu,int cmd) {
 	}
 	free(p);
     } else { // File and directory dealt with action string.
-      int fname_len = strlen(mpriv->dir) + strlen(mpriv->p.current->p.txt) + 1;
-      char filename[fname_len];
-      char *str;
       char *action = mpriv->p.current->d ? mpriv->dir_action:mpriv->file_action;
-      sprintf(filename,"%s%s",mpriv->dir,mpriv->p.current->p.txt);
-      str = replace_path(action, filename,1);
+      char *filename = av_asprintf("%s%s",mpriv->dir,mpriv->p.current->p.txt);
+      char *str = replace_path(action, filename,1);
       mp_input_parse_and_queue_cmds(str);
       if (str != action)
 	free(str);
+      av_freep(&filename);
     }
   } break;
   case MENU_CMD_ACTION: {
-    int fname_len = strlen(mpriv->dir) + strlen(mpriv->p.current->p.txt) + 1;
-    char filename[fname_len];
-    char *str;
-    sprintf(filename,"%s%s",mpriv->dir,mpriv->p.current->p.txt);
-    str = replace_path(action, filename,1);
+    char *filename = av_asprintf("%s%s",mpriv->dir,mpriv->p.current->p.txt);
+    char *str = replace_path(action, filename,1);
     mp_input_parse_and_queue_cmds(str);
     if(str != action)
       free(str);
+    av_freep(&filename);
   } break;
   default:
     menu_list_read_cmd(menu,cmd);

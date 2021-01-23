@@ -44,13 +44,13 @@ enum pu_field_type_t {
     PU_INTERLACED
 };
 
-struct metrics {
+DECLARE_ALIGNED(8, , struct metrics) {
     /* This struct maps to a packed word 64-bit MMX register */
     unsigned short int even;
     unsigned short int odd;
     unsigned short int noise;
     unsigned short int temp;
-} __attribute__ ((aligned (8)));
+};
 
 struct frame_stats {
     struct metrics tiny, low, high, bigger, twox, max;

@@ -28,13 +28,14 @@
 #include "mp_msg.h"
 #include <inttypes.h>
 #include <stdlib.h>
+#include "libavutil/mem_internal.h"
 #include "libmpcodecs/img_format.h"
 #include "cpudetect.h"
 
 #if ARCH_X86 && (!HAVE_SSE2 || CONFIG_RUNTIME_CPUDETECT)
-static const uint64_t bFF __attribute__((aligned(8))) = 0xFFFFFFFFFFFFFFFFULL;
-static const unsigned long long mask24lh  __attribute__((aligned(8))) = 0xFFFF000000000000ULL;
-static const unsigned long long mask24hl  __attribute__((aligned(8))) = 0x0000FFFFFFFFFFFFULL;
+DECLARE_ALIGNED(8, static const uint64_t, bFF) = 0xFFFFFFFFFFFFFFFFULL;
+DECLARE_ALIGNED(8, static const unsigned long long, mask24lh) = 0xFFFF000000000000ULL;
+DECLARE_ALIGNED(8, static const unsigned long long, mask24hl) = 0x0000FFFFFFFFFFFFULL;
 #endif
 
 //Note: we have C, X86-nommx, MMX, MMX2, 3DNOW version therse no 3DNOW+MMX2 one

@@ -58,7 +58,7 @@
 #define XMIN(a,b) ((a) < (b) ? (a) : (b))
 
 //===========================================================================//
-static const uint8_t  __attribute__((aligned(8))) dither[8][8]={
+DECLARE_ALIGNED(8, static const uint8_t, dither)[8][8]={
 {  0,  48,  12,  60,   3,  51,  15,  63, },
 { 32,  16,  44,  28,  35,  19,  47,  31, },
 {  8,  56,   4,  52,  11,  59,   7,  55, },
@@ -383,7 +383,7 @@ static void filter(struct vf_priv_s *p, uint8_t *dst, uint8_t *src, int dst_stri
         int x, y, i;
         const int count= 1<<p->log2_count;
         const int stride= is_luma ? p->temp_stride : ((width+16+15)&(~15));
-        uint64_t __attribute__((aligned(16))) block_align[32];
+        LOCAL_ALIGNED_16(uint64_t, block_align, [32]);
         int16_t *block = (int16_t *)block_align;
         int16_t *block2= (int16_t *)(block_align+16);
 

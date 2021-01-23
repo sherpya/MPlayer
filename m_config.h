@@ -19,6 +19,8 @@
 #ifndef MPLAYER_M_CONFIG_H
 #define MPLAYER_M_CONFIG_H
 
+#include "libavutil/mem_internal.h"
+
 /// \defgroup Config Config manager
 ///
 /// m_config provides an API to manipulate the config variables in MPlayer.
@@ -43,7 +45,7 @@ struct m_config_save_slot {
   int lvl;
   // We have to store other datatypes in this as well,
   // so make sure we get properly aligned addresses.
-  unsigned char data[0] __attribute__ ((aligned (8)));
+  DECLARE_ALIGNED(8, unsigned char, data)[0];
 };
 
 /// Config option

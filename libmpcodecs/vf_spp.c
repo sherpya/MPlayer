@@ -39,6 +39,7 @@
 
 #include "libavutil/common.h"
 #include "libavutil/internal.h"
+#include "libavutil/mem_internal.h"
 #include "libavutil/intreadwrite.h"
 #include "libavcodec/avcodec.h"
 #include "libavcodec/pixblockdsp.h"

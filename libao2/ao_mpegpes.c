@@ -161,6 +161,7 @@ static int preinit(const char *arg)
 		mp_msg(MSGT_VO, MSGL_ERR, "AO_MPEGPES, Unrecognized options\n");
 		return -1;
 	}
+#ifdef CONFIG_DVB
 	if(card==-1)
 	{
 		//search the first usable card
@@ -183,7 +184,6 @@ static int preinit(const char *arg)
 	}
 	card--;
 
-#ifdef CONFIG_DVB
 	if(!ao_file)
 		return init_device(card);
 #else

@@ -147,7 +147,6 @@ static void id2str(const uint8_t *id, int idlen, char dst[ID_STR_LEN])
 static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
 {
     char line[1024];
-    char filename[PATH_MAX];
     const char *home;
     int vukfound = 0;
     stream_t *file;
@@ -156,8 +155,9 @@ static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
 
     // look up discid in KEYDB.cfg to get VUK
     home = getenv("HOME");
-    snprintf(filename, sizeof(filename), "%s/.cache/aacs/vuk/%s", home, idstr);
+    char *filename = av_asprintf("%s/.cache/aacs/vuk/%s", home, idstr);
     file = open_stream(filename, NULL, NULL);
+    av_freep(&filename);
     if (file) {
         vukfound = 1;
         memset(line, 0, sizeof(line));
@@ -170,17 +170,20 @@ static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
         if (vukfound)
             return 1;
     }
-    snprintf(filename, sizeof(filename), "%s/.config/aacs/KEYDB.cfg", home);
+    filename = av_asprintf("%s/.config/aacs/KEYDB.cfg", home);
     file = open_stream(filename, NULL, NULL);
     if (!file) {
-        snprintf(filename, sizeof(filename), "%s/.dvdcss/KEYDB.cfg", home);
+        av_freep(&filename);
+        filename = av_asprintf("%s/.dvdcss/KEYDB.cfg", home);
         file = open_stream(filename, NULL, NULL);
     }
     if (!file) {
         mp_msg(MSGT_OPEN,MSGL_ERR,
                "Cannot open VUK database file %s\n", filename);
+        av_freep(&filename);
         return 0;
     }
+    av_freep(&filename);
     while (stream_read_line(file, line, sizeof(line), 0)) {
         char *vst;
 
@@ -224,23 +227,25 @@ static int bd_get_uks(struct bd_priv *bd)
     struct AVAES *a;
     struct AVSHA *asha;
     stream_t *file;
-    char filename[PATH_MAX];
     uint8_t discid[20];
     char idstr[ID_STR_LEN];
 
-    snprintf(filename, sizeof(filename), BD_UKF_PATH, bd->device);
+    char *filename = av_asprintf(BD_UKF_PATH, bd->device);
     file = open_stream(filename, NULL, NULL);
     if (!file) {
         mp_msg(MSGT_OPEN, MSGL_ERR,
                "Cannot open file %s to get UK and DiscID\n", filename);
+        av_freep(&filename);
         return 0;
     }
     file_size = file->end_pos;
     if (file_size <= 0 || file_size > 10 * 1024* 1024) {
         mp_msg(MSGT_OPEN, MSGL_ERR, "File %s too large\n", filename);
+        av_freep(&filename);
         free_stream(file);
         return 0;
     }
+    av_freep(&filename);
     buf = av_malloc(file_size);
     stream_read(file, buf, file_size);
     free_stream(file);
@@ -432,15 +437,16 @@ static void get_clipinf(struct bd_priv *bd)
 {
     int i;
     int langmap_offset, index_offset, end_offset;
-    char filename[PATH_MAX];
     stream_t *file;
 
-    snprintf(filename, sizeof(filename), BD_CLIPINF_PATH, bd->device, bd->title);
+    char *filename = av_asprintf(BD_CLIPINF_PATH, bd->device, bd->title);
     file = open_stream(filename, NULL, NULL);
     if (!file) {
         mp_msg(MSGT_OPEN, MSGL_ERR, "Cannot open clipinf %s\n", filename);
+        av_freep(&filename);
         return;
     }
+    av_freep(&filename);
     if (stream_read_qword(file) != AV_RB64("HDMV0200")) {
         mp_msg(MSGT_OPEN, MSGL_ERR, "Unknown clipinf format\n");
         return;
@@ -490,7 +496,7 @@ static int bd_stream_control(stream_t *s, int cmd, void *arg)
 
 static int bd_stream_open(stream_t *s, int mode, void* opts, int* file_format)
 {
-    char filename[PATH_MAX];
+    char *filename;
 
     struct stream_priv_s* p = opts;
     struct bd_priv *bd = calloc(1, sizeof(*bd));
@@ -527,9 +533,10 @@ static int bd_stream_open(stream_t *s, int mode, void* opts, int* file_format)
     // set up AES key from uk
     av_aes_init(bd->aeseed, bd->uks.keys[0].u8, 128, 0);
 
-    snprintf(filename, sizeof(filename), BD_M2TS_PATH, bd->device, bd->title);
+    filename = av_asprintf(BD_M2TS_PATH, bd->device, bd->title);
     mp_msg(MSGT_OPEN, MSGL_STATUS, "Opening %s\n", filename);
     bd->title_file = open_stream(filename, NULL, NULL);
+    av_freep(&filename);
     if (!bd->title_file)
         return STREAM_ERROR;
     s->end_pos = bd->title_file->end_pos;

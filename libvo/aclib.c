@@ -41,7 +41,7 @@
 //#define COMPILE_C
 //#endif
 
-#if ARCH_X86
+#if ARCH_X86 && HAVE_INLINE_ASM
 
 #if (HAVE_MMX && !HAVE_AMD3DNOW && !HAVE_MMX2) || CONFIG_RUNTIME_CPUDETECT
 #define COMPILE_MMX
@@ -160,7 +160,7 @@
 void * fast_memcpy(void * to, const void * from, size_t len)
 {
 #if CONFIG_RUNTIME_CPUDETECT
-#if ARCH_X86
+#if ARCH_X86 && HAVE_INLINE_ASM
 	// ordered per speed fasterst first
 	if(gCpuCaps.hasSSE2)
 		fast_memcpy_SSE(to, from, len);
@@ -174,13 +174,13 @@ void * fast_memcpy(void * to, const void * from, size_t len)
 #endif
 		memcpy(to, from, len); // prior to mmx we use the standart memcpy
 #else
-#if HAVE_SSE2
+#if HAVE_SSE2_INLINE
 		fast_memcpy_SSE(to, from, len);
-#elif HAVE_MMX2
+#elif HAVE_MMX2_INLINE
 		fast_memcpy_MMX2(to, from, len);
-#elif HAVE_AMD3DNOW
+#elif HAVE_AMD3DNOW_INLINE
 		fast_memcpy_3DNow(to, from, len);
-#elif HAVE_MMX
+#elif HAVE_MMX_INLINE
 		fast_memcpy_MMX(to, from, len);
 #else
 		memcpy(to, from, len); // prior to mmx we use the standart memcpy
@@ -194,7 +194,7 @@ void * fast_memcpy(void * to, const void * from, size_t len)
 void * mem2agpcpy(void * to, const void * from, size_t len)
 {
 #if CONFIG_RUNTIME_CPUDETECT
-#if ARCH_X86
+#if ARCH_X86 && HAVE_INLINE_ASM
 	// ordered per speed fasterst first
 	if(gCpuCaps.hasSSE2)
 		mem2agpcpy_SSE(to, from, len);
@@ -208,13 +208,13 @@ void * mem2agpcpy(void * to, const void * from, size_t len)
 #endif
 		memcpy(to, from, len); // prior to mmx we use the standart memcpy
 #else
-#if HAVE_SSE2
+#if HAVE_SSE2_INLINE
 		mem2agpcpy_SSE(to, from, len);
-#elif HAVE_MMX2
+#elif HAVE_MMX2_INLINE
 		mem2agpcpy_MMX2(to, from, len);
-#elif HAVE_AMD3DNOW
+#elif HAVE_AMD3DNOW_INLINE
 		mem2agpcpy_3DNow(to, from, len);
-#elif HAVE_MMX
+#elif HAVE_MMX_INLINE
 		mem2agpcpy_MMX(to, from, len);
 #else
 		memcpy(to, from, len); // prior to mmx we use the standart memcpy

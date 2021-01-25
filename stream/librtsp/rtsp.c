@@ -39,12 +39,12 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <time.h>
-#include <sys/time.h>
 #include <sys/types.h>
 #include <inttypes.h>
 #if HAVE_WINSOCK2_H
 #include <winsock2.h>
 #else
+#include <sys/time.h>
 #include <sys/socket.h>
 #endif
 #include "libavutil/avstring.h"

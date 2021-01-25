@@ -35,7 +35,6 @@
 #  define END_C_DECLS
 #endif /* __cplusplus */
 
-#include <sys/time.h>
 #include <time.h>
 
 BEGIN_C_DECLS

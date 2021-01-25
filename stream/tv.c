@@ -30,7 +30,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
-#include <sys/time.h>
 
 #include "config.h"
 

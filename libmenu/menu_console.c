@@ -20,14 +20,20 @@
 #include "mp_msg.h"
 #include "help_mp.h"
 
+#ifdef HAVE_POSIX_SELECT
+#define RUN_CMD 1
+#else
+#define RUN_CMD 0
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <sys/time.h>
 #include <sys/types.h>
-#ifndef __MINGW32__
+#if RUN_CMD
 #include <sys/wait.h>
+#include <sys/time.h>
 #endif
 #include <unistd.h>
 #include <errno.h>
@@ -241,7 +247,7 @@ static void draw(menu_t* menu, mp_image_t* mpi) {
 }
 
 static void check_child(menu_t* menu) {
-#ifndef __MINGW32__
+#if RUN_CMD
   fd_set rfd;
   struct timeval tv;
   int max_fd = mpriv->child_fd[2] > mpriv->child_fd[1] ? mpriv->child_fd[2] :
@@ -295,7 +301,7 @@ static void check_child(menu_t* menu) {
 #define close_pipe(pipe) close(pipe[0]); close(pipe[1])
 
 static int run_shell_cmd(menu_t* menu, char* cmd) {
-#ifndef __MINGW32__
+#if RUN_CMD
   int in[2],out[2],err[2];
 
   mp_msg(MSGT_GLOBAL,MSGL_INFO,MSGTR_LIBMENU_ConsoleRun,cmd);

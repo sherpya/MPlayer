@@ -29,7 +29,6 @@
 #include <unistd.h>
 #include <assert.h>
 #include <sys/stat.h>
-#include <sys/time.h>
 #include <sys/types.h>
 
 #if defined(__MINGW32__) || defined(__CYGWIN__)
@@ -123,8 +122,6 @@
 #include "sub/subreader.h"
 #include "sub/vobsub.h"
 #include "sub/eosd.h"
-#include "osdep/getch2.h"
-#include "osdep/timer.h"
 
 #include "udp_sync.h"
 

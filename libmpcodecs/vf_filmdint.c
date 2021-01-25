@@ -19,11 +19,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
 
 #include "config.h"
 #include "mp_msg.h"
 #include "cpudetect.h"
+#include "osdep/timer.h"
 
 #include "img_format.h"
 #include "mp_image.h"
@@ -927,9 +927,7 @@ static void init(struct vf_priv_s *p, mp_image_t *mpi)
 
 static inline double get_time(void)
 {
-    struct timeval tv;
-    gettimeofday(&tv, 0);
-    return tv.tv_sec + tv.tv_usec * 1e-6;
+    return GetTimer() * 1e-6;
 }
 
 static void get_image(struct vf_instance *vf, mp_image_t *mpi)

@@ -30,7 +30,6 @@
 #include <ctype.h>
 
 #include <fcntl.h>
-#include <sys/time.h>
 #include <sys/types.h>
 
 #include "config.h"
@@ -42,6 +41,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <arpa/inet.h>
 #else
 #include <winsock2.h>

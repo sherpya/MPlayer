@@ -33,10 +33,10 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <sys/time.h>
 #include <inttypes.h>
 #if !HAVE_WINSOCK2_H
 #include <sys/socket.h>
+#include <sys/time.h>
 //#include <netinet/in.h>
 //#include <netdb.h>
 #else

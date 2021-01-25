@@ -25,7 +25,9 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef HAVE_POSIX_SELECT
 #include <sys/time.h>
+#endif
 #include <fcntl.h>
 #include <ctype.h>
 

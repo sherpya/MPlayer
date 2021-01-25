@@ -3594,6 +3594,11 @@ else
 fi
 echores "$_nanosleep"
 
+echocheck "windows.h"
+windows_h=no
+def_windows_h='#define HAVE_WINDOWS_H 0'
+header_check windows.h && windows_h=yes && def_windows_h='#define HAVE_WINDOWS_H 1' && extra_cflags="$extra_cflags -D_WIN32_WINNT=0x0600"
+echores "$windows_h"
 
 echocheck "socklib"
 # for Solaris (socket stuff is in -lsocket, gethostbyname and friends in -lnsl):
@@ -4217,12 +4222,6 @@ if test "$_os2threads" = yes || test "$_w32threads" = yes || test "$_pthreads" =
 else
     _threads=no
 fi
-
-echocheck "windows.h"
-windows_h=no
-def_windows_h='#define HAVE_WINDOWS_H 0'
-header_check windows.h && windows_h=yes && def_windows_h='#define HAVE_WINDOWS_H 1'
-echores "$windows_h"
 
 
 echocheck "io.h"

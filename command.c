@@ -1122,7 +1122,7 @@ static int mp_property_capture(m_option_t *prop, int action,
                                void *arg, MPContext *mpctx)
 {
     int ret;
-    int capturing = mpctx->stream && mpctx->stream->capture_file;
+    int capturing = mpctx->stream && mpctx->stream->capture_stream;
 
     if (!mpctx->stream)
         return M_PROPERTY_UNAVAILABLE;
@@ -1133,17 +1133,18 @@ static int mp_property_capture(m_option_t *prop, int action,
     }
 
     ret = m_property_flag(prop, action, arg, &capturing);
-    if (ret == M_PROPERTY_OK && capturing != !!mpctx->stream->capture_file) {
+    if (ret == M_PROPERTY_OK && capturing != !!mpctx->stream->capture_stream) {
         if (capturing) {
-            mpctx->stream->capture_file = fopen(stream_dump_name, "ab");
-            if (!mpctx->stream->capture_file) {
+            int dummy;
+            mpctx->stream->capture_stream = open_stream_full(stream_dump_name, STREAM_APPEND, NULL, &dummy);
+            if (!mpctx->stream->capture_stream) {
                 mp_msg(MSGT_GLOBAL, MSGL_ERR,
                        "Error opening capture file: %s\n", strerror(errno));
                 ret = M_PROPERTY_ERROR;
             }
         } else {
-            fclose(mpctx->stream->capture_file);
-            mpctx->stream->capture_file = NULL;
+            free_stream(mpctx->stream->capture_stream);
+            mpctx->stream->capture_stream = NULL;
         }
     }
 
@@ -1153,7 +1154,7 @@ static int mp_property_capture(m_option_t *prop, int action,
         break;
     case M_PROPERTY_OK:
         set_osd_msg(OSD_MSG_SPEED, 1, osd_duration, MSGTR_OSDCapturing,
-                    mpctx->stream->capture_file ? MSGTR_Enabled : MSGTR_Disabled);
+                    mpctx->stream->capture_stream ? MSGTR_Enabled : MSGTR_Disabled);
         break;
     default:
         break;

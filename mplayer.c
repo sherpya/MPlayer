@@ -3280,12 +3280,12 @@ play_next_file:
     if (stream_dump_type == 5) {
         unsigned char buf[4096];
         int len;
-        FILE *f;
+        stream_t *os;
         current_module = "dumpstream";
         stream_reset(mpctx->stream);
         stream_seek(mpctx->stream, mpctx->stream->start_pos);
-        f = fopen(stream_dump_name, "wb");
-        if (!f) {
+        os = open_output_stream(stream_dump_name, NULL);
+        if (!os) {
             mp_msg(MSGT_CPLAYER, MSGL_FATAL, MSGTR_CantOpenDumpfile);
             exit_player(EXIT_ERROR);
         }
@@ -3302,7 +3302,7 @@ play_next_file:
                 break;
             len = stream_read(mpctx->stream, buf, 4096);
             if (len > 0) {
-                if (fwrite(buf, len, 1, f) != 1) {
+                if (stream_write_buffer(os, buf, len) != len) {
                     mp_msg(MSGT_MENCODER, MSGL_FATAL, MSGTR_ErrorWritingFile, stream_dump_name);
                     exit_player(EXIT_ERROR);
                 }
@@ -3315,7 +3315,7 @@ play_next_file:
                     break;
             }
         }
-        if (fclose(f)) {
+        if (free_stream(os)) {
             mp_msg(MSGT_MENCODER, MSGL_FATAL, MSGTR_ErrorWritingFile, stream_dump_name);
             exit_player(EXIT_ERROR);
         }
@@ -3483,7 +3483,7 @@ goto_enable_cache:
 
     // DUMP STREAMS:
     if ((stream_dump_type) && (stream_dump_type < 4)) {
-        FILE *f;
+        stream_t *os;
         demux_stream_t *ds = NULL;
         current_module = "dump";
         // select stream to dump
@@ -3512,8 +3512,8 @@ goto_enable_cache:
             mpctx->d_sub->id = -2;
         }
         // let's dump it!
-        f = fopen(stream_dump_name, "wb");
-        if (!f) {
+        os = open_output_stream(stream_dump_name, NULL);
+        if (!os) {
             mp_msg(MSGT_CPLAYER, MSGL_FATAL, MSGTR_CantOpenDumpfile);
             exit_player(EXIT_ERROR);
         }
@@ -3530,9 +3530,9 @@ goto_enable_cache:
                 break;
             if ((mpctx->demuxer->file_format == DEMUXER_TYPE_AVI || mpctx->demuxer->file_format == DEMUXER_TYPE_ASF || mpctx->demuxer->file_format == DEMUXER_TYPE_MOV)
                 && stream_dump_type == 2)
-                fwrite(&in_size, 1, 4, f);
+                stream_write_buffer(os, &in_size, 4);
             if (in_size > 0) {
-                fwrite(start, in_size, 1, f);
+                stream_write_buffer(os, start, in_size);
                 stream_dump_progress(in_size, mpctx->stream);
             }
             if (dvd_last_chapter > 0) {
@@ -3541,7 +3541,7 @@ goto_enable_cache:
                     break;
             }
         }
-        fclose(f);
+        free_stream(os);
         stream_dump_progress_end();
         mp_msg(MSGT_CPLAYER, MSGL_INFO, MSGTR_CoreDumped);
         exit_player_with_rc(EXIT_EOF, 0);

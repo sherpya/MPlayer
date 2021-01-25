@@ -578,7 +578,7 @@ int cache_stream_fill_buffer(stream_t *s){
   s->buf_len=len;
   s->pos+=len;
 //  printf("[%d]",len);fflush(stdout);
-  if (s->capture_file)
+  if (s->capture_stream)
     stream_capture_do(s);
   return len;
 

@@ -149,6 +149,8 @@ static int open_f(stream_t *stream,int mode, void* opts, int* file_format) {
     m = O_RDONLY;
   else if(mode == STREAM_WRITE)
     m = O_RDWR|O_CREAT|O_TRUNC;
+  else if (mode == STREAM_APPEND)
+    m = O_RDWR|O_CREAT|O_APPEND;
   else {
     mp_msg(MSGT_OPEN,MSGL_ERR, "[file] Unknown open mode %d\n",mode);
     m_struct_free(&stream_opts,opts);

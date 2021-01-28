@@ -52,8 +52,8 @@
 #include "help_mp.h"
 #include "mpcommon.h"
 #include "mplayer.h"
-#include "libavutil/common.h"
 #include "libavutil/avstring.h"
+#include "libavutil/common.h"
 #include "stream/stream.h"
 
 #ifdef __linux__
@@ -169,22 +169,22 @@ GtkStyle *style;
 GdkPixmap *dpixmap;
 GdkBitmap *dmask;
 
-static void fs_PersistantHistory(char *subject)
+static void fs_PersistantHistory(char *directory)
 {
     unsigned int i;
     char *entry;
 
-    if (!subject)
+    if (!directory)
         return;
 
     for (i = 0; i < FF_ARRAY_ELEMS(fsHistory); i++)
-        if (gstrcmp(fsHistory[i], subject) == 0) {
+        if (gstrcmp(fsHistory[i], directory) == 0) {
             entry = fsHistory[i];
             break;
         }
 
     if (i == FF_ARRAY_ELEMS(fsHistory)) {
-        entry = strdup(subject);
+        entry = strdup(directory);
         free(fsHistory[--i]);
     }
 

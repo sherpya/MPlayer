@@ -124,8 +124,6 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
         return 6;
     }
 
-    avcodec_register_all();
-
     if (avcodec_open2(avctx, avcodec_find_decoder(AV_CODEC_ID_PNG), NULL) < 0) {
         av_free(frame);
         av_free(avctx);
@@ -139,7 +137,8 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
     /* HACK: Make PNGs decode normally instead of as CorePNG delta frames. */
     pkt.flags = AV_PKT_FLAG_KEY;
 
-    avcodec_decode_video2(avctx, frame, &decode_ok, &pkt);
+    decode_ok = (avcodec_send_packet(avctx, &pkt) == 0 &&
+                 avcodec_receive_frame(avctx, frame) == 0);
 
     memset(img, 0, sizeof(*img));
     memset(palette, 0, sizeof(palette));
@@ -185,6 +184,8 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
         } else
             decode_ok = False;
     }
+
+    avcodec_send_packet(avctx, NULL);   // flush the decoder
 
     avcodec_close(avctx);
     av_free(frame);

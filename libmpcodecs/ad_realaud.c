@@ -22,6 +22,7 @@
 
 #include "config.h"
 #include "mp_msg.h"
+#include "mppacked.h"
 
 //#include <stddef.h>
 #ifdef HAVE_LIBDL
@@ -147,7 +148,8 @@ typedef struct /*__attribute__((__packed__))*/ {
 } ra_init_t;
 
 /* windows dlls need packed structs (no padding) */
-typedef struct __attribute__((__packed__)) {
+MP_PACKED(
+typedef struct, {
     int samplerate;
     short bits;
     short channels;
@@ -157,6 +159,7 @@ typedef struct __attribute__((__packed__)) {
     int extradata_len;
     void* extradata;
 } wra_init_t;
+)
 #endif
 
 #ifdef HAVE_LIBDL

@@ -24,6 +24,7 @@
 #include "config.h"	/* get correct definition of HAVE_BIGENDIAN */
 #include "libavutil/common.h"
 #include "mpbswap.h"
+#include "mppacked.h"
 #include "demuxer.h"
 
 #ifndef mmioFOURCC
@@ -150,7 +151,8 @@ typedef struct avistdindex_entry {
 } avistdindex_entry;
 
 // Standard index
-typedef struct __attribute__((packed)) avistdindex_chunk {
+MP_PACKED(
+typedef struct, avistdindex_chunk {
     char           fcc[4];       // ix##
     uint32_t  dwSize;            // size of this chunk
     uint16_t wLongsPerEntry;     // must be sizeof(aIndex[0])/sizeof(DWORD)
@@ -162,6 +164,7 @@ typedef struct __attribute__((packed)) avistdindex_chunk {
     uint32_t  dwReserved3;       // must be 0
     avistdindex_entry *aIndex;   // the actual frames
 } avistdindex_chunk;
+)
 
 
 // Base Index Form 'indx'

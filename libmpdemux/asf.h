@@ -23,29 +23,35 @@
 #include <inttypes.h>
 #include "libavutil/common.h"
 #include "mpbswap.h"
+#include "mppacked.h"
 
 ///////////////////////
 // ASF Object Header
 ///////////////////////
-typedef struct __attribute__((packed)) {
+MP_PACKED(
+typedef struct, {
   uint8_t guid[16];
   uint64_t size;
 } ASF_obj_header_t;
+)
 
 ////////////////
 // ASF Header
 ////////////////
-typedef struct __attribute__((packed)) {
+MP_PACKED(
+typedef struct, {
   ASF_obj_header_t objh;
   uint32_t cno; // number of subchunks
   uint8_t v1; // unknown (0x01)
   uint8_t v2; // unknown (0x02)
 } ASF_header_t;
+)
 
 /////////////////////
 // ASF File Header
 /////////////////////
-typedef struct __attribute__((packed)) {
+MP_PACKED(
+typedef struct, {
   uint8_t stream_id[16]; // stream GUID
   uint64_t file_size;
   uint64_t creation_time; //File creation time FILETIME 8
@@ -58,11 +64,13 @@ typedef struct __attribute__((packed)) {
   uint32_t max_packet_size; //Max size of the packet  UINT32 4
   uint32_t max_bitrate; //Maximum bitrate of the media (sum of all the stream)
 } ASF_file_header_t;
+)
 
 ///////////////////////
 // ASF Stream Header
 ///////////////////////
-typedef struct __attribute__((packed)) {
+MP_PACKED(
+typedef struct, {
   uint8_t type[16]; // Stream type (audio/video) GUID 16
   uint8_t concealment[16]; // Audio error concealment type GUID 16
   uint64_t unk1; // Unknown, maybe reserved ( usually contains 0 ) UINT64 8
@@ -71,38 +79,45 @@ typedef struct __attribute__((packed)) {
   uint16_t stream_no; //Stream number UINT16 2
   uint32_t unk2; //Unknown UINT32 4
 } ASF_stream_header_t;
+)
 
 ///////////////////////////
 // ASF Content Description
 ///////////////////////////
-typedef struct  __attribute__((packed)) {
+MP_PACKED(
+typedef struct, {
   uint16_t title_size;
   uint16_t author_size;
   uint16_t copyright_size;
   uint16_t comment_size;
   uint16_t rating_size;
 } ASF_content_description_t;
+)
 
 ////////////////////////
 // ASF Segment Header
 ////////////////////////
-typedef struct __attribute__((packed)) {
+MP_PACKED(
+typedef struct, {
   uint8_t streamno;
   uint8_t seq;
   uint32_t x;
   uint8_t flag;
 } ASF_segmhdr_t;
+)
 
 //////////////////////
 // ASF Stream Chunck
 //////////////////////
-typedef struct __attribute__((packed)) {
+MP_PACKED(
+typedef struct, {
 	uint16_t	type;
 	uint16_t	size;
 	uint32_t	sequence_number;
 	uint16_t	unknown;
 	uint16_t	size_confirm;
 } ASF_stream_chunck_t;
+)
 
 // Definition of the stream type
 #if HAVE_BIGENDIAN

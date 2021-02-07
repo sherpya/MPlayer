@@ -3,6 +3,8 @@
 
 #include <inttypes.h>
 
+#include "mppacked.h"
+
 // Basic types:
 
 typedef char *                          Ptr;
@@ -39,99 +41,121 @@ enum {
 
 //==================== COMPONENTS ===========================
 
-struct __attribute__((__packed__)) ComponentParameters {
+MP_PACKED(
+struct, ComponentParameters {
     UInt8                           flags;                      /* call modifiers: sync/async, deferred, immed, etc */
     UInt8                           paramSize;                  /* size in bytes of actual parameters passed to this call */
     short                           what;                       /* routine selector, negative for Component management calls */
     int32_t                         params[1];                  /* actual parameters for the indicated routine */
 };
+)
 typedef struct ComponentParameters      ComponentParameters;
 
 
-struct __attribute__((__packed__)) ComponentDescription {
+MP_PACKED(
+struct, ComponentDescription {
     OSType                          componentType;              /* A unique 4-byte code indentifying the command set */
     OSType                          componentSubType;           /* Particular flavor of this instance */
     OSType                          componentManufacturer;      /* Vendor indentification */
     uint32_t                        componentFlags;             /* 8 each for Component,Type,SubType,Manuf/revision */
     uint32_t                        componentFlagsMask;         /* Mask for specifying which flags to consider in search, zero during registration */
 };
+)
 typedef struct ComponentDescription     ComponentDescription;
 
 
-struct __attribute__((__packed__)) ResourceSpec {
+MP_PACKED(
+struct, ResourceSpec {
     OSType                          resType;                    /* 4-byte code    */
     short                           resID;                      /*         */
 };
+)
 typedef struct ResourceSpec             ResourceSpec;
 
 
-struct __attribute__((__packed__)) ComponentResource {
+MP_PACKED(
+struct, ComponentResource {
     ComponentDescription            cd;                         /* Registration parameters */
     ResourceSpec                    component;                  /* resource where Component code is found */
     ResourceSpec                    componentName;              /* name string resource */
     ResourceSpec                    componentInfo;              /* info string resource */
     ResourceSpec                    componentIcon;              /* icon resource */
 };
+)
 typedef struct ComponentResource        ComponentResource;
 typedef ComponentResource *             ComponentResourcePtr;
 typedef ComponentResourcePtr *          ComponentResourceHandle;
 
 
-struct __attribute__((__packed__)) ComponentRecord {
+MP_PACKED(
+struct, ComponentRecord {
     int32_t                            data[1];
 };
+)
 typedef struct ComponentRecord          ComponentRecord;
 typedef ComponentRecord *               Component;
 
 
-struct __attribute__((__packed__)) ComponentInstanceRecord {
+MP_PACKED(
+struct, ComponentInstanceRecord {
     int32_t                            data[1];
 };
+)
 typedef struct ComponentInstanceRecord  ComponentInstanceRecord;
 
 typedef ComponentInstanceRecord *       ComponentInstance;
 
 // ========================= QUICKDRAW =========================
 
-struct __attribute__((__packed__)) Rect {
+MP_PACKED(
+struct, Rect {
     short                           top;
     short                           left;
     short                           bottom;
     short                           right;
 };
+)
 typedef struct Rect                     Rect;
 typedef Rect *                          RectPtr;
 
-struct __attribute__((__packed__)) RGBColor {
+MP_PACKED(
+struct, RGBColor {
     unsigned short                  red;                        /*magnitude of red component*/
     unsigned short                  green;                      /*magnitude of green component*/
     unsigned short                  blue;                       /*magnitude of blue component*/
 };
+)
 typedef struct RGBColor                 RGBColor;
 typedef RGBColor *                      RGBColorPtr;
 typedef RGBColorPtr *                   RGBColorHdl;
 
-struct __attribute__((__packed__)) ColorSpec {
+MP_PACKED(
+struct, ColorSpec {
     short                           value;                      /*index or other value*/
     RGBColor                        rgb;                        /*true color*/
 };
+)
 typedef struct ColorSpec                ColorSpec;
 typedef ColorSpec *                     ColorSpecPtr;
 typedef ColorSpec                       CSpecArray[1];
 
-struct __attribute__((__packed__)) ColorTable {
+MP_PACKED(
+struct, ColorTable {
     int32_t                         ctSeed;                     /*unique identifier for table*/
     short                           ctFlags;                    /*high bit: 0 = PixMap; 1 = device*/
     short                           ctSize;                     /*number of entries in CTTable*/
     CSpecArray                      ctTable;                    /*array [0..0] of ColorSpec*/
 };
+)
 typedef struct ColorTable               ColorTable;
 typedef ColorTable *                    CTabPtr;
 typedef CTabPtr *                       CTabHandle;
 
-struct __attribute__((__packed__)) MatrixRecord {
+MP_PACKED(
+struct, MatrixRecord {
     Fixed                           matrix[3][3];
 };
+)
 typedef struct MatrixRecord             MatrixRecord;
 typedef MatrixRecord *                  MatrixRecordPtr;
 
@@ -140,7 +164,8 @@ typedef OSType                          CodecType;
 typedef unsigned short                  CodecFlags;
 typedef uint32_t                        CodecQ;
 
-struct __attribute__((__packed__)) ImageDescription {
+MP_PACKED(
+struct, ImageDescription {
     int32_t                         idSize;                     /* total size of ImageDescription including extra data ( CLUTs and other per sequence data ) */
     CodecType                       cType;                      /* what kind of codec compressed this data */
     int32_t                         resvd1;                     /* reserved for Apple use */
@@ -161,6 +186,7 @@ struct __attribute__((__packed__)) ImageDescription {
     short                           depth;                      /* what depth is this data (1-32) or ( 33-40 grayscale ) */
     short                           clutID;                     /* clut id or if 0 clut follows  or -1 if no clut */
 };
+)
 typedef struct ImageDescription         ImageDescription;
 typedef ImageDescription *              ImageDescriptionPtr;
 typedef ImageDescriptionPtr *           ImageDescriptionHandle;
@@ -185,7 +211,8 @@ enum {
     k2vuyPixelFormat            = FOUR_CHAR_CODE('2','v','u','y')        /* UYVY 4:2:2 byte ordering   16*/
 };
 
-struct __attribute__((__packed__)) PixMapExtension {
+MP_PACKED(
+struct, PixMapExtension {
     int32_t                         extSize;                    /*size of struct, duh!*/
     uint32_t                        pmBits;                     /*pixmap attributes bitfield*/
     void *                          pmGD;                       /*this is a GDHandle*/
@@ -197,13 +224,15 @@ struct __attribute__((__packed__)) PixMapExtension {
     uint32_t                        signature;
     Handle                          baseAddrHandle;
 };
+)
 typedef struct PixMapExtension          PixMapExtension;
 
 typedef PixMapExtension *               PixMapExtPtr;
 typedef PixMapExtPtr *                  PixMapExtHandle;
 
 
-struct __attribute__((__packed__)) PixMap {
+MP_PACKED(
+struct, PixMap {
     Ptr                             baseAddr;                   /*pointer to pixels*/
     short                           rowBytes;                   /*offset to next line*/
     Rect                            bounds;                     /*encloses bitmap*/
@@ -220,16 +249,19 @@ struct __attribute__((__packed__)) PixMap {
     CTabHandle                      pmTable;                    /*color map for this pixMap*/
     PixMapExtHandle                 pmExt;                      /*Handle to pixMap extension*/
 };
+)
 typedef struct PixMap                   PixMap;
 typedef PixMap *                        PixMapPtr;
 typedef PixMapPtr *                     PixMapHandle;
 
 
-struct __attribute__((__packed__)) BitMap {
+MP_PACKED(
+struct, BitMap {
     Ptr                             baseAddr;
     short                           rowBytes;
     Rect                            bounds;
 };
+)
 typedef struct BitMap                   BitMap;
 typedef BitMap *                        BitMapPtr;
 typedef BitMapPtr *                     BitMapHandle;
@@ -241,12 +273,15 @@ struct Pattern {
 typedef struct Pattern                  Pattern;
 typedef unsigned char                   Style;
 typedef Style                           StyleField;
-struct __attribute__((__packed__)) Point {
+MP_PACKED(
+struct, Point {
     short                           v;
     short                           h;
 };
+)
 typedef struct Point                    Point;
-struct __attribute__((__packed__)) GrafPort {
+MP_PACKED(
+struct, GrafPort {
     short                           device;
     BitMap                          portBits;
     Rect                            portRect;
@@ -274,6 +309,7 @@ struct __attribute__((__packed__)) GrafPort {
     Handle                          polySave;
     /*QDProcsPtr*/void*                      grafProcs;
 };
+)
 typedef struct GrafPort                 GrafPort;
 typedef GrafPort *GWorldPtr;
 typedef GWorldPtr *GWorldHandle;
@@ -417,7 +453,8 @@ enum {
 
 
 
-struct __attribute__((__packed__)) CodecCapabilities {
+MP_PACKED(
+struct, CodecCapabilities {
     int32_t                         flags;
     short                           wantedPixelSize;
     short                           extendWidth;
@@ -428,9 +465,11 @@ struct __attribute__((__packed__)) CodecCapabilities {
     uint32_t                        time;
     int32_t                         flags2;                     /* field new in QuickTime 4.0 */
 };
+)
 typedef struct CodecCapabilities        CodecCapabilities;
 
-struct __attribute__((__packed__)) CodecDecompressParams {
+MP_PACKED(
+struct, CodecDecompressParams {
     ImageSequence                   sequenceID;                 /* predecompress,banddecompress */
     ImageDescriptionHandle          imageDescription;           /* predecompress,banddecompress */
     Ptr                             data;
@@ -502,11 +541,13 @@ struct __attribute__((__packed__)) CodecDecompressParams {
     UInt32                          taskWeight;                 /* preferred weight for MP tasks implementing this operation*/
     OSType                          taskName;                   /* preferred name (type) for MP tasks implementing this operation*/
 };
+)
 typedef struct CodecDecompressParams    CodecDecompressParams;
 
 
 
-struct __attribute__((__packed__)) ImageSubCodecDecompressCapabilities {
+MP_PACKED(
+struct, ImageSubCodecDecompressCapabilities {
     int32_t                         recordSize;                 /* sizeof(ImageSubCodecDecompressCapabilities)*/
     int32_t                         decompressRecordSize;       /* size of your codec's decompress record*/
     Boolean                         canAsync;                   /* default true*/
@@ -525,10 +566,12 @@ struct __attribute__((__packed__)) ImageSubCodecDecompressCapabilities {
     Boolean                         isChildCodec;               /* set by base codec before calling Initialize*/
     UInt8                           pad3[3];
 };
+)
 typedef struct ImageSubCodecDecompressCapabilities ImageSubCodecDecompressCapabilities;
 
 
-struct __attribute__((__packed__)) ImageSubCodecDecompressRecord {
+MP_PACKED(
+struct, ImageSubCodecDecompressRecord {
     Ptr                             baseAddr;
     int32_t                         rowBytes;
     Ptr                             codecData;
@@ -544,6 +587,7 @@ struct __attribute__((__packed__)) ImageSubCodecDecompressRecord {
     ImageCodecDrawBandCompleteUPP   drawBandCompleteUPP;        /* only used if subcodec set subCodecCallsDrawBandComplete; if drawBandCompleteUPP is non-nil, codec must call it when a frame is finished, but may return from DrawBand before the frame is finished. */
     void *                          drawBandCompleteRefCon;     /* Note: do not call drawBandCompleteUPP directly from a hardware interrupt; instead, use DTInstall to run a function at deferred task time, and call drawBandCompleteUPP from that. */
 };
+)
 typedef struct ImageSubCodecDecompressRecord ImageSubCodecDecompressRecord;
 
 
@@ -593,7 +637,8 @@ enum {
     codecInfoSequenceSensitive  = (1L << 13)                    /* compressed data is sensitive to out of sequence decoding */
 };
 
-struct __attribute__((__packed__)) CodecInfo {
+MP_PACKED(
+struct, CodecInfo {
     Str31                           typeName;                   /* name of the codec type i.e.: 'Apple Image Compression' */
     short                           version;                    /* version of the codec data that this codec knows about */
     short                           revisionLevel;              /* revision level of this codec i.e: 0x00010001 (1.0.1) */
@@ -613,6 +658,7 @@ struct __attribute__((__packed__)) CodecInfo {
     short                           compressPipelineLatency;    /* in milliseconds ( for asynchronous codecs ) */
     int32_t                         privateData;
 };
+)
 typedef struct CodecInfo                CodecInfo;
 
 enum {

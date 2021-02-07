@@ -18,18 +18,26 @@ under MinGW
 
 #include "mediatype.h"
 
+#include "mppacked.h"
+
 //#define Debug if(1)
 #define Debug if(0)
 
 
 typedef long long REFERENCE_TIME;
 
-typedef struct __attribute__((__packed__)) RECT32
+MP_PACKED(
+typedef struct, RECT32
 {
-    int left, top, right, bottom;
+    int left;
+    int top;
+    int right;
+    int bottom;
 } RECT32;
+)
 
-typedef struct __attribute__((__packed__)) tagVIDEOINFOHEADER
+MP_PACKED(
+typedef struct, tagVIDEOINFOHEADER
 {
     RECT32            rcSource;          // The bit we really want to use
     RECT32            rcTarget;          // Where the video should go
@@ -39,6 +47,7 @@ typedef struct __attribute__((__packed__)) tagVIDEOINFOHEADER
     BITMAPINFOHEADER  bmiHeader;
     //int               reserved[3];
 } VIDEOINFOHEADER;
+)
 
 typedef GUID CLSID;
 typedef GUID IID;

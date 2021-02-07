@@ -36,13 +36,16 @@
 
 #include "mp_msg.h"
 #include "mpbswap.h"
+#include "mppacked.h"
 #include "network.h"
 
+MP_PACKED(
 typedef struct mp_net_stream_packet_st {
   uint16_t len;
   uint8_t cmd;
   char data[0];
-} __attribute__ ((packed))  mp_net_stream_packet_t;
+}, mp_net_stream_packet_t;
+)
 
 #define PACKET_MAX_SIZE 4096
 
@@ -61,13 +64,15 @@ typedef struct mp_net_stream_packet_st {
 // Server response
 #define NET_STREAM_OK 128
 // Data returned if open is successful
+MP_PACKED(
 typedef struct mp_net_stream_opened_st {
   uint32_t file_format;
   uint32_t flags;
   uint32_t sector_size;
   uint64_t start_pos;
   uint64_t end_pos;
-}  __attribute__ ((packed))  mp_net_stream_opened_t;
+}, mp_net_stream_opened_t;
+)
 // FILL_BUFFER return the data
 // CLOSE return nothing
 #define NET_STREAM_ERROR 129

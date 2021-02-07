@@ -20,10 +20,12 @@
 #define MPLAYER_MS_HDR_H
 
 #include "config.h"
+#include "mppacked.h"
 
 #ifndef _WAVEFORMATEX_
 #define _WAVEFORMATEX_
-typedef struct __attribute__((__packed__)) _WAVEFORMATEX {
+MP_PACKED(
+typedef struct, _WAVEFORMATEX {
   unsigned short  wFormatTag;
   unsigned short  nChannels;
   unsigned int    nSamplesPerSec;
@@ -31,23 +33,28 @@ typedef struct __attribute__((__packed__)) _WAVEFORMATEX {
   unsigned short  nBlockAlign;
   unsigned short  wBitsPerSample;
   unsigned short  cbSize;
-} WAVEFORMATEX, *PWAVEFORMATEX, *NPWAVEFORMATEX, *LPWAVEFORMATEX;
+} WAVEFORMATEX;
+)
+typedef WAVEFORMATEX *PWAVEFORMATEX, *NPWAVEFORMATEX, *LPWAVEFORMATEX;
 #endif /* _WAVEFORMATEX_ */
 
 #ifndef _WAVEFORMATEXTENSIBLE_
 #define _WAVEFORMATEXTENSIBLE_
-typedef struct __attribute__((__packed__)) _WAVEFORMATEXTENSIBLE {
+MP_PACKED(
+typedef struct, _WAVEFORMATEXTENSIBLE {
     WAVEFORMATEX   wf;
     unsigned short wValidBitsPerSample;
     unsigned int   dwChannelMask;
     unsigned int   SubFormat; // Only interested in first 32 bits of guid
     unsigned int   _guid_remainder[3];
 } WAVEFORMATEXTENSIBLE;
+)
 #endif /* _WAVEFORMATEXTENSIBLE_ */
 
 #ifndef _MPEGLAYER3WAVEFORMAT_
 #define _MPEGLAYER3WAVEFORMAT_
-typedef struct __attribute__((__packed__)) mpeglayer3waveformat_tag {
+MP_PACKED(
+typedef struct, mpeglayer3waveformat_tag {
   WAVEFORMATEX wf;
   unsigned short wID;
   unsigned int   fdwFlags;
@@ -55,12 +62,14 @@ typedef struct __attribute__((__packed__)) mpeglayer3waveformat_tag {
   unsigned short nFramesPerBlock;
   unsigned short nCodecDelay;
 } MPEGLAYER3WAVEFORMAT;
+)
 #endif /* _MPEGLAYER3WAVEFORMAT_ */
 
 /* windows.h #includes wingdi.h on MinGW. */
 #if !defined(_BITMAPINFOHEADER_) && !defined(_WINGDI_)
 #define _BITMAPINFOHEADER_
-typedef struct __attribute__((__packed__))
+MP_PACKED(
+typedef struct,
 {
     int 	biSize;
     int  	biWidth;
@@ -73,7 +82,9 @@ typedef struct __attribute__((__packed__))
     int  	biYPelsPerMeter;
     int 	biClrUsed;
     int 	biClrImportant;
-} BITMAPINFOHEADER, *PBITMAPINFOHEADER, *LPBITMAPINFOHEADER;
+} BITMAPINFOHEADER;
+)
+typedef BITMAPINFOHEADER *PBITMAPINFOHEADER, *LPBITMAPINFOHEADER;
 typedef struct {
 	BITMAPINFOHEADER bmiHeader;
 	int	bmiColors[1];

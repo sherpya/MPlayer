@@ -86,6 +86,7 @@
 
 #include "tv.h"
 #include "mp_msg.h"
+#include "mppacked.h"
 #include "frequencies.h"
 
 
@@ -221,12 +222,14 @@ typedef struct priv {
  \note
  structure have to be 2-byte aligned and have 10-byte length!!
 */
-typedef struct __attribute__((__packed__)) {
+MP_PACKED(
+typedef struct, {
     WORD CountryCode;		///< Country code
     WORD CableFreqTable;	///< index of resource with frequencies for cable channels
     WORD BroadcastFreqTable;	///< index of resource with frequencies for broadcast channels
     DWORD VideoStandard;	///< used video standard
 } TRCCountryList;
+)
 /**
     information about image formats
 */

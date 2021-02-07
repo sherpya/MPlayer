@@ -28,6 +28,7 @@
 #include "mp_msg.h"
 #include "help_mp.h"
 #include "mpcommon.h"
+#include "mppacked.h"
 #include "stream/stream.h"
 #include "demuxer.h"
 #include "stheader.h"
@@ -81,7 +82,8 @@ typedef struct stream_header_audio {
     ogg_int32_t avgbytespersec;
 } stream_header_audio;
 
-typedef struct __attribute__((__packed__)) stream_header {
+MP_PACKED(
+typedef struct, stream_header {
     char streamtype[8];
     char subtype[4];
 
@@ -103,6 +105,7 @@ typedef struct __attribute__((__packed__)) stream_header {
         stream_header_audio	audio;
     } sh;
 } stream_header;
+)
 
 /// Our private datas
 

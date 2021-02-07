@@ -8,8 +8,10 @@
 #define MPLAYER_MEDIATYPE_H
 
 #include "guids.h"
+#include "mppacked.h"
 
-typedef struct __attribute__((__packed__)) MediaType
+MP_PACKED(
+typedef struct, MediaType
 {
     GUID	majortype;		//0x0
     GUID	subtype;		//0x10
@@ -21,6 +23,7 @@ typedef struct __attribute__((__packed__)) MediaType
     unsigned long cbFormat;		//0x40
     char*	pbFormat;		//0x44
 } AM_MEDIA_TYPE;
+)
 
 /**
  * \brief print info from AM_MEDIA_TYPE structure

@@ -315,7 +315,8 @@ static void filter_line_c(struct vf_priv_s *p, uint8_t *dst, uint8_t *prev, uint
             spatial_score= score;\
             spatial_pred= (cur[-refs  +j] + cur[+refs  -j])>>1;\
 
-        CHECK(-1) CHECK(-2) }} }}
+        // double parenthesis are workaround for MSVC preprocessor
+        CHECK((-1)) CHECK((-2)) }} }}
         CHECK( 1) CHECK( 2) }} }}
 
         if(p->mode<2){

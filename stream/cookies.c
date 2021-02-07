@@ -27,7 +27,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <dirent.h>
+#endif
 #include <inttypes.h>
 #include <limits.h>
 
@@ -189,16 +191,21 @@ static struct cookie_list_type *load_cookies_from(const char *filename,
 /* Attempt to load cookies.txt from various locations. Returns a pointer to the linked list contain the cookies. */
 static struct cookie_list_type *load_cookies(void)
 {
+    struct cookie_list_type *list = NULL;
+#ifndef _MSC_VER
     DIR *dir;
     struct dirent *ent;
-    struct cookie_list_type *list = NULL;
     char *buf;
 
     char *homedir;
+#endif
 
     if (cookies_file)
 	return load_cookies_from(cookies_file, list);
 
+#ifdef _MSC_VER
+    return list;
+#else
     homedir = getenv("HOME");
     if (!homedir)
 	return list;
@@ -231,6 +238,7 @@ static struct cookie_list_type *load_cookies(void)
     free(buf);
 
     return list;
+#endif
 }
 
 /* Take an HTTP_header_t, and insert the correct headers. The cookie files are read if necessary. */

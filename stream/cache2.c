@@ -45,6 +45,9 @@
 #include "osdep/timer.h"
 #if defined(__MINGW32__)
 #include <windows.h>
+#ifdef _MSC_VER
+#include <process.h>
+#endif
 static void ThreadProc( void *s );
 #elif defined(__OS2__)
 #define INCL_DOS

@@ -26,8 +26,10 @@
 #include <string.h>
 #include <ctype.h>
 
+#ifndef _MSC_VER
 #include <sys/types.h>
 #include <dirent.h>
+#endif
 
 #include "ass_mp.h"
 #include "config.h"
@@ -1975,6 +1977,9 @@ struct sub_list {
 static void append_dir_subtitles(struct sub_list *slist, const char *path,
                                  const char *fname, int limit_fuzziness)
 {
+#ifdef _MSC_VER
+    return;
+#else
     char *f_fname, *f_fname_noext, *f_fname_trim, *tmp, *tmp_sub_id;
     char *tmp_fname_noext, *tmp_fname_trim, *tmp_fname_ext, *tmpresult;
 
@@ -2129,6 +2134,7 @@ static void append_dir_subtitles(struct sub_list *slist, const char *path,
     free(tmp_fname_ext);
 
     free(tmpresult);
+#endif
 }
 
 /**

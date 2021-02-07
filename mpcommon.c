@@ -18,6 +18,7 @@
 
 #if defined(__MINGW32__) || defined(__CYGWIN__)
 #include <windows.h>
+#include <windef.h>
 #endif
 #include <stdlib.h>
 #include "stream/stream.h"
@@ -479,9 +480,9 @@ static int get_win32_cmdline(int *argc_ptr, char **argv_ptr[])
 
     HMODULE kernel32 = GetModuleHandle("Kernel32.dll");
     HMODULE shell32  = GetModuleHandle("shell32.dll");
-    int WINAPI (*wc2mb)(UINT, DWORD, LPCWSTR, int, LPSTR, int, LPCSTR, LPBOOL) = NULL;
-    LPCWSTR WINAPI (*getCmdlW)(void) = NULL;
-    LPWSTR * WINAPI (*cmdl2argv)(LPCWSTR, int *) = NULL;
+    int (WINAPI *wc2mb)(UINT, DWORD, LPCWSTR, int, LPSTR, int, LPCSTR, LPBOOL) = NULL;
+    LPCWSTR (WINAPI *getCmdlW)(void) = NULL;
+    LPWSTR *(WINAPI *cmdl2argv)(LPCWSTR, int *) = NULL;
 
     if (!kernel32 || !shell32)
         goto err_out;
@@ -541,8 +542,8 @@ static void sanitize_os(void)
 {
 #if defined(__MINGW32__) || defined(__CYGWIN__)
     HMODULE kernel32 = GetModuleHandle("Kernel32.dll");
-    BOOL WINAPI (*setDEP)(DWORD) = NULL;
-    BOOL WINAPI (*setDllDir)(LPCTSTR) = NULL;
+    BOOL (WINAPI *setDEP)(DWORD) = NULL;
+    BOOL (WINAPI *setDllDir)(LPCTSTR) = NULL;
     if (kernel32) {
         setDEP = GetProcAddress(kernel32, "SetProcessDEPPolicy");
         setDllDir = GetProcAddress(kernel32, "SetDllDirectoryA");

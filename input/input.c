@@ -213,7 +213,7 @@ static const mp_cmd_t mp_cmds[] = {
 
   { MP_CMD_GUI, "gui", 1, { {MP_CMD_ARG_STRING, {0}}, {-1,{0}} } },
 
-  { 0, "", 0, {} }
+  { 0, "", 0, { 0 } }
 };
 
 /// The names of the keys as used in input.conf

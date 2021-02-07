@@ -24,7 +24,8 @@ include config.mak
 ###### variable declarations #######
 
 # local fallbacks for missing operating system features
-OS_FEATURE-$(GETTIMEOFDAY)           += osdep/gettimeofday.c
+# the fallback for gettimeofday should actually no longet be needed
+#OS_FEATURE-$(GETTIMEOFDAY)           += osdep/gettimeofday.c
 OS_FEATURE-$(GLOB_WIN)               += osdep/glob-win.c
 OS_FEATURE-$(MMAP)                   += osdep/mmap-os2.c
 OS_FEATURE-$(SETENV)                 += osdep/setenv.c
@@ -731,7 +732,7 @@ all: $(ALL_PRG-yes)
 	$(CC) $(CC_DEPFLAGS) $(CFLAGS) $(CC_C) $(CC_O) $<
 
 %-rc.o: %.rc
-	$(WINDRES) -I. $< -o $@
+	$(WINDRES) -I. $(WINDRES_O) $<
 
 ffmpeglibs: $(FFMPEGLIBS)
 
@@ -743,7 +744,7 @@ mencoder$(EXESUF): EXTRALIBS += $(EXTRALIBS_MENCODER)
 mplayer$(EXESUF): $(MPLAYER_DEPS)
 mplayer$(EXESUF): EXTRALIBS += $(EXTRALIBS_MPLAYER)
 mencoder$(EXESUF) mplayer$(EXESUF):
-	$(CC) -o $@ $^ $(EXTRALIBS)
+	$(CC) $(CC_LINK_O) $^ $(EXTRALIBS)
 
 codec-cfg-test$(EXESUF): HOSTCFLAGS := $(HOSTCFLAGS) -DTESTING
 codec-cfg$(EXESUF) codecs2html$(EXESUF):  HOSTCFLAGS := $(HOSTCFLAGS) -DCODECS2HTML
@@ -776,10 +777,10 @@ version.h: version.sh $(wildcard .svn/entries .git/logs/HEAD)
 	./$< `$(CC) -dumpversion`
 
 %$(EXESUF): %.c
-	$(CC) $(CC_DEPFLAGS) $(CFLAGS) -o $@ $^ $(LIBS)
+	$(CC) $(CC_DEPFLAGS) $(CFLAGS) $(CC_LINK_O) $^ $(LIBS)
 
 %.ho: %.h
-	$(CC) $(CFLAGS) -Wno-unused -c -o $@ -x c $<
+	$(CC) $(CFLAGS) -Wno-unused -c $(CC_O) -x c $<
 
 checkheaders: $(ALLHEADERS:.h=.ho)
 
@@ -1022,12 +1023,12 @@ TOOLS/subrip$(EXESUF): path.o sub/vobsub.o sub/spudec.o sub/unrar_exec.o \
     ffmpeg/libswscale/libswscale.a ffmpeg/libavutil/libavutil.a $(MP_MSG_OBJS)
 
 mplayer-nomain.o: mplayer.c
-	$(CC) $(CFLAGS) -DDISABLE_MAIN -c -o $@ $<
+	$(CC) $(CFLAGS) -DDISABLE_MAIN -c $(CC_O) $<
 
 TOOLS/netstream$(EXESUF): TOOLS/netstream.c
 TOOLS/vivodump$(EXESUF): TOOLS/vivodump.c
 TOOLS/netstream$(EXESUF) TOOLS/vivodump$(EXESUF): $(subst mplayer.o,mplayer-nomain.o,$(OBJS_MPLAYER)) $(filter-out %mencoder.o,$(OBJS_MENCODER)) $(OBJS_COMMON) $(COMMON_LIBS)
-	$(CC) $(CC_DEPFLAGS) $(CFLAGS) -o $@ $^ $(EXTRALIBS_MPLAYER) $(EXTRALIBS_MENCODER) $(EXTRALIBS)
+	$(CC) $(CC_DEPFLAGS) $(CFLAGS) $(CC_LINK_O) $^ $(EXTRALIBS_MPLAYER) $(EXTRALIBS_MENCODER) $(EXTRALIBS)
 
 REAL_SRCS    = $(wildcard TOOLS/realcodecs/*.c)
 REAL_TARGETS = $(REAL_SRCS:.c=.so.6.0)

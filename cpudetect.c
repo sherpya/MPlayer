@@ -39,6 +39,9 @@ CpuCaps gCpuCaps;
 #include <sys/sysctl.h>
 #elif defined(__MINGW32__) || defined(__CYGWIN__)
 #include <windows.h>
+#ifdef _MSC_VER
+#include <intrin.h>
+#endif
 #elif defined(__OS2__)
 #define INCL_DOS
 #include <os2.h>
@@ -245,6 +248,9 @@ static int has_cpuid(void)
 void
 do_cpuid(unsigned int ax, unsigned int *p)
 {
+#ifdef _MSC_VER
+    __cpuid(p, ax);
+#else
 // code from libavcodec:
     __asm__ volatile
         ("mov %%"REG_b", %%"REG_S"\n\t"
@@ -253,6 +259,7 @@ do_cpuid(unsigned int ax, unsigned int *p)
          : "=a" (p[0]), "=S" (p[1]),
            "=c" (p[2]), "=d" (p[3])
          : "0" (ax));
+#endif
 }
 
 void GetCpuCaps( CpuCaps *caps)
@@ -409,7 +416,7 @@ char *GetCpuFriendlyName(unsigned int regs[], unsigned int regs2[]){
 
 #ifdef __APPLE__
 #include <sys/sysctl.h>
-#elif defined(__AMIGAOS4__)
+#elif defined(__AMIGAOS4__) || defined(_WIN32)
 /* nothing */
 #else
 #include <signal.h>

@@ -50,6 +50,10 @@ toupper() {
   tr '[a-z]' '[A-Z]'
 }
 
+cc_link_o() {
+  eval printf '%s\\n' $CC_LINK_O
+}
+
 # Prefer these macros to full length text !
 # These macros only return an error code - NO display is done
 compile_check() {
@@ -58,9 +62,9 @@ compile_check() {
   echo >> "$TMPLOG"
   cat "$source" >> "$TMPLOG"
   echo >> "$TMPLOG"
-  echo "$_cc $WARNFLAGS $WARN_CFLAGS $CFLAGS $source $extra_cflags $ld_static $extra_ldflags $libs_mplayer $libs_mencoder -o $TMPEXE $@ $libm" >> "$TMPLOG"
+  echo "$_cc $($filter_flags $WARNFLAGS $WARN_CFLAGS $CFLAGS $source $extra_cflags $ld_static $extra_ldflags $libs_mplayer $libs_mencoder $(cc_link_o $TMPEXE) $@) $libm" >> "$TMPLOG"
   rm -f "$TMPEXE"
-  $_cc $WARNFLAGS $WARN_CFLAGS $CFLAGS "$source" $extra_cflags $ld_static $extra_ldflags $libs_mplayer $libs_mencoder -o "$TMPEXE" "$@" $libm >> "$TMPLOG" 2>&1
+  $_cc $($filter_flags $WARNFLAGS $WARN_CFLAGS $CFLAGS "$source" $extra_cflags $ld_static $extra_ldflags $libs_mplayer $libs_mencoder $(cc_link_o $TMPEXE) "$@") $libm >> "$TMPLOG" 2>&1
   TMPRES="$?"
   echo >> "$TMPLOG"
   echo >> "$TMPLOG"
@@ -228,6 +232,7 @@ qnx()       { issystem "QNX"; }
 sunos()     { issystem "SunOS"; }
 wine()      { issystem "Wine"; }
 win32()     { cygwin || mingw32 || wine; }
+msvc()      { test "$cc_vendor" = "msvc"; }
 
 # arch test boolean functions
 # x86/x86pc is used by QNX
@@ -1673,7 +1678,29 @@ for ac_option do
   esac
 done
 
+msvc_filter_flags() {
+  for f; do
+    case $f in
+      -fno-common) ;;
+      -march=*) ;;
+      -mcpu=*) ;;
+      -mfpu=*) ;;
+      -mtune=*) ;;
+      -pipe) ;;
+      -M*) ;;
+      -l*) echo -n ${f#-l}.lib" " ;;
+      *) echo -n $f" " ;;
+    esac
+  done
+}
 
+AR_O='$@'
+CC_O='-o $@'
+CC_LINK_O='-o $@'
+WINDRES_O='-o $@'
+def_inline_asm='#define HAVE_INLINE_ASM 1'
+inline_asm=yes
+filter_flags=echo
 # Checking CC version...
 # Intel C++ Compilers (no autoselect, use CC=/some/binary ./configure)
 if test "$(basename $_cc)" = "icc" || test "$(basename $_cc)" = "ecc"; then
@@ -1698,6 +1725,32 @@ if test "$(basename $_cc)" = "icc" || test "$(basename $_cc)" = "ecc"; then
       ;;
   esac
   echores "$cc_version"
+elif test "$(basename $_cc .exe)" = "cl"; then
+  echocheck "$_cc version"
+  cc_vendor=msvc
+  cc_version=$($_cc 2>&1 | head -n 1 | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+  cc_arch=$($_cc 2>&1 | head -n 1 | grep -o 'for [a-zA-Z0-9_-]\+' | cut -d ' ' -f 2)
+  case $cc_arch in
+  x64|X64) cc_arch=x86_64 ;;
+  ARM64|arm64) cc_arch=aarch64 ;;
+  esac
+  test -z "$_target" && _target="$cc_arch-mingw32"
+  extra_cflags="-nologo -we4013 -D__MINGW32__ -D_USE_MATH_DEFINES -Dssize_t=int64_t $extra_cflags"
+  CC_O='-Fo$@'
+  CC_LINK_O='-Fe$@'
+  _ar='lib.exe'
+  _arflags="-nologo"
+  AR_O='-out:$@'
+  _ranlib=':'
+  _windres='rc.exe'
+  WINDRES_O='-fo$@'
+  def_inline_asm='#define HAVE_INLINE_ASM 0'
+  inline_asm=no
+  filter_flags=msvc_filter_flags
+  libs_mplayer="$libs_mplayer -luser32 -lshell32"
+  test -n "$cc_version" || cc_fail=yes
+  test "$cc_arch" = "aarch64" && _as="gas-preprocessor.pl -arch aarch64 -as-type armasm -- armasm64.exe" && test $neon = "auto" && neon=yes
+  echores "$cc_version"
 else
   for _cc in "$_cc" gcc cc ; do
     cc_name_tmp=$($_cc -v 2>&1 | tail -n 1 | cut -d ' ' -f 1)
@@ -1711,9 +1764,9 @@ else
           cc_fail=yes
           ;;
         *)
-          _cc_major=$(echo $cc_version | cut -d '.' -f 1)
-          _cc_minor=$(echo $cc_version | cut -d '.' -f 2)
-          _cc_mini=$(echo $cc_version | cut -d '.' -f 3)
+          _cc_major=$(echo ${cc_version%%-*} | cut -d '.' -f 1)
+          _cc_minor=$(echo ${cc_version%%-*} | cut -d '.' -f 2)
+          _cc_mini=$(echo ${cc_version%%-*} | cut -d '.' -f 3)
           ;;
       esac
       echores "$cc_version"
@@ -1775,13 +1828,13 @@ if test -z "$_target" ; then
   # host's CPU/instruction set
   set_host_arch() {
   case "$1" in
-      x86_64|amd64|i[3-9]86*|i86pc|x86|x86pc|k5|k6|k6_2|k6_3|k6-2|k6-3|pentium*|athlon*|i586_i686|i586-i686) host_arch=i386 ;;
+      x86_64|amd64|x64|i[3-9]86*|i86pc|x86|x86pc|k5|k6|k6_2|k6_3|k6-2|k6-3|pentium*|athlon*|i586_i686|i586-i686) host_arch=i386 ;;
       ia64) host_arch=ia64 ;;
       macppc|ppc*|Power*) host_arch=ppc ;;
       alpha) host_arch=alpha ;;
       sun4*|sparc*) host_arch=sparc ;;
       parisc*|hppa*|9000*) host_arch=hppa ;;
-      aarch64*) host_arch=aarch64 ;;
+      aarch64*|ARM64) host_arch=aarch64 ;;
       arm*|zaurus|cats) host_arch=arm ;;
       sh3|sh4|sh4a) host_arch=sh ;;
       s390) host_arch=s390 ;;
@@ -1952,6 +2005,8 @@ if test $_cross_compile = yes; then
 fi
 
 echocheck "host cc"
+# we do not support compiling some things with cl.exe yet
+msvc && test -z "$_host_cc" && _host_cc=cc
 test "$_host_cc" || _host_cc=$_cc
 echores $_host_cc
 
@@ -1960,8 +2015,10 @@ echores $_host_cc
 # now that we know what compiler should be used for compilation, try to find
 # out which assembler is used by the $_cc compiler
 if test "$_as" = auto ; then
-  _as=$($_cc -print-prog-name=as)
-  test -z "$_as" && _as=as
+  # FFmpeg actually expects this to be gcc, so do not set this to "as".
+  _as=$_cc
+  #_as=$($_cc -print-prog-name=as)
+  #test -z "$_as" && _as=as
 fi
 
 if test "$_nm" = auto ; then
@@ -2012,8 +2069,10 @@ if x86 ; then
   # SSE implies MMX2, but not all SSE processors report the mmxext CPU flag.
   pparam=$(echo $pparam | sed -e 's/sse/sse mmxext/')
 
+  extcheck=kernel_check
+  msvc && extcheck=yes
   for ext in $pparam ; do
-    eval test \"\$_$ext\" = auto 2>/dev/null && eval _$ext=kernel_check
+    eval test \"\$_$ext\" = auto 2>/dev/null && eval _$ext=$extcheck
   done
 
   echocheck "CPU vendor"
@@ -2350,7 +2409,7 @@ case "$host_arch" in
     iproc='ia64'
     ;;
 
-  x86_64|amd64)
+  x86_64|amd64|x64)
     arch='x86'
     subarch='x86_64'
     def_fast_unaligned='#define HAVE_FAST_UNALIGNED 1'
@@ -2488,7 +2547,7 @@ case "$host_arch" in
     _optimizing="$proc"
     ;;
 
-  aarch64)
+  aarch64|ARM64)
     arch='aarch64'
     iproc='aarch64'
     if test "$_runtime_cpudetection" = no ; then
@@ -3060,7 +3119,7 @@ def_bswap='#define HAVE_BSWAP 0'
 def_ebx_available='#define HAVE_EBX_AVAILABLE 0'
 def_xmm_clobbers='#define HAVE_XMM_CLOBBERS 0'
 
-if x86_64 ; then
+if x86_64 && ! msvc; then
 inline_asm_check '"mov (%eax), %eax"' || die "Your binutils version is too old to compile for 64-bit (on OSX try --cc=clang)"
 fi
 
@@ -3373,6 +3432,8 @@ test "$_vis"       = yes && cpuexts="VIS $cpuexts"
 test "$_mvi"       = yes && cpuexts="MVI $cpuexts"
 cpuexts_external=""
 test "$have_yasm"  = yes && cpuexts_external="$cpuexts"
+cpuexts_inline="$cpuexts"
+test "$inline_asm" = no && cpuexts_inline=""
 
 # Checking kernel version...
 if x86_32 && linux ; then
@@ -3929,13 +3990,22 @@ header_check sys/poll.h && poll_h=yes &&
   def_poll_h='#define HAVE_POLL_H 1'
 echores "$poll_h"
 
+echocheck "unistd.h"
+unistd_h=no
+def_unistd_h='#define HAVE_UNISTD_H 0'
+header_check unistd.h && unistd_h=yes &&
+  def_unistd_h='#define HAVE_UNISTD_H 1'
+echores "$unistd_h"
+
 echocheck "emmintrin.h (SSE intrinsics)"
 emmintrin_h=no
 def_emmintrin_h='#define HAVE_EMMINTRIN_H 0'
   cat > $TMPC << EOF
 #include <emmintrin.h>
 
+#ifndef _MSC_VER
 __attribute__((target("sse2")))
+#endif
 static int sse2test(int i) {
     __m128i mmi = _mm_set1_epi16(i);
     mmi = _mm_add_epi16(mmi, mmi);
@@ -3990,7 +4060,11 @@ stdatomic_h=no
 statement_check stdatomic.h "atomic_int_least64_t a; atomic_fetch_add_explicit(&a, 5, memory_order_relaxed)" && stdatomic_h=yes
 echores "$stdatomic_h"
 if test "$stdatomic_h" = no ; then
-  CFLAGS="-Icompat/atomics/gcc $CFLAGS"
+  if msvc ; then
+    CFLAGS="-Icompat/atomics/win32 $CFLAGS"
+  else
+    CFLAGS="-Icompat/atomics/gcc $CFLAGS"
+  fi
 fi
 
 echocheck "malloc.h"
@@ -7768,7 +7842,7 @@ fi #if freebsd || netbsd || openbsd || dragonfly || bsdos
 
 
 echocheck "DirectShow TV interface"
-if test "$_tv_dshow" = auto && test "$_tv" = yes && win32 ; then
+if test "$_tv_dshow" = auto && test "$_tv" = yes && win32 && ! msvc ; then
     _tv_dshow=no
     statement_check ole2.h 'void* p; CoCreateInstance((GUID*)&GUID_NULL, NULL, CLSCTX_INPROC_SERVER, &GUID_NULL, &p)' -lole32 -luuid && _tv_dshow=yes
 fi
@@ -8493,6 +8567,11 @@ for part in $list; do
 done
 }
 
+# This should be last
+if msvc ; then
+  CFLAGS="$CFLAGS -Icompatinc"
+fi
+
 #############################################################################
 echo "Creating config.mak"
 cat > config.mak << EOF
@@ -8522,27 +8601,28 @@ CONFDIR = \$(DESTDIR)$_confdir
 
 AR      = $_ar
 ARFLAGS = $_arflags
-AR_O    = \$@
-AS      = $_cc
+AR_O    = $AR_O
+AS      = $_as
 CC      = $_cc
 CXX     = $_cc
 HOST_CC = $_host_cc
 INSTALL = $_install
 INSTALLSTRIP = $_install_strip
 WINDRES = $_windres
+WINDRES_O = $WINDRES_O
 
-CFLAGS   = $WARNFLAGS $WARN_CFLAGS $CFLAGS $extra_cflags
-CXXFLAGS = $WARNFLAGS $CXXFLAGS $extra_cflags $extra_cxxflags
-CC_DEPFLAGS = $DEPFLAGS
+CFLAGS   = $($filter_flags $WARNFLAGS $WARN_CFLAGS $CFLAGS $extra_cflags)
+CXXFLAGS = $($filter_flags $WARNFLAGS $CXXFLAGS $extra_cflags $extra_cxxflags)
+CC_DEPFLAGS = $($filter_flags $DEPFLAGS)
 
 CFLAGS_DHAHELPER         = $cflags_dhahelper
 CFLAGS_NO_OMIT_LEAF_FRAME_POINTER = $cflags_no_omit_leaf_frame_pointer
 CFLAGS_STACKREALIGN      = $cflags_stackrealign
 CFLAGS_SVGALIB_HELPER    = $cflags_svgalib_helper
 
-EXTRALIBS          = $ld_static $extra_ldflags $timer_libs $extra_libs
-EXTRALIBS_MPLAYER  = $libs_mplayer
-EXTRALIBS_MENCODER = $libs_mencoder
+EXTRALIBS          = $($filter_flags $ld_static $extra_ldflags $timer_libs $extra_libs)
+EXTRALIBS_MPLAYER  = $($filter_flags $libs_mplayer)
+EXTRALIBS_MENCODER = $($filter_flags $libs_mencoder)
 
 MP_MSG_LIBS = $ld_iconv $ld_termcap $timer_libs
 
@@ -8558,7 +8638,7 @@ $(mak_enable "$arch_all"    "$arch"    ARCH)
 $(mak_enable "$subarch_all" "$subarch" ARCH)
 $(mak_enable "$cpuexts_all" "$cpuexts" HAVE)
 $(mak_enable "$cpuexts_all" "$cpuexts_external" HAVE _EXTERNAL)
-$(mak_enable "$cpuexts_all" "$cpuexts" HAVE _INLINE)
+$(mak_enable "$cpuexts_all" "$cpuexts_inline" HAVE _INLINE)
 
 MENCODER = $_mencoder
 MPLAYER  = $_mplayer
@@ -8752,7 +8832,8 @@ HOSTCC     = \$(HOST_CC)
 HOSTCFLAGS = $HOSTCFLAGS
 HOSTLIBS   = $libm
 AS_O       = -o \$@
-CC_O       = -o \$@
+CC_O       = $CC_O
+CC_LINK_O  = $CC_LINK_O
 CXX_O      = -o \$@
 AS_C       = -c
 CC_C       = -c
@@ -8983,7 +9064,7 @@ $def_fast_inttypes
 /* libdvdcss */
 #define HAVE_ERRNO_H 1
 #define HAVE_INTTYPES_H 1
-#define HAVE_UNISTD_H 1
+$def_unistd_h
 $def_broken_mkdir
 $def_cdio
 $def_cdrom
@@ -9092,7 +9173,7 @@ $(ff_config_enable "$arch_all" "$arch" "#" "ARCH")
 $(ff_config_enable "$subarch_all" "$subarch" "#" "ARCH")
 $(ff_config_enable "$cpuexts_all" "$cpuexts" "#" "HAVE")
 $(ff_config_enable "$cpuexts_all" "$cpuexts_external" "#" "HAVE" "_EXTERNAL")
-$(ff_config_enable "$cpuexts_all" "$cpuexts" "#" "HAVE" "_INLINE")
+$(ff_config_enable "$cpuexts_all" "$cpuexts_inline" "#" "HAVE" "_INLINE")
 
 
 /* Blu-ray/DVD/VCD/CD */
@@ -9414,6 +9495,8 @@ $def_erf
 
 #define HAVE_INCOMPATIBLE_LIBAV_ABI 0
 #define HAVE_MSVCRT 0
+#define HAVE_UWP 0
+#define HAVE_WINRT 0
 #define HAVE_PRAGMA_DEPRECATED 0
 #define CONFIG_AUDIO_FLOAT 0
 #define CONFIG_AVCODEC 1
@@ -9454,7 +9537,7 @@ $def_as_func
 #define HAVE_ATOMICS_NATIVE 1
 #define HAVE_ATTRIBUTE_PACKED 1
 #define HAVE_GETHRTIME 0
-#define HAVE_INLINE_ASM 1
+$def_inline_asm
 #define HAVE_INLINE_ASM_NONLOCAL_LABELS 1
 #define HAVE_INLINE_ASM_DIRECT_SYMBOL_REFS 1
 #define HAVE_ISATTY 0
@@ -9594,7 +9677,7 @@ echo "%define HAVE_ALIGNED_STACK 1" >> "$TMPS"
 echo "$(ff_config_enable "$arch_all" "$arch" "%" "ARCH")" >> "$TMPS"
 echo "$(ff_config_enable "$subarch_all" "$subarch" "%" "ARCH")" >> "$TMPS"
 echo "$(ff_config_enable "$cpuexts_all" "$cpuexts_external" "%" "HAVE" "_EXTERNAL")" >> "$TMPS"
-echo "$(ff_config_enable "$cpuexts_all" "$cpuexts" "%" "HAVE" "_INLINE")" >> "$TMPS"
+echo "$(ff_config_enable "$cpuexts_all" "$cpuexts_inline" "%" "HAVE" "_INLINE")" >> "$TMPS"
 echo "$(ff_config_enable "$yasm_features_all" "$yasm_features" "%" "HAVE")" >> "$TMPS"
 echo "$(ff_config_enable "$libavdecoders_all"  "$libavdecoders" "%" "CONFIG")" >> "$TMPS"
 echo "$(ff_config_enable "$libavencoders_all"  "$libavencoders" "%" "CONFIG")" >> "$TMPS"

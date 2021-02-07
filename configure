@@ -8482,11 +8482,13 @@ mak_enable () {
 list=$(echo $1 | toupper)
 item=$(echo $2 | toupper)
 nprefix=$3;
+suffix=$4
 for part in $list; do
+  name="${nprefix}_${part}$suffix"
   if $(echo $item | grep -q -E "(^| )$part($| )"); then
-    echo "${nprefix}_$part = yes"
+    echo "$name = yes"
   else
-    echo "${nprefix}_$part = no"
+    echo "!$name = yes"
   fi
 done
 }
@@ -8555,6 +8557,8 @@ ARCH = $arch
 $(mak_enable "$arch_all"    "$arch"    ARCH)
 $(mak_enable "$subarch_all" "$subarch" ARCH)
 $(mak_enable "$cpuexts_all" "$cpuexts" HAVE)
+$(mak_enable "$cpuexts_all" "$cpuexts_external" HAVE _EXTERNAL)
+$(mak_enable "$cpuexts_all" "$cpuexts" HAVE _INLINE)
 
 MENCODER = $_mencoder
 MPLAYER  = $_mplayer

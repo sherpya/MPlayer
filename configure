@@ -3084,7 +3084,7 @@ if x86_32 ; then
     _pref_as_version='2.16.92'
     echo 'pabsd %xmm0, %xmm1' >> $TMPS
   fi
-  $_as $TMPS -o $TMPEXE > /dev/null 2>&1 || as_verc_fail=yes
+  $_as -c $TMPS -o $TMPEXE > /dev/null 2>&1 || as_verc_fail=yes
 
   if test "$as_verc_fail" != yes ; then
     echores "ok"

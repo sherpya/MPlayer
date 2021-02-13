@@ -28,7 +28,7 @@
 #include "mp_msg.h"
 #include <inttypes.h>
 #include <stdlib.h>
-#include "libavutil/mem_internal.h"
+#include "mpmem.h"
 #include "libmpcodecs/img_format.h"
 #include "cpudetect.h"
 

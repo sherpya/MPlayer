@@ -19,7 +19,7 @@
 #ifndef MPLAYER_M_CONFIG_H
 #define MPLAYER_M_CONFIG_H
 
-#include "libavutil/mem_internal.h"
+#include "mpmem.h"
 
 /// \defgroup Config Config manager
 ///

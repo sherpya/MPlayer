@@ -35,6 +35,7 @@
 #endif
 
 #include "libavutil/mem.h"
+#include "mpmem.h"
 
 #include "img_format.h"
 #include "mp_image.h"

@@ -32,7 +32,7 @@
 #include <inttypes.h>
 #include <math.h>
 
-#include "libavutil/mem_internal.h"
+#include "mpmem.h"
 #include "mp_msg.h"
 #include "img_format.h"
 #include "mp_image.h"

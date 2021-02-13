@@ -30,7 +30,7 @@
 #include "mp_msg.h"
 #include "cpudetect.h"
 
-#include "libavutil/mem.h"
+#include "mpmem.h"
 #include "libavcodec/avcodec.h"
 
 #include "img_format.h"

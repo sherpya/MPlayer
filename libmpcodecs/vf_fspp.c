@@ -50,7 +50,7 @@
 
 #include "libavutil/internal.h"
 #include "libavutil/intreadwrite.h"
-#include "libavutil/mem.h"
+#include "mpmem.h"
 #include "mpx86asm.h"
 #include "libavcodec/avcodec.h"
 

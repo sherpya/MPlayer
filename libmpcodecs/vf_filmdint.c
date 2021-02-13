@@ -24,6 +24,7 @@
 #include "mp_msg.h"
 #include "cpudetect.h"
 #include "osdep/timer.h"
+#include "mpmem.h"
 
 #include "img_format.h"
 #include "mp_image.h"

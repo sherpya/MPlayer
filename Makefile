@@ -667,7 +667,7 @@ $(foreach suffix,.c .cpp .m .S,$(eval DEP_FILES := $(DEP_FILES:$(suffix)=.d)))
 ALL_PRG-$(MPLAYER)  += mplayer$(EXESUF)
 ALL_PRG-$(MENCODER) += mencoder$(EXESUF)
 
-INSTALL_TARGETS-$(GUI)      += install-gui
+INSTALL_TARGETS-$(GUI)      += install-gui install-gui-man
 INSTALL_TARGETS-$(MENCODER) += install-mencoder install-mencoder-man
 INSTALL_TARGETS-$(MPLAYER)  += install-mplayer  install-mplayer-man
 

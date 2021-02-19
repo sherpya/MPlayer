@@ -4064,6 +4064,12 @@ if test "$stdatomic_h" = no ; then
     CFLAGS="-Icompat/atomics/win32 $CFLAGS"
   else
     CFLAGS="-Icompat/atomics/gcc $CFLAGS"
+    if ! statement_check ffmpeg/compat/atomics/gcc/stdatomic.h "atomic_int_least64_t a; atomic_fetch_add_explicit(&a, 5, memory_order_relaxed)" ; then
+        # These are the only ones needing 64-bit atomics.
+        # They are not worth adding a dependency or even worse switching to a
+        # badly inefficient pthreads-based atomics implementation
+        libavmuxers=$(filter_out_component muxer 'FIFO FIFO_TEST')
+    fi
   fi
 fi
 
@@ -5398,7 +5404,8 @@ if test "$quicktime" = auto ; then
   statement_check QuickTime/QuickTime.h 'ImageDescription *desc; EnterMovies(); ExitMovies()' -framework QuickTime && quicktime=yes
 fi
 if test "$quicktime" = yes ; then
-  extra_ldflags="$extra_ldflags -framework QuickTime"
+  # Carbon framework needed for symbols like SoundConverterOpen and DisposeGWorld
+  extra_ldflags="$extra_ldflags -framework QuickTime -framework Carbon"
   def_quicktime='#define CONFIG_QUICKTIME 1'
 else
   def_quicktime='#undef CONFIG_QUICKTIME'

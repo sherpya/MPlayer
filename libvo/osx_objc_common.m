@@ -142,8 +142,10 @@ void vo_osx_swap_buffers(void)
 	NSScreen *screen_handle = [self fullscreen_screen];
 	NSRect screen_frame = [screen_handle frame];
 	NSSize size = screen_frame.size;
+#ifndef __POWER__
 	if ([self respondsToSelector:@selector(convertSizeToBacking:)])
 		size = [self convertSizeToBacking:size];
+#endif
 	vo_screenwidth = size.width;
 	vo_screenheight = size.height;
 	xinerama_x = screen_frame.origin.x;
@@ -249,8 +251,10 @@ void vo_osx_swap_buffers(void)
 	[super reshape];
 	NSRect frame = [self frame];
 	NSSize size = frame.size;
+#ifndef __POWER__
 	if ([self respondsToSelector:@selector(convertSizeToBacking:)])
 		size = [self convertSizeToBacking:size];
+#endif
 	vo_dwidth  = size.width;
 	vo_dheight = size.height;
 	event_flags |= VO_EVENT_RESIZE;
@@ -407,8 +411,10 @@ void vo_osx_swap_buffers(void)
 		[self update_screen_info];
 
 		NSSize size = { vo_screenwidth, vo_screenheight };
+#ifndef __POWER__
 		if ([self respondsToSelector:@selector(convertSizeFromBacking:)])
 			size = [self convertSizeFromBacking:size];
+#endif
 		[window setFrame:NSMakeRect(xinerama_x, xinerama_y, size.width, size.height) display:YES animate:animate]; //zoom-in window with nice useless sfx
 		old_view_frame = [self bounds];
 

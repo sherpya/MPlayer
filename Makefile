@@ -910,8 +910,8 @@ uninstall:
 	rm -f $(MANDIR)/man1/mencoder.1 $(MANDIR)/man1/mplayer.1
 	rm -f $(foreach size,$(GUI_ICONSIZES),$(prefix)/share/icons/hicolor/$(size)/apps/mplayer.png)
 	rm -f $(prefix)/share/applications/mplayer.desktop
-	rm -f $(MANDIR)/man1/mplayer.1 $(MANDIR)/man1/mencoder.1
-	rm -f $(foreach lang,$(MAN_LANGS),$(foreach man,mplayer.1 mencoder.1,$(MANDIR)/$(lang)/man1/$(man)))
+	rm -f $(MANDIR)/man1/mplayer.1 $(MANDIR)/man1/mencoder.1 $(MANDIR)/man1/gmplayer.1
+	rm -f $(foreach lang,$(MAN_LANGS),$(foreach man,mplayer.1 mencoder.1 gmplayer.1,$(MANDIR)/$(lang)/man1/$(man)))
 
 clean: testsclean toolsclean driversclean dhahelperclean
 	-$(MAKE) -C ffmpeg $@

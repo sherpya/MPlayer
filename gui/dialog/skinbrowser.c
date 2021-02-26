@@ -40,7 +40,7 @@ char      * sbSelectedSkin=NULL;
 char      * sbSkinDirInHome=NULL;
 char      * sbSkinDirInData=NULL;
 
-char *prevSelected;
+static char *prevSelected;
 
 GtkWidget * SkinBrowser = NULL;
 

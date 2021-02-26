@@ -184,11 +184,11 @@ void gtkMessageBox(int type, const gchar *str)
     ShowMessageBox(str);
     gtk_label_set_text(GTK_LABEL(gtkMessageBoxText), str);
 
-    /* enable linewrapping by alex */
-// GTK_LABEL(gtkMessageBoxText)->max_width = 80;
-    if (strlen(str) > 80)
+    if (strlen(str) > 80) {
         gtk_label_set_line_wrap(GTK_LABEL(gtkMessageBoxText), TRUE);
-    else
+        gtk_label_set_justify(GTK_LABEL(gtkMessageBoxText), GTK_JUSTIFY_LEFT);
+        gtk_widget_set_size_request(gtkMessageBoxText, 415, -1);
+    } else
         gtk_label_set_line_wrap(GTK_LABEL(gtkMessageBoxText), FALSE);
 
     switch (type) {

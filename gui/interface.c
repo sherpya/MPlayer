@@ -286,8 +286,8 @@ void guiInit(void)
     switch (ret) {
     case -1:
         if (skin) {
-        gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_GUI_MSG_SkinCfgNotFound, skinName);
-        mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
+            gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_GUI_MSG_SkinCfgNotFound, skinName);
+            mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
         } else {
             if (skinRead("Noskin") != 0)
                 mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);

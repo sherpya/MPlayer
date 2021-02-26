@@ -31,6 +31,7 @@
 #include "gui/app/app.h"
 #include "gui/app/gui.h"
 #include "gui/dialog/dialog.h"
+#include "gui/util/bitmap.h"
 #include "gui/util/misc.h"
 #include "gui/util/string.h"
 
@@ -1193,6 +1194,80 @@ static char *setname(char *dir, char *sname)
     av_strlcat(skinfname, "skin", sizeof(skinfname));
 
     return skinfname;
+}
+
+/**
+ * @brief Create the most minimal skin possible.
+ *
+ * @return 0 (ok) or -1 (error)
+ */
+static int skinNoskin(void)
+{
+    mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[skin] using built-in skin\n");
+
+    appFreeStruct();
+
+    /* section = movieplayer */
+
+    skin = &guiApp;
+
+    /* window = main */
+
+    currWin = &skin->main;
+    currWinItemIdx = &skin->IndexOfMainItems;
+    currWinItems   = skin->mainItems;
+
+    /* decoration = disable */
+
+    skin->mainDecoration = 0;
+
+    /* base = <img>, 0, 0 (where <img> is a 1x1 transparent pixel image) */
+
+    currWin->Bitmap.Width     = 1;
+    currWin->Bitmap.Height    = 1;
+    currWin->Bitmap.Bpp       = 32;
+    currWin->Bitmap.ImageSize = 4;
+    currWin->Bitmap.Image     = calloc(1, 4);
+
+    if (!currWin->Bitmap.Image) {
+        skin_error(MSGTR_GUI_MSG_SkinMemoryError);
+        return -1;
+    }
+
+    *(uint32_t *)currWin->Bitmap.Image = GUI_TRANSPARENT;
+
+    if (!bpRenderMask(&currWin->Bitmap, &currWin->Mask)) {
+        skin_error(MSGTR_GUI_MSG_SkinMemoryError);
+        return -1;
+    }
+
+    currWin->x      = 0;
+    currWin->y      = 0;
+    currWin->width  = currWin->Bitmap.Width;
+    currWin->height = currWin->Bitmap.Height;
+
+    /* window = video */
+
+    currWin = &skin->video;
+    currWinItemIdx = NULL;
+    currWinItems   = NULL;
+
+    /* base = NULL, -1, -1, 720, 404 */
+
+    currWin->x      = -1;
+    currWin->y      = -1;
+    currWin->width  = 720;
+    currWin->height = 404;
+
+    /* background = 0, 0, 0 */
+
+    currWin->R = 0;
+    currWin->G = 0;
+    currWin->B = 0;
+
+    /* end */
+
+    return 0;
 }
 
 /**

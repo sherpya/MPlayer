@@ -671,6 +671,7 @@ static int create_window(uint32_t d_width, uint32_t d_height, uint32_t flags, co
   if (stereo_mode == GL_3D_QUADBUFFER)
     flags |= VOFLAG_STEREO;
 #ifdef CONFIG_GL_SDL
+#if !SDL_VERSION_ATLEAST(2, 0, 0)
   if (glctx.type == GLTYPE_SDL) {
     // Ugly to do this here, but SDL ignores it if set later
     if (swap_interval >= 0) {
@@ -681,6 +682,7 @@ static int create_window(uint32_t d_width, uint32_t d_height, uint32_t flags, co
 #endif
     }
   }
+#endif
 #endif
   return mpglcontext_create_window(&glctx, d_width, d_height, flags, title);
 }

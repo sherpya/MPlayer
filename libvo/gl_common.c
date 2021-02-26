@@ -2389,7 +2389,11 @@ static int x11_check_events(void) {
 #include "sdl_common.h"
 
 static void swapGlBuffers_sdl(MPGLContext *ctx) {
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+  SDL_GL_SwapWindow(sdl_window);
+#else
   SDL_GL_SwapBuffers();
+#endif
 }
 
 static void *sdlgpa(const GLubyte *name) {
@@ -2406,6 +2410,16 @@ static int setGlWindow_sdl(MPGLContext *ctx) {
   return SET_WINDOW_OK;
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+SDL_GLContext sdl_gl_context;
+#endif
+
+static void releaseGlContext_sdl() {
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+  SDL_GL_DeleteContext(sdl_gl_context);
+#endif
+}
+
 static int sdl_check_events(void) {
   int res = 0;
   SDL_Event event;
@@ -2414,8 +2428,10 @@ static int sdl_check_events(void) {
   }
   // poll "events" from within MPlayer code
   res |= sdl_default_handle_event(NULL);
+#if !SDL_VERSION_ATLEAST(2, 0, 0)
   if (res & VO_EVENT_RESIZE)
     sdl_set_mode(0, SDL_OPENGL | SDL_RESIZABLE);
+#endif
   return res;
 }
 
@@ -2711,6 +2727,7 @@ int init_mpglcontext(MPGLContext *ctx, enum MPGLType type) {
   case GLTYPE_SDL:
     SDL_Init(SDL_INIT_VIDEO);
     ctx->setGlWindow = setGlWindow_sdl;
+    ctx->releaseGlContext = releaseGlContext_sdl;
     ctx->swapGlBuffers = swapGlBuffers_sdl;
     ctx->check_events = sdl_check_events;
     ctx->fullscreen = vo_sdl_fullscreen;
@@ -2813,6 +2830,9 @@ int mpglcontext_create_window(MPGLContext *ctx, uint32_t d_width, uint32_t d_hei
 #ifdef CONFIG_GL_SDL
   if (ctx->type == GLTYPE_SDL && !vo_sdl_config(d_width, d_height, flags, title))
     return -1;
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+  sdl_gl_context = SDL_GL_CreateContext(sdl_window);
+#endif
 #endif
   return 0;
 }

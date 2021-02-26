@@ -29,11 +29,27 @@
 #include <SDL.h>
 #endif
 
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+#define SDL_FULLSCREEN SDL_WINDOW_FULLSCREEN_DESKTOP
+#define SDL_OPENGL SDL_WINDOW_OPENGL
+#define SDL_NOFRAME SDL_WINDOW_BORDERLESS
+#define SDL_RESIZABLE SDL_WINDOW_RESIZABLE
+#else
+#define SDL_Window void
+#endif
+
+extern SDL_Window *sdl_window;
+
 int vo_sdl_init(void);
 void vo_sdl_uninit(void);
 int vo_sdl_config(int w, int h, int flags, const char *title);
 void vo_sdl_fullscreen(void);
-SDL_Surface *sdl_set_mode(int bpp, uint32_t flags);
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+int
+#else
+SDL_Surface *
+#endif
+sdl_set_mode(int bpp, uint32_t flags);
 int sdl_default_handle_event(SDL_Event *event);
 
 #endif /* MPLAYER_SDL_COMMON_H */

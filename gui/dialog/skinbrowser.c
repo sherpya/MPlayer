@@ -40,7 +40,6 @@ char      * sbSelectedSkin=NULL;
 char      * sbSkinDirInHome=NULL;
 char      * sbSkinDirInData=NULL;
 
-char * gtkOldSkin=NULL;
 static char * prev=NULL;
 
 GtkWidget * SkinBrowser = NULL;
@@ -54,7 +53,7 @@ static void prButton( GtkButton * button,gpointer user_data )
   switch ( GPOINTER_TO_INT(user_data) )
    {
     case 0: // cancel
-      if ( strcmp( sbSelectedSkin,gtkOldSkin ) ) uiChangeSkin( gtkOldSkin );
+      if ( strcmp( sbSelectedSkin,skinName ) ) uiChangeSkin( skinName );
       break;
    case 1: // ok
       uiChangeSkin( sbSelectedSkin );   // NOTE TO MYSELF: skin already changed!
@@ -166,8 +165,7 @@ int FillSkinList( gchar * mdir )
  glob_t          gg;
  struct stat     fs;
 
- gtkOldSkin=strdup( skinName );
- prev=gtkOldSkin;
+ prev=skinName;
 
  glob( mdir,GLOB_NOSORT,NULL,&gg );
  for( i=0;i<gg.gl_pathc;i++ )

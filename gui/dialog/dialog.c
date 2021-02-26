@@ -191,12 +191,13 @@ void gtkMessageBox(int type, const gchar *str)
     } else
         gtk_label_set_line_wrap(GTK_LABEL(gtkMessageBoxText), FALSE);
 
-    switch (type) {
+    switch (type & ~MSGBOX_WAIT) {
     case MSGBOX_FATAL:
         gtk_window_set_title(GTK_WINDOW(MessageBox), MSGTR_GUI_ErrorFatal);
         gtk_widget_hide(InformationImage);
         gtk_widget_hide(WarningImage);
         gtk_widget_show(ErrorImage);
+        type |= MSGBOX_WAIT;
         break;
 
     case MSGBOX_ERROR:
@@ -224,7 +225,7 @@ void gtkMessageBox(int type, const gchar *str)
     gtk_widget_show(MessageBox);
     gtkSetLayer(MessageBox);
 
-    if (type == MSGBOX_FATAL) {
+    if (type & MSGBOX_WAIT) {
         while (MessageBox) {
             gtk_main_iteration_do(FALSE);
             usec_sleep(5000);

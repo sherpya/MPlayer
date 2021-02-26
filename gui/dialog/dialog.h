@@ -29,7 +29,8 @@ enum {
     MSGBOX_INFORMATION,
     MSGBOX_WARNING,
     MSGBOX_ERROR,
-    MSGBOX_FATAL
+    MSGBOX_FATAL,
+    MSGBOX_WAIT         // must be a power of 2!
 };
 
 typedef struct {

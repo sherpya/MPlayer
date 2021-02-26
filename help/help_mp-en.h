@@ -707,6 +707,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_MSG_MemoryErrorWindow "Not enough memory for window rendering.\n"
 #define MSGTR_GUI_MSG_NoFileLoaded "No file loaded."
 #define MSGTR_GUI_MSG_NoMediaOpened "No media opened."
+#define MSGTR_GUI_MSG_NoSkinInstalled "There is no 'default'-skin installed. Skins allow comfortable control and display information during playback. Without a skin, only simple control is available from a menu accessible with a right mouse button click on the video window.\n\nInstall a skin, select one from the skin browser or put 'gui_skin=Noskin' into the configuration file if you want to go without a skin and avoid this message.\n"
 #define MSGTR_GUI_MSG_NotAFile0 "This does not seem to be a file!\n"
 #define MSGTR_GUI_MSG_NotAFile1 "%s does not seem to be a file!\n"
 #define MSGTR_GUI_MSG_PlaybackNeedsRestart "You need to restart playback for some options to take effect."

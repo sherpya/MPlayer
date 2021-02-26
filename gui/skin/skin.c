@@ -1285,6 +1285,9 @@ int skinRead(char *sname)
     unsigned char param[256];
     unsigned int i;
 
+    if (*sname == 0 || strcmp(sname, "Noskin") == 0)
+        return skinNoskin();
+
     skinfname = setname(skinDirInHome, sname);
 
     if ((skinfile = fopen(skinfname, "rt")) == NULL) {

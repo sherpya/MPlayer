@@ -235,8 +235,8 @@ make install</screen>
     </para>
 
     <para>
-      Da <application>MPlayer</application> kein Skin mitbringt, musst du zumindest eines
-      herunterladen, um die GUI benutzen zu können. Siehe dazu Skins auf der
+      Um die GUI auf komfortable Weise und wie vorgesehen zu benutzen,
+      solltest du unbedingt ein Skin installieren. Siehe dazu Skins auf der
       <ulink url="http://www.mplayerhq.hu/dload.html">Download-Seite</ulink>.
       Ein Skin sollte in das normale systemweite Verzeichnis
       <filename class="directory">$PREFIX/share/mplayer/skins</filename> oder in das

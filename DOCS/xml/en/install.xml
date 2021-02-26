@@ -193,8 +193,8 @@ execute the <command>gmplayer</command> binary.
 </para>
 
 <para>
-As <application>MPlayer</application> doesn't have a skin included, you
-have to download at least one if you want to use the GUI. See Skins at the <ulink
+In order to use the GUI in a comfortable way and as intended, you are
+strongly advised to install a skin. See Skins at the <ulink
 url="http://www.mplayerhq.hu/dload.html">download page</ulink>.
 A skin should be extracted to the usual system-wide directory <filename
 class="directory">$PREFIX/share/mplayer/skins</filename> or to the user

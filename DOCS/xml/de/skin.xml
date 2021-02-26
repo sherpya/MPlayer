@@ -6,12 +6,6 @@
 
   <sect1 id="skin-overview">
     <title>Überblick</title>
-    <para>
-      Es hat nicht wirklich etwas mit dem Skinformat zu tun, aber du solltest
-      wissen, dass <application>MPlayer</application> <emphasis role="bold">kein</emphasis>
-      eingebautes Skin besitzt, also <emphasis role="bold">muss zumindest ein Skin
-        installiert sein, damit das GUI verwendet werden kann.</emphasis>
-    </para>
 
     <sect2 id="skin-overview-directories">
       <title>Verzeichnisse</title>

@@ -78,6 +78,7 @@ guiInterface_t guiInfo = {
     .PlaylistNext = True
 };
 
+static int skin;
 static int current_volume;
 static int guiInitialized;
 static int orig_fontconfig;
@@ -268,7 +269,9 @@ void guiInit(void)
     mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[interface] skin directory #1: %s\n", skinDirInHome);
     mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[interface] skin directory #2: %s\n", skinDirInData);
 
-    if (!skinName)
+    skin = (skinName != NULL);
+
+    if (!skin)
         skinName = strdup("default");
 
     ret = skinRead(skinName);
@@ -282,8 +285,17 @@ void guiInit(void)
 
     switch (ret) {
     case -1:
+        if (skin) {
         gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_GUI_MSG_SkinCfgNotFound, skinName);
         mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
+        } else {
+            if (skinRead("Noskin") != 0)
+                mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
+
+            gtkMessageBox(MSGBOX_WARNING, MSGTR_GUI_MSG_NoSkinInstalled);
+            setdup(&skinName, "");
+            break;
+        }
 
     case -2:
         gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_GUI_MSG_SkinCfgError, skinName);

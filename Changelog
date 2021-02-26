@@ -11,6 +11,8 @@ MPlayer
     * Command line option -fs is now recognized in addition to the
       GUI option load_fullscreen
     * Use correct visual in OpenGL video output driver for X11
+    * Provide a built-in skin so that the GUI can be used even
+      without an installed skin
 
     Other:
     * Building on Arm now compiles for the ISA and extensions of the

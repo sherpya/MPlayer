@@ -40,7 +40,7 @@ char      * sbSelectedSkin=NULL;
 char      * sbSkinDirInHome=NULL;
 char      * sbSkinDirInData=NULL;
 
-static char * prev=NULL;
+char *prevSelected;
 
 GtkWidget * SkinBrowser = NULL;
 
@@ -71,9 +71,9 @@ static void on_SkinList_select_row( GtkCList * clist,gint row,gint column,GdkEve
  (void) user_data;
 
  gtk_clist_get_text( clist,row,0,&sbSelectedSkin );
- if ( strcmp( prev,sbSelectedSkin ) )
+ if ( strcmp( prevSelected,sbSelectedSkin ) )
   {
-   prev=sbSelectedSkin;
+   prevSelected=sbSelectedSkin;
    uiChangeSkin( sbSelectedSkin );
    gtkRaise( SkinBrowser );
   }
@@ -154,6 +154,8 @@ void ShowSkinBrowser( void )
 
  gtk_window_add_accel_group( GTK_WINDOW( SkinBrowser ),accel_group );
  gtk_widget_grab_focus( scrolledwindow1 );
+
+ prevSelected = skinName;
  gtk_widget_show(SkinBrowser);
 }
 
@@ -164,8 +166,6 @@ int FillSkinList( gchar * mdir )
  size_t          i;
  glob_t          gg;
  struct stat     fs;
-
- prev=skinName;
 
  glob( mdir,GLOB_NOSORT,NULL,&gg );
  for( i=0;i<gg.gl_pathc;i++ )

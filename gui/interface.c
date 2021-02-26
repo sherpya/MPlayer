@@ -292,7 +292,7 @@ void guiInit(void)
             if (skinRead("Noskin") != 0)
                 mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
 
-            gtkMessageBox(MSGBOX_WARNING, MSGTR_GUI_MSG_NoSkinInstalled);
+            gtkMessageBox(MSGBOX_WARNING | MSGBOX_WAIT, MSGTR_GUI_MSG_NoSkinInstalled);
             setdup(&skinName, "");
             break;
         }

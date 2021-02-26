@@ -161,8 +161,7 @@ static GtkWidget * CreateSkinBrowser( void )
 
 void ShowSkinBrowser( void )
 {
- if ( SkinBrowser ) gtkRaise( SkinBrowser );
-   else SkinBrowser=CreateSkinBrowser();
+  SkinBrowser = CreateSkinBrowser();
 }
 
 int FillSkinList( gchar * mdir )

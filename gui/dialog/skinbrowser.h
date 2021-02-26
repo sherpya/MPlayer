@@ -21,7 +21,6 @@
 
 #include <gtk/gtk.h>
 
-extern char      * sbSelectedSkin;
 extern GtkWidget * SkinBrowser;
 extern GtkWidget *SkinList;
 extern char *sbSkinDirInHome;

@@ -167,7 +167,7 @@ void ShowSkinBrowser( void )
 
 int FillSkinList( gchar * mdir )
 {
- gchar         * str[2];
+ gchar         * str[1];
  gchar         * tmp;
  size_t          i;
  glob_t          gg;
@@ -175,9 +175,6 @@ int FillSkinList( gchar * mdir )
 
  gtkOldSkin=strdup( skinName );
  prev=gtkOldSkin;
-
- str[0]="default";
- str[1]="";
 
  glob( mdir,GLOB_NOSORT,NULL,&gg );
  for( i=0;i<gg.gl_pathc;i++ )

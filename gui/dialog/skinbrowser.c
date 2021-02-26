@@ -190,10 +190,10 @@ int FillSkinList( gchar * mdir )
      else tmp = gg.gl_pathv[i];
      // only directories or a link named "default"
      if ( S_ISDIR( fs.st_mode ) || ( ( fs.st_mode & S_IFMT ) == S_IFLNK  && strcmp( tmp,"default" ) == 0 ) )
-     {
-     str[0]=tmp;
-     if ( gtkFindInCList( SkinList,str[0] ) == -1 ) gtk_clist_append( GTK_CLIST( SkinList ),str );
-     }
+      {
+       str[0]=tmp;
+       if ( gtkFindInCList( SkinList,str[0] ) == -1 ) gtk_clist_append( GTK_CLIST( SkinList ),str );
+      }
     }
   }
  globfree( &gg );

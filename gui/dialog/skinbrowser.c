@@ -154,7 +154,7 @@ static GtkWidget * CreateSkinBrowser( void )
   { strcpy( sbSkinDirInData,skinDirInData ); strcat( sbSkinDirInData,"/*" ); }
 
  gtk_window_add_accel_group( GTK_WINDOW( SkinBrowser ),accel_group );
- gtk_widget_grab_focus( SkinList );
+ gtk_widget_grab_focus( scrolledwindow1 );
 
  return SkinBrowser;
 }

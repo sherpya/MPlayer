@@ -56,7 +56,6 @@ static void prButton( GtkButton * button,gpointer user_data )
       if ( strcmp( sbSelectedSkin,skinName ) ) uiChangeSkin( skinName );
       break;
    case 1: // ok
-      uiChangeSkin( sbSelectedSkin );   // NOTE TO MYSELF: skin already changed!
       free( skinName );
       skinName=strdup( sbSelectedSkin );
       break;

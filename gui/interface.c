@@ -276,7 +276,7 @@ void guiInit(void)
     if (ret == -1 && strcmp(skinName, "default") != 0) {
         mp_msg(MSGT_GPLAYER, MSGL_WARN, MSGTR_GUI_MSG_SkinCfgSelectedNotFound, skinName);
 
-        skinName = strdup("default");
+        setdup(&skinName, "default");
         ret      = skinRead(skinName);
     }
 

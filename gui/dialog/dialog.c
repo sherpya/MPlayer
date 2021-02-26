@@ -277,7 +277,6 @@ void gtkShow(int type, char *param)
             FillSkinList(sbSkinDirInData)) {
             gtkSelectInCList(SkinList, param);
             gtk_clist_sort(GTK_CLIST(SkinList));
-            gtk_widget_show(SkinBrowser);
             gtkSetLayer(SkinBrowser);
         } else {
             gtk_widget_destroy(SkinBrowser);

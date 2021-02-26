@@ -205,7 +205,8 @@ directory, then the system-wide directory for a subdirectory named
 <filename class="directory">default</filename> (which
 simply can be a link to your favourite skin) to load the skin, but
 you can use the <option>-skin <replaceable>myskin</replaceable></option>
-option, or the <literal>skin=myskin</literal> config file directive to use
+option, or the <literal>skin=myskin</literal> or <literal>gui_skin=myskin
+</literal> config file directives, or the skin browser to use
 a different skin from the <filename class="directory">skins</filename>
 directories.
 </para>

@@ -247,7 +247,8 @@ make install</screen>
       Unterverzeichnis mit dem Namen <filename class="directory">default</filename>
       (das einfach ein Link auf das Lieblingsskin sein kann), um das Skin zu laden.
       Du kannst aber auch die Option <option>-skin <replaceable>meinskin</replaceable></option>
-      oder die Konfigurationsdateianweisung <literal>skin=meinskin</literal> benutzen,
+      oder die Konfigurationsdateianweisungen <literal>skin=meinskin</literal>
+      oder <literal>gui_skin=meinskin</literal> oder aber den Skinbrowser benutzen,
       um ein anderes Skin aus den <filename class="directory">skins</filename>-Verzeichnissen
       zu verwenden.
     </para>

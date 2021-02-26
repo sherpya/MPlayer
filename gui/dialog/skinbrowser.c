@@ -178,20 +178,22 @@ int FillSkinList( gchar * mdir )
 
  str[0]="default";
  str[1]="";
- if ( gtkFindInCList( SkinList,str[0] ) == -1 ) gtk_clist_append( GTK_CLIST( SkinList ),str );
 
  glob( mdir,GLOB_NOSORT,NULL,&gg );
  for( i=0;i<gg.gl_pathc;i++ )
   {
    if ( !strcmp( gg.gl_pathv[i],"." ) || !strcmp( gg.gl_pathv[i],".." ) ) continue;
-   if ( ( stat( gg.gl_pathv[i],&fs ) == 0 ) && S_ISDIR( fs.st_mode ) )
+   if ( ( lstat( gg.gl_pathv[i],&fs ) == 0 ) )
     {
      tmp=strrchr( gg.gl_pathv[i],'/' );
      if (tmp) tmp++;
      else tmp = gg.gl_pathv[i];
-     if ( !strcmp( tmp,"default" ) ) continue;
+     // only directories or a link named "default"
+     if ( S_ISDIR( fs.st_mode ) || ( ( fs.st_mode & S_IFMT ) == S_IFLNK  && strcmp( tmp,"default" ) == 0 ) )
+     {
      str[0]=tmp;
      if ( gtkFindInCList( SkinList,str[0] ) == -1 ) gtk_clist_append( GTK_CLIST( SkinList ),str );
+     }
     }
   }
  globfree( &gg );

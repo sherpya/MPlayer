@@ -42,6 +42,7 @@
 #include "help_mp.h"
 #include "mp_msg.h"
 #include "libavutil/intreadwrite.h"
+#include "osdep/timer.h"
 
 #define THRESHOLD 128   // transparency values equal to or above this will become
                         // opaque, all values below this will become transparent
@@ -223,9 +224,12 @@ void gtkMessageBox(int type, const gchar *str)
     gtk_widget_show(MessageBox);
     gtkSetLayer(MessageBox);
 
-    if (type == MSGBOX_FATAL)
-        while (MessageBox)
-            gtk_main_iteration_do(0);
+    if (type == MSGBOX_FATAL) {
+        while (MessageBox) {
+            gtk_main_iteration_do(FALSE);
+            usec_sleep(5000);
+        }
+    }
 }
 
 /**

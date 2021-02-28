@@ -594,6 +594,9 @@ static void fs_Ok_released(GtkButton *button, gpointer user_data)
     (void)button;
     (void)user_data;
 
+    if (!fsSelectedFile)
+        fsSelectedFile = ".";
+
     if (chdir(fsSelectedFile) == 0) {
         gchar *utf8dir;
 

@@ -6695,7 +6695,15 @@ echores "$_ass"
 echocheck "ENCA"
 if test "$_enca" = auto ; then
     _enca=no
-    statement_check enca.h 'enca_get_languages(NULL)' -lenca && _enca=yes
+    if statement_check enca.h 'enca_get_languages(NULL)' -lenca; then
+      _enca=yes
+    elif $_pkg_config --exists enca; then
+      if statement_check enca.h 'enca_get_languages(NULL)' $($_pkg_config --cflags --libs enca); then
+        _enca=yes
+        extra_cflags="$extra_cflags $($_pkg_config --cflags enca)"
+        extra_ldflags="$extra_ldflags $($_pkg_config --libs enca)"
+      fi
+    fi
 fi
     if test "$_enca" = yes ; then
         def_enca='#define CONFIG_ENCA 1'

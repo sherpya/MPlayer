@@ -2,7 +2,7 @@
 # Check help message header files for conversion specifications and
 # valid string constant definitions.
 
-CHECK=checkhelp
+CHECK=helpcheck$$
 
 SYMCONST_REGEX="[A-Za-z0-9_]\\+"
 CONVSPEC_REGEX="%[^diouxXeEfFgGaAcspn%]*[diouxXeEfFgGaAcspn%][0-9]*"

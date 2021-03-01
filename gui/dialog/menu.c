@@ -685,7 +685,7 @@ GtkWidget * CreatePopUpMenu( int wType )
    }
 
   AddSeparator( Menu );
-  VolumeMenu = AddSubMenu( Menu, volume_png, MSGTR_Volume );
+  VolumeMenu = AddSubMenu( Menu, volume_png, MSGTR_GUI_Volume );
   H = AddMenuItem( VolumeMenu, volume_increase_png, MSGTR_GUI_Increase, evIncVolume );
   D = AddMenuItem( VolumeMenu, volume_decrease_png, MSGTR_GUI_Decrease, evDecVolume );
 

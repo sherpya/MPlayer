@@ -278,14 +278,14 @@ void cfg_read(void)
     gui_conf = m_config_new();
 
     if (!gui_conf) {
-        gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_MemAllocFailed);
+        gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_GUI_MemAllocFailed);
         mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
     }
 
     m_config_register_options(gui_conf, gui_opts);
 
     if (!disable_gui_conf && (m_config_parse_config_file(gui_conf, fname, 1) < 0)) {
-        gmp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_ConfigFileError "\n");
+        gmp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_GUI_ConfigFileError "\n");
         mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
     }
 
@@ -306,7 +306,7 @@ void cfg_read(void)
             item = calloc(1, sizeof(*item));
 
             if (!item) {
-                gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_MemAllocFailed);
+                gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_GUI_MemAllocFailed);
                 mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
             }
 
@@ -341,7 +341,7 @@ void cfg_read(void)
             item = calloc(1, sizeof(*item));
 
             if (!item) {
-                gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_MemAllocFailed);
+                gmp_msg(MSGT_GPLAYER, MSGL_FATAL, MSGTR_GUI_MemAllocFailed);
                 mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
             }
 

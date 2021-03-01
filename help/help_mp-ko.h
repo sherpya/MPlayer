@@ -335,6 +335,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "캐시"
 #define MSGTR_GUI_CacheSize "캐시 크기"
 #define MSGTR_GUI_Cancel "취소"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "가운데"
 #define MSGTR_GUI_Channel1 "채널 1"
 #define MSGTR_GUI_Channel2 "채널 2"

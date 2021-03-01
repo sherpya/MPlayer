@@ -676,6 +676,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "Önbellek"
 #define MSGTR_GUI_CacheSize "Önbellek boyutu"
 #define MSGTR_GUI_Cancel "İptal"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "Merkez"
 #define MSGTR_GUI_Channel1 "Kanal 1"
 #define MSGTR_GUI_Channel2 "Kanal 2"
@@ -692,6 +694,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Video kodlama sınıfı"
 #define MSGTR_GUI_CodecsAndLibraries " Kodekler ve üçüncü parti kütüphaneleri"
 #define MSGTR_GUI_Coefficient "Katsayı"
+#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_Configure "Ayarla"
 #define MSGTR_GUI_ConfigureDriver "Sürücüyü Ayarla"
 #define MSGTR_GUI_Contrast "Karşıtlık"
@@ -757,6 +760,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Hue "Renk"
 #define MSGTR_GUI_Lavc "LAVC kullan (FFmpeg)"
 #define MSGTR_GUI_MaximumUsageSpareCPU "Otomatik kalite"
+#define MSGTR_GUI_MemAllocFailed MSGTR_MemAllocFailed
 #define MSGTR_GUI_Miscellaneous "Çeşitli"
 #define MSGTR_GUI_Mixer "Karıştırıcı"
 #define MSGTR_GUI_MixerChannel "Karıştırıcı kanalı"
@@ -864,6 +868,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Video "Video"
 #define MSGTR_GUI_VideoEncoder "Video kodlayıcı"
 #define MSGTR_GUI_VideoTracks "Video parçası"
+#define MSGTR_GUI_Volume MSGTR_Volume
 #define MSGTR_GUI_Warning "Uyarı!"
 
 // ======================= VO Video Output drivers ========================

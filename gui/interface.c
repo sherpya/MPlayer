@@ -1297,7 +1297,7 @@ void mplayer(int what, float value, void *data)
             vo_font = read_font_desc(font_name, font_factor, 0);
 
             if (!vo_font)
-                gmp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_CantLoadFont, font_name);
+                gmp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_GUI_CantLoadFont, font_name);
         } else {
             char *fname = get_path("font/font.desc");
 
@@ -1415,7 +1415,7 @@ void mplayerLoadSubtitle(const char *name)
         subdata = sub_read_file(name, guiInfo.sh_video ? guiInfo.sh_video->fps : 25);
 
         if (!subdata) {
-            gmp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_CantLoadSub, name);
+            gmp_msg(MSGT_GPLAYER, MSGL_ERR, MSGTR_GUI_CantLoadSub, name);
             return;
         }
     }

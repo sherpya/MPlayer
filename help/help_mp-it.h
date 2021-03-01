@@ -526,6 +526,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "Cache"
 #define MSGTR_GUI_CacheSize "Dimensione cache"
 #define MSGTR_GUI_Cancel "Annulla"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "Centro"
 #define MSGTR_GUI_Channel1 "Canale 1"
 #define MSGTR_GUI_Channel2 "Canale 2"
@@ -542,6 +544,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Famiglia codec video"
 #define MSGTR_GUI_CodecsAndLibraries "Codec e librerie di terze parti"
 #define MSGTR_GUI_Coefficient "Coefficiente"
+#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_Configure "Configura"
 #define MSGTR_GUI_ConfigureDriver "Configura driver"
 #define MSGTR_GUI_Contrast "Contrasto"
@@ -607,6 +610,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Hue "Tonalità"
 #define MSGTR_GUI_Lavc "Usa LAVC (FFmpeg)"
 #define MSGTR_GUI_MaximumUsageSpareCPU "Qualità automatica"
+#define MSGTR_GUI_MemAllocFailed MSGTR_MemAllocFailed
 #define MSGTR_GUI_Miscellaneous "Varie"
 #define MSGTR_GUI_Mixer "Mixer"
 #define MSGTR_GUI_MixerChannel "Canale mixer"
@@ -714,6 +718,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Video "Video"
 #define MSGTR_GUI_VideoEncoder "Video encoder"
 #define MSGTR_GUI_VideoTracks "Traccia video"
+#define MSGTR_GUI_Volume MSGTR_Volume
 #define MSGTR_GUI_Warning "Avvertimento!"
 
 // ======================= video output drivers ========================

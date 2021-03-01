@@ -649,6 +649,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "緩存"
 #define MSGTR_GUI_CacheSize "緩存大小"
 #define MSGTR_GUI_Cancel "取消"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "中間"
 #define MSGTR_GUI_Channel1 "聲道 1"
 #define MSGTR_GUI_Channel2 "聲道 2"
@@ -665,6 +667,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "視頻解碼器族"
 #define MSGTR_GUI_CodecsAndLibraries "編解碼器和第三方庫"
 #define MSGTR_GUI_Coefficient "參數"
+#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_Configure "配置"
 #define MSGTR_GUI_ConfigureDriver "配置驅動"
 #define MSGTR_GUI_Contrast "對比度"
@@ -729,6 +732,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Hue "色調"
 #define MSGTR_GUI_Lavc "使用 LAVC (FFmpeg)"
 #define MSGTR_GUI_MaximumUsageSpareCPU "自動品質控製"
+#define MSGTR_GUI_MemAllocFailed MSGTR_MemAllocFailed
 #define MSGTR_GUI_Miscellaneous "其他"
 #define MSGTR_GUI_Mixer "混音器"
 #define MSGTR_GUI_MixerChannel "混音通道"
@@ -836,6 +840,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Video "視頻"
 #define MSGTR_GUI_VideoEncoder "視頻編碼器"
 #define MSGTR_GUI_VideoTracks "視頻軌迹"
+#define MSGTR_GUI_Volume MSGTR_Volume
 #define MSGTR_GUI_Warning "警告!"
 
 // ======================= VO Video Output drivers ========================

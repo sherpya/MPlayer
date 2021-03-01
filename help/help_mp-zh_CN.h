@@ -542,6 +542,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "缓冲"
 #define MSGTR_GUI_CacheSize "缓存大小"
 #define MSGTR_GUI_Cancel "取消"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_CD "CD"
 #define MSGTR_GUI_Center "中置"
 #define MSGTR_GUI_Channel1 "声道 1"
@@ -560,6 +562,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Codecs "编解码器"
 #define MSGTR_GUI_CodecsAndLibraries "编解码器和第三方程序库\n"
 #define MSGTR_GUI_Coefficient "参数"
+#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_Configure "配置"
 #define MSGTR_GUI_ConfigureDriver "配置驱动程序"
 #define MSGTR_GUI_Contrast "对比度"
@@ -687,6 +690,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Information "信息"
 #define MSGTR_GUI_Lavc "lavc（实时 mpeg1 编码）"
 #define MSGTR_GUI_MaximumUsageSpareCPU "空闲 CPU 时间的最大使用量"
+#define MSGTR_GUI_MemAllocFailed MSGTR_MemAllocFailed
 #define MSGTR_GUI_Miscellaneous "杂项"
 #define MSGTR_GUI_Mixer "混音器"
 #define MSGTR_GUI_MixerChannel "混音器声道"
@@ -824,11 +828,14 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Video "视频"
 #define MSGTR_GUI_VideoEncoder "视频编解码器"
 #define MSGTR_GUI_VideoTracks "视频通道"
+#define MSGTR_GUI_Volume MSGTR_Volume
 #define MSGTR_GUI_Warning "警告"
 
 #define MSGTR_GUI_WIN32_AddFile "添加文件"
 #define MSGTR_GUI_WIN32_AddURL "添加网络地址"
+#define MSGTR_GUI_WIN32_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_WIN32_Close "关闭"
+#define MSGTR_GUI_WIN32_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_WIN32_DebugConsole "调试控制终端"
 #define MSGTR_GUI_WIN32_Defaults "默认值"
 #define MSGTR_GUI_WIN32_DirectoryList "目录列表"

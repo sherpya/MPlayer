@@ -332,6 +332,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "Кеш"
 #define MSGTR_GUI_CacheSize "Големина на кешот"
 #define MSGTR_GUI_Cancel "Откажи"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "Центар"
 #define MSGTR_GUI_Channel1 "Канал 1"
 #define MSGTR_GUI_Channel2 "Канал 2"

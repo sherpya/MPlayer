@@ -514,6 +514,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "Кэш"
 #define MSGTR_GUI_CacheSize "Размер кэша"
 #define MSGTR_GUI_Cancel "Отмена"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "Центральная"
 #define MSGTR_GUI_Channel1 "Канал 1"
 #define MSGTR_GUI_Channel2 "Канал 2"
@@ -530,6 +532,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Семейство видео кодеков"
 #define MSGTR_GUI_CodecsAndLibraries "Кодеки и сторонние библиотеки"
 #define MSGTR_GUI_Coefficient "Коэффициент"
+#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_Configure "Настроить"
 #define MSGTR_GUI_ConfigureDriver "Настроить драйвер"
 #define MSGTR_GUI_Contrast "Контраст"
@@ -595,6 +598,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Hue "Цвет"
 #define MSGTR_GUI_Lavc "Использовать LAVC (FFmpeg)"
 #define MSGTR_GUI_MaximumUsageSpareCPU "Авто качество"
+#define MSGTR_GUI_MemAllocFailed MSGTR_MemAllocFailed
 #define MSGTR_GUI_Miscellaneous "Разное"
 #define MSGTR_GUI_Mixer "Микшер"
 #define MSGTR_GUI_MixerChannel "Канал микшера"
@@ -702,6 +706,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Video "Видео"
 #define MSGTR_GUI_VideoEncoder "Видео кодировщик"
 #define MSGTR_GUI_VideoTracks "Видео дорожка"
+#define MSGTR_GUI_Volume MSGTR_Volume
 #define MSGTR_GUI_Warning "Предупреждение!"
 
 // ======================= video output drivers ========================

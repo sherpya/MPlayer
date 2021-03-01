@@ -526,6 +526,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "Gyorsítótár"
 #define MSGTR_GUI_CacheSize "Gyorsítótár merete"
 #define MSGTR_GUI_Cancel "Mégse"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "Középső"
 #define MSGTR_GUI_Channel1 "1. Csatorna"
 #define MSGTR_GUI_Channel2 "2. Csatorna"
@@ -542,6 +544,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Video kodek család"
 #define MSGTR_GUI_CodecsAndLibraries "Codec-ek és third party könyvtárak"
 #define MSGTR_GUI_Coefficient "Együttható"
+#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_Configure "Beállítás"
 #define MSGTR_GUI_ConfigureDriver "Vezérlő beállítása"
 #define MSGTR_GUI_Contrast "Kontraszt"
@@ -607,6 +610,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Hue "Szinárnyalat"
 #define MSGTR_GUI_Lavc "LAVC használata (FFmpeg)"
 #define MSGTR_GUI_MaximumUsageSpareCPU "Autómatikus minőség állítás"
+#define MSGTR_GUI_MemAllocFailed MSGTR_MemAllocFailed
 #define MSGTR_GUI_Miscellaneous "Egyéb"
 #define MSGTR_GUI_Mixer "Mixer"
 #define MSGTR_GUI_MixerChannel "Mixer csatorna"
@@ -714,6 +718,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Video "Videó"
 #define MSGTR_GUI_VideoEncoder "Video kódoló"
 #define MSGTR_GUI_VideoTracks "Video track"
+#define MSGTR_GUI_Volume MSGTR_Volume
 #define MSGTR_GUI_Warning "Figyelmeztetés!"
 
 // ======================= video output drivers ========================

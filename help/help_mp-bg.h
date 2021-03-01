@@ -531,6 +531,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "Кеширане"
 #define MSGTR_GUI_CacheSize "Размер на кеша"
 #define MSGTR_GUI_Cancel "Отказ"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "Централен"
 #define MSGTR_GUI_Channel1 "Канал 1"
 #define MSGTR_GUI_Channel2 "Канал 2"
@@ -546,6 +548,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyAudio "Фамилия аудио кодеци"
 #define MSGTR_GUI_CodecFamilyVideo "Фамилия видео кодеци"
 #define MSGTR_GUI_Coefficient "Коефициент"
+#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_Configure "Конфигурация"
 #define MSGTR_GUI_ConfigureDriver "Конфигуриране на драйвера"
 #define MSGTR_GUI_Contrast "Контраст"
@@ -607,6 +610,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Hue "Тон"
 #define MSGTR_GUI_Lavc "Използване на LAVC (FFmpeg)"
 #define MSGTR_GUI_MaximumUsageSpareCPU "Автоматичен контрол на качеството"
+#define MSGTR_GUI_MemAllocFailed MSGTR_MemAllocFailed
 #define MSGTR_GUI_Miscellaneous "Разни"
 #define MSGTR_GUI_Mixer "Смесител"
 #define MSGTR_GUI_MixerChannel "Канал на смесителя"

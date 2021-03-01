@@ -173,6 +173,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_AudioTracks "Lyd språk"
 #define MSGTR_GUI_AvailableSkins "Skins"
 #define MSGTR_GUI_Cancel "Avbryt"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_ChapterNN "Kapittel %2d"
 #define MSGTR_GUI_Chapters "Kapittel"
 #define MSGTR_GUI_DVD "DVD"

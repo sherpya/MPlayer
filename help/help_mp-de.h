@@ -751,6 +751,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "Cache"
 #define MSGTR_GUI_CacheSize "Cachegröße"
 #define MSGTR_GUI_Cancel "Abbrechen"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_CD "CD"
 #define MSGTR_GUI_Center "Mitte"
 #define MSGTR_GUI_Channel1 "Kanal 1"
@@ -769,6 +771,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Codecs "Codecs"
 #define MSGTR_GUI_CodecsAndLibraries "Codecs und externe Bibliotheken"
 #define MSGTR_GUI_Coefficient "Koeffizient"
+#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_Configure "Konfigurieren"
 #define MSGTR_GUI_ConfigureDriver "Treiber konfigurieren"
 #define MSGTR_GUI_Contrast "Kontrast"
@@ -900,6 +903,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Information "Information"
 #define MSGTR_GUI_Lavc "lavc (MPEG-1-Encodierung in Echtzeit)"
 #define MSGTR_GUI_MaximumUsageSpareCPU "Maximale Nutzung freier CPU-Zeit"
+#define MSGTR_GUI_MemAllocFailed MSGTR_MemAllocFailed
 #define MSGTR_GUI_Minimize "Minimieren"
 #define MSGTR_GUI_Miscellaneous "Sonstiges"
 #define MSGTR_GUI_Mixer "Mixer"
@@ -1050,11 +1054,14 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Video "Video"
 #define MSGTR_GUI_VideoEncoder "Videoencoder"
 #define MSGTR_GUI_VideoTracks "Videospuren"
+#define MSGTR_GUI_Volume MSGTR_Volume
 #define MSGTR_GUI_Warning "Warnung"
 
 #define MSGTR_GUI_WIN32_AddFile "Datei hinzufügen"
 #define MSGTR_GUI_WIN32_AddURL "URL hinzufügen"
+#define MSGTR_GUI_WIN32_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_WIN32_Close "Schließen"
+#define MSGTR_GUI_WIN32_ConfigFileError MSGTR_ConfigFileError
 #define MSGTR_GUI_WIN32_DebugConsole "Debugging-Konsole"
 #define MSGTR_GUI_WIN32_Defaults "Standard"
 #define MSGTR_GUI_WIN32_DirectoryList "Verzeichnisliste"

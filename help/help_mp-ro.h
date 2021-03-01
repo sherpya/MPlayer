@@ -295,6 +295,8 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Cache "Cache"
 #define MSGTR_GUI_CacheSize "Dimensiune cache"
 #define MSGTR_GUI_Cancel "Anulare"
+#define MSGTR_GUI_CantLoadFont MSGTR_CantLoadFont
+#define MSGTR_GUI_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_Center "Centru"
 #define MSGTR_GUI_Channel1 "Canalul 1"
 #define MSGTR_GUI_Channel2 "Canalul 2"

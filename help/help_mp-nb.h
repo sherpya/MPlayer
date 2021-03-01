@@ -181,7 +181,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Error "fail..."
 #define MSGTR_GUI_ErrorFatal "fatal feil..."
 #define MSGTR_GUI_File "Spill file"
-#define MSGTR_GUI_MSG_MemoryErrorWindow "Beklager, ikke nok minne til tegnebuffer."
+#define MSGTR_GUI_MSG_MemoryErrorWindow "Beklager, ikke nok minne til tegnebuffer.\n"
 #define MSGTR_GUI_MSG_SkinBitmapConversionError "24 bit til 32 bit konverteringsfeil (%s)\n"
 #define MSGTR_GUI_MSG_SkinBitmapNotFound "finner ikke filen (%s)\n"
 #define MSGTR_GUI_MSG_SkinBitmapPngReadError "PNG lesefeil (%s)\n"

@@ -52,6 +52,7 @@
 #include "codec-cfg.h"
 #include "m_option.h"
 #include "mp_core.h"
+#include "libavutil/avstring.h"
 #include "libavutil/common.h"
 
 #include "actions.h"
@@ -393,7 +394,10 @@ void uiMainInit (void)
 
   if (!mainDrawBuffer)
   {
-    gmp_msg(MSGT_GPLAYER, MSGL_FATAL, "[main] " MSGTR_GUI_MSG_MemoryErrorWindow);
+    char msg[80] = "[main] ";
+
+    av_strlcat(msg, MSGTR_GUI_MSG_MemoryErrorWindow, sizeof(msg));
+    gmp_msg(MSGT_GPLAYER, MSGL_FATAL, msg);
     mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
   }
 

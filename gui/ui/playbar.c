@@ -47,6 +47,7 @@
 #include "libmpdemux/demuxer.h"
 #include "libmpdemux/stheader.h"
 #include "codec-cfg.h"
+#include "libavutil/avstring.h"
 
 #include "ui.h"
 #include "actions.h"
@@ -286,7 +287,10 @@ void uiPlaybarInit( void )
 
  if ( ( playbarDrawBuffer = malloc( guiApp.playbar.Bitmap.ImageSize ) ) == NULL )
   {
-   gmp_msg( MSGT_GPLAYER,MSGL_FATAL,"[playbar] " MSGTR_GUI_MSG_MemoryErrorWindow );
+   char msg[80] = "[playbar] ";
+
+   av_strlcat( msg, MSGTR_GUI_MSG_MemoryErrorWindow, sizeof(msg) );
+   gmp_msg( MSGT_GPLAYER, MSGL_FATAL, msg );
    mplayer( MPLAYER_EXIT_GUI, EXIT_ERROR, 0 );
   }
 

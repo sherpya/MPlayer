@@ -35,6 +35,8 @@
 
 #include "gui/dialog/dialog.h"
 
+#include "libavutil/avstring.h"
+
 unsigned char * menuDrawBuffer = NULL;
 static int      uiMenuRender = True;
 int             menuItem = -1;
@@ -109,7 +111,10 @@ void uiMenuInit( void )
 
  if ( ( menuDrawBuffer = calloc( 1,guiApp.menu.Bitmap.ImageSize ) ) == NULL )
   {
-   gmp_msg( MSGT_GPLAYER,MSGL_FATAL,"[menu] " MSGTR_GUI_MSG_MemoryErrorWindow );
+   char msg[80] = "[menu] ";
+
+   av_strlcat( msg, MSGTR_GUI_MSG_MemoryErrorWindow, sizeof(msg) );
+   gmp_msg( MSGT_GPLAYER, MSGL_FATAL, msg );
    mplayer( MPLAYER_EXIT_GUI, EXIT_ERROR, 0 );
   }
 

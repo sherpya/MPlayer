@@ -563,7 +563,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Familia de codec de video"
 #define MSGTR_GUI_CodecsAndLibraries "Codecs y librerías de terceros"
 #define MSGTR_GUI_Coefficient "Coeficiente"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "error en fichero de configuración\n"
 #define MSGTR_GUI_Configure "Configurar"
 #define MSGTR_GUI_ConfigureDriver "Configurar driver"
 #define MSGTR_GUI_Contrast "Contraste"

@@ -694,7 +694,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Video kodlama sınıfı"
 #define MSGTR_GUI_CodecsAndLibraries " Kodekler ve üçüncü parti kütüphaneleri"
 #define MSGTR_GUI_Coefficient "Katsayı"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "ayar dosyası hatası\n"
 #define MSGTR_GUI_Configure "Ayarla"
 #define MSGTR_GUI_ConfigureDriver "Sürücüyü Ayarla"
 #define MSGTR_GUI_Contrast "Karşıtlık"

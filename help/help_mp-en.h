@@ -562,7 +562,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Codecs "Codecs"
 #define MSGTR_GUI_CodecsAndLibraries "Codecs and third party libraries"
 #define MSGTR_GUI_Coefficient "Coefficient"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "Config file error\n"
 #define MSGTR_GUI_Configure "Configure"
 #define MSGTR_GUI_ConfigureDriver "Configure driver"
 #define MSGTR_GUI_Contrast "Contrast"
@@ -852,7 +852,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_WIN32_AddURL "Add URL"
 #define MSGTR_GUI_WIN32_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_WIN32_Close "Close"
-#define MSGTR_GUI_WIN32_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_WIN32_ConfigFileError MSGTR_GUI_ConfigFileError
 #define MSGTR_GUI_WIN32_DebugConsole "Debug Console"
 #define MSGTR_GUI_WIN32_Defaults "Defaults"
 #define MSGTR_GUI_WIN32_DirectoryList "Directory list"

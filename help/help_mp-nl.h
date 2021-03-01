@@ -532,7 +532,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyAudio "Audio codec familie"
 #define MSGTR_GUI_CodecFamilyVideo "Video codec familie"
 #define MSGTR_GUI_Coefficient "Coefficient"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "Fout in het configuratie bestand of configuratie bestand ontbreekt\n"
 #define MSGTR_GUI_Configure "Configureer"
 #define MSGTR_GUI_ConfigureDriver "Configureer driver"
 #define MSGTR_GUI_Contrast "Contrast"

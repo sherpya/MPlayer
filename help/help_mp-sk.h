@@ -634,7 +634,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Rodina video kodekov"
 #define MSGTR_GUI_CodecsAndLibraries "Kódeky a knižnice tretích strán"
 #define MSGTR_GUI_Coefficient "Koeficient"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "chyba konfiguračného súboru\n"
 #define MSGTR_GUI_Configure "Konfigurácia"
 #define MSGTR_GUI_ConfigureDriver "Konfigurovať ovládač"
 #define MSGTR_GUI_Contrast "Kontrast"

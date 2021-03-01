@@ -562,7 +562,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_Codecs "编解码器"
 #define MSGTR_GUI_CodecsAndLibraries "编解码器和第三方程序库"
 #define MSGTR_GUI_Coefficient "参数"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "配置文件错误\n"
 #define MSGTR_GUI_Configure "配置"
 #define MSGTR_GUI_ConfigureDriver "配置驱动程序"
 #define MSGTR_GUI_Contrast "对比度"
@@ -835,7 +835,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_WIN32_AddURL "添加网络地址"
 #define MSGTR_GUI_WIN32_CantLoadSub MSGTR_CantLoadSub
 #define MSGTR_GUI_WIN32_Close "关闭"
-#define MSGTR_GUI_WIN32_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_WIN32_ConfigFileError MSGTR_GUI_ConfigFileError
 #define MSGTR_GUI_WIN32_DebugConsole "调试控制终端"
 #define MSGTR_GUI_WIN32_Defaults "默认值"
 #define MSGTR_GUI_WIN32_DirectoryList "目录列表"

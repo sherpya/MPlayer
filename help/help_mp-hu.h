@@ -544,7 +544,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Video kodek család"
 #define MSGTR_GUI_CodecsAndLibraries "Codec-ek és third party könyvtárak"
 #define MSGTR_GUI_Coefficient "Együttható"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "konfigurációs fájl hibája\n"
 #define MSGTR_GUI_Configure "Beállítás"
 #define MSGTR_GUI_ConfigureDriver "Vezérlő beállítása"
 #define MSGTR_GUI_Contrast "Kontraszt"

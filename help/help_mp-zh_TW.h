@@ -667,7 +667,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "視頻解碼器族"
 #define MSGTR_GUI_CodecsAndLibraries "編解碼器和第三方庫"
 #define MSGTR_GUI_Coefficient "參數"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "配置文件錯誤\n"
 #define MSGTR_GUI_Configure "配置"
 #define MSGTR_GUI_ConfigureDriver "配置驅動"
 #define MSGTR_GUI_Contrast "對比度"

@@ -527,7 +527,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_CodecFamilyVideo "Драйвер відео содеку"
 #define MSGTR_GUI_CodecsAndLibraries "Кодеки та сторонні бібліотеки"
 #define MSGTR_GUI_Coefficient "Коефіціент"
-#define MSGTR_GUI_ConfigFileError MSGTR_ConfigFileError
+#define MSGTR_GUI_ConfigFileError "помилка у файлі налаштувань\n"
 #define MSGTR_GUI_Configure "Налаштунки"
 #define MSGTR_GUI_ConfigureDriver "Налаштувати драйвер"
 #define MSGTR_GUI_Contrast "Контраст"

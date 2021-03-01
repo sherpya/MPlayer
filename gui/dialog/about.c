@@ -57,6 +57,7 @@ static GtkWidget * CreateAbout( void )
   GtkAccelGroup * accel_group;
 
   char title[128];
+  gchar *about;
 
   accel_group=gtk_accel_group_new();
 
@@ -96,12 +97,12 @@ static GtkWidget * CreateAbout( void )
   gtk_container_add( GTK_CONTAINER( scrolledwindow1 ),AboutText );
   snprintf(title, sizeof(title), MP_TITLE, MPlayer);
   gtk_text_buffer_insert (AboutTextBuffer, &iter, title, -1);
-  gtk_text_buffer_insert (AboutTextBuffer, &iter,
+  about = g_strdup_printf(
     "\n"
-    MSGTR_GUI_Sponsored":\n"
+    "%s:\n"
     "       http://www.uhulinux.hu/\n"
     "\n"
-    MSGTR_GUI_Contributors":\n"
+    "%s:\n"
     "\n"
     "     * Andreas Ackermann\n"
     "     * adland\n"
@@ -259,7 +260,7 @@ static GtkWidget * CreateAbout( void )
     "     * Matan Ziv-Av\n"
     "     * Márk Vicián Zoltán\n"
     "\n"
-    MSGTR_GUI_CodecsAndLibraries":\n"
+    "%s:\n"
     "\n"
     "     * Fabrice Bellard\n"
     "     * Vivien Chappelier\n"
@@ -272,7 +273,7 @@ static GtkWidget * CreateAbout( void )
     "     * Mark Podlipec\n"
     "     * Damien Vincent\n"
     "\n"
-    MSGTR_GUI_Translations":\n"
+    "%s:\n"
     "\n"
     "     * Marcin Biernat\n"
     "     * Ingo Brückl\n"
@@ -290,7 +291,7 @@ static GtkWidget * CreateAbout( void )
     "     * Wacław Schiller\n"
     "     * Andoni Zubimendi\n"
     "\n"
-    MSGTR_GUI_Skins":\n"
+    "%s:\n"
     "\n"
     "     * Azrael\n"
     "     * Viktor Bekesi\n"
@@ -322,7 +323,13 @@ static GtkWidget * CreateAbout( void )
     "     * Andrew Weber\n"
     "     * Gary Jr. Whitmore\n"
     "     * Franciszek Wilamowski\n"
-    "     * Michael Zeising", -1 );
+    "     * Michael Zeising", MSGTR_GUI_Sponsored,
+                              MSGTR_GUI_Contributors,
+                              MSGTR_GUI_CodecsAndLibraries,
+                              MSGTR_GUI_Translations,
+                              MSGTR_GUI_Skins);
+  gtk_text_buffer_insert(AboutTextBuffer, &iter, about, -1);
+  g_free(about);
 
   gtkAddHSeparator( vbox );
   Ok=gtkAddButton( MSGTR_GUI_Ok,gtkAddHButtonBox( vbox ) );

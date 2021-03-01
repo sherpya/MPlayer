@@ -293,7 +293,7 @@ void uiPlaybarInit( void )
  guiApp.playbarWindow.Parent=guiApp.videoWindow.WindowID;
  wsWindowCreate( &guiApp.playbarWindow,
    guiApp.playbar.x,guiApp.playbar.y,guiApp.playbar.width,guiApp.playbar.height,
-   wsHideFrame|wsHideWindow,wsShowMouseCursor|wsHandleMouseButton|wsHandleMouseMove,"PlayBar" );
+   wsHideFrame|wsHideWindow,wsShowMouseCursor|wsHandleMouseButton|wsHandleMouseMove,MPlayer" - PlayBar" );
 
  mp_msg( MSGT_GPLAYER,MSGL_DBG2,"[playbar] playbarWindow ID: 0x%x\n",(int)guiApp.playbarWindow.WindowID );
 

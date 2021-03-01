@@ -27,6 +27,7 @@
 #include "mp_msg.h"
 #include "gui/app/app.h"
 #include "gui/app/gui.h"
+#include "gui/interface.h"
 #include "actions.h"
 #include "ui.h"
 #include "gui/util/mem.h"
@@ -108,9 +109,8 @@ void uiMenuInit( void )
 
  if ( ( menuDrawBuffer = calloc( 1,guiApp.menu.Bitmap.ImageSize ) ) == NULL )
   {
-    mp_msg( MSGT_GPLAYER,MSGL_DBG2,"[menu] " MSGTR_GUI_MSG_MemoryErrorWindow );
-   gtkMessageBox( MSGBOX_FATAL,"[menu] " MSGTR_GUI_MSG_MemoryErrorWindow );
-   return;
+   gmp_msg( MSGT_GPLAYER,MSGL_FATAL,"[menu] " MSGTR_GUI_MSG_MemoryErrorWindow );
+   mplayer( MPLAYER_EXIT_GUI, EXIT_ERROR, 0 );
   }
 
  wsWindowCreate( &guiApp.menuWindow,

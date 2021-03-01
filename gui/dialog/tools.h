@@ -25,11 +25,13 @@
 GtkWidget * gtkAddDialogFrame( GtkWidget * parent );
 GtkWidget * gtkAddFrame( const char * title, int type, GtkWidget * parent, int add );
 GtkWidget * gtkAddLabel( const char * title, GtkWidget * parent );
+GtkWidget * gtkAddLabelColon( const char * title, GtkWidget * parent );
 GtkWidget * gtkAddVBox( GtkWidget * parent, int type );
 GtkWidget * gtkAddHBox( GtkWidget * parent, int type );
 GtkWidget * gtkAddCheckButton( const char * title, GtkWidget * parent );
 GtkWidget * gtkAddRadioButton( const char * title, GSList ** group, GtkWidget * parent );
 GtkWidget * gtkAddSpinButton( const char * title, GtkAdjustment * adj, GtkWidget * parent );
+GtkWidget * gtkAddSpinButtonColon( const char * title, GtkAdjustment * adj, GtkWidget * parent );
 GtkWidget * gtkAddButton( const char * title, GtkWidget * parent );
 GtkWidget * gtkAddHSeparator( GtkWidget * parent );
 GtkWidget * gtkAddHButtonBox( GtkWidget * parent );

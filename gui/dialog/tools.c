@@ -89,6 +89,18 @@ GtkWidget * gtkAddLabel( const char * title,GtkWidget * parent )
  return label;
 }
 
+GtkWidget * gtkAddLabelColon( const char * title,GtkWidget * parent )
+{
+ GtkWidget * label;
+ gchar * text;
+
+ text = g_strconcat( title,":",NULL );
+ label = gtkAddLabel( text,parent );
+ g_free( text );
+
+ return label;
+}
+
 GtkWidget * gtkAddVBox( GtkWidget * parent,int type )
 {
  GtkWidget * vbox;
@@ -146,6 +158,18 @@ GtkWidget * gtkAddSpinButton( const char * title,GtkAdjustment * adj,GtkWidget *
  gtk_box_pack_start( GTK_BOX( parent ),SB,FALSE,FALSE,0 );
  gtk_widget_show( SB );
  return SB;
+}
+
+GtkWidget * gtkAddSpinButtonColon( const char * title,GtkAdjustment * adj,GtkWidget * parent )
+{
+ GtkWidget * button;
+ gchar * text;
+
+ text = g_strconcat( title,":",NULL );
+ button = gtkAddSpinButton( text,adj,parent );
+ g_free( text );
+
+ return button;
 }
 
 GtkWidget * gtkAddButton( const char * title,GtkWidget * parent )

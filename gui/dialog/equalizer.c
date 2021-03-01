@@ -383,19 +383,19 @@ static GtkWidget * CreateEqualizer( void )
   gtk_container_add( GTK_CONTAINER( Notebook ),table1 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Contrast":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Contrast,NULL ),
     0,1,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Brightness":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Brightness,NULL ),
     0,1,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Hue":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Hue,NULL ),
     0,1,2,3,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Saturation":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Saturation,NULL ),
     0,1,3,4,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   VContrastadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
@@ -607,27 +607,27 @@ GtkWidget * CreateEquConfig( void )
   gtk_table_set_col_spacings( GTK_TABLE( table1 ),4 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Channel1":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Channel1,NULL ),
     0,1,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Channel2":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Channel2,NULL ),
     0,1,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Channel3":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Channel3,NULL ),
     0,1,2,3,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Channel4":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Channel4,NULL ),
     0,1,3,4,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Channel5":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Channel5,NULL ),
     0,1,4,5,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( MSGTR_GUI_Channel6":",NULL ),
+    gtkAddLabelColon( MSGTR_GUI_Channel6,NULL ),
     0,1,5,6,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   CBChannel1=gtkAddCombo( NULL );

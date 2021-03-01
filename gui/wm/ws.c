@@ -38,6 +38,7 @@
 #include "mp_msg.h"
 #include "mpbswap.h"
 #include "mplayer.h"
+#include "libavutil/avstring.h"
 #include "libavutil/imgutils.h"
 #include "libavutil/pixfmt.h"
 #include "libswscale/swscale.h"
@@ -313,11 +314,13 @@ void wsDone(void)
 static int wsErrorHandler(Display *display, XErrorEvent *event)
 {
     char type[128];
+    char msg[80]     = "[ws] ";
     _XExtension *ext = NULL;
 
     XGetErrorText(display, event->error_code, type, sizeof(type));
 
-    mp_msg(MSGT_GPLAYER, MSGL_ERR, "[ws] " MSGTR_GUI_MSG_X11Error);
+    av_strlcat(msg, MSGTR_GUI_MSG_X11Error, sizeof(msg));
+    mp_msg(MSGT_GPLAYER, MSGL_ERR, "%s", msg);
     mp_msg(MSGT_GPLAYER, MSGL_ERR, "[ws]  Error code: %d - %s\n", event->error_code, type);
 
     if (event->request_code < 128) {

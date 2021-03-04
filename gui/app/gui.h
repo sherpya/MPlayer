@@ -24,6 +24,17 @@
 #ifndef MPLAYER_GUI_GUI_H
 #define MPLAYER_GUI_GUI_H
 
+#include "config.h"
+
+#ifdef ENABLE_NLS
+#include <libintl.h>
+#include <locale.h>
+#define GETTEXT_PACKAGE "mplayer"
+#define _(string) dgettext(GETTEXT_PACKAGE, string)
+#else
+#define _(string) string
+#endif
+
 /// Name of the program the GUI utilizes
 #define MPlayer "MPlayer"
 

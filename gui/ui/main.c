@@ -371,7 +371,7 @@ static void uiMainDND(int num,char** files)
       }
       listMgr(PLAYLIST_ITEM_APPEND,item);
     } else {
-      mp_msg( MSGT_GPLAYER,MSGL_WARN,MSGTR_GUI_MSG_NotAFile1,str );
+      mp_msg( MSGT_GPLAYER,MSGL_WARN,_(MSGTR_GUI_MSG_NotAFile1),str );
     }
     free( str );
   }
@@ -396,7 +396,7 @@ void uiMainInit (void)
   {
     char msg[80] = "[main] ";
 
-    av_strlcat(msg, MSGTR_GUI_MSG_MemoryErrorWindow, sizeof(msg));
+    av_strlcat(msg, _(MSGTR_GUI_MSG_MemoryErrorWindow), sizeof(msg));
     gmp_msg(MSGT_GPLAYER, MSGL_FATAL, msg);
     mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
   }

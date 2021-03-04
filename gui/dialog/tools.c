@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "tools.h"
+#include "gui/app/gui.h"
 
 #include "help_mp.h"
 
@@ -37,7 +38,7 @@
  */
 static gchar *scale_format_value (GtkScale *scale, gdouble value, gpointer user_data)
 {
-  gchar *val, *p, *dm = MSGTR_GUI_DecimalMark;
+  gchar *val, *p, *dm = _(MSGTR_GUI_DecimalMark);
 
   (void) user_data;
 

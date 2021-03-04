@@ -21,6 +21,7 @@
 
 #include <X11/Xlib.h>
 #include "wsxdnd.h"
+#include "gui/app/gui.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -100,7 +101,7 @@ wsXDNDProcessSelection(wsWindow* win, XEvent *event)
     XSendEvent(wsDisplay, selowner, 0, 0, &xevent);
 
     if (!delme){
-      mp_msg( MSGT_GPLAYER,MSGL_WARN,MSGTR_GUI_MSG_DragAndDropNothing );
+      mp_msg( MSGT_GPLAYER,MSGL_WARN,_(MSGTR_GUI_MSG_DragAndDropNothing) );
       return False;
     }
 
@@ -170,7 +171,7 @@ wsXDNDProcessClientMessage(XClientMessageEvent *event)
         }
       }
       if (atom_support == None) {
-        mp_msg( MSGT_GPLAYER,MSGL_WARN,MSGTR_GUI_MSG_NotAFile0 );
+        mp_msg( MSGT_GPLAYER,MSGL_WARN,_(MSGTR_GUI_MSG_NotAFile0) );
       }
     } else {
       /* need to check the whole list here */
@@ -217,7 +218,7 @@ wsXDNDProcessClientMessage(XClientMessageEvent *event)
 
   if (event->message_type == XA_XdndDrop) {
     if ((Window) event->data.l[0] != XGetSelectionOwner(wsDisplay, XA_XdndSelection)){
-      mp_msg( MSGT_GPLAYER,MSGL_WARN,MSGTR_GUI_MSG_DragAndDropOwner );
+      mp_msg( MSGT_GPLAYER,MSGL_WARN,_(MSGTR_GUI_MSG_DragAndDropOwner) );
     }
     if (atom_support != None) {
       XConvertSelection(wsDisplay, XA_XdndSelection, atom_support,

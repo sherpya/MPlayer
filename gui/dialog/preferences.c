@@ -238,7 +238,7 @@ static void prEntry( GtkEditable * editable,gpointer user_data )
    case 0: // font encoding
         comment=gtk_entry_get_text( GTK_ENTRY( EFontEncoding ) );
         for ( i=0;lEncoding[i].name;i++ )
-          if ( !gstrcmp( lEncoding[i].comment,comment ) ) break;
+          if ( !gstrcmp( _(lEncoding[i].comment),comment ) ) break;
         if ( lEncoding[i].comment ) mplayer( MPLAYER_SET_FONT_ENCODING,0,lEncoding[i].name );
         else mplayer( MPLAYER_SET_FONT_ENCODING,0,(char *)comment );
         break;
@@ -247,11 +247,11 @@ static void prEntry( GtkEditable * editable,gpointer user_data )
    case 1: // sub encoding
         comment=gtk_entry_get_text( GTK_ENTRY( ESubEncoding ) );
         for ( i=0;lEncoding[i].name;i++ )
-          if ( !gstrcmp( lEncoding[i].comment,comment ) ) break;
+          if ( !gstrcmp( _(lEncoding[i].comment),comment ) ) break;
         if ( lEncoding[i].comment ) mplayer( MPLAYER_SET_SUB_ENCODING,0,lEncoding[i].name );
         else
         {
-         if ( strcmp( comment,MSGTR_GUI__Default_ ) == 0 ) comment=NULL;
+         if ( strcmp( comment,_(MSGTR_GUI__Default_) ) == 0 ) comment=NULL;
          mplayer( MPLAYER_SET_SUB_ENCODING,0,(char *)comment );
         }
         if ( !comment) gtk_widget_set_sensitive( CBSubEncoding,(!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBSubUtf8)) && !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBSubUnicode))) );
@@ -397,7 +397,7 @@ static void prButton( GtkButton * button, gpointer user_data )
 
         if ( guiInfo.Playing && inform )
          {
-          gtkMessageBox( MSGBOX_INFORMATION,MSGTR_GUI_MSG_PlaybackNeedsRestart );
+          gtkMessageBox( MSGBOX_INFORMATION,_(MSGTR_GUI_MSG_PlaybackNeedsRestart) );
           inform = False;
          }
 
@@ -629,7 +629,7 @@ static GtkWidget * CreatePreferences( void )
   accel_group=gtk_accel_group_new();
 
   Preferences=gtk_window_new( GTK_WINDOW_TOPLEVEL );
-  gtk_window_set_title( GTK_WINDOW( Preferences ),MSGTR_GUI_Preferences );
+  gtk_window_set_title( GTK_WINDOW( Preferences ),_(MSGTR_GUI_Preferences) );
   gtk_window_set_position( GTK_WINDOW( Preferences ),GTK_WIN_POS_CENTER );
   gtk_window_set_wmclass( GTK_WINDOW( Preferences ),"Preferences",MPlayer );
 
@@ -663,9 +663,9 @@ static GtkWidget * CreatePreferences( void )
   gtk_clist_set_shadow_type( GTK_CLIST( CLADrivers ),GTK_SHADOW_NONE );
   gtk_widget_set_usize( CLADrivers,250,-2 );
   gtk_clist_set_column_widget( GTK_CLIST( CLADrivers ),0,
-    gtkAddLabel( MSGTR_GUI_AvailableDrivers,NULL ) );
+    gtkAddLabel( _(MSGTR_GUI_AvailableDrivers),NULL ) );
 
-  AConfig=gtkAddButton( MSGTR_GUI_ConfigureDriver,
+  AConfig=gtkAddButton( _(MSGTR_GUI_ConfigureDriver),
     gtkAddHButtonBox( vbox2 ) );
 
   vbox3=gtkAddVBox(
@@ -674,39 +674,39 @@ static GtkWidget * CreatePreferences( void )
     gtk_widget_set_usize( vbox3,250,-2 );
 
   hbox10 = gtkAddHBox(vbox3, 1);
-  CBReplayGain = gtkAddCheckButton(MSGTR_GUI_ReplayGain, hbox10);
+  CBReplayGain = gtkAddCheckButton(_(MSGTR_GUI_ReplayGain), hbox10);
   RGbox = gtkAddHBox(hbox10, 1);
-  gtkAddLabel(MSGTR_GUI_ReplayGainAdjustment, RGbox);
+  gtkAddLabel(_(MSGTR_GUI_ReplayGainAdjustment), RGbox);
   RGadj = gtk_adjustment_new(gtkReplayGainAdjustment, -30, 10, 1, 5, 0);
   RGspin = gtk_spin_button_new(GTK_ADJUSTMENT(RGadj), 1, 0);
   gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(RGspin), TRUE);
   gtk_box_pack_start(GTK_BOX(RGbox), GTK_WIDGET(RGspin), FALSE, FALSE, 0);
-  gtkAddLabel(MSGTR_GUI_dB, RGbox);
+  gtkAddLabel(_(MSGTR_GUI_dB), RGbox);
   gtk_widget_set_sensitive(RGbox, gtkReplayGainOn);
   gtk_widget_show(RGspin);
 
-  CBNormalize=gtkAddCheckButton( MSGTR_GUI_NormalizeSound,vbox3 );
-  CBAudioEqualizer=gtkAddCheckButton( MSGTR_GUI_EnableEqualizer,vbox3 );
-  CBSoftwareMixer=gtkAddCheckButton( MSGTR_GUI_EnableSoftwareMixer,vbox3 );
+  CBNormalize=gtkAddCheckButton( _(MSGTR_GUI_NormalizeSound),vbox3 );
+  CBAudioEqualizer=gtkAddCheckButton( _(MSGTR_GUI_EnableEqualizer),vbox3 );
+  CBSoftwareMixer=gtkAddCheckButton( _(MSGTR_GUI_EnableSoftwareMixer),vbox3 );
 #if 0
   CBSurround=gtkAddCheckButton( "Enable surround",vbox3 );
 #endif
 
   gtkAddHSeparator( vbox3 );
-  CBExtraStereo=gtkAddCheckButton( MSGTR_GUI_EnableExtraStereo,vbox3 );
+  CBExtraStereo=gtkAddCheckButton( _(MSGTR_GUI_EnableExtraStereo),vbox3 );
   hbox8=gtkAddHBox( vbox3,1 );
-  /*label=*/gtkAddLabelColon( MSGTR_GUI_Coefficient,hbox8 );
+  /*label=*/gtkAddLabelColon( _(MSGTR_GUI_Coefficient),hbox8 );
 //    gtk_misc_set_padding( GTK_MISC( label ),20,0 );
   HSExtraStereoMuladj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-10,10,0.1,0,0 ) );
   HSExtraStereoMul=gtkAddHScale( HSExtraStereoMuladj,hbox8,1 );
   gtkAddHSeparator( vbox3 );
 
   hbox8=gtkAddHBox( vbox3,1 );
-  gtkAddLabelColon( MSGTR_GUI_AudioDelay,hbox8 );
+  gtkAddLabelColon( _(MSGTR_GUI_AudioDelay),hbox8 );
 
   HSAudioDelayadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,0.1,0,0 ) );
   HSAudioDelay=gtkAddHScale( HSAudioDelayadj,hbox8,1 );
-  label=gtkAddLabel( MSGTR_GUI_Audio,NULL );
+  label=gtkAddLabel( _(MSGTR_GUI_Audio),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),0 ),label );
 
 /* 2nd page */
@@ -730,31 +730,31 @@ static GtkWidget * CreatePreferences( void )
   gtk_clist_set_shadow_type( GTK_CLIST( CLVDrivers ),GTK_SHADOW_NONE );
   gtk_widget_set_usize( CLVDrivers,250,-2 );
 
-  label=gtkAddLabel( MSGTR_GUI_AvailableDrivers,NULL );
+  label=gtkAddLabel( _(MSGTR_GUI_AvailableDrivers),NULL );
     gtk_clist_set_column_widget( GTK_CLIST( CLVDrivers ),0,label );
 
   hbuttonbox3=gtkAddHButtonBox( vbox4 );
-  VConfig=gtkAddButton( MSGTR_GUI_ConfigureDriver,hbuttonbox3 );
+  VConfig=gtkAddButton( _(MSGTR_GUI_ConfigureDriver),hbuttonbox3 );
 
   vbox5=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
       gtkAddFrame( NULL,GTK_SHADOW_ETCHED_OUT,hbox2,0 ),1 ),0 );
     gtk_widget_set_usize( vbox5,250,-2 );
 
-  CBDoubleBuffer=gtkAddCheckButton( MSGTR_GUI_EnableDoubleBuffering,vbox5 );
-  CBDR=gtkAddCheckButton( MSGTR_GUI_EnableDirectRendering,vbox5 );
-  CBFramedrop=gtkAddCheckButton( MSGTR_GUI_EnableFrameDropping,vbox5 );
-  CBHFramedrop=gtkAddCheckButton( MSGTR_GUI_EnableFrameDroppingIntense,vbox5 );
-  CBFlip=gtkAddCheckButton( MSGTR_GUI_Flip,vbox5 );
+  CBDoubleBuffer=gtkAddCheckButton( _(MSGTR_GUI_EnableDoubleBuffering),vbox5 );
+  CBDR=gtkAddCheckButton( _(MSGTR_GUI_EnableDirectRendering),vbox5 );
+  CBFramedrop=gtkAddCheckButton( _(MSGTR_GUI_EnableFrameDropping),vbox5 );
+  CBHFramedrop=gtkAddCheckButton( _(MSGTR_GUI_EnableFrameDroppingIntense),vbox5 );
+  CBFlip=gtkAddCheckButton( _(MSGTR_GUI_Flip),vbox5 );
 
   table1=gtk_table_new( 2,2,FALSE );
   gtk_widget_show( table1 );
   gtk_box_pack_start( GTK_BOX( vbox5 ),table1,FALSE,FALSE,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_PanAndScan,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_PanAndScan),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_FrameRate,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_FrameRate),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   HSPanscanadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,1,0.1,0,0 ) );
@@ -767,7 +767,7 @@ static GtkWidget * CreatePreferences( void )
     gtk_spin_button_set_numeric( GTK_SPIN_BUTTON( HSFPS ),TRUE );
     gtk_table_attach( GTK_TABLE( table1 ),HSFPS,1,2,1,2,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabel( MSGTR_GUI_Video,NULL );
+  label=gtkAddLabel( _(MSGTR_GUI_Video),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),1 ),label );
 
 /* 3rd page */
@@ -776,21 +776,21 @@ static GtkWidget * CreatePreferences( void )
 
   vbox600=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
-      gtkAddFrame( MSGTR_GUI_OsdLevel,GTK_SHADOW_ETCHED_OUT,vbox6,0 ),1 ),0 );
+      gtkAddFrame( _(MSGTR_GUI_OsdLevel),GTK_SHADOW_ETCHED_OUT,vbox6,0 ),1 ),0 );
 
-  RBOSDNone=gtkAddRadioButton( MSGTR_GUI_OsdLevel0,&OSD_group,vbox600 );
-  RBOSDIndicator=gtkAddRadioButton( MSGTR_GUI_OsdLevel1,&OSD_group,vbox600 );
-  RBOSDTandP=gtkAddRadioButton( MSGTR_GUI_OsdLevel2,&OSD_group,vbox600 );
-  RBOSDTPTT=gtkAddRadioButton( MSGTR_GUI_OsdLevel3,&OSD_group,vbox600 );
+  RBOSDNone=gtkAddRadioButton( _(MSGTR_GUI_OsdLevel0),&OSD_group,vbox600 );
+  RBOSDIndicator=gtkAddRadioButton( _(MSGTR_GUI_OsdLevel1),&OSD_group,vbox600 );
+  RBOSDTandP=gtkAddRadioButton( _(MSGTR_GUI_OsdLevel2),&OSD_group,vbox600 );
+  RBOSDTPTT=gtkAddRadioButton( _(MSGTR_GUI_OsdLevel3),&OSD_group,vbox600 );
 
   vbox7=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
-      gtkAddFrame( MSGTR_GUI_Subtitle,GTK_SHADOW_ETCHED_OUT,vbox6,0 ),1 ),0 );
+      gtkAddFrame( _(MSGTR_GUI_Subtitle),GTK_SHADOW_ETCHED_OUT,vbox6,0 ),1 ),0 );
 
 #if 0
   hbox4=gtkAddHBox( vbox7,1 );
 
-  gtkAddLabelColon( MSGTR_GUI_Subtitle,hbox4 );
+  gtkAddLabelColon( _(MSGTR_GUI_Subtitle),hbox4 );
 
   ESubtitleName=gtk_entry_new();
   gtk_widget_show( ESubtitleName );
@@ -798,7 +798,7 @@ static GtkWidget * CreatePreferences( void )
 
   hbuttonbox4=gtkAddHButtonBox( hbuttonbox4 );
     gtk_container_set_border_width( GTK_CONTAINER( hbuttonbox4 ),3 );
-  BLoadSubtitle=gtkAddButton( MSGTR_GUI_Browse,hbuttonbox4 );
+  BLoadSubtitle=gtkAddButton( _(MSGTR_GUI_Browse),hbuttonbox4 );
 #endif
 
   vbox8=gtkAddVBox( vbox7,0 );
@@ -807,16 +807,16 @@ static GtkWidget * CreatePreferences( void )
   gtk_widget_show( table1 );
   gtk_box_pack_start( GTK_BOX( vbox8 ),table1,FALSE,FALSE,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_Delay,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_Delay),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_Position,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_Position),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_FrameRate,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_FrameRate),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,2,3,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_Encoding,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_Encoding),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,3,4,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( GTK_FILL ),0,0 );
 
   HSSubDelayadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-10.0,10,0.1,0,0 ) );
@@ -842,7 +842,7 @@ static GtkWidget * CreatePreferences( void )
   CBSubEncoding=gtk_combo_new();
   gtk_widget_show( CBSubEncoding );
   gtk_box_pack_start( GTK_BOX( vbox10 ),CBSubEncoding,TRUE,FALSE,0 );
-  CBSubEncoding_items=g_list_append( CBSubEncoding_items,MSGTR_GUI__Default_ );
+  CBSubEncoding_items=g_list_append( CBSubEncoding_items,_(MSGTR_GUI__Default_) );
   {
    int i, listed=(sub_cp == NULL);
 
@@ -853,7 +853,7 @@ static GtkWidget * CreatePreferences( void )
     if (cd != (iconv_t) -1)
     {
      iconv_close(cd);
-     CBSubEncoding_items=g_list_append( CBSubEncoding_items,lEncoding[i].comment );
+     CBSubEncoding_items=g_list_append( CBSubEncoding_items,_(lEncoding[i].comment) );
 
      if ( !listed )
       if ( av_strcasecmp ( lEncoding[i].name, sub_cp ) == 0 ) listed=True;
@@ -875,31 +875,31 @@ static GtkWidget * CreatePreferences( void )
 
   vbox9=gtkAddVBox( vbox8,0 );
 
-  CBSubOverlap=gtkAddCheckButton( MSGTR_GUI_SubtitleAllowOverlap,vbox9 );
-  CBNoAutoSub=gtkAddCheckButton( MSGTR_GUI_SubtitleAutomaticLoad,vbox9 );
-  CBSubUtf8=gtkAddCheckButton( MSGTR_GUI_CpUTF8,hbox3 );
-  CBSubUnicode=gtkAddCheckButton( MSGTR_GUI_CpUnicode,hbox3 );
-  CBDumpMPSub=gtkAddCheckButton( MSGTR_GUI_SubtitleConvertMpsub,vbox9 );
-  CBDumpSrt=gtkAddCheckButton( MSGTR_GUI_SubtitleConvertSrt,vbox9 );
+  CBSubOverlap=gtkAddCheckButton( _(MSGTR_GUI_SubtitleAllowOverlap),vbox9 );
+  CBNoAutoSub=gtkAddCheckButton( _(MSGTR_GUI_SubtitleAutomaticLoad),vbox9 );
+  CBSubUtf8=gtkAddCheckButton( _(MSGTR_GUI_CpUTF8),hbox3 );
+  CBSubUnicode=gtkAddCheckButton( _(MSGTR_GUI_CpUnicode),hbox3 );
+  CBDumpMPSub=gtkAddCheckButton( _(MSGTR_GUI_SubtitleConvertMpsub),vbox9 );
+  CBDumpSrt=gtkAddCheckButton( _(MSGTR_GUI_SubtitleConvertSrt),vbox9 );
 
   gtkAddHSeparator( vbox9 );
-  CBUseASS=gtkAddCheckButton( MSGTR_GUI_EnableAssSubtitle,vbox9 );
+  CBUseASS=gtkAddCheckButton( _(MSGTR_GUI_EnableAssSubtitle),vbox9 );
   hbox9=gtkAddHBox( vbox9,0 );
-  CBASSUseMargins=gtkAddCheckButton( MSGTR_GUI_SubtitleAddMargins,hbox9 );
+  CBASSUseMargins=gtkAddCheckButton( _(MSGTR_GUI_SubtitleAddMargins),hbox9 );
 
   hbox91=gtk_hbox_new( FALSE,0 );
   gtk_box_pack_start( GTK_BOX( hbox9 ),hbox91,TRUE,FALSE,0 );
   gtk_widget_show( hbox91 );
-  SBASSTopMargin=gtkAddSpinButtonColon( MSGTR_GUI_Top,
+  SBASSTopMargin=gtkAddSpinButtonColon( _(MSGTR_GUI_Top),
         (GtkAdjustment *)gtk_adjustment_new(0,0,2000,1,8,0),hbox91 );
 
   hbox92=gtk_hbox_new( FALSE,0 );
   gtk_box_pack_start( GTK_BOX( hbox9 ),hbox92,TRUE,FALSE,0 );
   gtk_widget_show( hbox92 );
-  SBASSBottomMargin=gtkAddSpinButtonColon( MSGTR_GUI_Bottom,
+  SBASSBottomMargin=gtkAddSpinButtonColon( _(MSGTR_GUI_Bottom),
         (GtkAdjustment *)gtk_adjustment_new(0,0,2000,1,8,0),hbox92 );
 
-  label=gtkAddLabel( MSGTR_GUI_OSD_Subtitles,NULL );
+  label=gtkAddLabel( _(MSGTR_GUI_OSD_Subtitles),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),2 ),label );
   vbox601=gtkAddVBox( notebook1,0 );
 
@@ -910,32 +910,32 @@ static GtkWidget * CreatePreferences( void )
       gtkAddFrame( NULL,GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
 
   hbox6=gtkAddHBox( vbox603,1 );
-  gtkAddLabelColon( MSGTR_GUI_Font,hbox6 );
+  gtkAddLabelColon( _(MSGTR_GUI_Font),hbox6 );
   prEFontName=gtk_entry_new();
   gtk_widget_show( prEFontName );
   gtk_box_pack_start( GTK_BOX( hbox6 ),prEFontName,TRUE,TRUE,0 );
   hbuttonbox5=gtkAddHButtonBox( hbox6 );
     gtk_container_set_border_width( GTK_CONTAINER( hbuttonbox5 ),3 );
-  BLoadFont=gtkAddButton( MSGTR_GUI_Browse,hbuttonbox5 );
+  BLoadFont=gtkAddButton( _(MSGTR_GUI_Browse),hbuttonbox5 );
 
 #ifdef CONFIG_FREETYPE
   table1=gtk_table_new( 6,2,FALSE );
   gtk_widget_show( table1 );
   gtk_box_pack_start( GTK_BOX( vbox603 ),table1,FALSE,FALSE,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_ScaleMode,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_ScaleMode),NULL );
   gtk_misc_set_alignment( GTK_MISC( label ),0,0 );
   gtk_table_attach( GTK_TABLE( table1 ),label,0,1,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( GTK_FILL ),0,0 );
 
   vbox11=gtkAddVBox( NULL,0 );
   gtk_table_attach( GTK_TABLE( table1 ),vbox11,1,2,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  RBFontNoAutoScale=gtkAddRadioButton( MSGTR_GUI_ScaleNo,&Font_group,vbox11 );
-  RBFontAutoScaleHeight=gtkAddRadioButton( MSGTR_GUI_ScaleMovieHeight,&Font_group,vbox11 );
-  RBFontAutoScaleWidth=gtkAddRadioButton( MSGTR_GUI_ScaleMovieWidth,&Font_group,vbox11 );
-  RBFontAutoScaleDiagonal=gtkAddRadioButton( MSGTR_GUI_ScaleMovieDiagonal,&Font_group,vbox11 );
+  RBFontNoAutoScale=gtkAddRadioButton( _(MSGTR_GUI_ScaleNo),&Font_group,vbox11 );
+  RBFontAutoScaleHeight=gtkAddRadioButton( _(MSGTR_GUI_ScaleMovieHeight),&Font_group,vbox11 );
+  RBFontAutoScaleWidth=gtkAddRadioButton( _(MSGTR_GUI_ScaleMovieWidth),&Font_group,vbox11 );
+  RBFontAutoScaleDiagonal=gtkAddRadioButton( _(MSGTR_GUI_ScaleMovieDiagonal),&Font_group,vbox11 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_Encoding,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_Encoding),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   CBFontEncoding=gtk_combo_new();
@@ -957,7 +957,7 @@ static GtkWidget * CreatePreferences( void )
 #endif
     if ( append )
     {
-     CBFontEncoding_items=g_list_append( CBFontEncoding_items,lEncoding[i].comment );
+     CBFontEncoding_items=g_list_append( CBFontEncoding_items,_(lEncoding[i].comment) );
 
      if ( !listed )
       if ( av_strcasecmp ( lEncoding[i].name, subtitle_font_encoding ) == 0 ) listed=True;
@@ -972,28 +972,28 @@ static GtkWidget * CreatePreferences( void )
   gtk_entry_set_editable( GTK_ENTRY( EFontEncoding ),FALSE );
   gtk_widget_show( EFontEncoding );
 
-  label=gtkAddLabelColon( MSGTR_GUI_Blur,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_Blur),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,2,3,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   HSFontBluradj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,0.1,0,0 ) );
   HSFontBlur=gtkAddHScale( HSFontBluradj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSFontBlur,1,2,2,3,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_Outline,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_Outline),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,3,4,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   HSFontOutLineadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,0.1,0,0 ) );
   HSFontOutLine=gtkAddHScale( HSFontOutLineadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSFontOutLine,1,2,3,4,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_SizeSubtitles,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_SizeSubtitles),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,4,5,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   HSFontTextScaleadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,0.1,0,0 ) );
   HSFontTextScale=gtkAddHScale( HSFontTextScaleadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSFontTextScale,1,2,4,5,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_SizeOSD,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_SizeOSD),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,5,6,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   HSFontOSDScaleadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,0.1,0,0 ) );
@@ -1001,12 +1001,12 @@ static GtkWidget * CreatePreferences( void )
     gtk_table_attach( GTK_TABLE( table1 ),HSFontOSDScale,1,2,5,6,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 #else
   hbox7=gtkAddHBox( vbox603,1 );
-  gtkAddLabelColon( MSGTR_GUI_Outline,hbox7 );
+  gtkAddLabelColon( _(MSGTR_GUI_Outline),hbox7 );
   HSFontFactoradj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,10,0.05,0,0 ) );
   HSFontFactor=gtkAddHScale( HSFontFactoradj,hbox7,2 );
 #endif
 
-  label=gtkAddLabel( MSGTR_GUI_Font,NULL );
+  label=gtkAddLabel( _(MSGTR_GUI_Font),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),3 ),label );
 
 /* 5th page */
@@ -1015,18 +1015,18 @@ static GtkWidget * CreatePreferences( void )
 
   vbox602=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
-      gtkAddFrame( MSGTR_GUI_Demuxer,GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
+      gtkAddFrame( _(MSGTR_GUI_Demuxer),GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
 
-  CBNonInterlaved=gtkAddCheckButton( MSGTR_GUI_NonInterleavedParser,vbox602 );
-  CBIndex=gtkAddCheckButton( MSGTR_GUI_SeekingInBrokenMedia,vbox602 );
+  CBNonInterlaved=gtkAddCheckButton( _(MSGTR_GUI_NonInterleavedParser),vbox602 );
+  CBIndex=gtkAddCheckButton( _(MSGTR_GUI_SeekingInBrokenMedia),vbox602 );
 
   vbox604=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
-      gtkAddFrame( MSGTR_GUI_Codecs,GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
+      gtkAddFrame( _(MSGTR_GUI_Codecs),GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
 
   hbox5=gtkAddHBox( vbox604,1 );
 
-  gtkAddLabelColon( MSGTR_GUI_CodecFamilyVideo,hbox5 );
+  gtkAddLabelColon( _(MSGTR_GUI_CodecFamilyVideo),hbox5 );
 
   CBVFM=gtk_combo_new();
   gtk_widget_show( CBVFM );
@@ -1038,7 +1038,7 @@ static GtkWidget * CreatePreferences( void )
 
   hbox5=gtkAddHBox( vbox604,1 );
 
-  gtkAddLabelColon( MSGTR_GUI_CodecFamilyAudio,hbox5 );
+  gtkAddLabelColon( _(MSGTR_GUI_CodecFamilyAudio),hbox5 );
 
   CBAFM=gtk_combo_new();
   gtk_widget_show( CBAFM );
@@ -1048,7 +1048,7 @@ static GtkWidget * CreatePreferences( void )
   gtk_entry_set_editable( GTK_ENTRY( EAFM ),FALSE );
   gtk_widget_show( EAFM );
 
-  label=gtkAddLabel( MSGTR_GUI_Demuxers_Codecs,NULL );
+  label=gtkAddLabel( _(MSGTR_GUI_Demuxers_Codecs),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),4 ),label );
 
   vbox601=gtkAddVBox( notebook1,0 );
@@ -1057,13 +1057,13 @@ static GtkWidget * CreatePreferences( void )
 
   vbox602=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
-      gtkAddFrame( MSGTR_GUI_PostProcessing,GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
+      gtkAddFrame( _(MSGTR_GUI_PostProcessing),GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
 
-  CBPostprocess=gtkAddCheckButton( MSGTR_GUI_EnablePostProcessing,vbox602 );
+  CBPostprocess=gtkAddCheckButton( _(MSGTR_GUI_EnablePostProcessing),vbox602 );
 
   hbox5=gtkAddHBox( vbox602,1 );
 
-  gtkAddLabelColon( MSGTR_GUI_MaximumUsageSpareCPU,hbox5 );
+  gtkAddLabelColon( _(MSGTR_GUI_MaximumUsageSpareCPU),hbox5 );
 
   if ( guiInfo.sh_video && guiInfo.Playing ) HSPPQualityadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,get_video_quality_max( guiInfo.sh_video ),1,0,0 ) );
    else HSPPQualityadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,1,0,0 ) );
@@ -1071,13 +1071,13 @@ static GtkWidget * CreatePreferences( void )
 
   vbox602=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
-      gtkAddFrame( MSGTR_GUI_Cache,GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
+      gtkAddFrame( _(MSGTR_GUI_Cache),GTK_SHADOW_ETCHED_OUT,vbox601,0 ),1 ),0 );
 
-  CBCache=gtkAddCheckButton( MSGTR_GUI_EnableCache,vbox602 );
+  CBCache=gtkAddCheckButton( _(MSGTR_GUI_EnableCache),vbox602 );
 
   hbox5=gtkAddHBox( vbox602,1 );
 
-  gtkAddLabelColon( MSGTR_GUI_CacheSize,hbox5 );
+  gtkAddLabelColon( _(MSGTR_GUI_CacheSize),hbox5 );
 
   SBCacheadj=GTK_ADJUSTMENT( gtk_adjustment_new( gtkCacheSize,32,0x7fffffff,1,32,0 ) );
   SBCache=gtk_spin_button_new( GTK_ADJUSTMENT( SBCacheadj ),1,0 );
@@ -1086,22 +1086,22 @@ static GtkWidget * CreatePreferences( void )
 
   vbox602=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
-      gtkAddFrame( MSGTR_GUI_Miscellaneous,GTK_SHADOW_ETCHED_OUT,vbox601,1 ),1 ),0 );
+      gtkAddFrame( _(MSGTR_GUI_Miscellaneous),GTK_SHADOW_ETCHED_OUT,vbox601,1 ),1 ),0 );
 
-  CBShowVideoWindow=gtkAddCheckButton( MSGTR_GUI_HideVideoWindow,vbox602 );
-  CBLoadFullscreen=gtkAddCheckButton( MSGTR_GUI_StartFullscreen,vbox602 );
-  CBSaveWinPos=gtkAddCheckButton( MSGTR_GUI_SaveWindowPositions,vbox602 );
-  CBStopXScreenSaver=gtkAddCheckButton( MSGTR_GUI_TurnOffXScreenSaver,vbox602 );
-  CBPlayBar=gtkAddCheckButton( MSGTR_GUI_EnablePlaybar,vbox602 );
-  CBTVDigital=gtkAddCheckButton( MSGTR_GUI_EnableDigitalTV,vbox602 );
-  CBPlaylists = gtkAddCheckButton(MSGTR_GUI_PlaylistSupport, vbox602);
-  CBNoIdle=gtkAddCheckButton( MSGTR_GUI_QuitAfterPlaying,vbox602 );
+  CBShowVideoWindow=gtkAddCheckButton( _(MSGTR_GUI_HideVideoWindow),vbox602 );
+  CBLoadFullscreen=gtkAddCheckButton( _(MSGTR_GUI_StartFullscreen),vbox602 );
+  CBSaveWinPos=gtkAddCheckButton( _(MSGTR_GUI_SaveWindowPositions),vbox602 );
+  CBStopXScreenSaver=gtkAddCheckButton( _(MSGTR_GUI_TurnOffXScreenSaver),vbox602 );
+  CBPlayBar=gtkAddCheckButton( _(MSGTR_GUI_EnablePlaybar),vbox602 );
+  CBTVDigital=gtkAddCheckButton( _(MSGTR_GUI_EnableDigitalTV),vbox602 );
+  CBPlaylists = gtkAddCheckButton(_(MSGTR_GUI_PlaylistSupport), vbox602);
+  CBNoIdle=gtkAddCheckButton( _(MSGTR_GUI_QuitAfterPlaying),vbox602 );
 
   gtkAddHSeparator( vbox602 );
 
-  CBAutoSync=gtkAddCheckButton( MSGTR_GUI_EnableAutomaticAVSync,vbox602 );
+  CBAutoSync=gtkAddCheckButton( _(MSGTR_GUI_EnableAutomaticAVSync),vbox602 );
   hbox5=gtkAddHBox( vbox602,1 );
-  gtkAddLabelColon( MSGTR_GUI_SyncValue,hbox5 );
+  gtkAddLabelColon( _(MSGTR_GUI_SyncValue),hbox5 );
   SBAutoSyncadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,10000,1,10,0 ) );
   SBAutoSync=gtk_spin_button_new( GTK_ADJUSTMENT( SBAutoSyncadj ),1,0 );
   gtk_widget_show( SBAutoSync );
@@ -1113,13 +1113,13 @@ static GtkWidget * CreatePreferences( void )
     gtk_widget_show( table1 );
     gtk_box_pack_start( GTK_BOX( vbox602 ),table1,FALSE,FALSE,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_DeviceDVD,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_DeviceDVD),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
   prEDVDDevice=gtk_entry_new();
     gtk_widget_show( prEDVDDevice );
     gtk_table_attach( GTK_TABLE( table1 ),prEDVDDevice,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  label=gtkAddLabelColon( MSGTR_GUI_DeviceCDROM,NULL );
+  label=gtkAddLabelColon( _(MSGTR_GUI_DeviceCDROM),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
   prECDRomDevice=gtk_entry_new();
     gtk_widget_show( prECDRomDevice );
@@ -1127,7 +1127,7 @@ static GtkWidget * CreatePreferences( void )
 
 //  gtkAddHSeparator( vbox602 );
 
-  label=gtkAddLabel( MSGTR_GUI_Miscellaneous,NULL );
+  label=gtkAddLabel( _(MSGTR_GUI_Miscellaneous),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),5 ),label );
 
 /* --- */
@@ -1137,8 +1137,8 @@ static GtkWidget * CreatePreferences( void )
   hbuttonbox1=gtkAddHButtonBox( vbox1 );
     gtk_button_box_set_layout( GTK_BUTTON_BOX( hbuttonbox1 ),GTK_BUTTONBOX_END );
     gtk_button_box_set_spacing( GTK_BUTTON_BOX( hbuttonbox1 ),10 );
-  BOk=gtkAddButton( MSGTR_GUI_Ok,hbuttonbox1 );
-  BCancel=gtkAddButton( MSGTR_GUI_Cancel,hbuttonbox1 );
+  BOk=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
+  BCancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox1 );
 
   gtk_widget_add_accelerator( BOk,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
   gtk_widget_add_accelerator( BCancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
@@ -1327,7 +1327,7 @@ void ShowPreferences( void )
    int i;
    for ( i=0;lEncoding[i].name;i++ )
     if ( !av_strcasecmp( sub_cp,lEncoding[i].name ) ) break;
-   if ( lEncoding[i].name ) gtk_entry_set_text( GTK_ENTRY( ESubEncoding ),lEncoding[i].comment );
+   if ( lEncoding[i].name ) gtk_entry_set_text( GTK_ENTRY( ESubEncoding ),_(lEncoding[i].comment) );
    else gtk_entry_set_text( GTK_ENTRY( ESubEncoding ),sub_cp );
    gtk_widget_set_sensitive( CBSubUtf8,FALSE );
    gtk_widget_set_sensitive( CBSubUnicode,FALSE );
@@ -1348,7 +1348,7 @@ void ShowPreferences( void )
   const char *s = (subtitle_font_encoding ? subtitle_font_encoding : ENC_UNICODE);
   for ( i=0;lEncoding[i].name;i++ )
    if ( !av_strcasecmp( s,lEncoding[i].name ) ) break;
-  if ( lEncoding[i].name ) gtk_entry_set_text( GTK_ENTRY( EFontEncoding ),lEncoding[i].comment );
+  if ( lEncoding[i].name ) gtk_entry_set_text( GTK_ENTRY( EFontEncoding ),_(lEncoding[i].comment) );
   else gtk_entry_set_text( GTK_ENTRY( EFontEncoding ),s );
  }
  switch ( subtitle_autoscale )
@@ -1370,7 +1370,7 @@ void ShowPreferences( void )
   GList * Items = NULL;
   const char  * name = NULL;
 
-  Items=g_list_append( Items,MSGTR_GUI__Default_ );
+  Items=g_list_append( Items,_(MSGTR_GUI__Default_) );
   for( i=0;mpcodecs_vd_drivers[i];i++ )
    {
     Items=g_list_append( Items,(char *)mpcodecs_vd_drivers[i]->info->name );
@@ -1386,7 +1386,7 @@ void ShowPreferences( void )
   GList * Items = NULL;
   const char  * name = NULL;
 
-  Items=g_list_append( Items,MSGTR_GUI__Default_ );
+  Items=g_list_append( Items,_(MSGTR_GUI__Default_) );
   for( i=0;mpcodecs_ad_drivers[i];i++ )
    {
     Items=g_list_append( Items,(char *)mpcodecs_ad_drivers[i]->info->name );
@@ -1593,22 +1593,22 @@ static GList *appendESDDevices(GList *l)
 
 #if defined(CONFIG_OSS_AUDIO) || defined(CONFIG_ALSA) || defined(CONFIG_SDL) || defined (CONFIG_ESD)
 // Gets text string from a gtk entry, interpreting
-// MSGTR_GUI_DefaultSetting as null string.
+// _(MSGTR_GUI_DefaultSetting) as null string.
 static const char *getGtkEntryText(GtkWidget *from)
 {
   const char *tmp = gtk_entry_get_text(GTK_ENTRY(from));
-  if (strcmp(tmp, MSGTR_GUI_DefaultSetting) == 0) {
+  if (strcmp(tmp, _(MSGTR_GUI_DefaultSetting)) == 0) {
     tmp = NULL;
   }
   return tmp;
 }
 
 // Sets text string of a gtk entry, interpreting
-// null string as MSGTR_GUI_DefaultSetting.
+// null string as _(MSGTR_GUI_DefaultSetting).
 static void setGtkEntryText(GtkWidget *dest, char *to)
 {
   if (!to) {
-    to = MSGTR_GUI_DefaultSetting;
+    to = _(MSGTR_GUI_DefaultSetting);
   }
   gtk_entry_set_text(GTK_ENTRY(dest),to);
 }
@@ -1676,7 +1676,7 @@ static GtkWidget *CreateAudioConfig( void ) {
   GtkAccelGroup *accel_group;
 
   AudioConfig = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title(GTK_WINDOW(AudioConfig), MSGTR_GUI_AudioDriverConfiguration);
+  gtk_window_set_title(GTK_WINDOW(AudioConfig), _(MSGTR_GUI_AudioDriverConfiguration));
   gtk_window_set_position(GTK_WINDOW(AudioConfig), GTK_WIN_POS_CENTER);
   gtk_window_set_policy(GTK_WINDOW(AudioConfig), FALSE, FALSE, TRUE);
   gtk_window_set_wmclass(GTK_WINDOW(AudioConfig), "AudioConfig", MPlayer);
@@ -1690,12 +1690,12 @@ static GtkWidget *CreateAudioConfig( void ) {
   gtk_widget_show(table);
   gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 
-  label = gtkAddLabelColon(MSGTR_GUI_Device, NULL);
+  label = gtkAddLabelColon(_(MSGTR_GUI_Device), NULL);
   gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(0), 0, 0);
 
   CBAudioDevice = gtkAddCombo(NULL);
   gtk_table_attach(GTK_TABLE(table), CBAudioDevice, 1, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  items = g_list_append(items,(gpointer)MSGTR_GUI_DefaultSetting);
+  items = g_list_append(items,(gpointer)_(MSGTR_GUI_DefaultSetting));
 #ifdef CONFIG_OSS_AUDIO
   if (strncmp(ao_driver[0], "oss", 3) == 0)
     items = appendOSSDevices(items);
@@ -1719,12 +1719,12 @@ static GtkWidget *CreateAudioConfig( void ) {
   CEAudioDevice = GTK_COMBO(CBAudioDevice)->entry;
   gtk_widget_show(CEAudioDevice);
 
-  label = gtkAddLabelColon(MSGTR_GUI_Mixer, NULL);
+  label = gtkAddLabelColon(_(MSGTR_GUI_Mixer), NULL);
   gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(0), 0, 0);
 
   CBAudioMixer = gtkAddCombo(NULL);
   gtk_table_attach(GTK_TABLE(table), CBAudioMixer, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  items = g_list_append(items, (gpointer)MSGTR_GUI_DefaultSetting);
+  items = g_list_append(items, (gpointer)_(MSGTR_GUI_DefaultSetting));
 #ifdef CONFIG_OSS_AUDIO
   if (strncmp(ao_driver[0], "oss", 3) == 0)
     items = appendOSSMixers(items);
@@ -1740,12 +1740,12 @@ static GtkWidget *CreateAudioConfig( void ) {
   CEAudioMixer = GTK_COMBO(CBAudioMixer)->entry;
   gtk_widget_show(CEAudioMixer);
 
-  label = gtkAddLabelColon(MSGTR_GUI_MixerChannel, NULL);
+  label = gtkAddLabelColon(_(MSGTR_GUI_MixerChannel), NULL);
   gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(0), 0, 0);
 
   CBAudioMixerChannel = gtkAddCombo(NULL);
   gtk_table_attach(GTK_TABLE(table), CBAudioMixerChannel, 1, 2, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  items = g_list_append(items, (gpointer)MSGTR_GUI_DefaultSetting);
+  items = g_list_append(items, (gpointer)_(MSGTR_GUI_DefaultSetting));
 #ifdef CONFIG_OSS_AUDIO
   if (strncmp(ao_driver[0], "oss", 3) == 0)
     items = appendOSSMixerChannels(items);
@@ -1766,8 +1766,8 @@ static GtkWidget *CreateAudioConfig( void ) {
   hbuttonbox = gtkAddHButtonBox(vbox);
   gtk_button_box_set_layout(GTK_BUTTON_BOX(hbuttonbox), GTK_BUTTONBOX_END);
   gtk_button_box_set_spacing(GTK_BUTTON_BOX(hbuttonbox), 10);
-  BAudioOk = gtkAddButton(MSGTR_GUI_Ok, hbuttonbox);
-  BAudioCancel = gtkAddButton(MSGTR_GUI_Cancel, hbuttonbox);
+  BAudioOk = gtkAddButton(_(MSGTR_GUI_Ok), hbuttonbox);
+  BAudioCancel = gtkAddButton(_(MSGTR_GUI_Cancel), hbuttonbox);
 
   gtk_signal_connect(GTK_OBJECT(AudioConfig), "destroy", GTK_SIGNAL_FUNC(gtk_widget_destroyed), &AudioConfig);
   gtk_signal_connect(GTK_OBJECT(BAudioOk), "clicked", GTK_SIGNAL_FUNC(audioButton), GINT_TO_POINTER(1));
@@ -1880,7 +1880,7 @@ GtkWidget * CreateDXR3Config( void )
  vbox1=gtkAddVBox( gtkAddDialogFrame( DXR3Config ),0 );
  vbox2=gtkAddVBox( vbox1,0 );
  hbox1=gtkAddHBox( vbox2,1 );
- gtkAddLabelColon( MSGTR_GUI_Device,hbox1 );
+ gtkAddLabelColon( _(MSGTR_GUI_Device),hbox1 );
 
  CBDevice=gtkAddCombo( hbox1 );
 
@@ -1898,17 +1898,17 @@ GtkWidget * CreateDXR3Config( void )
 
  gtkAddHSeparator( vbox2 );
  vbox3=gtkAddVBox( vbox2,0 );
- gtkAddLabelColon( MSGTR_GUI_VideoEncoder,vbox3 );
- RBVNone=gtkAddRadioButton( MSGTR_GUI_None,&VEncoder_group,vbox3 );
- RBVLavc=gtkAddRadioButton( MSGTR_GUI_Lavc,&VEncoder_group,vbox3 );
+ gtkAddLabelColon( _(MSGTR_GUI_VideoEncoder),vbox3 );
+ RBVNone=gtkAddRadioButton( _(MSGTR_GUI_None),&VEncoder_group,vbox3 );
+ RBVLavc=gtkAddRadioButton( _(MSGTR_GUI_Lavc),&VEncoder_group,vbox3 );
 
  gtkAddHSeparator( vbox1 );
 
  hbuttonbox1=gtkAddHButtonBox( vbox1 );
    gtk_button_box_set_layout( GTK_BUTTON_BOX( hbuttonbox1 ),GTK_BUTTONBOX_END );
    gtk_button_box_set_spacing( GTK_BUTTON_BOX( hbuttonbox1 ),10 );
- dxr3BOk=gtkAddButton( MSGTR_GUI_Ok,hbuttonbox1 );
- dxr3BCancel=gtkAddButton( MSGTR_GUI_Cancel,hbuttonbox1 );
+ dxr3BOk=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
+ dxr3BCancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox1 );
 
  gtk_widget_add_accelerator( dxr3BOk,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
  gtk_widget_add_accelerator( dxr3BCancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );

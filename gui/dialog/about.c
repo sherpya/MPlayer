@@ -63,7 +63,7 @@ static GtkWidget * CreateAbout( void )
 
   About=gtk_window_new( GTK_WINDOW_TOPLEVEL );
   gtk_widget_set_usize( About,370,425 );
-  gtk_window_set_title( GTK_WINDOW( About ),MSGTR_GUI_AboutMPlayer );
+  gtk_window_set_title( GTK_WINDOW( About ),_(MSGTR_GUI_AboutMPlayer) );
   gtk_window_set_position( GTK_WINDOW( About ),GTK_WIN_POS_CENTER );
   gtk_window_set_policy( GTK_WINDOW( About ),FALSE,FALSE,TRUE );
   gtk_window_set_wmclass( GTK_WINDOW( About ),"About",MPlayer );
@@ -323,16 +323,16 @@ static GtkWidget * CreateAbout( void )
     "     • Andrew Weber\n"
     "     • Gary Jr. Whitmore\n"
     "     • Franciszek Wilamowski\n"
-    "     • Michael Zeising", MSGTR_GUI_Sponsored,
-                              MSGTR_GUI_Contributors,
-                              MSGTR_GUI_CodecsAndLibraries,
-                              MSGTR_GUI_Translations,
-                              MSGTR_GUI_Skins);
+    "     • Michael Zeising", _(MSGTR_GUI_Sponsored),
+                              _(MSGTR_GUI_Contributors),
+                              _(MSGTR_GUI_CodecsAndLibraries),
+                              _(MSGTR_GUI_Translations),
+                              _(MSGTR_GUI_Skins));
   gtk_text_buffer_insert(AboutTextBuffer, &iter, about, -1);
   g_free(about);
 
   gtkAddHSeparator( vbox );
-  Ok=gtkAddButton( MSGTR_GUI_Ok,gtkAddHButtonBox( vbox ) );
+  Ok=gtkAddButton( _(MSGTR_GUI_Ok),gtkAddHButtonBox( vbox ) );
 
   gtk_signal_connect( GTK_OBJECT( About ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&About );
   gtk_signal_connect_object( GTK_OBJECT( Ok ),"clicked",GTK_SIGNAL_FUNC( abWidgetDestroy ),NULL );

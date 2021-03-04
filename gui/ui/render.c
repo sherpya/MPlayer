@@ -86,7 +86,7 @@ static char *TranslateFilename(int how, char *fname, size_t maxlen)
             else if (len > 5 && fname[len - 5] == '.')
                 fname[len - 5] = 0;
         } else
-            av_strlcpy(fname, MSGTR_GUI_MSG_NoFileLoaded, maxlen);
+            av_strlcpy(fname, _(MSGTR_GUI_MSG_NoFileLoaded), maxlen);
 
         break;
 
@@ -97,27 +97,27 @@ static char *TranslateFilename(int how, char *fname, size_t maxlen)
 
     case STREAMTYPE_CDDA:
 
-        snprintf(fname, maxlen, MSGTR_GUI_TitleN, guiInfo.Track);
+        snprintf(fname, maxlen, _(MSGTR_GUI_TitleN), guiInfo.Track);
         break;
 
     case STREAMTYPE_VCD:
 
-        snprintf(fname, maxlen, MSGTR_GUI_TitleN, guiInfo.Track - 1);
+        snprintf(fname, maxlen, _(MSGTR_GUI_TitleN), guiInfo.Track - 1);
         break;
 
     case STREAMTYPE_DVD:
 
         if (guiInfo.Chapter)
-            snprintf(fname, maxlen, MSGTR_GUI_ChapterN, guiInfo.Chapter);
+            snprintf(fname, maxlen, _(MSGTR_GUI_ChapterN), guiInfo.Chapter);
         else
-            av_strlcpy(fname, MSGTR_GUI_NoChapter, maxlen);
+            av_strlcpy(fname, _(MSGTR_GUI_NoChapter), maxlen);
 
         break;
 
     case STREAMTYPE_TV:
     case STREAMTYPE_DVB:
 
-        p      = MSGTR_GUI_NoChannelName;
+        p      = _(MSGTR_GUI_NoChannelName);
         stream = mpctx_get_stream(guiInfo.mpcontext);
 
         if (stream)
@@ -129,7 +129,7 @@ static char *TranslateFilename(int how, char *fname, size_t maxlen)
     case STREAMTYPE_BINCUE:
 
         if (guiInfo.Track)
-            snprintf(fname, maxlen, MSGTR_GUI_TitleN, guiInfo.Track - guiInfo.Angles);
+            snprintf(fname, maxlen, _(MSGTR_GUI_TitleN), guiInfo.Track - guiInfo.Angles);
         else
             *fname = 0;
 
@@ -137,7 +137,7 @@ static char *TranslateFilename(int how, char *fname, size_t maxlen)
 
     default:
 
-        av_strlcpy(fname, MSGTR_GUI_MSG_NoMediaOpened, maxlen);
+        av_strlcpy(fname, _(MSGTR_GUI_MSG_NoMediaOpened), maxlen);
         break;
     }
 

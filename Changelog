@@ -13,6 +13,8 @@ MPlayer
     * Use correct visual in OpenGL video output driver for X11
     * Provide a built-in skin so that the GUI can be used even
       without an installed skin
+    * Native Language Support, i.e. the GUI language can be changed
+      as specified in LC_MESSAGES or LANG
     * Minor bug fixes
 
     Other:

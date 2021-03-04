@@ -289,7 +289,7 @@ void uiPlaybarInit( void )
   {
    char msg[80] = "[playbar] ";
 
-   av_strlcat( msg, MSGTR_GUI_MSG_MemoryErrorWindow, sizeof(msg) );
+   av_strlcat( msg, _(MSGTR_GUI_MSG_MemoryErrorWindow), sizeof(msg) );
    gmp_msg( MSGT_GPLAYER, MSGL_FATAL, msg );
    mplayer( MPLAYER_EXIT_GUI, EXIT_ERROR, 0 );
   }

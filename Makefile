@@ -711,13 +711,15 @@ ADDSUFFIXES     = $(foreach suf,$(1),$(addsuffix $(suf),$(2)))
 ADD_ALL_DIRS    = $(call ADDSUFFIXES,$(1),$(ALL_DIRS))
 ADD_ALL_EXESUFS = $(1) $(call ADDSUFFIXES,$(EXESUFS_ALL),$(1))
 
+ALL_MSGS = $(foreach lang,$(filter-out $(firstword $(MSG_LANGS)),$(MSG_LANGS)),help/po/$(lang).mo)
+
 GUI_ICONSIZES = 16x16 22x22 24x24 32x32 48x48 256x256
 
 
 
 ###### generic rules #######
 
-all: $(ALL_PRG-yes)
+all: $(ALL_PRG-yes) $(ALL_MSGS)
 
 %.o: %.S
 	$(CC) $(CC_DEPFLAGS) $(CFLAGS) $(AS_C) $(AS_O) $<
@@ -774,6 +776,13 @@ helpcheck: $(addsuffix elpcheck,$(wildcard help/help_mp-*.h))
 help_mp.h: help/help_mp-en.h $(HELP_FILE)
 	help/help_create.sh $(HELP_FILE) $(CHARSET)
 
+help/po/%.po: help/help_mp-%.h help/help_mp-en.h
+	mkdir -p $(@D)
+	help/help_create_po.pl $< $@
+
+%.mo: %.po
+	msgfmt $< -o $@
+
 # rebuild version.h each time the working copy is updated
 version.h: version.sh $(wildcard .svn/entries .git/logs/HEAD)
 	./$< `$(CC) -dumpversion`
@@ -829,7 +838,7 @@ mpcommon.o osdep/mplayer-rc.o gui/dialog/about.o gui/win32/gui.o: version.h
 
 osdep/mplayer-rc.o: osdep/mplayer.exe.manifest
 
-gui/%: CFLAGS += -Wno-strict-prototypes
+gui/%: CFLAGS += -DLOCALEDIR=\"$(prefix)/share/locale\" -Wno-strict-prototypes
 
 loader/%: CFLAGS += -fno-omit-frame-pointer $(CFLAGS_NO_OMIT_LEAF_FRAME_POINTER)
 #loader/%: CFLAGS += -Ddbg_printf=__vprintf -DTRACE=__vprintf -DDETAILED_OUT
@@ -859,13 +868,14 @@ install-dirs:
 install-%: %$(EXESUF) install-dirs
 	$(INSTALL) -m 755 $(INSTALLSTRIP) $< $(BINDIR)
 
-install-gui: install-mplayer install-gui-icons
+install-gui: install-mplayer install-gui-icons install-gui-msg
 	-ln -sf mplayer$(EXESUF) $(BINDIR)/gmplayer$(EXESUF)
 	$(INSTALL) -d $(DATADIR)/skins $(prefix)/share/applications
 	$(INSTALL) -m 644 etc/mplayer.desktop $(prefix)/share/applications/
 
 install-gui-icons:    $(foreach size,$(GUI_ICONSIZES),install-gui-icon-$(size))
 install-gui-man:      $(foreach lang,$(MAN_LANGS),install-gui-man-$(lang))
+install-gui-msg:      $(foreach lang,$(filter-out $(firstword $(MSG_LANGS)),$(MSG_LANGS)),install-gui-msg-$(lang))
 install-mencoder-man: $(foreach lang,$(MAN_LANGS),install-mencoder-man-$(lang))
 install-mplayer-man:  $(foreach lang,$(MAN_LANGS),install-mplayer-man-$(lang))
 
@@ -890,6 +900,12 @@ install-gui-man-$(lang): install-mplayer-man-$(lang)
 	cd $(MANDIR)/$(lang)/man1/ && ln -sf mplayer.1 gmplayer.1
 endef
 
+define GUI_MSG_RULE
+install-gui-msg-$(lang): help/po/$(lang).mo
+	$(INSTALL) -d $(prefix)/share/locale/$(lang)/LC_MESSAGES
+	$(INSTALL) -m 644 help/po/$(lang).mo $(prefix)/share/locale/$(lang)/LC_MESSAGES/mplayer.mo
+endef
+
 define MENCODER_MAN_RULE
 install-mencoder-man-$(lang): install-mplayer-man-$(lang)
 	cd $(MANDIR)/$(lang)/man1 && ln -sf mplayer.1 mencoder.1
@@ -903,6 +919,7 @@ endef
 
 $(foreach size,$(GUI_ICONSIZES),$(eval $(GUI_ICON_RULE)))
 $(foreach lang,$(filter-out en,$(MAN_LANG_ALL)),$(eval $(GUI_MAN_RULE)))
+$(foreach lang,$(MSG_LANGS),$(eval $(GUI_MSG_RULE)))
 $(foreach lang,$(filter-out en,$(MAN_LANG_ALL)),$(eval $(MENCODER_MAN_RULE)))
 $(foreach lang,$(filter-out en,$(MAN_LANG_ALL)),$(eval $(MPLAYER_MAN_RULE)))
 
@@ -913,6 +930,7 @@ uninstall:
 	rm -f $(prefix)/share/applications/mplayer.desktop
 	rm -f $(MANDIR)/man1/mplayer.1 $(MANDIR)/man1/mencoder.1 $(MANDIR)/man1/gmplayer.1
 	rm -f $(foreach lang,$(MAN_LANGS),$(foreach man,mplayer.1 mencoder.1 gmplayer.1,$(MANDIR)/$(lang)/man1/$(man)))
+	rm -f $(foreach lang,$(MSG_LANGS),$(prefix)/share/locale/$(lang)/LC_MESSAGES/mplayer.mo)
 
 clean: testsclean toolsclean driversclean dhahelperclean
 	-$(MAKE) -C ffmpeg $@
@@ -922,7 +940,7 @@ clean: testsclean toolsclean driversclean dhahelperclean
 	-rm -f $(VIDIX_PCI_FILES)
 	-rm -f $(call ADD_ALL_EXESUFS,codec-cfg cpuinfo)
 	-rm -f codecs.conf.h help_mp.h version.h
-	-rm -rf DOCS/tech/doxygen DOCS/HTML
+	-rm -rf DOCS/tech/doxygen DOCS/HTML help/po
 
 distclean: clean
 	-$(MAKE) -C ffmpeg $@
@@ -1112,6 +1130,8 @@ dhahelperclean:
 .PHONY: all doxygen *install* *tools drivers dhahelper*
 .PHONY: checkheaders *clean tests check_checksums fatetest helpcheck
 .PHONY: doc html-chunked* html-single* xmllint*
+
+.SECONDARY: $(patsubst %.mo,%.po,$(ALL_MSGS))
 
 # Disable suffix rules.  Most of the builtin rules are suffix rules,
 # so this saves some time on slow systems.

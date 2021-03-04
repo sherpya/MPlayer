@@ -547,12 +547,15 @@ Language options:
   --language-man=lang    language to use for the man pages [en]
   --language-msg=lang    language to use for the messages and the GUI [en]
   --language=lang        default language to use [en]
+  --disable-nls          disable Native Language Support (GUI only) [autodetect]
 Specific options override --language. You can pass a list of languages separated
 by whitespace or commas instead of a single language. Nonexisting translations
 will be dropped from each list. All documentation and man page translations
-available in the list will be installed, for the messages the first available
-translation will be used. The value "all" will activate all translations. The
-LINGUAS environment variable is honored. In all cases the fallback is English.
+available in the list will be installed. This also applies to the messages,
+unless --disable-nls is specified or autodetected, in which case the first
+available translation will be used. The value "all" will activate all
+translations. The LINGUAS environment variable is honored. In all cases the
+fallback is English.
 Available values are: all $msg_lang_all
 
 Miscellaneous options:
@@ -823,6 +826,7 @@ _lircc=auto
 _apple_remote=auto
 _apple_ir=auto
 _gui=no
+_nls=auto
 _termcap=auto
 _termios=auto
 _3dfx=no
@@ -1303,6 +1307,8 @@ for ac_option do
   --disable-apple-ir)   _apple_ir=no    ;;
   --enable-gui)         _gui=yes        ;;
   --disable-gui)        _gui=no         ;;
+  --enable-nls)         _nls=yes        ;;
+  --disable-nls)        _nls=no         ;;
   --enable-termcap)     _termcap=yes    ;;
   --disable-termcap)    _termcap=no     ;;
   --enable-termios)     _termios=yes    ;;
@@ -3479,6 +3485,38 @@ fi
 echores "$_langinfo"
 
 
+echocheck "NLS"
+test "$_nls" = auto && _nls="$_gui"
+if test "$_nls" = yes -a "$_gui" = no; then
+  _nls=no
+  res_comment="disabled because --enable-gui not specified"
+fi
+if test "$_nls" = yes; then
+  def_nls='#define ENABLE_NLS 1'
+else
+  def_nls='#undef ENABLE_NLS'
+fi
+echores "$_nls"
+
+
+if test "$_nls" = yes; then
+  echocheck "Perl"
+  if test -z "$(which perl)"; then
+    echores "no"
+    echo "configure error: Perl not found; required for NLS"
+    exit 1
+  fi
+  echores "$_nls"
+  echocheck "msgfmt"
+  if test -z "$(which msgfmt)"; then
+    echores "no"
+    echo "configure error: msgfmt not found; required for NLS"
+    exit 1
+  fi
+  echores "$_nls"
+fi
+
+
 echocheck "language"
 # Set preferred languages, "all" uses English as main language.
 test -z "$language" && language=$LINGUAS
@@ -3491,10 +3529,12 @@ language_msg=$(echo $language_msg | tr , " ")
 
 test "$language_doc" = "all" && language_doc=$doc_lang_all
 test "$language_man" = "all" && language_man=$man_lang_all
-test "$language_msg" = "all" && language_msg=en
+if test "$language_msg" = "all"; then
+  test "$_nls" = yes && language_msg=$msg_lang_all || language_msg=en
+fi
 
 # Prune non-existing translations from language lists.
-# Set message translation to the first available language.
+# If NLS is disabled, set message translation to the first available language.
 # Fall back on English.
 for lang in $language_doc ; do
   test -d DOCS/xml/$lang && tmp_language_doc="$tmp_language_doc $lang"
@@ -3509,11 +3549,31 @@ language_man=$tmp_language_man
 test -z "$language_man" && language_man=en
 
 for lang in $language_msg ; do
-  test -f "help/help_mp-${lang}.h" && tmp_language_msg=$lang && break
+  if test -f "help/help_mp-${lang}.h"; then
+    if test "$_nls" = no; then
+      tmp_en=yes
+      tmp_language_msg=$lang
+      language_msg_main=$lang
+      break
+    else # _nls, and if more than one language then English is main and must come first
+      test -n "$tmp_language_msg" && language_msg_main=en
+      if test "$lang" = en; then
+        tmp_en=yes
+        tmp_language_msg="$lang $tmp_language_msg"
+      else
+        tmp_language_msg="$tmp_language_msg $lang"
+      fi
+      test -z "$language_msg_main" && language_msg_main=$lang
+    fi
+  fi
 done
 language_msg=$tmp_language_msg
-test -z "$language_msg" && language_msg=en
-_mp_help="help/help_mp-${language_msg}.h"
+test "$language_msg_main" = en -a -z "$tmp_en" && language_msg="en $language_msg"
+test -z "$language_msg" && language_msg=en && language_msg_main=en
+_mp_help="help/help_mp-${language_msg_main}.h"
+language_doc=$(echo $language_doc | tr -s " ")
+language_man=$(echo $language_man | tr -s " ")
+language_msg=$(echo $language_msg | tr -s " ")
 echores "messages: $language_msg - man pages: $language_man - documentation: $language_doc"
 
 
@@ -8602,6 +8662,7 @@ DOC_LANGS = $language_doc
 DOC_LANG_ALL = $doc_lang_all
 MAN_LANGS = $language_man
 MAN_LANG_ALL = $man_lang_all
+MSG_LANGS = $language_msg
 
 CATALOG = $catalog
 XMLLINT_COMMAND = xmllint --noout --noent --postvalid $catalog_opts
@@ -9172,6 +9233,7 @@ $def_debug
 $def_dynamic_plugins
 $def_fastmemcpy
 $def_menu
+$def_nls
 $def_runtime_cpudetection
 $def_sighandler
 $def_sortsub

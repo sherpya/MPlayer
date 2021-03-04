@@ -21,6 +21,9 @@ MPlayer
       e.g. Raspbian not using NEON by default.
       Can use --enable-runtime-cpudetection to restore the previous
       behaviour, though full runtime CPU detection is not supported.
+    * New configure option --enable-nls for Native Language Support at
+      runtime (for the moment only for the GUI and enabled by default
+      for it)
 
   1.4: "SubCounter" April 18, 2019
 

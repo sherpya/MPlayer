@@ -3499,24 +3499,6 @@ fi
 echores "$_nls"
 
 
-if test "$_nls" = yes; then
-  echocheck "Perl"
-  if test -z "$(which perl)"; then
-    echores "no"
-    echo "configure error: Perl not found; required for NLS"
-    exit 1
-  fi
-  echores "$_nls"
-  echocheck "msgfmt"
-  if test -z "$(which msgfmt)"; then
-    echores "no"
-    echo "configure error: msgfmt not found; required for NLS"
-    exit 1
-  fi
-  echores "$_nls"
-fi
-
-
 echocheck "language"
 # Set preferred languages, "all" uses English as main language.
 test -z "$language" && language=$LINGUAS
@@ -3575,6 +3557,24 @@ language_doc=$(echo $language_doc | tr -s " ")
 language_man=$(echo $language_man | tr -s " ")
 language_msg=$(echo $language_msg | tr -s " ")
 echores "messages: $language_msg - man pages: $language_man - documentation: $language_doc"
+
+
+if test "$_nls" = yes && $(echo "$language_msg" | grep -q " "); then
+  echocheck "Perl"
+  if test -z "$(which perl)"; then
+    echores "no"
+    echo "configure error: Perl not found; required for NLS"
+    exit 1
+  fi
+  echores "$_nls"
+  echocheck "msgfmt"
+  if test -z "$(which msgfmt)"; then
+    echores "no"
+    echo "configure error: msgfmt not found; required for NLS"
+    exit 1
+  fi
+  echores "$_nls"
+fi
 
 
 echocheck "enable sighandler"

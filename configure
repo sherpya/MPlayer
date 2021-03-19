@@ -423,6 +423,7 @@ Codecs:
   --disable-ffmpeg_a        disable static FFmpeg [autodetect]
   --disable-ffmpeg_so       disable shared FFmpeg [autodetect]
   --disable-postproc        disable libpostproc [autodetect]
+  --disable-libxml2         disable XML handling, for DASH streams [autodetect]
   --enable-vf-lavfi         enable libavfilter wrapper [disabled]
   --disable-libavcodec_mpegaudio_hp disable high precision audio decoding
                                     in libavcodec [enabled]
@@ -683,6 +684,7 @@ _prefix="/usr/local"
 ffmpeg_a=auto
 ffmpeg_so=auto
 postproc=auto
+_libxml2=auto
 _vf_lavfi=no
 _libavcodec_mpegaudio_hp=yes
 _libopencore_amrnb=auto
@@ -1292,6 +1294,8 @@ for ac_option do
   --disable-ffmpeg_so)  ffmpeg_so=no    ;;
   --enable-postproc)    postproc=yes    ;;
   --disable-postproc)   postproc=no     ;;
+  --enable-libxml2)     _libxml2=yes    ;;
+  --disable-libxml2)    _libxml2=no     ;;
   --enable-vf-lavfi)    _vf_lavfi=yes   ;;
   --disable-vf-lavfi)   _vf_lavfi=no    ;;
   --enable-libavcodec_mpegaudio_hp)     _libavcodec_mpegaudio_hp=yes    ;;
@@ -1658,7 +1662,7 @@ libavfilters=$(echo $libavfilters_all)
 libavdecoders=$(filter_out_component decoder 'LIB[A-Z0-9_]* [A-Z0-9]*_QSV [A-Z0-9]*_MMAL [A-Z0-9]*_MEDIACODEC [A-Z0-9]*_CUVID [A-Z0-9_]*_AT [A-Z0-9]*_RKMPP [A-Z0-9]*_V4L2M2M')
 libavencoders=$(filter_out_component encoder 'LIB[A-Z0-9_]* [A-Z0-9]*_QSV [A-Z0-9]*_MMAL NVENC[A-Z0-9_]* H264_NVENC[A-Z0-9_]* HEVC_NVENC[A-Z0-9_]* HAP [A-Z0-9]*_VIDEOTOOLBOX [A-Z0-9]*_VAAPI [A-Z0-9]*_OMX [A-Z0-9_]*_AT [A-Z0-9]*_V4L2M2M [A-Z0-9]*_AMF [A-Z0-9]*_MF')
 libavbsfs=$(filter_out_component bsf 'TRACE_HEADERS [A-Z0-9_]*_METADATA H264_REDUNDANT_PPS FILTER_UNITS')
-libavdemuxers=$(filter_out_component demuxer 'AVISYNTH DASH LIB[A-Z0-9_]* REDIR VAPOURSYNTH')
+libavdemuxers=$(filter_out_component demuxer 'AVISYNTH LIB[A-Z0-9_]* REDIR VAPOURSYNTH')
 libavmuxers=$(filter_out_component muxer 'CHROMAPRINT LIB[A-Z0-9_]* RTP RTSP SAP')
 libavprotocols=$(filter_out_component protocol 'BLURAY FFRTMPCRYPT HTTPS LIB[A-Z0-9_]* TLS TLS_GNUTLS TLS_OPENSSL TLS_SECURETRANSPORT TLS_SCHANNEL')
 libavfilters=$(filter_out_component filter 'VF_FREI0R[A-Z0-9_]* LIB[A-Z0-9_]* MP VF_OCV')
@@ -7508,6 +7512,34 @@ else
   def_postproc='#undef CONFIG_POSTPROC'
 fi
 echores "$postproc"
+
+
+echocheck "libxml2"
+if test "$_libxml2" = auto ; then
+    _libxml2=no
+    if test "$ffmpeg_a" = yes && $_pkg_config --exists libxml-2.0 ; then
+            cat > $TMPC << EOF
+#include <libxml/xmlstring.h>
+int main(void) {
+  xmlChar *str = "";
+  return xmlStrlen(str);
+}
+EOF
+        inc_tmp=$($_pkg_config --cflags libxml-2.0)
+        ld_tmp=$($_pkg_config --libs libxml-2.0)
+        cc_check $inc_tmp $ld_tmp && _libxml2=yes
+        if test "$_libxml2" = yes; then
+            extra_cflags="$extra_cflags $inc_tmp"
+            extra_ldflags="$extra_ldflags $ld_tmp"
+        fi
+    else
+        test "$ffmpeg_a" = no && res_comment="dynamic linking to libxml2 is irrelevant when using dynamic FFmpeg"
+    fi
+fi
+if test "$_libxml2" = "no" ; then
+    libavdemuxers=$(filter_out_component demuxer 'DASH')
+fi
+echores "$_libxml2"
 
 
 echocheck "libopencore_amr narrowband"

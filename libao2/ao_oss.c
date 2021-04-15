@@ -469,7 +469,8 @@ static void reset(void){
     }
     fail |= ioctl (audio_fd, SNDCTL_DSP_SPEED, &ao_data.samplerate) == -1;
   }
-  mp_msg(MSGT_AO,MSGL_WARN, "OSS: Reset failed\n");
+  if (fail)
+    mp_msg(MSGT_AO,MSGL_WARN, "OSS: Reset failed\n");
 }
 
 // stop playing, keep buffers (for pause)

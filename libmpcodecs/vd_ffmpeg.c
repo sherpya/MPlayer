@@ -902,7 +902,7 @@ static mp_image_t *decode(sh_video_t *sh, void *data, int len, int flags){
     pkt.size = len;
     // Necessary to decode e.g. CorePNG and ZeroCodec correctly
     pkt.flags = (sh->ds->flags & 1) ? AV_PKT_FLAG_KEY : 0;
-    av_packet_split_side_data(&pkt);
+    mp_packet_split_side_data(&pkt);
     if (av_packet_get_side_data(&pkt, AV_PKT_DATA_PALETTE, NULL))
         ctx->palette_sent = 1;
     if (!ctx->palette_sent && sh->bih && sh->bih->biBitCount <= 8) {
@@ -977,6 +977,8 @@ static mp_image_t *decode(sh_video_t *sh, void *data, int len, int flags){
 
         // average MB quantizer
         {
+// TODO: still possible in new FFmpeg API?
+#if 0
             int x, y;
             int w = ((avctx->width  << lavc_param_lowres)+15) >> 4;
             int h = ((avctx->height << lavc_param_lowres)+15) >> 4;
@@ -989,6 +991,7 @@ static mp_image_t *decode(sh_video_t *sh, void *data, int len, int flags){
                 q += qstride;
             }
             quality /= w * h;
+#endif
         }
 
         all_len+=len;
@@ -1079,7 +1082,8 @@ static mp_image_t *decode(sh_video_t *sh, void *data, int len, int flags){
         swap_palette(mpi->planes[1]);
 #endif
 /* to comfirm with newer lavc style */
-    mpi->qscale = av_frame_get_qp_table(pic, &mpi->qstride, &mpi->qscale_type);
+// TODO: still possible in new FFmpeg API?
+//    mpi->qscale = av_frame_get_qp_table(pic, &mpi->qstride, &mpi->qscale_type);
     mpi->pict_type=pic->pict_type;
     mpi->fields = MP_IMGFIELD_ORDERED;
     if(pic->interlaced_frame) mpi->fields |= MP_IMGFIELD_INTERLACED;

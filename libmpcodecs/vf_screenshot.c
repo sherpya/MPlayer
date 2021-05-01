@@ -49,10 +49,9 @@ struct vf_priv_s {
     int shot, store_slices;
     int dw, dh;
     AVFrame *pic;
+    AVPacket *pkt;
     struct SwsContext *ctx;
     AVCodecContext *avctx;
-    uint8_t *outbuffer;
-    int outbuffer_size;
 };
 
 //===========================================================================//
@@ -75,7 +74,6 @@ static int config(struct vf_instance *vf,
     vf->priv->ctx=sws_getContextFromCmdLine(width, height, outfmt,
                                  d_width, d_height, IMGFMT_RGB24);
 
-    av_fast_malloc(&vf->priv->outbuffer, &vf->priv->outbuffer_size, d_width * d_height * 3 * 2);
     if (!vf->priv->avctx) {
         vf->priv->avctx = avcodec_alloc_context3(NULL);
         vf->priv->avctx->pix_fmt = AV_PIX_FMT_RGB24;
@@ -106,17 +104,21 @@ static void write_png(struct vf_priv_s *priv)
 {
     char *fname = priv->fname;
     FILE * fp;
-    AVPacket pkt;
-    int res, got_pkt;
+    AVPacket *pkt = priv->pkt;
+    int res;
 
-    av_init_packet(&pkt);
-    pkt.data = priv->outbuffer;
-    pkt.size = priv->outbuffer_size;
     priv->pic->width = priv->avctx->width;
     priv->pic->height = priv->avctx->height;
     priv->pic->format = priv->avctx->pix_fmt;
-    res = avcodec_encode_video2(priv->avctx, &pkt, priv->pic, &got_pkt);
-    if (res < 0 || !got_pkt || pkt.size <= 0) {
+    res = avcodec_send_frame(priv->avctx, priv->pic);
+    if (res >= 0) {
+        res = avcodec_receive_packet(priv->avctx, pkt);
+        if (res == AVERROR(EAGAIN)) {
+            avcodec_send_frame(priv->avctx, NULL);
+            res = avcodec_receive_packet(priv->avctx, pkt);
+        }
+    }
+    if (res < 0 || pkt->size <= 0) {
         mp_msg(MSGT_VFILTER,MSGL_ERR,"\nFailed to encode screenshot %s!\n", fname);
         return;
     }
@@ -127,7 +129,8 @@ static void write_png(struct vf_priv_s *priv)
         return;
     }
 
-    fwrite(priv->outbuffer, pkt.size, 1, fp);
+    fwrite(pkt->data, pkt->size, 1, fp);
+    av_packet_unref(pkt);
 
     fclose (fp);
     mp_msg(MSGT_VFILTER,MSGL_INFO,"*** screenshot '%s' ***\n",priv->fname);
@@ -281,7 +284,7 @@ static void uninit(vf_instance_t *vf)
     if(vf->priv->ctx) sws_freeContext(vf->priv->ctx);
     av_freep(&vf->priv->pic->data[0]);
     av_frame_free(&vf->priv->pic);
-    av_freep(&vf->priv->outbuffer);
+    av_packet_free(&vf->priv->pkt);
     free(vf->priv->prefix);
     free(vf->priv);
 }
@@ -298,8 +301,8 @@ static int vf_open(vf_instance_t *vf, char *args)
     vf->uninit=uninit;
     vf->priv = calloc(1, sizeof(struct vf_priv_s));
     vf->priv->pic = av_frame_alloc();
+    vf->priv->pkt = av_packet_alloc();
     vf->priv->prefix = strdup(args ? args : "shot");
-    avcodec_register_all();
     if (!avcodec_find_encoder(AV_CODEC_ID_PNG)) {
         mp_msg(MSGT_VFILTER, MSGL_FATAL, "Could not find libavcodec PNG encoder\n");
         return 0;

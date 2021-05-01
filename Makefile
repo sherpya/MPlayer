@@ -71,7 +71,9 @@ SRCS_COMMON-$(CONFIG_VF_LAVFI)      +=  libmpcodecs/vf_lavfi.c
 SRCS_COMMON-$(FFMPEG_A)              += libmpcodecs/vf_fspp.c           \
                                         libmpcodecs/vf_qp.c             \
                                         libmpcodecs/vf_spp.c            \
-                                        libmpcodecs/vf_uspp.c           \
+
+# needs update for missing coded_frame
+#libmpcodecs/vf_uspp.c           \
 
 SRCS_COMMON-$(FREETYPE)              += sub/font_load_ft.c
 SRCS_COMMON-$(FTP)                   += stream/stream_ftp.c

@@ -197,7 +197,7 @@ static const vf_info_t* const filter_list[]={
     &vf_info_hue,
 #ifdef CONFIG_FFMPEG_A
     &vf_info_spp,
-    &vf_info_uspp,
+//    &vf_info_uspp, // TODO: does not currently build
     &vf_info_fspp,
     &vf_info_qp,
 //    &vf_info_mcdeint, //TODO: vf_mcdeint is deactivated because it doesn't build after latest FFmpeg major bumps

@@ -68,7 +68,7 @@ const m_option_t lavfdopts_conf[] = {
 #define BIO_BUFFER_SIZE 32768
 
 typedef struct lavf_priv {
-    AVInputFormat *avif;
+    const AVInputFormat *avif;
     AVFormatContext *avfc;
     AVIOContext *pb;
     int audio_streams;
@@ -366,7 +366,7 @@ static void handle_stream(demuxer_t *demuxer, AVFormatContext *avfc, int i) {
             if (demuxer->audio->id != i)
                 st->discard= AVDISCARD_ALL;
             if (priv->audio_streams == 0) {
-                int rg_size;
+                size_t rg_size;
                 AVReplayGain *rg = (AVReplayGain*)av_stream_get_side_data(st, AV_PKT_DATA_REPLAYGAIN, &rg_size);
                 if (rg && rg_size >= sizeof(*rg)) {
                     priv->r_gain = rg->track_gain / 10000;
@@ -420,9 +420,12 @@ static void handle_stream(demuxer_t *demuxer, AVFormatContext *avfc, int i) {
             if (st->time_base.den) { /* if container has time_base, use that */
                 sh_video->video.dwRate= st->time_base.den;
                 sh_video->video.dwScale= st->time_base.num;
+#if 0
             } else {
+                // not available in latest FFmpeg API, ok to just remove?
                 sh_video->video.dwRate= st->codec->time_base.den;
                 sh_video->video.dwScale= st->codec->time_base.num;
+#endif
             }
             sh_video->fps=av_q2d(st->r_frame_rate);
             sh_video->frametime=1/av_q2d(st->r_frame_rate);
@@ -527,7 +530,7 @@ static void handle_stream(demuxer_t *demuxer, AVFormatContext *avfc, int i) {
             st->discard= AVDISCARD_ALL;
     }
     if (stream_type) {
-        AVCodec *avc = avcodec_find_decoder(codec->codec_id);
+        const AVCodec *avc = avcodec_find_decoder(codec->codec_id);
         const char *codec_name = avc ? avc->name : "unknown";
         if (!avc && *stream_type == 's' && demuxer->s_streams[i])
             codec_name = sh_sub_type2str(((sh_sub_t *)demuxer->s_streams[i])->type);
@@ -602,7 +605,6 @@ static demuxer_t* demux_open_lavf(demuxer_t *demuxer){
         avfc->pb = priv->pb;
     }
 
-    av_dict_set(&opts, "fflags", "+keepside", 0);
     if(avformat_open_input(&avfc, mp_filename, priv->avif, &opts)<0){
         mp_msg(MSGT_HEADER,MSGL_ERR,"LAVF_header: av_open_input_stream() failed\n");
         return NULL;
@@ -707,7 +709,7 @@ static int demux_lavf_fill_buffer(demuxer_t *demux, demux_stream_t *dsds){
         }
         sh = ds->sh;
         if (sh && sh->bih) {
-            int size = 0;
+            size_t size = 0;
             const uint8_t *pal = av_packet_get_side_data(&pkt, AV_PKT_DATA_PALETTE, &size);
             if (pal && size)
                 memcpy(((uint8_t *)sh->bih) + sh->bih->biSize, pal, FFMIN(size, 1024));
@@ -721,7 +723,7 @@ static int demux_lavf_fill_buffer(demuxer_t *demux, demux_stream_t *dsds){
         return 1;
     }
 
-        av_packet_merge_side_data(&pkt);
+        mp_packet_merge_side_data(&pkt);
         dp=new_demux_packet(pkt.size);
         memcpy(dp->buffer, pkt.data, pkt.size);
 

@@ -22,9 +22,13 @@
 #define MPLAYER_AV_HELPERS_H
 
 struct AVCodecContext;
+struct AVFrame;
+struct AVPacket;
 
 void init_avcodec(void);
 void init_avformat(void);
 int lavc_encode_audio(struct AVCodecContext *ctx, void *src, int src_len, void *dst, int dst_len);
+int mp_packet_merge_side_data(struct AVPacket *pkt);
+int mp_packet_split_side_data(struct AVPacket *pkt);
 
 #endif /* MPLAYER_AV_HELPERS_H */

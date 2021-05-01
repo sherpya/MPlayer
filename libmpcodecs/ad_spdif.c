@@ -126,7 +126,7 @@ static int init(sh_audio_t *sh)
     lavf_ctx->start_time = AV_NOPTS_VALUE;
     for (i = 0; fmt_id_type[i].name; i++) {
         if (!strcmp(codec_idx2str(sh->codec->dll_idx), fmt_id_type[i].name)) {
-            lavf_ctx->streams[0]->codec->codec_id = fmt_id_type[i].id;
+            lavf_ctx->streams[0]->codecpar->codec_id = fmt_id_type[i].id;
             break;
         }
     }
@@ -161,7 +161,7 @@ static int init(sh_audio_t *sh)
     }
     sh->ds->buffer_pos -= in_size;
 
-    switch (lavf_ctx->streams[0]->codec->codec_id) {
+    switch (lavf_ctx->streams[0]->codecpar->codec_id) {
     case AV_CODEC_ID_AAC:
         spdif_ctx->iec61937_packet_size = 16384;
         sh->sample_format               = AF_FORMAT_IEC61937_LE;

@@ -43,9 +43,9 @@ static void avsub_to_spudec(AVSubtitleRect **rects, int num_rects,
 
     if (num_rects == 1) {
         spudec_set_paletted(vo_spudec,
-                            rects[0]->pict.data[0],
-                            rects[0]->pict.linesize[0],
-                            rects[0]->pict.data[1],
+                            rects[0]->data[0],
+                            rects[0]->linesize[0],
+                            rects[0]->data[1],
                             rects[0]->x,
                             rects[0]->y,
                             rects[0]->w,
@@ -66,9 +66,9 @@ static void avsub_to_spudec(AVSubtitleRect **rects, int num_rects,
     spudec_packet_clear(packet);
     for (i = 0; i < num_rects; i++)
         spudec_packet_fill(packet,
-                           rects[i]->pict.data[0],
-                           rects[i]->pict.linesize[0],
-                           rects[i]->pict.data[1],
+                           rects[i]->data[0],
+                           rects[i]->linesize[0],
+                           rects[i]->data[1],
                            rects[i]->x - xmin,
                            rects[i]->y - ymin,
                            rects[i]->w,
@@ -105,7 +105,7 @@ int decode_avsub(struct sh_sub *sh, uint8_t **data, int *size,
     pkt.size = *size;
     pkt.pts = *pts * 1000;
     if (*pts != MP_NOPTS_VALUE && *endpts != MP_NOPTS_VALUE)
-        pkt.convergence_duration = (*endpts - *pts) * 1000;
+        pkt.duration = (*endpts - *pts) * 1000;
     if (!ctx) {
         AVCodec *sub_codec;
         init_avcodec();

@@ -112,7 +112,7 @@ static muxer_stream_t* lavf_new_stream(muxer_t *muxer, int type)
 	muxer_priv_t *priv = muxer->priv;
 	muxer_stream_t *stream;
 	muxer_stream_priv_t *spriv;
-	AVCodecContext *ctx;
+	AVCodecParameters *ctx;
 
 	if(type != MUXER_TYPE_VIDEO && type != MUXER_TYPE_AUDIO)
 	{
@@ -154,7 +154,7 @@ static muxer_stream_t* lavf_new_stream(muxer_t *muxer, int type)
 	}
 	spriv->avstream->id = 1;
 
-	ctx = spriv->avstream->codec;
+	ctx = spriv->avstream->codecpar;
 	ctx->codec_id = AV_CODEC_ID_NONE;
 	switch(type)
 	{
@@ -177,11 +177,9 @@ static muxer_stream_t* lavf_new_stream(muxer_t *muxer, int type)
 static void fix_parameters(muxer_stream_t *stream)
 {
 	muxer_stream_priv_t *spriv = stream->priv;
-	AVCodecContext *ctx = spriv->avstream->codec;
+	AVCodecParameters *ctx = spriv->avstream->codecpar;
 
         ctx->bit_rate= stream->avg_rate;
-        ctx->rc_buffer_size= stream->vbv_size;
-        ctx->rc_max_rate= stream->max_rate;
 
 	if(stream->type == MUXER_TYPE_AUDIO)
 	{
@@ -221,12 +219,12 @@ static void fix_parameters(muxer_stream_t *stream)
                     ctx->codec_tag= stream->bih->biCompression;
 		mp_msg(MSGT_MUXER, MSGL_INFO, "VIDEO CODEC ID: %d\n", ctx->codec_id);
 		if (stream->imgfmt)
-		    ctx->pix_fmt = imgfmt2pixfmt(stream->imgfmt);
+		    ctx->format = imgfmt2pixfmt(stream->imgfmt);
 		ctx->width = stream->bih->biWidth;
 		ctx->height = stream->bih->biHeight;
 		ctx->bit_rate = 800000;
-		ctx->time_base.den = stream->h.dwRate;
-		ctx->time_base.num = stream->h.dwScale;
+		spriv->avstream->time_base.den = stream->h.dwRate;
+		spriv->avstream->time_base.num = stream->h.dwScale;
 		if (stream->aspect)
 			ctx->sample_aspect_ratio =
 			spriv->avstream->sample_aspect_ratio = av_d2q(stream->aspect * ctx->height / ctx->width, 255);
@@ -319,9 +317,10 @@ static void write_trailer(muxer_t *muxer)
 }
 
 static void list_formats(void) {
-	AVOutputFormat *fmt;
+	void *i = NULL;
+	const AVOutputFormat *fmt;
 	mp_msg(MSGT_DEMUX, MSGL_INFO, "Available lavf output formats:\n");
-	for (fmt = av_oformat_next(NULL); fmt; fmt = av_oformat_next(fmt))
+	while ((fmt = av_muxer_iterate(&i)))
 		mp_msg(MSGT_DEMUX, MSGL_INFO, "%15s : %s\n", fmt->name, fmt->long_name);
 }
 
@@ -368,7 +367,7 @@ int muxer_init_muxer_lavf(muxer_t *muxer)
             const char *src = out_filename;
             if (!strncmp(out_filename, "ffmpeg://dummy://", 17)) src += 17;
             else if (!strncmp(out_filename, "ffmpeg://", 9)) src += 9;
-            av_strlcpy(priv->oc->filename, src, sizeof(priv->oc->filename));
+            priv->oc->url = av_strdup(src);
 	}
 	priv->oc->oformat = fmt;
 

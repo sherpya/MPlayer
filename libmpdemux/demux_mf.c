@@ -126,7 +126,7 @@ static demuxer_t* demux_open_mf(demuxer_t* demuxer){
 
 
   mf=open_mf(demuxer->stream->url + 5);
-  if(!mf) return NULL;
+  if(!mf || mf->nr_of_files == 0) return NULL;
 
   if(!mf_type){
     char* p=strrchr(mf->names[0],'.');

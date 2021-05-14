@@ -99,7 +99,7 @@ static float lavc_param_temporal_cplx_masking= 0.0;
 static float lavc_param_spatial_cplx_masking= 0.0;
 static float lavc_param_p_masking= 0.0;
 static int lavc_param_interlaced_dct= 0;
-static int lavc_param_prediction_method= FF_PRED_LEFT;
+static int lavc_param_prediction_method= 0; // method left (for some encoders)
 static int lavc_param_format= IMGFMT_YV12;
 static int lavc_param_debug= 0;
 static int lavc_param_psnr= 0;
@@ -122,7 +122,7 @@ static int lavc_param_umv= 0;
 static int lavc_param_obmc= 0;
 static int lavc_param_loop= 0;
 static int lavc_param_last_pred= 0;
-static int lavc_param_pre_me= 1;
+static int lavc_param_pre_me= 0;
 static int lavc_param_me_subpel_quality= 8;
 static int lavc_param_me_range= 0;
 static int lavc_param_coder= 0;
@@ -144,7 +144,7 @@ static int lavc_param_turbo = 0;
 static int lavc_param_skip_threshold=0;
 static int lavc_param_skip_factor=0;
 static int lavc_param_skip_exp=0;
-static int lavc_param_skip_cmp=0;
+static int lavc_param_skip_cmp = FF_CMP_DCTMAX;
 static int lavc_param_brd_scale = 0;
 static int lavc_param_bidir_refine = 0;
 static int lavc_param_video_global_header= 0;
@@ -344,9 +344,11 @@ static int config(struct vf_instance *vf,
     lavc_venc_context->qblur= lavc_param_vqblur;
     lavc_venc_context->max_b_frames= lavc_param_vmax_b_frames;
     lavc_venc_context->b_quant_factor= lavc_param_vb_qfactor;
-    lavc_venc_context->b_frame_strategy= lavc_param_vb_strategy;
+    if (lavc_param_vb_strategy)
+        av_dict_set_int(&opts, "b_strategy", lavc_param_vb_strategy, 0);
     lavc_venc_context->b_quant_offset= (int)(FF_QP2LAMBDA * lavc_param_vb_qoffset + 0.5);
-    lavc_venc_context->rtp_payload_size= lavc_param_packet_size;
+    if (lavc_param_packet_size)
+        av_dict_set_int(&opts, "ps", lavc_param_packet_size, 0);
     lavc_venc_context->strict_std_compliance= lavc_param_strict;
     lavc_venc_context->i_quant_factor= lavc_param_vi_qfactor;
     lavc_venc_context->i_quant_offset= (int)(FF_QP2LAMBDA * lavc_param_vi_qoffset + 0.5);
@@ -363,20 +365,29 @@ static int config(struct vf_instance *vf,
             lavc_param_rc_initial_buffer_occupancy;
     lavc_venc_context->debug= lavc_param_debug;
     lavc_venc_context->last_predictor_count= lavc_param_last_pred;
-    lavc_venc_context->pre_me= lavc_param_pre_me;
+    if (lavc_param_pre_me)
+        av_dict_set_int(&opts, "mepre", lavc_param_pre_me, 0);
     lavc_venc_context->me_pre_cmp= lavc_param_me_pre_cmp;
     lavc_venc_context->pre_dia_size= lavc_param_pre_dia_size;
     lavc_venc_context->me_subpel_quality= lavc_param_me_subpel_quality;
     lavc_venc_context->me_range= lavc_param_me_range;
-    lavc_venc_context->coder_type= lavc_param_coder;
-    lavc_venc_context->context_model= lavc_param_context;
-    lavc_venc_context->scenechange_threshold= lavc_param_sc_threshold;
-    lavc_venc_context->noise_reduction= lavc_param_noise_reduction;
+    if (lavc_param_coder)
+        av_dict_set_int(&opts, "coder", lavc_param_coder, 0);
+    if (lavc_param_context)
+        av_dict_set_int(&opts, "context", lavc_param_context, 0);
+    if (lavc_param_sc_threshold)
+        av_dict_set_int(&opts, "sc_threshold", lavc_param_sc_threshold, 0);
+    if (lavc_param_noise_reduction)
+        av_dict_set_int(&opts, "noise_reduction", lavc_param_noise_reduction, 0);
     lavc_venc_context->nsse_weight= lavc_param_nssew;
-    lavc_venc_context->frame_skip_threshold= lavc_param_skip_threshold;
-    lavc_venc_context->frame_skip_factor= lavc_param_skip_factor;
-    lavc_venc_context->frame_skip_exp= lavc_param_skip_exp;
-    lavc_venc_context->frame_skip_cmp= lavc_param_skip_cmp;
+    if (lavc_param_skip_threshold)
+        av_dict_set_int(&opts, "skip_threshold", lavc_param_skip_threshold, 0);
+    if (lavc_param_skip_factor)
+        av_dict_set_int(&opts, "skip_factor", lavc_param_skip_factor, 0);
+    if (lavc_param_skip_exp)
+        av_dict_set_int(&opts, "skip_exp", lavc_param_skip_exp, 0);
+    if (lavc_param_skip_cmp != FF_CMP_DCTMAX)
+        av_dict_set_int(&opts, "skip_cmp", lavc_param_skip_cmp, 0);
 
     if (lavc_param_intra_matrix)
     {
@@ -444,7 +455,8 @@ static int config(struct vf_instance *vf,
     }
     lavc_venc_context->rc_override_count=i;
 
-    lavc_venc_context->mpeg_quant=lavc_param_mpeg_quant;
+    if (lavc_param_mpeg_quant)
+        av_dict_set_int(&opts, "mpeg_quant", lavc_param_mpeg_quant, 0);
 
     lavc_venc_context->dct_algo= lavc_param_fdct;
     lavc_venc_context->idct_algo= lavc_param_idct;
@@ -534,8 +546,10 @@ static int config(struct vf_instance *vf,
     if(lavc_param_interlaced_dct) lavc_venc_context->flags|= AV_CODEC_FLAG_INTERLACED_DCT;
     lavc_venc_context->flags|= lavc_param_psnr;
     lavc_venc_context->intra_dc_precision = lavc_param_dc_precision - 8;
-    lavc_venc_context->prediction_method= lavc_param_prediction_method;
-    lavc_venc_context->brd_scale = lavc_param_brd_scale;
+    if (lavc_param_prediction_method)
+        av_dict_set_int(&opts, "pred", lavc_param_prediction_method, 0);
+    if (lavc_param_brd_scale)
+        av_dict_set_int(&opts, "brd_scale", lavc_param_brd_scale, 0);
     lavc_venc_context->bidir_refine = lavc_param_bidir_refine;
     if((lavc_param_video_global_header&1)
        /*|| (video_global_header==0 && (oc->oformat->flags & AVFMT_GLOBALHEADER))*/){
@@ -546,7 +560,8 @@ static int config(struct vf_instance *vf,
     }
     lavc_venc_context->mv0_threshold = lavc_param_mv0_threshold;
     lavc_venc_context->refs = lavc_param_refs;
-    lavc_venc_context->b_sensitivity = lavc_param_b_sensitivity;
+    if (lavc_param_b_sensitivity != 40)
+        av_dict_set_int(&opts, "b_sensitivity", lavc_param_b_sensitivity, 0);
     lavc_venc_context->level = lavc_param_level;
 
     if(lavc_param_avopt){
@@ -611,7 +626,7 @@ static int config(struct vf_instance *vf,
 	  lavc_venc_context->pre_dia_size = 0;
 	  lavc_venc_context->dia_size = 1;
 
-	  lavc_venc_context->noise_reduction = 0; // nr=0
+	  av_dict_set(&opts, "noise_reduction", "0", 0); // nr=0
 	  lavc_venc_context->mb_decision = 0; // mbd=0 ("realtime" encoding)
 
 	  lavc_venc_context->flags &= ~AV_CODEC_FLAG_QPEL;

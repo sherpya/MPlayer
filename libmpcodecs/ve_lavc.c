@@ -297,7 +297,8 @@ struct vf_priv_s {
     AVCodecContext *context;
     AVFrame *pic;
     int coded_picture_number;
-    AVCodec *codec;
+    const AVCodec *codec;
+    AVPacket *pkt;
     FILE *stats_file;
 };
 
@@ -736,8 +737,8 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
 static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
     const char pict_type_char[5]= {'?', 'I', 'P', 'B', 'S'};
     double dts;
-    AVPacket pkt;
-    int res, got_pkt;
+    AVPacket *pkt= vf->priv->pkt;
+    int res;
 
     if(pts == MP_NOPTS_VALUE)
         pts= lavc_venc_context->frame_number * av_q2d(lavc_venc_context->time_base);
@@ -753,10 +754,12 @@ static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
             pic->pts= MP_NOPTS_VALUE;
 #endif
     }
-    av_init_packet(&pkt);
-    pkt.data = mux_v->buffer;
-    pkt.size = mux_v->buffer_size;
-    res = avcodec_encode_video2(lavc_venc_context, &pkt, pic, &got_pkt);
+    res = avcodec_send_frame(lavc_venc_context, pic);
+    if (res < 0 && res != AVERROR(EAGAIN) && res != AVERROR_EOF)
+        return res;
+    res = avcodec_receive_packet(lavc_venc_context, pkt);
+    if (res < 0 && res != AVERROR(EAGAIN))
+        return res == AVERROR_EOF ? 0 : res;
 
     /* store stats if there are any */
     if(lavc_venc_context->stats_out && stats_file) {
@@ -765,20 +768,20 @@ static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
         lavc_venc_context->stats_out[0] = 0;
     }
 
-    if (res < 0)
-        return 0;
-    if(!got_pkt && lavc_param_skip_threshold==0 && lavc_param_skip_factor==0){
+    if(res == AVERROR(EAGAIN) && lavc_param_skip_threshold==0 && lavc_param_skip_factor==0){
         ++mux_v->encoder_delay;
         return 0;
     }
 
     dts = pts = MP_NOPTS_VALUE;
-    if (pkt.pts != AV_NOPTS_VALUE)
-        pts = pkt.pts * av_q2d(lavc_venc_context->time_base);
-    if (pkt.dts != AV_NOPTS_VALUE)
-        dts = pkt.dts * av_q2d(lavc_venc_context->time_base);
+    if (pkt->pts != AV_NOPTS_VALUE)
+        pts = pkt->pts * av_q2d(lavc_venc_context->time_base);
+    if (pkt->dts != AV_NOPTS_VALUE)
+        dts = pkt->dts * av_q2d(lavc_venc_context->time_base);
 
-    muxer_write_chunk(mux_v,pkt.size,pkt.flags & AV_PKT_FLAG_KEY ?0x10:0,
+    mux_v->buffer = pkt->data;      // use ref-counted packet
+    mux_v->buffer_size = pkt->size; // update size for consistency
+    muxer_write_chunk(mux_v,pkt->size,pkt->flags & AV_PKT_FLAG_KEY ?0x10:0,
                       dts, pts);
 
     /* store psnr / pict size / type / qscale */
@@ -787,7 +790,7 @@ static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
         char filename[20];
         double f= lavc_venc_context->width*lavc_venc_context->height*255.0*255.0;
 	double quality=0.0;
-	uint8_t *sd = av_packet_get_side_data(&pkt, AV_PKT_DATA_QUALITY_STATS, NULL);
+	uint8_t *sd = av_packet_get_side_data(pkt, AV_PKT_DATA_QUALITY_STATS, NULL);
 
         if(!fvstats) {
             time_t today2;
@@ -816,7 +819,7 @@ static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
         fprintf(fvstats, "%6d, %2.2f, %6d, %2.2f, %2.2f, %2.2f, %2.2f %c\n",
             vf->priv->coded_picture_number,
             quality,
-            pkt.size,
+            pkt->size,
             psnr(error[0]/f),
             psnr(error[1]*4/f),
             psnr(error[2]*4/f),
@@ -825,10 +828,9 @@ static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
             );
 	}
     }
-    vf->priv->coded_picture_number++;
     ++vf->priv->coded_picture_number;
-    res = pkt.size;
-    av_packet_unref(&pkt);
+    res = pkt->size;
+    av_packet_unref(pkt);
     return res;
 }
 
@@ -845,6 +847,8 @@ static void uninit(struct vf_instance *vf){
             psnr((lavc_venc_context->error[0]+lavc_venc_context->error[1]+lavc_venc_context->error[2])/(f*1.5))
             );
     }
+
+    av_packet_free(&vf->priv->pkt);
 
     av_freep(&lavc_venc_context->intra_matrix);
     av_freep(&lavc_venc_context->inter_matrix);
@@ -977,6 +981,7 @@ static int vf_open(vf_instance_t *vf, char* args){
 	return 0;
     }
 
+    vf->priv->pkt = av_packet_alloc();
     vf->priv->pic = av_frame_alloc();
     vf->priv->context = avcodec_alloc_context3(vf->priv->codec);
     vf->priv->context->codec_id = vf->priv->codec->id;

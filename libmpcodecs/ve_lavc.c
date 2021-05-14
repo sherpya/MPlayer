@@ -32,6 +32,7 @@
 
 #include "config.h"
 #include "libavutil/avstring.h"
+#include "libavutil/intreadwrite.h"
 #include "mencoder.h"
 #include "mp_msg.h"
 #include "help_mp.h"
@@ -295,6 +296,7 @@ struct vf_priv_s {
     muxer_stream_t* mux;
     AVCodecContext *context;
     AVFrame *pic;
+    int coded_picture_number;
     AVCodec *codec;
     FILE *stats_file;
 };
@@ -785,7 +787,7 @@ static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
         char filename[20];
         double f= lavc_venc_context->width*lavc_venc_context->height*255.0*255.0;
 	double quality=0.0;
-	int8_t *q;
+	uint8_t *sd = av_packet_get_side_data(&pkt, AV_PKT_DATA_QUALITY_STATS, NULL);
 
         if(!fvstats) {
             time_t today2;
@@ -804,32 +806,27 @@ static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
             }
         }
 
-	// average MB quantizer
-	q = lavc_venc_context->coded_frame->qscale_table;
-	if(q) {
-	    int x, y;
-	    int w = (lavc_venc_context->width+15) >> 4;
-	    int h = (lavc_venc_context->height+15) >> 4;
-	    for( y = 0; y < h; y++ ) {
-		for( x = 0; x < w; x++ )
-		    quality += (double)*(q+x);
-		q += lavc_venc_context->coded_frame->qstride;
-	    }
-	    quality /= w * h;
-	} else
-	    quality = lavc_venc_context->coded_frame->quality / (float)FF_QP2LAMBDA;
+	if(sd && sd[5] >= 3) {
+	    uint8_t pict_type = sd[4] * (sd[4] < FF_ARRAY_ELEMS(pict_type_char));
+	    uint64_t error[3] = {
+	        AV_RL64(sd + 8), AV_RL64(sd + 16), AV_RL64(sd + 24)
+	    };
+	    quality = AV_RL32(sd) / (float)FF_QP2LAMBDA;
 
         fprintf(fvstats, "%6d, %2.2f, %6d, %2.2f, %2.2f, %2.2f, %2.2f %c\n",
-            lavc_venc_context->coded_frame->coded_picture_number,
+            vf->priv->coded_picture_number,
             quality,
             pkt.size,
-            psnr(lavc_venc_context->coded_frame->error[0]/f),
-            psnr(lavc_venc_context->coded_frame->error[1]*4/f),
-            psnr(lavc_venc_context->coded_frame->error[2]*4/f),
-            psnr((lavc_venc_context->coded_frame->error[0]+lavc_venc_context->coded_frame->error[1]+lavc_venc_context->coded_frame->error[2])/(f*1.5)),
-            pict_type_char[lavc_venc_context->coded_frame->pict_type]
+            psnr(error[0]/f),
+            psnr(error[1]*4/f),
+            psnr(error[2]*4/f),
+            psnr((error[0]+error[1]+error[2])/(f*1.5)),
+            pict_type_char[pict_type]
             );
+	}
     }
+    vf->priv->coded_picture_number++;
+    ++vf->priv->coded_picture_number;
     res = pkt.size;
     av_packet_unref(&pkt);
     return res;
@@ -839,7 +836,7 @@ static void uninit(struct vf_instance *vf){
 
     if(lavc_param_psnr){
         double f= lavc_venc_context->width*lavc_venc_context->height*255.0*255.0;
-        f*= lavc_venc_context->coded_frame->coded_picture_number;
+        f*= vf->priv->coded_picture_number;
 
         mp_msg(MSGT_MENCODER, MSGL_INFO, "PSNR: Y:%2.2f, Cb:%2.2f, Cr:%2.2f, All:%2.2f\n",
             psnr(lavc_venc_context->error[0]/f),

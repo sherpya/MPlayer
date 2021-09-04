@@ -170,8 +170,13 @@ static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
         if (vukfound)
             return 1;
     }
-    filename = av_asprintf("%s/.config/aacs/KEYDB.cfg", home);
+    filename = av_asprintf("%s/.config/aacs/keydb.cfg", home);
     file = open_stream(filename, NULL, NULL);
+    if (!file) {
+        av_freep(&filename);
+        filename = av_asprintf("%s/.config/aacs/KEYDB.cfg", home);
+        file = open_stream(filename, NULL, NULL);
+    }
     if (!file) {
         av_freep(&filename);
         filename = av_asprintf("%s/.dvdcss/KEYDB.cfg", home);
@@ -197,7 +202,9 @@ static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
         // or         I | I-Key
         // can be followed by ; and comment
 
-        if (av_strncasecmp(line, idstr, 40))
+        if (strlen(line) < 40) continue;
+        // Do not care whether it starts with 0x or not
+        if (av_strncasecmp(line, idstr, 40) && av_strncasecmp(line + 2, idstr, 40))
             continue;
         mp_msg(MSGT_OPEN, MSGL_V, "KeyDB found Entry for DiscID:\n%s\n", line);
 
@@ -206,6 +213,7 @@ static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
             break;
         vst += 6;
         while (isspace(*vst)) vst++;
+        if (vst[0] == '0' && vst[1] == 'x') vst += 2;
         if (sscanf(vst,      "%16"SCNx64, &bd->vuk.u64[0]) != 1)
             continue;
         if (sscanf(vst + 16, "%16"SCNx64, &bd->vuk.u64[1]) != 1)
@@ -214,6 +222,8 @@ static int find_vuk(struct bd_priv *bd, const uint8_t discid[20])
         bd->vuk.u64[1] = av_be2ne64(bd->vuk.u64[1]);
         vukfound = 1;
     }
+    if (!vukfound)
+        mp_msg(MSGT_OPEN, MSGL_V, "Failed to find KeyDB Entry for DiscID:\n%s\n", line);
     free_stream(file);
     return vukfound;
 }

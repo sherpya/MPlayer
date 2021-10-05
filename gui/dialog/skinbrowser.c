@@ -99,7 +99,6 @@ void ShowSkinBrowser( void )
  SkinBrowser=gtk_window_new( GTK_WINDOW_TOPLEVEL );
  gtk_widget_set_usize( SkinBrowser,256,320 );
  gtk_container_set_border_width( GTK_CONTAINER( SkinBrowser ),1 );
- gtk_widget_set_events( SkinBrowser,GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK | GDK_VISIBILITY_NOTIFY_MASK );
  gtk_window_set_title( GTK_WINDOW( SkinBrowser ),_(MSGTR_GUI_SkinBrowser) );
  gtk_window_set_position( GTK_WINDOW( SkinBrowser ),GTK_WIN_POS_CENTER );
  gtk_window_set_policy( GTK_WINDOW( SkinBrowser ),FALSE,FALSE,TRUE );

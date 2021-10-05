@@ -128,6 +128,7 @@ void ShowSkinBrowser( void )
  gtk_clist_column_titles_show( GTK_CLIST( SkinList ) );
  gtk_clist_set_shadow_type( GTK_CLIST( SkinList ),GTK_SHADOW_ETCHED_OUT );
  gtk_clist_set_column_widget( GTK_CLIST( SkinList ),0, gtkAddLabel( _(MSGTR_GUI_AvailableSkins),NULL ) );
+ gtk_clist_column_title_passive( GTK_CLIST( SkinList ),0 );
 
  gtkAddHSeparator( vbox5 );
 

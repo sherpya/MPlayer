@@ -397,7 +397,7 @@ static void scan_dir( char * path )
  char              * curr;
  struct dirent * dirent;
  struct                  stat statbuf;
- char              * text[1][3]; text[0][2]="";
+ char              * text[1];
 
  gtk_clist_clear( GTK_CLIST( CLFiles ) );
  if ( (dir=opendir( path )) )
@@ -408,10 +408,9 @@ static void scan_dir( char * path )
          curr=calloc( 1,strlen( path ) + strlen( dirent->d_name ) + 3 ); sprintf( curr,"%s/%s",path,dirent->d_name );
          if ( stat( curr,&statbuf ) != -1 && ( S_ISREG( statbuf.st_mode ) || S_ISLNK( statbuf.st_mode ) ) )
           {
-           text[0][0]=g_filename_display_name( dirent->d_name );
-           text[0][1]=dirent->d_name;
-           gtk_clist_append( GTK_CLIST( CLFiles ), text[0] );
-           g_free( text[0][0] );
+           text[0]=g_filename_display_name( dirent->d_name );
+           gtk_clist_append( GTK_CLIST( CLFiles ), text );
+           g_free( text[0] );
            NrOfEntrys++;
           }
          free( curr );
@@ -516,11 +515,10 @@ static GtkWidget * CreatePlaylist( void )
   gtk_box_pack_start( GTK_BOX( vbox2 ),scrolledwindow2,TRUE,TRUE,0 );
   gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( scrolledwindow2 ),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC );
 
-  CLFiles=gtk_clist_new( 2 );
+  CLFiles=gtk_clist_new( 1 );
   gtk_widget_show( CLFiles );
   gtk_container_add( GTK_CONTAINER( scrolledwindow2 ),CLFiles );
   gtk_clist_set_column_width( GTK_CLIST( CLFiles ),0,80 );
-  gtk_clist_set_column_visibility( GTK_CLIST( CLFiles ),1,FALSE );
   gtk_clist_set_selection_mode( GTK_CLIST( CLFiles ),GTK_SELECTION_MULTIPLE );
   gtk_clist_column_titles_show( GTK_CLIST( CLFiles ) );
   gtk_clist_set_shadow_type( GTK_CLIST( CLFiles ),GTK_SHADOW_NONE );

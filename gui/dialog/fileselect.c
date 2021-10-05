@@ -701,13 +701,6 @@ static gboolean fs_key_release_event(GtkWidget *widget, GdkEvent *event, gpointe
     (void)user_data;
 
     switch (event->key.keyval) {
-    case GDK_Escape:
-
-        if (GTK_IS_SCROLLED_WINDOW(widget))
-            gtk_button_clicked(GTK_BUTTON(fsCancel));
-
-        break;
-
     case GDK_Return:
 
         if (GTK_IS_SCROLLED_WINDOW(widget))
@@ -746,6 +739,7 @@ static void fs_Destroy(void)
 static GtkWidget *CreateFileSelect(void)
 {
     gint x, y;
+    GtkAccelGroup *accel_group;
     GtkWidget *vbox4;
     GtkWidget *hbox4;
     GtkWidget *vseparator1;
@@ -755,6 +749,8 @@ static GtkWidget *CreateFileSelect(void)
 
     GtkWidget *upimage;
     GdkPixbuf *uppixbuf;
+
+    accel_group = gtk_accel_group_new();
 
     FileSelector = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_usize(FileSelector, 512, 440);
@@ -834,6 +830,8 @@ static GtkWidget *CreateFileSelect(void)
     fsOk     = gtkAddButton(MSGTR_GUI_Ok, hbuttonbox3);
     fsCancel = gtkAddButton(MSGTR_GUI_Cancel, hbuttonbox3);
 
+    gtk_widget_add_accelerator(fsCancel, "clicked", accel_group, GDK_Escape, 0, GTK_ACCEL_VISIBLE);
+
     gtk_signal_connect(GTK_OBJECT(FileSelector), "destroy", GTK_SIGNAL_FUNC(fs_Destroy), NULL);
     gtk_signal_connect(GTK_OBJECT(fsFNameListWindow), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
 
@@ -849,6 +847,8 @@ static GtkWidget *CreateFileSelect(void)
     gtk_signal_connect(GTK_OBJECT(fsCancel), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
     gtk_signal_connect(GTK_OBJECT(fsFNameList), "select-row", (GtkSignalFunc)fs_fsFNameList_select_row, NULL);
     gtk_signal_connect(GTK_OBJECT(fsFNameList), "event", (GtkSignalFunc)fs_fsFNameList_event, NULL);
+
+    gtk_window_add_accel_group(GTK_WINDOW(FileSelector), accel_group);
 
     return FileSelector;
 }

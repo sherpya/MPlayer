@@ -264,8 +264,7 @@ static gboolean plKeyReleased( GtkWidget * widget,
 {
  if (event->keyval == GDK_Return)
   {
-   if ( GTK_WIDGET_TYPE( widget ) == GTK_TYPE_BUTTON ) plButtonReleased( NULL, user_data );
-   else
+   if ( GTK_WIDGET_TYPE( widget ) == GTK_TYPE_CLIST )
     {
      switch ( GPOINTER_TO_INT( user_data) )
       {
@@ -577,13 +576,9 @@ static GtkWidget * CreatePlaylist( void )
   gtk_signal_connect( GTK_OBJECT( CLSelected ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(1) );
 
   gtk_signal_connect( GTK_OBJECT( Add ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(3) );
-  gtk_signal_connect( GTK_OBJECT( Add ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(3) );
   gtk_signal_connect( GTK_OBJECT( Remove ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(2) );
-  gtk_signal_connect( GTK_OBJECT( Remove ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(2) );
   gtk_signal_connect( GTK_OBJECT( Ok ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(1) );
-  gtk_signal_connect( GTK_OBJECT( Ok ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(1) );
   gtk_signal_connect( GTK_OBJECT( Cancel ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(0) );
-  gtk_signal_connect( GTK_OBJECT( Cancel ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(0) );
 
   gtk_window_add_accel_group( GTK_WINDOW( Playlist ),accel_group );
 

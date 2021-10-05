@@ -576,13 +576,13 @@ static GtkWidget * CreatePlaylist( void )
   sigEvent=gtk_signal_connect( GTK_OBJECT( CLSelected ),"event",GTK_SIGNAL_FUNC( plEvent ),GINT_TO_POINTER(1) );
   gtk_signal_connect( GTK_OBJECT( CLSelected ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(1) );
 
-  gtk_signal_connect( GTK_OBJECT( Add ),"released",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(3) );
+  gtk_signal_connect( GTK_OBJECT( Add ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(3) );
   gtk_signal_connect( GTK_OBJECT( Add ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(3) );
-  gtk_signal_connect( GTK_OBJECT( Remove ),"released",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(2) );
+  gtk_signal_connect( GTK_OBJECT( Remove ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(2) );
   gtk_signal_connect( GTK_OBJECT( Remove ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(2) );
-  gtk_signal_connect( GTK_OBJECT( Ok ),"released",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(1) );
+  gtk_signal_connect( GTK_OBJECT( Ok ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(1) );
   gtk_signal_connect( GTK_OBJECT( Ok ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(1) );
-  gtk_signal_connect( GTK_OBJECT( Cancel ),"released",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(0) );
+  gtk_signal_connect( GTK_OBJECT( Cancel ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(0) );
   gtk_signal_connect( GTK_OBJECT( Cancel ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(0) );
 
   gtk_window_add_accel_group( GTK_WINDOW( Playlist ),accel_group );

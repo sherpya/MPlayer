@@ -537,7 +537,7 @@ static gboolean fs_fsFNameList_event(GtkWidget *widget,
     if (event->type == GDK_BUTTON_RELEASE && bevent->button == 2) {
         if (gtk_clist_get_selection_info(GTK_CLIST(widget), bevent->x, bevent->y, &row, &col)) {
             fsSelectedFile = gtk_clist_get_row_data(GTK_CLIST(widget), row);
-            gtk_button_released(GTK_BUTTON(fsOk));
+            gtk_button_clicked(GTK_BUTTON(fsOk));
 
             return TRUE;
         }
@@ -556,7 +556,7 @@ static void fs_fsFNameList_select_row(GtkCList *clist, gint row, gint column,
     fsSelectedFile = gtk_clist_get_row_data(clist, row);
 
     if (event && event->type == GDK_BUTTON_PRESS)
-        gtk_button_released(GTK_BUTTON(fsOk));
+        gtk_button_clicked(GTK_BUTTON(fsOk));
 }
 
 static void fs_Up_released(GtkButton *button, gpointer user_data)
@@ -704,16 +704,16 @@ static gboolean fs_key_release_event(GtkWidget *widget, GdkEvent *event, gpointe
     case GDK_Escape:
 
         if (GTK_IS_SCROLLED_WINDOW(widget))
-            gtk_button_released(GTK_BUTTON(fsCancel));
+            gtk_button_clicked(GTK_BUTTON(fsCancel));
 
         break;
 
     case GDK_Return:
 
         if (GTK_IS_SCROLLED_WINDOW(widget))
-            gtk_button_released(GTK_BUTTON(fsOk));
+            gtk_button_clicked(GTK_BUTTON(fsOk));
         else if (GTK_IS_BUTTON(widget))
-            gtk_button_released(GTK_BUTTON(widget));
+            gtk_button_clicked(GTK_BUTTON(widget));
         else if (GTK_IS_ENTRY(widget))
             gtk_widget_grab_focus(fsFNameList);
 
@@ -722,7 +722,7 @@ static gboolean fs_key_release_event(GtkWidget *widget, GdkEvent *event, gpointe
     case GDK_BackSpace:
 
         if (GTK_IS_SCROLLED_WINDOW(widget)) {
-            gtk_button_released(GTK_BUTTON(fsUp));
+            gtk_button_clicked(GTK_BUTTON(fsUp));
             gtk_widget_grab_focus(fsFNameList);
         }
 
@@ -841,11 +841,11 @@ static GtkWidget *CreateFileSelect(void)
     gtk_signal_connect(GTK_OBJECT(fsFilterCombo), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
     gtk_signal_connect(GTK_OBJECT(fsPathCombo), "changed", GTK_SIGNAL_FUNC(fs_fsPathCombo_changed), fsPathCombo);
     gtk_signal_connect(GTK_OBJECT(fsPathCombo), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
-    gtk_signal_connect(GTK_OBJECT(fsUp), "released", GTK_SIGNAL_FUNC(fs_Up_released), fsFNameList);
+    gtk_signal_connect(GTK_OBJECT(fsUp), "clicked", GTK_SIGNAL_FUNC(fs_Up_released), fsFNameList);
     gtk_signal_connect(GTK_OBJECT(fsUp), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
-    gtk_signal_connect(GTK_OBJECT(fsOk), "released", GTK_SIGNAL_FUNC(fs_Ok_released), fsCombo4);
+    gtk_signal_connect(GTK_OBJECT(fsOk), "clicked", GTK_SIGNAL_FUNC(fs_Ok_released), fsCombo4);
     gtk_signal_connect(GTK_OBJECT(fsOk), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
-    gtk_signal_connect(GTK_OBJECT(fsCancel), "released", GTK_SIGNAL_FUNC(fs_Cancel_released), NULL);
+    gtk_signal_connect(GTK_OBJECT(fsCancel), "clicked", GTK_SIGNAL_FUNC(fs_Cancel_released), NULL);
     gtk_signal_connect(GTK_OBJECT(fsCancel), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
     gtk_signal_connect(GTK_OBJECT(fsFNameList), "select-row", (GtkSignalFunc)fs_fsFNameList_select_row, NULL);
     gtk_signal_connect(GTK_OBJECT(fsFNameList), "event", (GtkSignalFunc)fs_fsFNameList_event, NULL);

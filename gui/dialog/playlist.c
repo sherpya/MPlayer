@@ -521,7 +521,7 @@ static GtkWidget * CreatePlaylist( void )
   gtk_container_add( GTK_CONTAINER( scrolledwindow2 ),CLFiles );
   gtk_clist_set_column_width( GTK_CLIST( CLFiles ),0,80 );
   gtk_clist_set_column_visibility( GTK_CLIST( CLFiles ),1,FALSE );
-  gtk_clist_set_selection_mode( GTK_CLIST( CLFiles ),GTK_SELECTION_EXTENDED );
+  gtk_clist_set_selection_mode( GTK_CLIST( CLFiles ),GTK_SELECTION_MULTIPLE );
   gtk_clist_column_titles_show( GTK_CLIST( CLFiles ) );
   gtk_clist_set_shadow_type( GTK_CLIST( CLFiles ),GTK_SHADOW_NONE );
 

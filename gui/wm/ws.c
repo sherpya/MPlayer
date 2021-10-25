@@ -1311,9 +1311,8 @@ void wsWindowVisibility(wsWindow *win, int vis)
  */
 void wsWindowRaiseTop(Display *display, Window Win)
 {
-    XUnmapWindow(display, Win);
-    XMapRaised(display, Win);
-    XRaiseWindow(display, Win);
+    XMapRaised(display, Win);     // NOTE TO MYSELF: is that really enough?
+    XRaiseWindow(display, Win);   // NOTE TO MYSELF: is that really enough?
 }
 
 // ----------------------------------------------------------------------------------------------

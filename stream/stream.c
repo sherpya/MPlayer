@@ -749,7 +749,7 @@ int parse_chapter_range(const m_option_t *conf, const char *range) {
   return 0;
 }
 
-#if defined(__MINGW32__) || defined(__CYGWIN__)
+#ifdef __MINGW32__
 wchar_t *utf8_to_wide_char(const char *utf8)
 {
     int conv_size;

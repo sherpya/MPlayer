@@ -827,6 +827,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_DirectoryTree "Verzeichnisstruktur"
 #define MSGTR_GUI_DropSubtitle "Untertitel entfernen"
 #define MSGTR_GUI_DVD "DVD"
+#define MSGTR_GUI_Ellipsis " …"
 #define MSGTR_GUI_EnableAssSubtitle "Rendering von ssa-/ass-Untertiteln aktivieren"
 #define MSGTR_GUI_EnableAutomaticAVSync "Automatische A/V-Synchronisation aktivieren"
 #define MSGTR_GUI_EnableCache "Cache aktivieren"

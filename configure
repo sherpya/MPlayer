@@ -4438,19 +4438,12 @@ echores "$_iconv"
 
 echocheck "soundcard.h"
 _soundcard_h=no
-def_soundcard_h='#undef HAVE_SOUNDCARD_H'
 def_sys_soundcard_h='#undef HAVE_SYS_SOUNDCARD_H'
-for _soundcard_header in "sys/soundcard.h" "soundcard.h"; do
-  header_check $_soundcard_header && _soundcard_h=yes &&
-    res_comment="$_soundcard_header" && break
-done
+header_check sys/soundcard.h && _soundcard_h=yes &&
+  res_comment="sys/soundcard.h"
 
 if test "$_soundcard_h" = yes ; then
-  if test $_soundcard_header = "sys/soundcard.h"; then
-    def_sys_soundcard_h='#define HAVE_SYS_SOUNDCARD_H 1'
-  else
-    def_soundcard_h='#define HAVE_SOUNDCARD_H 1'
-  fi
+  def_sys_soundcard_h='#define HAVE_SYS_SOUNDCARD_H 1'
 fi
 echores "$_soundcard_h"
 
@@ -6113,17 +6106,17 @@ echores "$_v4l2"
 echocheck "OSS Audio"
 if test "$_ossaudio" = auto ; then
   _ossaudio=no
-  return_check $_soundcard_header SNDCTL_DSP_SETFRAGMENT && _ossaudio=yes
+  return_check sys/soundcard.h SNDCTL_DSP_SETFRAGMENT && _ossaudio=yes
 fi
 if test "$_ossaudio" = yes ; then
   def_ossaudio='#define CONFIG_OSS_AUDIO 1'
   aomodules="oss $aomodules"
   _real_ossaudio=no
-  cpp_condition_check "$_soundcard_header" OPEN_SOUND_SYSTEM &&
+  cpp_condition_check "sys/soundcard.h" OPEN_SOUND_SYSTEM &&
       _real_ossaudio=yes
   if test "$_real_ossaudio" = yes; then
       def_ossaudio_devdsp='#define PATH_DEV_DSP "/dev/dsp"'
-  elif netbsd || openbsd ; then
+  elif netbsd ; then
       def_ossaudio_devdsp='#define PATH_DEV_DSP "/dev/sound"'
       extra_ldflags="$extra_ldflags -lossaudio"
   else
@@ -9213,7 +9206,6 @@ $def_altivec_h
 $def_malloc_h
 $def_mman_h
 $def_mman_has_map_failed
-$def_soundcard_h
 $def_sys_soundcard_h
 $def_sys_sysinfo_h
 $def_sys_videoio_h

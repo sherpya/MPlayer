@@ -71,11 +71,7 @@
 #ifdef HAVE_SYS_SOUNDCARD_H
 #include <sys/soundcard.h>
 #else
-#ifdef HAVE_SOUNDCARD_H
-#include <soundcard.h>
-#else
 #include <linux/soundcard.h>
-#endif
 #endif
 
 #endif

@@ -38,10 +38,6 @@
 
 #ifdef HAVE_SYS_SOUNDCARD_H
 #include <sys/soundcard.h>
-#else
-#ifdef HAVE_SOUNDCARD_H
-#include <soundcard.h>
-#endif
 #endif
 
 #include "libaf/af_format.h"

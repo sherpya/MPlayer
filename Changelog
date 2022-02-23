@@ -3,6 +3,8 @@ MPlayer
     Decoders, demuxers, streams:
     * ffmpeg12vpdau is no longer supported by FFmpeg,
       provide separate ffmpeg1vpdau and ffmpeg2vdpau instead
+    * live555 deprecated and disabled by default, will be removed
+      in future
 
     GUI:
     * Fix wrongly sized video window after leaving fullscreen mode

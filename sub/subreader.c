@@ -1159,6 +1159,10 @@ static int sub_autodetect (stream_t* st, int *uses_time, int utf16) {
 	if (!stream_read_line (st, line, LINE_LEN, utf16))
 	    return SUB_INVALID;
 
+	// drtic/dtc format starts with [JRT2: line. It is not identical
+	// to microdvd, but very close and we have no spec
+	if (strncmp(line, "[JRT2:", 6) == 0)
+		{*uses_time=0;return SUB_MICRODVD;}
 	if (sscanf (line, "{%d}{%d}", &i, &i)==2)
 		{*uses_time=0;return SUB_MICRODVD;}
 	if (sscanf (line, "{%d}{}", &i)==1)

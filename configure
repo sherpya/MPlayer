@@ -4703,7 +4703,7 @@ fi
 echocheck "GnuTLS"
 if test "$_gnutls" = auto ; then
   _gnutls=no
-  if $_pkg_config --exists gnutls ; then
+  if $_pkg_config --exists gnutls && test "$_openssl" != "yes" ; then
 	  statement_check gnutls/gnutls.h 'gnutls_global_init()' $($_pkg_config --libs --cflags gnutls) &&
       _gnutls=yes
   fi

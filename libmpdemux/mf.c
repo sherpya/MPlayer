@@ -37,6 +37,7 @@
 #include "mp_msg.h"
 #include "help_mp.h"
 #include "stream/stream.h"
+#include "mp_strings.h"
 
 #include "mf.h"
 
@@ -110,10 +111,10 @@ mf_t* open_mf(char * filename){
    goto exit_mf;
   }
 
- fname=malloc( strlen( filename ) + 32 );
-
  if ( !strchr( filename,'%' ) )
   {
+   fname=malloc( strlen( filename ) + 32 );
+
    strcpy( fname,filename );
    if ( !strchr( filename,'*' ) ) strcat( fname,"*" );
 
@@ -142,19 +143,23 @@ mf_t* open_mf(char * filename){
 
  while ( error_count < 5 )
   {
-   sprintf( fname,filename,count++ );
+   fname = mp_asprintf( filename,count++ );
+
    if ( stat( fname,&fs ) )
     {
      error_count++;
      mp_msg( MSGT_STREAM,MSGL_V,"[mf] file not found: '%s'\n",fname );
+     free(fname);
     }
     else
     {
      mf->names=realloc( mf->names,( mf->nr_of_files + 1 ) * sizeof( char* ) );
-     mf->names[mf->nr_of_files]=strdup( fname );
+     mf->names[mf->nr_of_files]=fname;
 //     mp_msg( MSGT_STREAM,MSGL_V,"[mf] added file %d.: %s\n",mf->nr_of_files,mf->names[mf->nr_of_files] );
      mf->nr_of_files++;
     }
+
+   fname = NULL;
   }
 
  mp_msg( MSGT_STREAM,MSGL_INFO,"[mf] number of files: %d\n",mf->nr_of_files );

@@ -135,7 +135,7 @@ static GtkWidget * AddMenuItemEllipsis( GtkWidget *Menu, const guint8 *icon, con
  GtkWidget * item;
  gchar * text;
 
- text = g_strconcat( label,MSGTR_GUI_Ellipsis,NULL );
+ text = g_strconcat( label,_(MSGTR_GUI_Ellipsis),NULL );
  item = AddMenuItem( Menu,icon,text,message );
  g_free( text );
 

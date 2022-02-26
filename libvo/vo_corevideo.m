@@ -511,6 +511,8 @@ static int control(uint32_t request, void *data)
 
 	glEnable(CVOpenGLTextureGetTarget(texture));
 	glBindTexture(CVOpenGLTextureGetTarget(texture), CVOpenGLTextureGetName(texture));
+	glTexParameteri(CVOpenGLTextureGetTarget(texture), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(CVOpenGLTextureGetTarget(texture), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glColor3f(1,1,1);
 	glBegin(GL_QUADS);

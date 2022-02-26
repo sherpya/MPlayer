@@ -6789,7 +6789,7 @@ if test "$_zlib" = yes ; then
 else
   def_zlib='#define CONFIG_ZLIB 0'
   libavdecoders=$(filter_out_component decoder 'APNG FLASHSV FLASHSV2 PNG ZMBV ZLIB DXA EXR G2M LSCR MSCC MVHA MWSC RASC RSCC SCREENPRESSO SRGC TDSC TSCC ZEROCODEC WCMV')
-  libavencoders=$(filter_out_component encoder 'APNG FLASHSV FLASHSV2 PNG ZMBV ZLIB')
+  libavencoders=$(filter_out_component encoder 'APNG EXR FLASHSV FLASHSV2 PNG ZMBV ZLIB')
 fi
 echores "$_zlib"
 
@@ -7492,7 +7492,7 @@ EOF
     fi
 fi
 if test "$_libxml2" = "no" ; then
-    libavdemuxers=$(filter_out_component demuxer 'DASH')
+    libavdemuxers=$(filter_out_component demuxer 'DASH IMF')
 fi
 echores "$_libxml2"
 
@@ -9582,6 +9582,7 @@ $def_openssl
 #define CONFIG_LINUX_PERF 0
 #define CONFIG_MEMORY_POISONING 0
 #define CONFIG_POWERPC_PERF 0
+#define CONFIG_MACOS_KPERF 0
 /* For now prefer speed over avoiding potential invalid reads */
 #define CONFIG_SAFE_BITSTREAM_READER 0
 #define CONFIG_SHARED 0

@@ -44,6 +44,11 @@
 #include "osdep/keycodes.h"
 #include "osx_common.h"
 
+#if defined(__aarch64__) || defined(x86_64)
+// TODO figure out where this comes from!!
+#undef __POWER__
+#endif
+
 static float winAlpha = 1;
 
 static BOOL isLeopardOrLater;

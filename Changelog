@@ -28,6 +28,7 @@ MPlayer
     * New configure option --enable-nls for Native Language Support at
       runtime (for the moment only for the GUI and enabled by default
       for it)
+    * macOS: Fixes for retina display, sluggish input processing
 
   1.4: "SubCounter" April 18, 2019
 

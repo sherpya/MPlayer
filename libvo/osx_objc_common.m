@@ -505,8 +505,8 @@ void vo_osx_swap_buffers(void)
 
 	event_flags = 0;
 	event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:nil inMode:NSEventTrackingRunLoopMode dequeue:YES];
-	if (event == nil)
-		return event_flags;
+	while (event != nil)
+	{
 	[NSApp sendEvent:event];
 	// Without SDL's bootstrap code (include SDL.h in mplayer.c),
 	// on Leopard, we have trouble to get the play window automatically focused
@@ -518,6 +518,8 @@ void vo_osx_swap_buffers(void)
 		[window makeKeyAndOrderFront:self];
 	}
 #endif
+		event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:nil inMode:NSEventTrackingRunLoopMode dequeue:YES];
+	}
 	return event_flags;
 }
 

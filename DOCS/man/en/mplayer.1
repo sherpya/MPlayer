@@ -31,7 +31,7 @@
 .\" Title
 .\" --------------------------------------------------------------------------
 .
-.TH MPlayer 1 "2020-02-04" "The MPlayer Project" "The Movie Player"
+.TH MPlayer 1 "2022-02-27" "The MPlayer Project" "The Movie Player"
 .
 .SH NAME
 mplayer  \- movie player
@@ -1091,16 +1091,16 @@ Specify how often the \-heartbeat\-cmd should be executed, in seconds between ex
 .
 .TP
 .B \-identify
-Shorthand for \-msglevel identify=4.
+Shorthand for \-msglevel identify=6.
 Show file parameters in an easily parseable format.
 Also prints more detailed information about subtitle and audio
 track languages and IDs.
-In some cases you can get more information by using \-msglevel identify=6.
 For example, for a DVD or Blu\-ray it will list the chapters and time length
 of each title, as well as a disk ID.
 Combine this with \-frames 0 to suppress all video output.
 The wrapper script TOOLS/\:midentify.sh suppresses the other MPlayer output and
 (hopefully) shellescapes the filenames.
+You can get less information by using \-msglevel identify=4.
 .
 .TP
 .B \-idle (also see \-slave)

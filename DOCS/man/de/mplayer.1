@@ -33,7 +33,7 @@
 .\" Titel
 .\" --------------------------------------------------------------------------
 .
-.TH MPlayer 1 "04.02.2020" "Das MPlayer Projekt"
+.TH MPlayer 1 "27.02.2022" "Das MPlayer Projekt"
 .
 .SH NAME
 mplayer  \- Movie Player
@@ -1092,18 +1092,17 @@ mplayer \-heartbeat\-cmd "gnome\-screensaver\-command \-p" Datei
 .
 .TP
 .B \-identify
-Kurzschreibweise für \-msglevel identify=4.
-Zeigt Dateiparameter in einem einfach einzulesenden Format an.
-Gibt außerdem detailliertere Informationen über IDs und die Sprachen von
-Untertiteln und Audiospuren.
-In manchen Fällen erhältst du mehr Informationen durch Benutzung von \-msglevel
-identify=6.
-Zum Beispiel listet es für eine DVD die Kapitel die zeitliche Länge jedes
-Titels sowie die Disc-ID.
-Kombiniere dies mit \-frames 0, um alle Ausgaben zu unterdrücken.
-Das Wrapper-Script TOOLS/\:midentify unterdrückt die anderen Ausgaben von
-MPlayer
-und führt (hoffentlich) Shell-Escaping für die Dateinamen aus.
+Kurzschreibweise für \-msglevel identify=6.
+Zeigt Dateiparameter in einem leicht zu analysierenden Format an.
+Gibt außerdem detailliertere Informationen zu Sprachen und IDs von
+Untertiteln und Audiospuren aus.
+Bei einer DVD oder Blu-ray werden zum Beispiel die Kapitel und die Länge der
+einzelnen Titel sowie die Disk-ID angezeigt.
+Kombiniert man dies mit \-frames 0, wird die gesamte Videoausgabe
+unterdrückt.
+Das Wrapper-Skript TOOLS/\:midentify unterdrückt die anderen MPlayer-Ausgaben
+und führt (hoffentlich) ein Shell-Escaping für die Dateinamen aus.
+Man erhält weniger Informationen durch Verwendung von \-msglevel identify=4.
 .
 .TP
 .B \-idle (siehe auch \-slave)

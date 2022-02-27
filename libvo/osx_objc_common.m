@@ -244,6 +244,7 @@ void vo_osx_swap_buffers(void)
 
 	//show window
 	[window makeKeyAndOrderFront:self];
+	[self reshape];
 }
 
 - (void) drawRect: (NSRect *) bounds

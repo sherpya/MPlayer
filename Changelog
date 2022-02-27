@@ -1,5 +1,7 @@
 MPlayer
 
+  1.5: "Hope" February 27, 2022
+
     Decoders, demuxers, streams:
     * ffmpeg12vpdau is no longer supported by FFmpeg,
       provide separate ffmpeg1vpdau and ffmpeg2vdpau instead

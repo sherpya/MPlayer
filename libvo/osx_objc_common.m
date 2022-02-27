@@ -229,9 +229,12 @@ void vo_osx_swap_buffers(void)
 	// not aware of it.
 	// Also flip vo_dy since the screen origin is in the bottom left on OSX.
 	[self update_screen_info];
-	[window setFrameTopLeftPoint:NSMakePoint(
-		vo_dx,
-		2*xinerama_y + vo_screenheight - vo_dy)];
+	NSPoint topleft = NSMakePoint(vo_dx, 2*xinerama_y + vo_screenheight - vo_dy);
+#ifndef __POWER__
+	if ([self respondsToSelector:@selector(convertPointFromBacking:)])
+		topleft = [self convertPointFromBacking:topleft];
+#endif
+	[window setFrameTopLeftPoint:topleft];
 
 	vo_fs = flags & VOFLAG_FULLSCREEN;
 

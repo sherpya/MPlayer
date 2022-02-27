@@ -36,7 +36,9 @@ gzip -9 $dst.tar
 # generate checksums/signatures
 md5sum $dst.tar.xz > $dst.tar.xz.md5
 sha1sum $dst.tar.xz > $dst.tar.xz.sha1
+sha256sum $dst.tar.xz > $dst.tar.xz.sha256
 md5sum $dst.tar.gz > $dst.tar.gz.md5
 sha1sum $dst.tar.gz > $dst.tar.gz.sha1
+sha256sum $dst.tar.gz > $dst.tar.gz.sha256
 gpg -a --detach-sign $dst.tar.xz
 gpg -a --detach-sign $dst.tar.gz

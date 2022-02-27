@@ -44,11 +44,6 @@
 #include "osdep/keycodes.h"
 #include "osx_common.h"
 
-#if defined(__aarch64__) || defined(x86_64)
-// TODO figure out where this comes from!!
-#undef __POWER__
-#endif
-
 static float winAlpha = 1;
 
 static BOOL isLeopardOrLater;
@@ -147,7 +142,7 @@ void vo_osx_swap_buffers(void)
 	NSScreen *screen_handle = [self fullscreen_screen];
 	NSRect screen_frame = [screen_handle frame];
 	NSSize size = screen_frame.size;
-#ifndef __POWER__
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
 	if ([self respondsToSelector:@selector(convertSizeToBacking:)])
 		size = [self convertSizeToBacking:size];
 #endif
@@ -230,7 +225,7 @@ void vo_osx_swap_buffers(void)
 	// Also flip vo_dy since the screen origin is in the bottom left on OSX.
 	[self update_screen_info];
 	NSPoint topleft = NSMakePoint(vo_dx, 2*xinerama_y + vo_screenheight - vo_dy);
-#ifndef __POWER__
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
 	if ([self respondsToSelector:@selector(convertPointFromBacking:)])
 		topleft = [self convertPointFromBacking:topleft];
 #endif
@@ -260,7 +255,7 @@ void vo_osx_swap_buffers(void)
 	[super reshape];
 	NSRect frame = [self frame];
 	NSSize size = frame.size;
-#ifndef __POWER__
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
 	if ([self respondsToSelector:@selector(convertSizeToBacking:)])
 		size = [self convertSizeToBacking:size];
 #endif
@@ -420,7 +415,7 @@ void vo_osx_swap_buffers(void)
 		[self update_screen_info];
 
 		NSSize size = { vo_screenwidth, vo_screenheight };
-#ifndef __POWER__
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
 		if ([self respondsToSelector:@selector(convertSizeFromBacking:)])
 			size = [self convertSizeFromBacking:size];
 #endif

@@ -1667,6 +1667,9 @@ libavmuxers=$(filter_out_component muxer 'CHROMAPRINT LIB[A-Z0-9_]* RTP RTSP SAP
 libavprotocols=$(filter_out_component protocol 'BLURAY FFRTMPCRYPT HTTPS LIB[A-Z0-9_]* TLS TLS_GNUTLS TLS_OPENSSL TLS_SECURETRANSPORT TLS_SCHANNEL')
 libavfilters=$(filter_out_component filter 'VF_FREI0R[A-Z0-9_]* LIB[A-Z0-9_]* MP VF_OCV')
 
+libavwrappers_all="DEFLATE_WRAPPER INFLATE_WRAPPER"
+libavwrappers="$libavwrappers_all"
+
 # second pass command line parsing for options needing local FFmpeg checkout
 for ac_option do
   case "$ac_option" in
@@ -6790,6 +6793,7 @@ else
   def_zlib='#define CONFIG_ZLIB 0'
   libavdecoders=$(filter_out_component decoder 'APNG FLASHSV FLASHSV2 PNG ZMBV ZLIB DXA EXR G2M LSCR MSCC MVHA MWSC RASC RSCC SCREENPRESSO SRGC TDSC TSCC ZEROCODEC WCMV')
   libavencoders=$(filter_out_component encoder 'APNG EXR FLASHSV FLASHSV2 PNG ZMBV ZLIB')
+  libavwrappers=$(filter_out_component wrapper 'DEFLATE INFLATE')
 fi
 echores "$_zlib"
 
@@ -9058,6 +9062,7 @@ $(mak_enable "$libavbsfs_all"      "$libavbsfs"      CONFIG)
 $(mak_enable "$libavcbs_all"       "$libavcbs"       CONFIG)
 $(mak_enable "$libavhwaccels_all"  "$libavhwaccels"  CONFIG)
 $(mak_enable "$libavfilters_all"   "$libavfilters"   CONFIG)
+$(mak_enable "$libavwrappers_all"  "$libavwrappers"   CONFIG)
 EOF
 
 #############################################################################
@@ -9711,6 +9716,7 @@ $(ff_config_enable "$libavbsfs_all"      "$libavbsfs" "#")
 $(ff_config_enable "$libavcbs_all"       "$libavcbs" "#")
 $(ff_config_enable "$libavhwaccels_all"  "$libavhwaccels" "#")
 $(ff_config_enable "$libavfilters_all"   "$libavfilters" "#")
+$(ff_config_enable "$libavwrappers_all"   "$libavwrappers" "#")
 
 #endif /* MPLAYER_CONFIG_H */
 EOF
@@ -9769,6 +9775,7 @@ cp ffmpeg/ffbuild/config.mak ffmpeg/config.mak
 cat > ffmpeg/config.h << EOF
 #include "../config.h"
 EOF
+cp ffmpeg/config.h ffmpeg/config_components.h
 touch ffmpeg/.config
 
 # generate the lists of enabled components for ffmpeg

@@ -1591,8 +1591,8 @@ list_subparts_filters() {
 }
 
 echocheck "ffmpeg/libavcodec/allcodecs.c"
-libavdecoders_all=$(list_subparts_extern  AVCodec       decoder  codec/allcodecs.c)
-libavencoders_all=$(list_subparts_extern  AVCodec       encoder  codec/allcodecs.c)
+libavdecoders_all=$(list_subparts_extern  FFCodec       decoder  codec/allcodecs.c)
+libavencoders_all=$(list_subparts_extern  FFCodec       encoder  codec/allcodecs.c)
 libavparsers_all=$(list_subparts_extern   AVCodecParser parser   codec/parsers.c)
 test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
@@ -1610,7 +1610,7 @@ test $? -eq 0 && _list_subparts=found || _list_subparts="not found"
 echores "$_list_subparts"
 
 echocheck "ffmpeg/libavcodec/bitsteram_filters.c"
-libavbsfs_all=$(list_subparts_extern AVBitStreamFilter bsf codec/bitstream_filters.c)
+libavbsfs_all=$(list_subparts_extern FFBitStreamFilter bsf codec/bitstream_filters.c)
 test $? -eq 0 && _list_subparts_extern=found || _list_subparts_extern="not found"
 echores "$_list_subparts_extern"
 
@@ -9812,9 +9812,9 @@ print_enabled_filters(){
     cp $TMPH ffmpeg/$file
 }
 
-print_enabled_components libavcodec/codec_list.c AVCodec codec_list $libavdecoders $libavencoders
+print_enabled_components libavcodec/codec_list.c FFCodec codec_list $libavdecoders $libavencoders
 print_enabled_components libavcodec/parser_list.c AVCodecParser parser_list $libavparsers
-print_enabled_components libavcodec/bsf_list.c AVBitStreamFilter bitstream_filters $libavbsfs
+print_enabled_components libavcodec/bsf_list.c FFBitStreamFilter bitstream_filters $libavbsfs
 print_enabled_components libavdevice/indev_list.c AVInputFormat indev_list ""
 print_enabled_components libavdevice/outdev_list.c AVOutputFormat outdev_list ""
 print_enabled_components libavformat/demuxer_list.c AVInputFormat demuxer_list $libavdemuxers

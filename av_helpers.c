@@ -51,11 +51,9 @@ static void mp_msp_av_log_callback(void *ptr, int level, const char *fmt,
             AVCodecContext *s= ptr;
             if(s->codec){
                 if(s->codec->type == AVMEDIA_TYPE_AUDIO){
-                    if(s->codec->decode)
-                        type= MSGT_DECAUDIO;
+                    type= MSGT_DECAUDIO;
                 }else if(s->codec->type == AVMEDIA_TYPE_VIDEO){
-                    if(s->codec->decode)
-                        type= MSGT_DECVIDEO;
+                    type= MSGT_DECVIDEO;
                 }
                 //FIXME subtitles, encoders (what msgt for them? there is no appropriate ...)
             }

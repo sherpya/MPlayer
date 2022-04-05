@@ -283,8 +283,6 @@ mp_image_t* vf_get_image(vf_instance_t* vf, unsigned int outfmt, int mp_imgtype,
   int missing_palette;
 
 #ifdef MP_DEBUG
-  assert(w == -1 || w >= vf->w);
-  assert(h == -1 || h >= vf->h);
   assert(vf->w > 0);
   assert(vf->h > 0);
 #endif

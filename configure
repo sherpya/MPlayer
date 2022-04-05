@@ -604,7 +604,7 @@ Advanced options:
   --disable-fastmemcpy      disable 3DNow!/SSE/MMX optimized memcpy [enable]
   --enable-hardcoded-tables put tables in binary instead of calculating them at startup [disable]
   --enable-big-endian       force byte order to big-endian [autodetect]
-  --enable-debug[=1-3]      compile-in debugging information [disable]
+  --enable-debug[=1-3]      enable debug build (less optimized, extra asserts and compile-in debugging information) [disable]
   --enable-profile          compile-in profiling information [disable]
   --disable-sighandler      disable sighandler for crashes [enable]
   --enable-relocatable      enable compiling as relocatable/PIE executable [auto]

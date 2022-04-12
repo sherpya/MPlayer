@@ -793,7 +793,7 @@ GtkWidget * CreatePopUpMenu( int wType )
     for ( i=0;i < subs;i++ )
      {
       int ret = -1;
-      char lng[60], tmp[80], *lang = NULL;
+      char lng[60], tmp[80], *lang = NULL, *basename;
       /* file */
       if ( i < subs0 )
        {
@@ -803,7 +803,9 @@ GtkWidget * CreatePopUpMenu( int wType )
 #endif
         if ( lang )
          {
-          av_strlcpy( lng, mp_basename(lang), sizeof(lng) );
+          basename = g_filename_display_name(mp_basename(lang));
+          av_strlcpy( lng, basename, sizeof(lng) );
+          g_free(basename);
           ret = 0;
          }
        }

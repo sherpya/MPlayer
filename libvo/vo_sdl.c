@@ -1250,6 +1250,7 @@ static int preinit(const char *arg)
     if(sdl_driver) {
         setenv("SDL_VIDEODRIVER", sdl_driver, 1);
     free(sdl_driver);
+    sdl_driver = NULL;
     }
 
     /* does the user want SDL to try and force Xv */

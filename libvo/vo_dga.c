@@ -402,6 +402,7 @@ static void uninit(void)
             XF86VidModeSwitchToMode(mDisplay, screen, vo_dga_vidmodes[0]);
             XF86VidModeSwitchToMode(mDisplay, screen, vo_dga_vidmodes[0]);
             XFree(vo_dga_vidmodes);
+            vo_dga_vidmodes = NULL;
         }
 #endif
 #endif

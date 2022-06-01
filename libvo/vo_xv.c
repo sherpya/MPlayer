@@ -311,8 +311,10 @@ static void deallocate_xvimage(int foo)
 #endif
     {
         free(xvimage[foo]->data);
+        xvimage[foo]->data = NULL;
     }
     XFree(xvimage[foo]);
+    xvimage[foo] = NULL;
 
     XSync(mDisplay, False);
     return;

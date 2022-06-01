@@ -223,6 +223,7 @@ shmatfail:
         shmctl(Shminfo.shmid, IPC_RMID, 0);
 shmgetfail:
         XFree(xvimage);
+        xvimage = NULL;
 noshmimage:
         Shmem_Flag = 0;
     }
@@ -256,8 +257,10 @@ static void deallocate_xvimage(void)
 #endif
     {
         free(xvimage->data);
+        xvimage->data = NULL;
     }
     XFree(xvimage);
+    xvimage = NULL;
 
     XSync(mDisplay, False);
     return;

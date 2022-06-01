@@ -478,8 +478,9 @@ int jpeg_enc_frame(jpeg_enc_t *j, unsigned char *y_data,
 	return put_bits_ptr(&(j->s->pb)) - j->s->pb.buf;
 }
 
-void jpeg_enc_uninit(jpeg_enc_t *j) {
+void jpeg_enc_uninit(jpeg_enc_t **jp) {
+	jpeg_enc_t *j = *jp;
 	ff_mjpeg_encode_close(j->s);
-	av_free(j->s);
-	av_free(j);
+	av_freep(&j->s);
+	av_freep(jp);
 }

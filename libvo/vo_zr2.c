@@ -489,5 +489,7 @@ static void uninit(void) {
 		ERROR("error munmapping buffer: %s\n", strerror(errno));
 
 	if (p->vdes >= 0) close(p->vdes);
+	p->vdes = -1;
 	free(p->subdevice);
+	p->subdevice = NULL;
 }

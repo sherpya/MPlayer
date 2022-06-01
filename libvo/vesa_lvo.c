@@ -140,6 +140,7 @@ void vlvo_term( void )
 	ioctl( lvo_handler,MGA_VID_OFF,0 );
 	munmap(frames[0],mga_vid_config.frame_size*mga_vid_config.num_frames);
 	if(lvo_handler != -1) close(lvo_handler);
+	lvo_handler = -1;
 }
 
 static uint32_t vlvo_draw_slice_420(uint8_t *image[], int stride[],

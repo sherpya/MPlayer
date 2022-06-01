@@ -363,7 +363,9 @@ static int parse_fbmode_cfg(char *cfgfile)
 out:
     mp_msg(MSGT_VO, MSGL_V, "%d modes\n", nr_modes);
     free(line);
+    line = NULL;
     fclose(fp);
+    fp = NULL;
     return nr_modes;
 err_out_parse_error:
     mp_msg(MSGT_VO, MSGL_V, "parse error");
@@ -374,7 +376,9 @@ err_out:
     fb_modes = NULL;
     nr_modes = 0;
     free(line);
-    free(fp);
+    line = NULL;
+    fclose(fp);
+    fp = NULL;
     return -2;
 err_out_not_valid:
     mp_msg(MSGT_VO, MSGL_V, "previous mode is not correct");
@@ -1117,7 +1121,9 @@ static void uninit(void)
     }
     vt_set_textarea(0, fb_orig_vinfo.yres);
     close(fb_tty_fd);
+    fb_tty_fd = -1;
     close(fb_dev_fd);
+    fb_dev_fd = -1;
     if (frame_buffer)
         munmap(frame_buffer, fb_size);
     frame_buffer = NULL;

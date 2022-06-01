@@ -150,7 +150,7 @@ typedef struct {
 
 
 static overlay_t *overlay_init(int dev);
-static int overlay_release(overlay_t *);
+static int overlay_release(overlay_t **);
 
 static int overlay_read_state(overlay_t *o, char *path);
 static int overlay_write_state(overlay_t *o, char *path);
@@ -449,13 +449,16 @@ static int config(uint32_t width, uint32_t height, uint32_t d_width, uint32_t d_
 	spued = malloc(sizeof(encodedata));
 	if (spued == NULL) {
 	        free( osdpicbuf );
+	        osdpicbuf = NULL;
 		mp_msg(MSGT_VO,MSGL_ERR, MSGTR_LIBVO_DXR3_OutOfMemory);
 		return -1;
 	}
 	spubuf = malloc(sizeof(encodedata));
 	if (spubuf == NULL) {
 	        free( osdpicbuf );
+	        osdpicbuf = NULL;
 		free( spued );
+		spued = NULL;
 		mp_msg(MSGT_VO,MSGL_ERR, MSGTR_LIBVO_DXR3_OutOfMemory);
 		return -1;
 	}
@@ -678,7 +681,7 @@ static void uninit(void)
 #ifdef CONFIG_X11
 	if (dxr3_overlay) {
 		overlay_set_mode(overlay_data, EM8300_OVERLAY_MODE_OFF);
-		overlay_release(overlay_data);
+		overlay_release(&overlay_data);
 
 		vo_x11_uninit();
 	}
@@ -691,16 +694,21 @@ static void uninit(void)
 
 	if (fd_video != -1) {
 		close(fd_video);
+		fd_video = -1;
 	}
 	if (fd_spu != -1) {
 		close(fd_spu);
+		fd_spu = -1;
 	}
 	if (fd_control != -1) {
 		close(fd_control);
+		fd_control = -1;
 	}
 #ifdef SPU_SUPPORT
 	free(osdpicbuf);
+	osdpicbuf = NULL;
 	free(spued);
+	spued = NULL;
 #endif
 }
 
@@ -845,7 +853,7 @@ static int preinit(const char *arg)
 		overlay_set_keycolor(ov, KEY_COLOR);
 		overlay_set_mode(ov, EM8300_OVERLAY_MODE_OVERLAY);
 		overlay_set_mode(ov, EM8300_OVERLAY_MODE_RECTANGLE);
-		overlay_release(ov);
+		overlay_release(&ov);
 		XCloseDisplay(dpy);
 		/* End of fucked up hack */
 
@@ -913,9 +921,10 @@ static overlay_t *overlay_init(int dev)
     return o;
 }
 
-static int overlay_release(overlay_t *o)
+static int overlay_release(overlay_t **o)
 {
-    free(o);
+    free(*o);
+    *o = NULL;
     return 0;
 }
 #define TYPE_INT 1

@@ -286,6 +286,7 @@ static int preinit(const char *arg) {
     if (ioctl(pfb_devfd, FBIOGATTR, &attr) < 0) {
         mp_msg(MSGT_VO, MSGL_ERR, "vo_xvr100: Error: ioctl failed (FBIOGATTR)\n");
         close(pfb_devfd);
+        pfb_devfd = -1;
         return 1;
     }
 
@@ -297,6 +298,7 @@ static int preinit(const char *arg) {
                           MAP_SHARED, pfb_devfd, PFB_VRAM_MMAPBASE)) == MAP_FAILED) {
         mp_msg(MSGT_VO, MSGL_ERR, "vo_xvr100: Error: unable to memory map framebuffer\n");
         close(pfb_devfd);
+        pfb_devfd = -1;
         return 1;
     }
 
@@ -305,6 +307,7 @@ static int preinit(const char *arg) {
         mp_msg(MSGT_VO, MSGL_ERR, "vo_xvr100: Error: unable to memory map framebuffer\n");
         munmap(pfb_vbase, PFB_VRAM_MMAPLEN);
         close(pfb_devfd);
+        pfb_devfd = -1;
         return 1;
     }
 

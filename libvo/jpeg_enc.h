@@ -47,6 +47,6 @@ jpeg_enc_t *jpeg_enc_init(int w, int h, int y_psize, int y_rsize,
 int jpeg_enc_frame(jpeg_enc_t *j, unsigned char *y_data,
 		unsigned char *u_data, unsigned char *v_data, char *bufr);
 
-void jpeg_enc_uninit(jpeg_enc_t *j);
+void jpeg_enc_uninit(jpeg_enc_t **j);
 
 #endif /* MPLAYER_JPEG_ENC_H */

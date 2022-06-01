@@ -161,7 +161,7 @@ static void vesa_term( void )
   if(init_mode) if((err=vbeSetMode(init_mode,NULL)) != VBE_OK) PRINT_VBE_ERR("vbeSetMode",err);
   init_mode=0;
   if(HAS_DGA()) vbeUnmapVideoBuffer((unsigned long)win.ptr,win.high);
-  if(dga_buffer && !HAS_DGA()) free(dga_buffer);
+  if(dga_buffer && !HAS_DGA()) { free(dga_buffer); dga_buffer = NULL; }
   vbeDestroy();
   if(sws) sws_freeContext(sws);
   sws=NULL;

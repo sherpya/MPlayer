@@ -266,7 +266,7 @@ static void uninit(void)
 {
     free(md5sum_outfile);
     md5sum_outfile = NULL;
-    if (md5sum_fd && md5sum_fd != stdout) fclose(md5sum_fd);
+    if (md5sum_fd && md5sum_fd != stdout) { fclose(md5sum_fd); md5sum_fd = NULL; }
     av_freep(&md5_context);
 }
 

@@ -314,7 +314,9 @@ static void uninit(void)
   if (vt_doit)
     vt_set_textarea(0, fb_orig_vinfo.yres);
   close(fb_tty_fd);
+  fb_tty_fd = -1;
   close(fb_dev_fd);
+  fb_dev_fd = -1;
   if (frame_buffer)
     munmap(frame_buffer, fb_size);
   frame_buffer = NULL;

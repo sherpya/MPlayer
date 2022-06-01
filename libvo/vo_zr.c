@@ -283,6 +283,7 @@ static void uninit_zoran(zr_info_t *zr)
 	if (munmap(zr->buf,zr->zrq.count*zr->zrq.size))
 	   mp_msg(MSGT_VO, MSGL_ERR, "zr: error unmapping buffer\n");
 	close(zr->vdes);
+	zr->des = -1;
 }
 
 static int zr_geometry_sane(geo_t *g, unsigned int width, unsigned int height)
@@ -581,7 +582,7 @@ static void uninit(void) {
 	int j;
 	mp_msg(MSGT_VO, MSGL_V, "zr: uninit called\n");
 	for (j = 0; j < zr_count; j++) {
-		jpeg_enc_uninit(zr_info[j].j);
+		jpeg_enc_uninit(&zr_info[j].j);
 		uninit_zoran(&zr_info[j]);
 	}
 }

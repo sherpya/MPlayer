@@ -474,6 +474,7 @@ uninit(void)
 {
     if( fd != -1 )
         close(fd);
+    fd = -1;
 }
 
 

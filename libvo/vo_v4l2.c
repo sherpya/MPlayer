@@ -117,6 +117,7 @@ preinit (const char *arg)
   if (v4l2_fd < 0)
   {
     free (device);
+    device = NULL;
     mp_msg (MSGT_VO, MSGL_FATAL, "%s %s\n", V4L2_VO_HDR, strerror (errno));
     return -1;
   }
@@ -129,6 +130,7 @@ preinit (const char *arg)
   if (ioctl (v4l2_fd, VIDIOC_G_EXT_CTRLS, &ctrls) < 0)
   {
     free (device);
+    device = NULL;
     mp_msg (MSGT_OPEN, MSGL_FATAL, "%s %s\n", V4L2_VO_HDR, strerror (errno));
     return -1;
   }
@@ -147,6 +149,7 @@ preinit (const char *arg)
   {
     mp_msg (MSGT_VO, MSGL_INFO, "none\n");
     free (device);
+    device = NULL;
     return -1;
   }
   else
@@ -160,6 +163,7 @@ preinit (const char *arg)
       mp_msg (MSGT_VO, MSGL_ERR,
               "%s can't set output (%s)\n", V4L2_VO_HDR, strerror (errno));
       free (device);
+      device = NULL;
       return -1;
     }
   }
@@ -167,6 +171,7 @@ preinit (const char *arg)
   /* display device name */
   mp_msg (MSGT_VO, MSGL_INFO, "%s using %s\n", V4L2_VO_HDR, device);
   free (device);
+  device = NULL;
 
   /* display current video output */
   if (ioctl (v4l2_fd, VIDIOC_G_OUTPUT, &output) == 0)

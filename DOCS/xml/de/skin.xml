@@ -517,11 +517,12 @@ end
                 <para>
                   Die erste Koordinate <literal>x<subscript>0</subscript>,y<subscript>0</subscript></literal>
                   definiert den 0%-Start-Punkt (auf dem Rand des
-                  Potentiometer) in der Grafik für Phase #1 und die zweite
+                  Potentiometer) in der Einzelgrafik der Phase #1 und die zweite
                   Koordinate <literal>x<subscript>1</subscript>,y<subscript>1</subscript></literal>
-                  den 100%-Stopp-Punkt in der Grafik für Phase #n - mit
+                  den 100%-Stopp-Punkt in der Einzelgrafik der Phase #n - mit
                   anderen Worten: die Koordinaten der Spitze der Markierung
-                  auf dem Potentiometer in den beiden einzelnen Grafiken.
+                  auf dem Potentiometer in den beiden jeweiligen Grafiken
+                  (nicht in der Grafik der Phasen).
                 </para>
               </listitem>
               <listitem>

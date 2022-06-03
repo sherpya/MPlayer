@@ -437,11 +437,11 @@ blocks.
     <literal>y<subscript>1</subscript></literal> - position of the 0% start
     point and 100% stop point for the potentiometer <emphasis role="bold">(<literal>rpotmeter</literal> only)</emphasis></para>
     <para>The first coordinate <literal>x<subscript>0</subscript>,y<subscript>0</subscript></literal>
-    defines the 0% start point (on the edge of the potentiometer) in the
-    image for phase #1 and the second coordinate <literal>x<subscript>1</subscript>,y<subscript>1</subscript></literal>
-    the 100% stop point in the image for phase #n - in other words, the
+    defines the 0% start point (on the edge of the potentiometer) in the individual
+    image of phase #1 and the second coordinate <literal>x<subscript>1</subscript>,y<subscript>1</subscript></literal>
+    the 100% stop point in the individual image of phase #n - in other words, the
     coordinates of the tip of the mark on the potentiometer in the two
-    individual images.</para></listitem>
+    single images (not in the image of all phases).</para></listitem>
   <listitem><para>
     <literal>default</literal> - default value for the potentiometer
     (in the range <literal>0</literal> to <literal>100</literal>)

@@ -2356,28 +2356,28 @@ void vo_xv_draw_colorkey(  int32_t x,  int32_t y,
                     w, h );
   }
 
-  /* draw black bars if needed */
   /* TODO! move this to vo_x11_clearwindow_part() */
-  if ( vo_fs )
+  /* draw left/right black bars if needed */
+  if (w < vo_dwidth)
   {
     XSetForeground( mDisplay, vo_gc, 0 );
-    /* making non-overlap fills, requires 8 checks instead of 4 */
-    if ( y > 0 )
-      XFillRectangle( mDisplay, vo_window, vo_gc,
-                      0, 0,
-                      vo_screenwidth, y);
-    if (x > 0)
-      XFillRectangle( mDisplay, vo_window, vo_gc,
-                      0, 0,
-                      x, vo_screenheight);
-    if (x + w < vo_screenwidth)
-      XFillRectangle( mDisplay, vo_window, vo_gc,
-                      x + w, 0,
-                      vo_screenwidth, vo_screenheight);
-    if (y + h < vo_screenheight)
-      XFillRectangle( mDisplay, vo_window, vo_gc,
-                      0, y + h,
-                      vo_screenwidth, vo_screenheight);
+    XFillRectangle( mDisplay, vo_window, vo_gc,
+                    0, 0,
+                    x, vo_dheight);
+    XFillRectangle( mDisplay, vo_window, vo_gc,
+                    x + w, 0,
+                    vo_dwidth, vo_dheight);
+  }
+  /* draw top/bottom black bars if needed */
+  if (h < vo_dheight)
+  {
+    XSetForeground( mDisplay, vo_gc, 0 );
+    XFillRectangle( mDisplay, vo_window, vo_gc,
+                    0, 0,
+                    vo_dwidth, y);
+    XFillRectangle( mDisplay, vo_window, vo_gc,
+                    0, y + h,
+                    vo_dwidth, vo_dheight);
   }
 }
 

@@ -111,6 +111,9 @@
 #define DEMUXER_CTRL_IDENTIFY_PROGRAM 15
 #define DEMUXER_CTRL_CORRECT_PTS 16
 #define DEMUXER_CTRL_GET_REPLAY_GAIN 17    // returns 10x the adjustment
+// Query stream IDs that the underlying device/stream would recognize
+#define DEMUXER_CTRL_REMAP_AUDIO_ID 18
+#define DEMUXER_CTRL_REMAP_SUB_ID 19
 
 #define SEEK_ABSOLUTE (1 << 0)
 #define SEEK_FACTOR   (1 << 1)

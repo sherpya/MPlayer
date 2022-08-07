@@ -790,6 +790,13 @@ static int demux_lavf_control(demuxer_t *demuxer, int cmd, void *arg)
 
 	    *((int *)arg) = (int)((priv->last_pts - priv->avfc->start_time)*100 / priv->avfc->duration);
 	    return DEMUXER_CTRL_OK;
+	case DEMUXER_CTRL_REMAP_AUDIO_ID:
+	case DEMUXER_CTRL_REMAP_SUB_ID:
+	{
+	    int id = *((int*)arg);
+	    if (priv->avfc && id >= 0 && id < priv->avfc->nb_streams) *(int *)arg = priv->avfc->streams[id]->id;
+	    return DEMUXER_CTRL_OK;
+	}
 	case DEMUXER_CTRL_SWITCH_AUDIO:
 	case DEMUXER_CTRL_SWITCH_VIDEO:
 	{

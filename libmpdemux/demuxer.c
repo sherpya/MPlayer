@@ -1857,7 +1857,9 @@ int demuxer_audio_lang(demuxer_t *d, int id, char *buf, int buf_len)
         return 0;
     }
     req.type = stream_ctrl_audio;
-    req.id = sh->aid;
+    req.id = id;
+    if (demux_control(d, DEMUXER_CTRL_REMAP_AUDIO_ID, &req.id) != DEMUXER_CTRL_OK)
+        req.id = sh->aid;
     if (stream_control(d->stream, STREAM_CTRL_GET_LANG, &req) == STREAM_OK) {
         av_strlcpy(buf, req.buf, buf_len);
         return 0;
@@ -1879,7 +1881,9 @@ int demuxer_sub_lang(demuxer_t *d, int id, char *buf, int buf_len)
     req.type = stream_ctrl_sub;
     // assume 1:1 mapping so we can show the language of
     // DVD subs even when we have not yet created the stream.
-    req.id = sh ? sh->sid : id;
+    req.id = id;
+    if (sh && demux_control(d, DEMUXER_CTRL_REMAP_SUB_ID, &req.id) != DEMUXER_CTRL_OK)
+        req.id = sh->sid;
     if (stream_control(d->stream, STREAM_CTRL_GET_LANG, &req) == STREAM_OK) {
         av_strlcpy(buf, req.buf, buf_len);
         return 0;

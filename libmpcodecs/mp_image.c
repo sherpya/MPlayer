@@ -163,6 +163,11 @@ void mp_image_setfmt(mp_image_t* mpi,unsigned int out_fmt){
         mpi->bpp = mp_get_chroma_shift(out_fmt, &mpi->chroma_x_shift, &mpi->chroma_y_shift, NULL);
         mpi->chroma_width  = mpi->width  >> mpi->chroma_x_shift;
         mpi->chroma_height = mpi->height >> mpi->chroma_y_shift;
+        // ensure enough space for odd sizes
+        if ((mpi->chroma_width << mpi->chroma_x_shift) < mpi->width)
+            ++mpi->chroma_width;
+        if ((mpi->chroma_height << mpi->chroma_y_shift) < mpi->height)
+            ++mpi->chroma_height;
     }
     switch(out_fmt){
     case IMGFMT_I420:
@@ -241,7 +246,7 @@ void mp_image_setfmt(mp_image_t* mpi,unsigned int out_fmt){
         mpi->bpp=12;
         mpi->num_planes=2;
         mpi->chroma_width=(mpi->width>>0);
-        mpi->chroma_height=(mpi->height>>1);
+        mpi->chroma_height=(mpi->height+1)>>1;
         mpi->chroma_x_shift=0;
         mpi->chroma_y_shift=1;
         return;

@@ -410,7 +410,8 @@ static int filter_n_bytes(sh_audio_t *sh, int len)
 	int format_change = sh->samplerate != filter_input.rate ||
 	                    sh->channels != filter_input.nch ||
 	                    sh->sample_format != filter_input.format;
-	if (ret <= 0 || format_change) {
+	if (ret == AVERROR(EAGAIN)) ret = 0;
+	else if (ret <= 0 || format_change) {
 	    error = format_change ? -2 : -1;
 	    len = sh->a_buffer_len;
 	    break;

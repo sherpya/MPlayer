@@ -333,6 +333,8 @@ static int decode_audio(sh_audio_t *sh_audio,unsigned char *buf,int minlen,int m
 	    int in_size = x;
 	    int consumed = ds_parse(sh_audio->ds, &start, &x, pts, 0);
 	    sh_audio->ds->buffer_pos -= in_size - consumed;
+	    // Explicitly request more data if all was used up by parser
+	    if (x == 0 && consumed == in_size && len == -1) len = AVERROR(EAGAIN);
 	    // Note: hopefully the following x <= 0 handling is correct, it was only
 	    // added because FFmpeg broke the API and 0-sized
 	    // packets started to break e.g. AC3 decode.

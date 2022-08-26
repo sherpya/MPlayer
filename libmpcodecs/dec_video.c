@@ -173,6 +173,10 @@ int get_current_video_decoder_lag(sh_video_t *sh_video)
 
 void uninit_video(sh_video_t *sh_video)
 {
+    if (sh_video->vfilter) {
+        vf_uninit_filter_chain(sh_video->vfilter);
+        sh_video->vfilter = NULL;
+    }
     if (!sh_video->initialized)
         return;
     mp_msg(MSGT_DECVIDEO, MSGL_V, "Uninit video: %s\n", codec_idx2str(sh_video->codec->drv_idx));
@@ -182,8 +186,6 @@ void uninit_video(sh_video_t *sh_video)
     if (sh_video->dec_handle)
         dlclose(sh_video->dec_handle);
 #endif
-    vf_uninit_filter_chain(sh_video->vfilter);
-    sh_video->vfilter = NULL;
     eosd_uninit();
     sh_video->initialized = 0;
 }

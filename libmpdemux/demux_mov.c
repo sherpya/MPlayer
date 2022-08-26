@@ -298,6 +298,10 @@ static void mov_build_index(mov_track_t* trak,int timescale){
 	    for(;sample<trak->samples_size;sample++){
 		if(pts<=trak->samples[sample].pts) break;
 	    }
+	    if (sample >= trak->samples_size){
+		// skip!
+		el->frames=0; continue;
+	    }
 	    el->start_sample=sample;
 	    el->pts_offset=((long long)e_pts*(long long)trak->timescale)/(long long)timescale-trak->samples[sample].pts;
 	    pts+=((long long)el->dur*(long long)trak->timescale)/(long long)timescale;
@@ -1315,6 +1319,10 @@ static void lschunks(demuxer_t* demuxer,int level,off_t endpos,mov_track_t* trak
 		int version = stream_read_char(demuxer->stream);
 		stream_skip(demuxer->stream, (version == 1) ? 19 : 11);
 		priv->timescale=stream_read_dword(demuxer->stream);
+		if (priv->timescale <= 0) {
+		    priv->timescale = 600;
+		    mp_msg(MSGT_DEMUX, MSGL_INFO,"MOV: invalid timescale, defaulting to %i\n", priv->timescale);
+		}
 		if (version == 1)
 		    priv->duration=stream_read_qword(demuxer->stream);
 		else

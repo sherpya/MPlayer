@@ -2347,6 +2347,7 @@ int reinit_video_chain(void)
     current_module = "init_video_filters";
     {
         char *vf_arg[] = { "_oldargs_", (char *)mpctx->video_out, NULL };
+        if (sh_video->vfilter) vf_uninit_filter_chain(sh_video->vfilter);
         sh_video->vfilter = vf_open_filter(NULL, "vo", vf_arg);
     }
 #ifdef CONFIG_MENU

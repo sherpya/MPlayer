@@ -183,6 +183,7 @@ void uninit_video(sh_video_t *sh_video)
         dlclose(sh_video->dec_handle);
 #endif
     vf_uninit_filter_chain(sh_video->vfilter);
+    sh_video->vfilter = NULL;
     eosd_uninit();
     sh_video->initialized = 0;
 }

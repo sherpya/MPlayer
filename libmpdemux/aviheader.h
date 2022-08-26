@@ -222,6 +222,7 @@ typedef enum {
 } VIDEO_STANDARD;
 
 #define MAKE_AVI_ASPECT(a, b) (((a)<<16)|(b))
+#define VALID_AVI_ASPECT(a) (((a)>>16) && ((a) & 0xffff))
 #define GET_AVI_ASPECT(a) ((float)((a)>>16)/(float)((a)&0xffff))
 
 /*

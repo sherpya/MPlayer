@@ -327,7 +327,7 @@ while(1){
         }
       } else
       if(last_fccType==streamtypeAUDIO){
-	unsigned wf_size = chunksize<sizeof(*sh_audio->wf)?sizeof(*sh_audio->wf):chunksize;
+	unsigned wf_size = FFMAX(chunksize, sizeof(*sh_audio->wf));
         sh_audio->wf=calloc(wf_size,1);
 //        sh_audio->wf=malloc(chunksize); memset(sh_audio->wf,0,chunksize);
         mp_msg(MSGT_HEADER, MSGL_V, "Found 'wf', %u bytes of %zu\n",
@@ -355,7 +355,7 @@ while(1){
       break;
     }
     case mmioFOURCC('v', 'p', 'r', 'p'): {
-	VideoPropHeader *vprp = malloc(chunksize);
+	VideoPropHeader *vprp = calloc(1, FFMAX(chunksize, sizeof(*vprp)));
 	unsigned int i;
 	stream_read(demuxer->stream, (void*)vprp, chunksize);
 	le2me_VideoPropHeader(vprp);
@@ -368,7 +368,7 @@ while(1){
 	for (i=0; i<vprp->nbFieldPerFrame; i++) {
 		le2me_VIDEO_FIELD_DESC(&vprp->FieldInfo[i]);
 	}
-	if (sh_video) {
+	if (sh_video && VALID_AVI_ASPECT(vprp->dwFrameAspectRatio)) {
 		sh_video->original_aspect = GET_AVI_ASPECT(vprp->dwFrameAspectRatio);
 	}
 	if( mp_msg_test(MSGT_HEADER,MSGL_V) ) print_vprp(vprp,MSGL_V);

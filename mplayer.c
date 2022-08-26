@@ -2457,7 +2457,7 @@ static double update_video(int *blit_frame)
         void *decoded_frame  = NULL;
         int drop_frame       = 0;
         int in_size;
-        int full_frame;
+        int full_frame = 0;
 
         do {
             int flush;

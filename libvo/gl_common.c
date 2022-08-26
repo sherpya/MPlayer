@@ -2809,13 +2809,13 @@ int mpglcontext_create_window(MPGLContext *ctx, uint32_t d_width, uint32_t d_hei
       }
       else
 #endif
-      vinfo = glXChooseVisual(mDisplay, mScreen, stereo_glx_attribs);
+      ctx->vinfo.x11 = vinfo = glXChooseVisual(mDisplay, mScreen, stereo_glx_attribs);
       if (!vinfo)
         mp_msg(MSGT_VO, MSGL_ERR, "[gl] Could not find a stereo visual, "
                                   "3D will probably not work!\n");
     }
     if (!vinfo)
-      vinfo = glXChooseVisual(mDisplay, mScreen, default_glx_attribs);
+      ctx->vinfo.x11 = vinfo = glXChooseVisual(mDisplay, mScreen, default_glx_attribs);
     if (!vinfo) {
       mp_msg(MSGT_VO, MSGL_ERR, "[gl] no GLX support present\n");
       return -1;

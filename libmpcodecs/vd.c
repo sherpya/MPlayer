@@ -332,7 +332,7 @@ int mpcodecs_config_vo(sh_video_t *sh, int w, int h,
                 screen_size_y = screen_size_xy * sh->disp_h / sh->disp_w;
             }
         }
-        if (sh->aspect >= 0.01) {
+        if (sh->aspect >= 0.01 && sh->aspect <= 100) {
             int w;
             mp_msg(MSGT_CPLAYER, MSGL_INFO, MSGTR_MovieAspectIsSet,
                    sh->aspect);
@@ -350,6 +350,8 @@ int mpcodecs_config_vo(sh_video_t *sh, int w, int h,
         } else {
             mp_msg(MSGT_CPLAYER, MSGL_INFO, MSGTR_MovieAspectUndefined);
         }
+        if (screen_size_x < 2) screen_size_x = 2;
+        if (screen_size_y < 2) screen_size_y = 2;
     }
 
     vocfg_flags = (fullscreen ? VOFLAG_FULLSCREEN : 0)

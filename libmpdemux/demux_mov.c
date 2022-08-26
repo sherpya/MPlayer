@@ -1088,6 +1088,7 @@ static int gen_sh_video(sh_video_t* sh, mov_track_t* trak, int timescale) {
 		        // Parse some parts of avcC, just for fun :)
 		        // real parsing is done by avc1 decoder
 		        mp_msg(MSGT_DEMUX, MSGL_V, "MOV: avcC version: %d\n", *(trak->stdata+pos+8));
+		        if (atom_len >= 14) {
 		        if (*(trak->stdata+pos+8) != 1)
 		          mp_msg(MSGT_DEMUX, MSGL_ERR, "MOV: unknown avcC version (%d). Expexct problems.\n", *(trak->stdata+pos+9));
 		        mp_msg(MSGT_DEMUX, MSGL_V, "MOV: avcC profile: %d\n", *(trak->stdata+pos+9));
@@ -1097,14 +1098,18 @@ static int gen_sh_video(sh_video_t* sh, mov_track_t* trak, int timescale) {
 		        mp_msg(MSGT_DEMUX, MSGL_V, "MOV: avcC number of sequence param sets: %d\n", cnt = (*(trak->stdata+pos+13) & 0x1f));
 		        poffs = pos + 14;
 		        for (i = 0; i < cnt; i++) {
+		          if (poffs - pos + 4 > atom_len) break;
 		          mp_msg(MSGT_DEMUX, MSGL_V, "MOV: avcC sps %d have length %d\n", i, AV_RB16(trak->stdata+poffs));
 		          poffs += AV_RB16(trak->stdata+poffs) + 2;
 		        }
-		        mp_msg(MSGT_DEMUX, MSGL_V, "MOV: avcC number of picture param sets: %d\n", *(trak->stdata+poffs));
+			if (poffs - pos < atom_len)
+		          mp_msg(MSGT_DEMUX, MSGL_V, "MOV: avcC number of picture param sets: %d\n", *(trak->stdata+poffs));
 		        poffs++;
 		        for (i = 0; i < cnt; i++) {
+		          if (poffs - pos + 4 > atom_len) break;
 		          mp_msg(MSGT_DEMUX, MSGL_V, "MOV: avcC pps %d have length %d\n", i, AV_RB16(trak->stdata+poffs));
 		          poffs += AV_RB16(trak->stdata+poffs) + 2;
+		        }
 		        }
 		        // Copy avcC for the AVC decoder
 		        // This data will be put in extradata below, where BITMAPINFOHEADER is created

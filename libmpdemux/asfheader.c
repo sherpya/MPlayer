@@ -234,7 +234,7 @@ static int get_ext_stream_properties(char *buf, int buf_len, int stream_num, str
   return 1;
 }
 
-#define CHECKDEC(l, n) if (((l) -= (n)) < 0) return 0
+#define CHECKDEC(l, n) if ((l) < (n)) return 0; (l) -= (n)
 static char* read_meta_record(ASF_meta_record_t* dest, char* buf,
     int* buf_len)
 {

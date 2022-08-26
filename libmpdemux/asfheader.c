@@ -340,20 +340,20 @@ static int is_drm(char* buf, int buf_len)
   return 1;
 }
 
-static int asf_init_audio_stream(demuxer_t *demuxer,struct asf_priv* asf, sh_audio_t* sh_audio, ASF_stream_header_t *streamh, int *ppos, uint8_t** buf, char *hdr, unsigned int hdr_len)
+static int asf_init_audio_stream(demuxer_t *demuxer,struct asf_priv* asf, sh_audio_t* sh_audio, ASF_stream_header_t *streamh, int pos, uint8_t* buffer, unsigned hdr_len)
 {
-  uint8_t *buffer = *buf;
-  int pos = *ppos;
-
+  if (streamh->type_size > hdr_len) return 0;
+  pos += streamh->type_size;
+  if (pos > hdr_len) return 0;
   sh_audio->wf=calloc(FFMAX(streamh->type_size, sizeof(*sh_audio->wf)), 1);
   memcpy(sh_audio->wf,buffer,streamh->type_size);
+  buffer += streamh->type_size;
+
   le2me_WAVEFORMATEX(sh_audio->wf);
   sh_audio->format=sh_audio->wf->wFormatTag;
   if( mp_msg_test(MSGT_HEADER,MSGL_V) ) print_wave_header(sh_audio->wf,MSGL_V);
   if(ASF_LOAD_GUID_PREFIX(streamh->concealment)==ASF_GUID_PREFIX_audio_conceal_interleave){
-    buffer = &hdr[pos];
-    pos += streamh->stream_size;
-    if (pos > hdr_len) return 0;
+    if (pos + 5 > hdr_len) return 0;
     asf->scrambling_h=buffer[0];
     asf->scrambling_w=(buffer[2]<<8)|buffer[1];
     asf->scrambling_b=(buffer[4]<<8)|buffer[3];
@@ -389,7 +389,6 @@ int read_asf_header(demuxer_t *demuxer,struct asf_priv* asf){
   uint16_t stream_count=0;
   uint64_t data_len;
   ASF_stream_header_t *streamh;
-  uint8_t *buffer;
   int audio_pos=0;
 
   if(hdr_len < 0) {
@@ -437,15 +436,12 @@ int read_asf_header(demuxer_t *demuxer,struct asf_priv* asf){
       audio_pos = pos - 16 - 8;
       streamh = (ASF_stream_header_t *)&hdr[sh_pos];
       le2me_ASF_stream_header_t(streamh);
-      if (streamh->type_size > hdr_len) goto len_err_out;
       audio_pos += 64; //16+16+4+4+4+16+4;
-      if (audio_pos + streamh->type_size > hdr_len) goto len_err_out;
-      buffer = &hdr[audio_pos];
       sh_audio=new_sh_audio(demuxer,streamh->stream_no & 0x7F, NULL);
       sh_audio->needs_parsing = 1;
       mp_msg(MSGT_DEMUX, MSGL_INFO, MSGTR_AudioID, "asfheader", streamh->stream_no & 0x7F);
       ++audio_streams;
-      if (!asf_init_audio_stream(demuxer, asf, sh_audio, streamh, &audio_pos, &buffer, hdr, hdr_len))
+      if (!asf_init_audio_stream(demuxer, asf, sh_audio, streamh, audio_pos, hdr + audio_pos, hdr_len))
         goto len_err_out;
       if (!get_ext_stream_properties(hdr, hdr_len, streamh->stream_no, asf, 0))
         goto len_err_out;
@@ -475,15 +471,12 @@ int read_asf_header(demuxer_t *demuxer,struct asf_priv* asf){
             (unsigned long)streamh->unk1, (unsigned int)streamh->unk2);
     mp_msg(MSGT_HEADER, MSGL_V, "FILEPOS=0x%X\n", pos + start);
     // type-specific data:
-    buffer = &hdr[pos];
-    pos += streamh->type_size;
-    if (pos > hdr_len) goto len_err_out;
     switch(ASF_LOAD_GUID_PREFIX(streamh->type)){
       case ASF_GUID_PREFIX_audio_stream: {
         sh_audio_t* sh_audio=new_sh_audio(demuxer,streamh->stream_no & 0x7F, NULL);
         mp_msg(MSGT_DEMUX, MSGL_INFO, MSGTR_AudioID, "asfheader", streamh->stream_no & 0x7F);
         ++audio_streams;
-        if (!asf_init_audio_stream(demuxer, asf, sh_audio, streamh, &pos, &buffer, hdr, hdr_len))
+        if (!asf_init_audio_stream(demuxer, asf, sh_audio, streamh, pos, hdr + pos, hdr_len))
           goto len_err_out;
 	//if(demuxer->audio->id==-1) demuxer->audio->id=streamh.stream_no & 0x7F;
         break;
@@ -491,14 +484,18 @@ int read_asf_header(demuxer_t *demuxer,struct asf_priv* asf){
       case ASF_GUID_PREFIX_video_stream: {
         unsigned int len;
         float asp_ratio;
+        int bih_start = 4+4+1+2;
+        uint8_t *buffer = hdr + pos;
         sh_video_t* sh_video=new_sh_video(demuxer,streamh->stream_no & 0x7F);
         mp_msg(MSGT_DEMUX, MSGL_INFO, MSGTR_VideoID, "asfheader", streamh->stream_no & 0x7F);
-        len=streamh->type_size-(4+4+1+2);
-        if (len > streamh->type_size) goto len_err_out;
+        if (streamh->type_size > hdr_len) goto len_err_out;
+        if (pos + streamh->type_size > hdr_len) goto len_err_out;
+        if (streamh->type_size < bih_start) goto len_err_out;
+        len=streamh->type_size-bih_start;
 	++video_streams;
 //        sh_video->bih=malloc(chunksize); memset(sh_video->bih,0,chunksize);
         sh_video->bih=calloc((len<sizeof(*sh_video->bih))?sizeof(*sh_video->bih):len,1);
-        memcpy(sh_video->bih,&buffer[4+4+1+2],len);
+        memcpy(sh_video->bih,&buffer[bih_start],len);
 	le2me_BITMAPINFOHEADER(sh_video->bih);
 	if (sh_video->bih->biSize > len && sh_video->bih->biSize > sizeof(*sh_video->bih))
 		sh_video->bih->biSize = len;

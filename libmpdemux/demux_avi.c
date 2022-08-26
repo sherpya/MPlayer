@@ -140,8 +140,9 @@ static int demux_avi_read_packet(demuxer_t *demux,demux_stream_t *ds,unsigned in
           if(priv->pts_has_video){
 	      // we have video pts now
 	      float delay=0;
-	      if(((sh_audio_t*)(ds->sh))->wf->nAvgBytesPerSec)
-	          delay=(float)priv->pts_corr_bytes/((sh_audio_t*)(ds->sh))->wf->nAvgBytesPerSec;
+	      sh_audio_t *sh = (sh_audio_t *)ds->sh;
+	      if(sh->wf && sh->wf->nAvgBytesPerSec)
+	          delay=(float)priv->pts_corr_bytes/sh->wf->nAvgBytesPerSec;
 	      mp_msg(MSGT_DEMUX,MSGL_V,"XXX initial  v_pts=%5.3f  a_pos=%d (%5.3f) \n",priv->avi_audio_pts,priv->pts_corr_bytes,delay);
 	      //priv->pts_correction=-priv->avi_audio_pts+delay;
 	      priv->pts_correction=delay-priv->avi_audio_pts;

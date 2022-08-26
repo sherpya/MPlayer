@@ -63,6 +63,7 @@ static void update_audio_block_size(demuxer_t *demux)
       }
     }
   }
+  if (priv->audio_block_size < 1) priv->audio_block_size = 1;
 }
 
 // Select ds from ID

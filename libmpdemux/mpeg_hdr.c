@@ -374,9 +374,9 @@ static int mp_unescape03(uint8_t *dest, const uint8_t *buf, int len)
     return 0;
 
   j = i = skip = 0;
-  while(i <= len-3)
+  while(i < len)
   {
-    if(buf[i] == 0 && buf[i+1] == 0 && buf[i+2] == 3)
+    if(i <= len-3 && buf[i] == 0 && buf[i+1] == 0 && buf[i+2] == 3)
     {
       dest[j] = dest[j+1] = 0;
       j += 2;
@@ -390,8 +390,6 @@ static int mp_unescape03(uint8_t *dest, const uint8_t *buf, int len)
       i++;
     }
   }
-  dest[j] = buf[len-2];
-  dest[j+1] = buf[len-1];
   len -= skip;
 
   return len;

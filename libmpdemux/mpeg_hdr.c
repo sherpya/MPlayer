@@ -399,7 +399,15 @@ int h264_parse_sps(mp_mpeg_header_t * picture, const unsigned char * inbuf, int 
 {
   unsigned int n = 0, v, i, k, mbh;
   int frame_mbs_only;
-  uint8_t *buf = malloc(len);
+  uint8_t *buf;
+  // Sanity check, should not happen in MPlayer due to limited video buffer
+  if (len > 100*1024*1024) len = 100*1024*1024;
+  // Allocate more to allow for overread.
+  // Initialize to 0xff to minimize golomb length
+  // 4kB is more than necessary, but calculating the exact
+  // value or adding more range checks is more pain than worth it.
+  buf = malloc(len + 4096);
+  memset(buf, 0xff, len + 4096);
 
   len = mp_unescape03(buf, inbuf, len);
 

@@ -286,7 +286,9 @@ static unsigned int read_golomb(unsigned char *buffer, unsigned int *init)
 {
   unsigned int x, v = 0, v2 = 0, m, len = 0, n = *init;
 
-  while(getbits(buffer, n++, 1) == 0)
+  // TODO: check exact length limit.
+  // Remaining code breaks values > 31 anyway though
+  while(getbits(buffer, n++, 1) == 0 && len < 31)
     len++;
 
   x = len + n;
@@ -299,9 +301,7 @@ static unsigned int read_golomb(unsigned char *buffer, unsigned int *init)
       v <<= 8;
   }
 
-  v2 = 1;
-  for(n = 0; n < len; n++)
-    v2 <<= 1;
+  v2 = 1u << len;
   v2 = (v2 - 1) + v;
 
   //fprintf(stderr, "READ_GOLOMB(%u), V=2^%u + %u-1 = %u\n", *init, len, v, v2);

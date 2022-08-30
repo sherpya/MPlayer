@@ -643,6 +643,8 @@ int common_init(void)
 
 void common_uninit(void)
 {
+    spudec_free(vo_spudec);
+    vo_spudec = NULL;
 #ifdef CONFIG_FREETYPE
     current_module = "uninit_font";
     if (sub_font && sub_font != vo_font)

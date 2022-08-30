@@ -1730,11 +1730,13 @@ if(sh_audio)
 mp_msg(MSGT_MENCODER, MSGL_INFO, MSGTR_AudioStreamResult,
     (float)(mux_a->size/mux_a->timer*8.0f/1000.0f), (int)(mux_a->size/mux_a->timer), (uint64_t)mux_a->size, (float)mux_a->timer);
 
+m_config_free(mconfig);
 m_entry_list_free(filelist);
 if(sh_audio){ uninit_audio(sh_audio);sh_audio=NULL; }
 if(sh_video){ uninit_video(sh_video);sh_video=NULL; }
 if(demuxer) free_demuxer(demuxer);
 if(stream) free_stream(stream); // kill cache thread
+if(ostream) free_stream(ostream);
 // Do not free mux_v->buffer, it may have been overwritten
 // with something we should not free.
 if(mux_v) free(mux_v_buffer);

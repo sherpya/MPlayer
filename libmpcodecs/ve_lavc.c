@@ -710,7 +710,7 @@ static double psnr(double d){
     return -10.0*log(d)/log(10);
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     AVFrame *pic= vf->priv->pic;
 
     pic->data[0]=mpi->planes[0];

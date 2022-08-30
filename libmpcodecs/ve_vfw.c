@@ -303,7 +303,7 @@ static int query_format(struct vf_instance *vf, unsigned int fmt){
     return 0;
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
     long flags=0;
     int ret;
 //    flip_upside_down(vo_image_ptr,vo_image_ptr,3*vo_w,vo_h); // dirty hack

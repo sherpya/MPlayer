@@ -62,7 +62,6 @@ typedef struct h264_module_t {
 static x264_param_t param;
 static int parse_error = 0;
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts);
 static int encode_frame(struct vf_instance *vf, x264_picture_t *pic_in);
 
 void x264enc_set_param(const m_option_t* opt, char* arg)
@@ -234,7 +233,7 @@ static int query_format(struct vf_instance *vf, unsigned int fmt)
     return 0;
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
     h264_module_t *mod=(h264_module_t*)vf->priv;
     int i;

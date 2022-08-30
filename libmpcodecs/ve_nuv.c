@@ -120,7 +120,7 @@ static int query_format(struct vf_instance *vf, unsigned int fmt){
   return 0;
 }
 
-static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts){
+static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts){
   uint8_t *header  = vf->priv->buffer;
   uint8_t* data = vf->priv->buffer + FRAMEHEADERSIZE;
   uint8_t* zdata = vf->priv->zbuffer + FRAMEHEADERSIZE;

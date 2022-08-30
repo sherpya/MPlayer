@@ -523,7 +523,7 @@ query_format(struct vf_instance *vf, unsigned int fmt)
  *==========================================================================*/
 
 static int
-put_image(struct vf_instance *vf, mp_image_t *mpi, double pts)
+put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double endpts)
 {
 	int size;
 	xvid_enc_stats_t stats;

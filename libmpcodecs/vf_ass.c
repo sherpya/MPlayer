@@ -879,6 +879,7 @@ static void uninit(struct vf_instance *vf)
     for (i = 0; i < MP_MAX_PLANES; i++)
         av_free(vf->priv->alphas[i]);
     av_free(vf->priv->dirty_rows);
+    free(vf->priv);
 }
 
 static const unsigned int fmt_list[] = {

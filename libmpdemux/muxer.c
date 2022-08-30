@@ -69,6 +69,34 @@ fail:
     return NULL;
 }
 
+off_t muxer_close(muxer_t *muxer)
+{
+    off_t size;
+    /* flush muxer just in case, this is a no-op unless
+     * we created a stream but never wrote frames to it... */
+    muxer_flush(muxer);
+    if (muxer->cont_write_index) muxer_write_index(muxer);
+    size=stream_tell(muxer->stream);
+    stream_seek(muxer->stream,0);
+    if (muxer->cont_write_header) muxer_write_header(muxer); // update header
+    return size;
+}
+
+void muxer_free(muxer_t *muxer)
+{
+    int num;
+    for (num = 0; muxer->streams[num]; ++num) {
+        free(muxer->streams[num]->priv);
+        muxer->streams[num]->priv = NULL;
+        free(muxer->streams[num]);
+        muxer->streams[num] = NULL;
+    }
+    free(muxer->idx);
+    muxer->idx = NULL;
+    muxer->idx_size = 0;
+    free(muxer);
+}
+
 /* Flush the internal muxer buffer.
  * This is normally called from muxer_write_chunk() once all streams
  * have seen frames. */

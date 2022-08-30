@@ -1699,13 +1699,7 @@ if(aencoder)
     if(aencoder->fixup)
         aencoder->fixup(aencoder);
 
-/* flush muxer just in case, this is a no-op unless
- * we created a stream but never wrote frames to it... */
-muxer_flush(muxer);
-if (muxer->cont_write_index) muxer_write_index(muxer);
-muxer_f_size=stream_tell(muxer->stream);
-stream_seek(muxer->stream,0);
-if (muxer->cont_write_header) muxer_write_header(muxer); // update header
+muxer_f_size=muxer_close(muxer);
 #if 0
 if(ferror(muxer_f) || fclose(muxer_f) != 0) {
     mp_msg(MSGT_MENCODER,MSGL_FATAL,MSGTR_ErrorWritingFile, out_filename);
@@ -1730,6 +1724,9 @@ if(sh_audio)
 mp_msg(MSGT_MENCODER, MSGL_INFO, MSGTR_AudioStreamResult,
     (float)(mux_a->size/mux_a->timer*8.0f/1000.0f), (int)(mux_a->size/mux_a->timer), (uint64_t)mux_a->size, (float)mux_a->timer);
 
+muxer_free(muxer);
+muxer=NULL;
+mux_v=mux_a=NULL;
 m_config_free(mconfig);
 m_entry_list_free(filelist);
 if(sh_audio){ uninit_audio(sh_audio);sh_audio=NULL; }

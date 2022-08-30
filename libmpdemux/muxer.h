@@ -133,6 +133,8 @@ extern const m_option_t mpegopts_conf[];
 extern const m_option_t nuvopts_conf[];
 
 muxer_t *muxer_new_muxer(int type,stream_t *stream);
+off_t muxer_close(muxer_t *muxer);
+void muxer_free(muxer_t *muxer);
 void muxer_flush(muxer_t *m);
 #define muxer_new_stream(muxer,a) muxer->cont_new_stream(muxer,a)
 #define muxer_stream_fix_parameters(muxer, a) muxer->fix_stream_parameters(a)

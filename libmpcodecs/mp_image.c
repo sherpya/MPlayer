@@ -51,8 +51,12 @@ void mp_image_alloc_planes(mp_image_t *mpi) {
   }
     mpi->planes[0]=av_malloc(mpi->bpp*mpi->width*(mpi->height+2)/8+
                             mpi->chroma_width*mpi->chroma_height);
-  } else
-    mpi->planes[0]=av_malloc(mpi->bpp*mpi->width*(mpi->height+2)/8);
+  } else {
+    // for odd width round up to be on the safe side,
+    // required in particular for planar formats
+    int alloc_w = mpi->width + (mpi->width & 1);
+    mpi->planes[0]=av_malloc(mpi->bpp*alloc_w*(mpi->height+2)/8);
+  }
   if (mpi->flags&MP_IMGFLAG_PLANAR) {
     int bpp = IMGFMT_IS_YUVP16(mpi->imgfmt)? 2 : 1;
     // YV12/I420/YVU9/IF09. feel free to add other planar formats here...

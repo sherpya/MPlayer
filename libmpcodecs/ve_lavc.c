@@ -441,8 +441,7 @@ static int config(struct vf_instance *vf,
 	    mp_msg(MSGT_MENCODER,MSGL_ERR,"error parsing vrc_q\n");
             return 0;
         }
-        lavc_venc_context->rc_override=
-            av_reallocp_array(lavc_venc_context->rc_override, i+1, sizeof(*lavc_venc_context->rc_override));
+        av_reallocp_array(&lavc_venc_context->rc_override, i+1, sizeof(*lavc_venc_context->rc_override));
         lavc_venc_context->rc_override[i].start_frame= start;
         lavc_venc_context->rc_override[i].end_frame  = end;
         if(q>0){

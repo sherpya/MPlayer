@@ -79,7 +79,7 @@ static int preinit(sh_audio_t *sh)
 
 static int init(sh_audio_t *sh)
 {
-    int i, x, in_size, srate, bps, *dtshd_rate, res;
+    int i, x, in_size, srate, bps, res;
     unsigned char *start;
     double pts;
     static const struct {
@@ -97,6 +97,7 @@ static int init(sh_audio_t *sh)
     AVStream            *stream    = NULL;
     const AVOption      *opt       = NULL;
     struct spdifContext *spdif_ctx = NULL;
+    AVDictionary *opts = NULL;
 
     spdif_ctx = av_mallocz(sizeof(*spdif_ctx));
     if (!spdif_ctx)
@@ -111,9 +112,6 @@ static int init(sh_audio_t *sh)
     init_avformat();
     lavf_ctx->oformat = av_guess_format(FILENAME_SPDIFENC, NULL, NULL);
     if (!lavf_ctx->oformat)
-        goto fail;
-    lavf_ctx->priv_data = av_mallocz(lavf_ctx->oformat->priv_data_size);
-    if (!lavf_ctx->priv_data)
         goto fail;
     lavf_ctx->pb = avio_alloc_context(spdif_ctx->pb_buffer, OUTBUF_SIZE, 1, spdif_ctx,
                             read_packet, write_packet, seek);
@@ -130,12 +128,17 @@ static int init(sh_audio_t *sh)
             break;
         }
     }
-    if ((res = avformat_write_header(lavf_ctx, NULL)) < 0) {
+    // FORCE USE DTS-HD
+    if (lavf_ctx->streams[0]->codecpar->codec_id == AV_CODEC_ID_DTS)
+        av_dict_set(&opts, "dtshd_rate", "768000" /* 192000*4 */, 0);
+    if ((res = avformat_write_header(lavf_ctx, opts)) < 0) {
+        av_dict_free(&opts);
         if (res == AVERROR_PATCHWELCOME)
             mp_msg(MSGT_DECAUDIO,MSGL_INFO,
                "This codec is not supported by spdifenc.\n");
         goto fail;
     }
+    av_dict_free(&opts);
     spdif_ctx->header_written = 1;
 
     // get sample_rate & bitrate from parser
@@ -177,13 +180,6 @@ static int init(sh_audio_t *sh)
         sh->i_bps                       = bps;
         break;
     case AV_CODEC_ID_DTS: // FORCE USE DTS-HD
-        opt = av_opt_find(&lavf_ctx->oformat->priv_class,
-                          "dtshd_rate", NULL, 0, 0);
-        if (!opt)
-            goto fail;
-        dtshd_rate                      = (int*)(((uint8_t*)lavf_ctx->priv_data) +
-                                          opt->offset);
-        *dtshd_rate                     = 192000*4;
         spdif_ctx->iec61937_packet_size = 32768;
         sh->sample_format               = AF_FORMAT_IEC61937_LE;
         sh->samplerate                  = 192000; // DTS core require 48000

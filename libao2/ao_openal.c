@@ -61,6 +61,7 @@ static ALuint sources[MAX_CHANS];
 static int cur_buf[MAX_CHANS];
 static int unqueue_buf[MAX_CHANS];
 static int16_t *tmpbuf;
+static int num_sources;
 
 
 static int control(int cmd, void *arg) {
@@ -126,15 +127,18 @@ static int init(int rate, int channels, int format, int flags) {
   alcMakeContextCurrent(ctx);
   alListenerfv(AL_POSITION, position);
   alListenerfv(AL_ORIENTATION, direction);
-  alGenSources(channels, sources);
-  for (i = 0; i < channels; i++) {
+  // play stereo using a single source - this is closer
+  // to the result from other aos and what people expect.
+  num_sources = channels <= 2 ? 1 : channels;
+  alGenSources(num_sources, sources);
+  for (i = 0; i < num_sources; i++) {
     cur_buf[i] = 0;
     unqueue_buf[i] = 0;
     alGenBuffers(NUM_BUF, buffers[i]);
     alSourcefv(sources[i], AL_POSITION, sppos[i]);
     alSource3f(sources[i], AL_VELOCITY, 0, 0, 0);
   }
-  if (channels == 1)
+  if (num_sources == 1)
     alSource3f(sources[0], AL_POSITION, 0, 0, 1);
   ao_data.channels = channels;
   alcGetIntegerv(dev, ALC_FREQUENCY, 1, &freq);
@@ -174,7 +178,7 @@ static void uninit(int immed) {
 static void unqueue_buffers(void) {
   ALint p;
   int s;
-  for (s = 0;  s < ao_data.channels; s++) {
+  for (s = 0; s < num_sources; s++) {
     int till_wrap = NUM_BUF - unqueue_buf[s];
     alGetSourcei(sources[s], AL_BUFFERS_PROCESSED, &p);
     if (p >= till_wrap) {
@@ -193,7 +197,7 @@ static void unqueue_buffers(void) {
  * \brief stop playing and empty buffers (for seeking/pause)
  */
 static void reset(void) {
-  alSourceStopv(ao_data.channels, sources);
+  alSourceStopv(num_sources, sources);
   unqueue_buffers();
 }
 
@@ -201,14 +205,14 @@ static void reset(void) {
  * \brief stop playing, keep buffers (for pause)
  */
 static void audio_pause(void) {
-  alSourcePausev(ao_data.channels, sources);
+  alSourcePausev(num_sources, sources);
 }
 
 /**
  * \brief resume playing, after audio_pause()
  */
 static void audio_resume(void) {
-  alSourcePlayv(ao_data.channels, sources);
+  alSourcePlayv(num_sources, sources);
 }
 
 static int get_space(void) {
@@ -217,7 +221,7 @@ static int get_space(void) {
   alGetSourcei(sources[0], AL_BUFFERS_QUEUED, &queued);
   queued = NUM_BUF - queued - 3;
   if (queued < 0) return 0;
-  return queued * CHUNK_SIZE * ao_data.channels;
+  return queued * CHUNK_SIZE * num_sources;
 }
 
 /**
@@ -228,22 +232,23 @@ static int play(void *data, int len, int flags) {
   int i, j, k;
   int ch;
   int16_t *d = data;
-  len /= ao_data.channels * CHUNK_SIZE;
+  int format = ao_data.channels == 2 && num_sources == 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
+  len /= num_sources * CHUNK_SIZE;
   for (i = 0; i < len; i++) {
-    for (ch = 0; ch < ao_data.channels; ch++) {
-      for (j = 0, k = ch; j < CHUNK_SIZE / 2; j++, k += ao_data.channels)
+    for (ch = 0; ch < num_sources; ch++) {
+      for (j = 0, k = ch; j < CHUNK_SIZE / 2; j++, k += num_sources)
         tmpbuf[j] = d[k];
-      alBufferData(buffers[ch][cur_buf[ch]], AL_FORMAT_MONO16, tmpbuf,
+      alBufferData(buffers[ch][cur_buf[ch]], format, tmpbuf,
                      CHUNK_SIZE, ao_data.samplerate);
       alSourceQueueBuffers(sources[ch], 1, &buffers[ch][cur_buf[ch]]);
       cur_buf[ch] = (cur_buf[ch] + 1) % NUM_BUF;
     }
-    d += ao_data.channels * CHUNK_SIZE / 2;
+    d += num_sources * CHUNK_SIZE / 2;
   }
   alGetSourcei(sources[0], AL_SOURCE_STATE, &state);
   if (state != AL_PLAYING) // checked here in case of an underrun
-    alSourcePlayv(ao_data.channels, sources);
-  return len * ao_data.channels * CHUNK_SIZE;
+    alSourcePlayv(num_sources, sources);
+  return len * num_sources * CHUNK_SIZE;
 }
 
 static float get_delay(void) {

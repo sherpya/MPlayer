@@ -159,6 +159,7 @@ err_out:
     pfds = NULL;
     sio_close(hdl);
     hdl = NULL;
+    havevol = 0;
     return 0;
 }
 
@@ -172,6 +173,7 @@ static void uninit(int immed)
     hdl = NULL;
     free(pfds);
     pfds = NULL;
+    havevol = 0;
 }
 
 /*

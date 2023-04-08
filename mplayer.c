@@ -672,6 +672,7 @@ void uninit_player(unsigned int mask)
         if (mpctx->audio_out)
             mpctx->audio_out->uninit(mpctx->eof ? 0 : 1);
         mpctx->audio_out = NULL;
+        mpctx->mixer.audio_out = NULL;
     }
 
 #ifdef CONFIG_GUI

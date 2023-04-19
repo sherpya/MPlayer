@@ -159,13 +159,21 @@ int req=(inNumFrames)*ao->packetSize;
 
 	if(amt>req)
  		amt=req;
+	// clear whole buffer since coreaudio seems to have
+	// issues handling data amounts smaller than it requested
+	if (amt < req)
+		memset(ioData->mBuffers[0].mData + amt, 0, req - amt);
 
 	if(amt)
 		read_buffer((unsigned char *)ioData->mBuffers[0].mData, amt);
-	else audio_pause();
 	ioData->mBuffers[0].mDataByteSize = amt;
 
- 	return noErr;
+	// In theory it might be nicer to call audio_pause if
+	// there is no data, as the code originally did.
+	// However since this runs in a separate thread, this can
+	// trigger a race condition if MPlayer calls AudioOutputUnitStop
+	// for example during uninit, which then causes a hang.
+	return amt ? noErr : kAudioFileEndOfFileError;
 }
 
 static int control(int cmd,void *arg){
@@ -1146,17 +1154,12 @@ static void uninit(int immed)
     usec_sleep((int)timeleft);
   }
 
+  audio_pause();
   if (!ao->b_digital) {
-      AudioOutputUnitStop(ao->theOutputUnit);
       AudioUnitUninitialize(ao->theOutputUnit);
       CloseComponent(ao->theOutputUnit);
   }
   else {
-      /* Stop device. */
-      err = AudioDeviceStop(ao->i_selected_dev, ao->renderCallback);
-      if (err != noErr)
-          ao_msg(MSGT_AO, MSGL_WARN, "AudioDeviceStop failed: [%4.4s]\n", (char *)&err);
-
       /* Remove IOProc callback. */
       err = AudioDeviceDestroyIOProcID(ao->i_selected_dev, ao->renderCallback);
       if (err != noErr)
@@ -1206,6 +1209,9 @@ static void uninit(int immed)
 static void audio_pause(void)
 {
     OSErr err=noErr;
+
+    if (ao->paused)
+        return;
 
     /* Stop callback. */
     if (!ao->b_digital)

@@ -5618,7 +5618,6 @@ fi
 echores "$libopenjpeg"
 if test "$libopenjpeg" = yes ; then
   def_libopenjpeg='#define CONFIG_LIBOPENJPEG 1'
-  libavdecoders="$libavdecoders LIBOPENJPEG_DECODER"
   libavencoders="$libavencoders LIBOPENJPEG_ENCODER"
   codecmodules="OpenJPEG $codecmodules"
 else

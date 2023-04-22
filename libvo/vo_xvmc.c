@@ -203,7 +203,7 @@ static int allocate_xvimage(int xvimage_width,int xvimage_height,int xv_format)
         if (!xvimage->data_size)
             goto shmgetfail;
 
-        Shminfo.shmid    = shmget(IPC_PRIVATE, xvimage->data_size, IPC_CREAT | 0777);
+        Shminfo.shmid    = shmget(IPC_PRIVATE, xvimage->data_size, IPC_CREAT | SHM_R | SHM_W);
         if (Shminfo.shmid == -1)
             goto shmgetfail;
         Shminfo.shmaddr  = (char *) shmat(Shminfo.shmid, 0, 0);

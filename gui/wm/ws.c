@@ -1357,7 +1357,7 @@ void wsImageCreate(wsWindow *win, int w, int h)
             mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
         }
 
-        win->Shminfo.shmid = shmget(IPC_PRIVATE, win->xImage->bytes_per_line * win->xImage->height, IPC_CREAT | 0777);
+        win->Shminfo.shmid = shmget(IPC_PRIVATE, win->xImage->bytes_per_line * win->xImage->height, IPC_CREAT | SHM_R | SHM_W);
 
         if (win->Shminfo.shmid < 0) {
             XDestroyImage(win->xImage);

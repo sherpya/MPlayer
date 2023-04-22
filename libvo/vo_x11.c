@@ -150,7 +150,7 @@ static void getMyXImage(void)
         }
         Shminfo[0].shmid = shmget(IPC_PRIVATE,
                                   myximage->bytes_per_line *
-                                  myximage->height, IPC_CREAT | 0777);
+                                  myximage->height, IPC_CREAT | SHM_R | SHM_W);
         if (Shminfo[0].shmid < 0)
         {
             XDestroyImage(myximage);

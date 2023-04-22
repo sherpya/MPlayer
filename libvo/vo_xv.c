@@ -279,7 +279,7 @@ static void allocate_xvimage(int foo)
                                          &Shminfo[foo]);
 
         Shminfo[foo].shmid =
-            shmget(IPC_PRIVATE, xvimage[foo]->data_size, IPC_CREAT | 0777);
+            shmget(IPC_PRIVATE, xvimage[foo]->data_size, IPC_CREAT | SHM_R | SHM_W);
         Shminfo[foo].shmaddr = (char *) shmat(Shminfo[foo].shmid, 0, 0);
         Shminfo[foo].readOnly = False;
 

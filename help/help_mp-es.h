@@ -783,7 +783,7 @@ static const char help_text[] = MSGTR_Help;
 
 // vo_3dfx.c
 #define MSGTR_LIBVO_3DFX_Only16BppSupported "[VO_3DFX] Solo 16bpp soportado!"
-#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] El id visual es  %lx.\n"
+#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] El id visual es %lx.\n"
 #define MSGTR_LIBVO_3DFX_UnableToOpenDevice "[VO_3DFX] No pude abrir /dev/3dfx.\n"
 #define MSGTR_LIBVO_3DFX_Error "[VO_3DFX] Error: %d.\n"
 #define MSGTR_LIBVO_3DFX_CouldntMapMemoryArea "[VO_3DFX] No pude mapear las areas de memoria 3dfx: %p,%p,%d.\n"

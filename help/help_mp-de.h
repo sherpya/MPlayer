@@ -272,7 +272,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_MissingFilename "\nDateiname nicht angegeben.\n\n"
 #define MSGTR_CannotOpenFile_Device "Kann Datei/Gerät nicht öffnen.\n"
 #define MSGTR_CannotOpenDemuxer "Kann Demuxer nicht öffnen.\n"
-#define MSGTR_NoAudioEncoderSelected "\nKein Audioencoder (-oac)  ausgewählt. \nWähle einen aus (siehe -oac help) oder verwende -nosound.\n"
+#define MSGTR_NoAudioEncoderSelected "\nKein Audioencoder (-oac) ausgewählt. \nWähle einen aus (siehe -oac help) oder verwende -nosound.\n"
 #define MSGTR_NoVideoEncoderSelected "\nKein Videoencoder (-ovc) ausgewählt. \nWähle einen aus (siehe -ovc help).\n"
 #define MSGTR_CannotOpenOutputFile "Kann Ausgabedatei '%s' nicht öffnen.\n"
 #define MSGTR_EncoderOpenFailed "Öffnen des Encoders fehlgeschlagen.\n"
@@ -286,7 +286,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_ResolutionDoesntMatch "\nNeue Videodatei hat eine andere Auflösung oder anderen Farbraum als die vorige.\n"
 #define MSGTR_FrameCopyFileMismatch "\nAlle Videodateien müssen für -ovc copy identische fps, Auflösung und Codec haben.\n"
 #define MSGTR_AudioCopyFileMismatch "\nAlle Videodateien müssen für -oac copy identischen Audiocodec und Format haben.\n"
-#define MSGTR_NoAudioFileMismatch "\nVideodateien ohne Ton können nicht mit Audio/Video-Dateien gemischt werden.  Versuche -nosound.\n"
+#define MSGTR_NoAudioFileMismatch "\nVideodateien ohne Ton können nicht mit Audio/Video-Dateien gemischt werden. Versuche -nosound.\n"
 #define MSGTR_NoSpeedWithFrameCopy "WARNUNG: Korrektes Funktionieren von -speed kann zusammen mit -oac copy nicht garantiert werden!\n"\
 "Das Ergebnis der Encodierung könnte defekt sein!\n"
 #define MSGTR_ErrorWritingFile "%s: Fehler beim Schreiben der Datei.\n"
@@ -1570,7 +1570,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_MPDEMUX_MKV_TrackID "[mkv] Track-ID %u: %s (%s), %s\n"
 #define MSGTR_MPDEMUX_MKV_UnknownCodecID "[mkv] Unbekannte/nicht unterstützte CodecID (%s) oder fehlende/fehlerhafte\n[mkv] CodecPrivate-Daten (Track %u).\n"
 #define MSGTR_MPDEMUX_MKV_FlacTrackDoesNotContainValidHeaders "[mkv] FLAC-Track enthält keine gültigen Header.\n"
-#define MSGTR_MPDEMUX_MKV_UnknownAudioCodec "[mkv]  Unbekannte/nicht unterstützte Audiocodec-ID ID '%s' für Track %u\n[mkv] oder fehlende/fehlerhafte private codec Daten.\n"
+#define MSGTR_MPDEMUX_MKV_UnknownAudioCodec "[mkv] Unbekannte/nicht unterstützte Audiocodec-ID ID '%s' für Track %u\n[mkv] oder fehlende/fehlerhafte private codec Daten.\n"
 #define MSGTR_MPDEMUX_MKV_SubtitleTypeNotSupported "[mkv] Untertitel-Typ '%s' wird nicht unterstützt.\n"
 #define MSGTR_MPDEMUX_MKV_WillPlayVideoTrack "[mkv] Werde Video-Track %u abspielen.\n"
 #define MSGTR_MPDEMUX_MKV_NoVideoTrackFound "[mkv] Kein Video-Track gefunden/gewünscht.\n"
@@ -1722,7 +1722,7 @@ static const char help_text[] = MSGTR_Help;
 
 // libvo/vo_3dfx.c
 #define MSGTR_LIBVO_3DFX_Only16BppSupported "[VO_3DFX] Nur 16bpp unterstützt!"
-#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] Visuelle ID ist  %lx.\n"
+#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] Visuelle ID ist %lx.\n"
 #define MSGTR_LIBVO_3DFX_UnableToOpenDevice "[VO_3DFX] Kann /dev/3dfx nicht öffnen.\n"
 #define MSGTR_LIBVO_3DFX_Error "[VO_3DFX] Fehler: %d.\n"
 #define MSGTR_LIBVO_3DFX_CouldntMapMemoryArea "[VO_3DFX] Konnte 3dfx-Speicherbereiche nicht abbilden: %p,%p,%d.\n"

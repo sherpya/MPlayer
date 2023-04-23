@@ -753,7 +753,7 @@ static const char help_text[] = MSGTR_Help;
 
 // vo_3dfx.c
 #define MSGTR_LIBVO_3DFX_Only16BppSupported "[VO_3DFX] Podporována pouze 16bit barevná hloubka!"
-#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] Visual ID je  %lx.\n"
+#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] Visual ID je %lx.\n"
 #define MSGTR_LIBVO_3DFX_UnableToOpenDevice "[VO_3DFX] Nelze otevřít /dev/3dfx.\n"
 #define MSGTR_LIBVO_3DFX_Error "[VO_3DFX] Chyba: %d.\n"
 #define MSGTR_LIBVO_3DFX_CouldntMapMemoryArea "[VO_3DFX] Nelze mapovat 3dfx paměťové prostory: %p,%p,%d.\n"

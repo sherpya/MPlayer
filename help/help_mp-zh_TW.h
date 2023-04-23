@@ -1463,7 +1463,7 @@ static const char help_text[] = MSGTR_Help;
 // libvo/vo_3dfx.c
 
 #define MSGTR_LIBVO_3DFX_Only16BppSupported "[VO_3DFX] 祇支持 16bpp!"
-#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] 可視 ID 是  %lx。\n"
+#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] 可視 ID 是 %lx。\n"
 #define MSGTR_LIBVO_3DFX_UnableToOpenDevice "[VO_3DFX] 無法打開 /dev/3dfx。\n"
 #define MSGTR_LIBVO_3DFX_Error "[VO_3DFX] 錯誤: %d。\n"
 #define MSGTR_LIBVO_3DFX_CouldntMapMemoryArea "[VO_3DFX] 没能映射 3dfx 内存區域: %p,%p,%d。\n"

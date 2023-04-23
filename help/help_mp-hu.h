@@ -767,7 +767,7 @@ static const char help_text[] = MSGTR_Help;
 
 // vo_3dfx.c
 #define MSGTR_LIBVO_3DFX_Only16BppSupported "[VO_3DFX] Csak 16bpp támogatott!"
-#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] A vizuális ID  %lx.\n"
+#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] A vizuális ID %lx.\n"
 #define MSGTR_LIBVO_3DFX_UnableToOpenDevice "[VO_3DFX] A /dev/3dfx nem nyitható meg.\n"
 #define MSGTR_LIBVO_3DFX_Error "[VO_3DFX] Hiba: %d.\n"
 #define MSGTR_LIBVO_3DFX_CouldntMapMemoryArea "[VO_3DFX] Nem mappolhatóak a 3dfx memória területek: %p,%p,%d.\n"

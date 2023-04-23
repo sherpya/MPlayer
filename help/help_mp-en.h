@@ -924,7 +924,7 @@ static const char help_text[] = MSGTR_Help;
 
 // vo_3dfx.c
 #define MSGTR_LIBVO_3DFX_Only16BppSupported "[VO_3DFX] Only 16bpp supported!"
-#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] Visual ID is  %lx.\n"
+#define MSGTR_LIBVO_3DFX_VisualIdIs "[VO_3DFX] Visual ID is %lx.\n"
 #define MSGTR_LIBVO_3DFX_UnableToOpenDevice "[VO_3DFX] Unable to open /dev/3dfx.\n"
 #define MSGTR_LIBVO_3DFX_Error "[VO_3DFX] Error: %d.\n"
 #define MSGTR_LIBVO_3DFX_CouldntMapMemoryArea "[VO_3DFX] Couldn't map 3dfx memory areas: %p,%p,%d.\n"
@@ -1500,7 +1500,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_MPDEMUX_MKV_ZlibInitializationFailed "[mkv] zlib initialization failed.\n"
 #define MSGTR_MPDEMUX_MKV_ZlibDecompressionFailed "[mkv] zlib decompression failed.\n"
 #define MSGTR_MPDEMUX_MKV_LzoDecompressionFailed "[mkv] lzo decompression failed.\n"
-#define MSGTR_MPDEMUX_MKV_TrackEncrypted "[mkv] Track number %u has been encrypted  and decryption has not yet been\n[mkv] implemented. Skipping track.\n"
+#define MSGTR_MPDEMUX_MKV_TrackEncrypted "[mkv] Track number %u has been encrypted and decryption has not yet been\n[mkv] implemented. Skipping track.\n"
 #define MSGTR_MPDEMUX_MKV_UnknownContentEncoding "[mkv] Unknown content encoding type for track %u. Skipping track.\n"
 #define MSGTR_MPDEMUX_MKV_UnknownCompression "[mkv] Track %u has been compressed with an unknown/unsupported compression\n[mkv] algorithm (%u). Skipping track.\n"
 #define MSGTR_MPDEMUX_MKV_ZlibCompressionUnsupported "[mkv] Track %u was compressed with zlib but mplayer has not been compiled\n[mkv] with support for zlib compression. Skipping track.\n"

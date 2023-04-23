@@ -1625,7 +1625,7 @@ static const char help_text[] = MSGTR_Help;
 // libmenu/menu_param.c
 #define MSGTR_LIBMENU_SubmenuDefinitionNeedAMenuAttribut "[MENU] Definition des Untermenüs benötigt ein 'menu'-Attribut.\n"
 #define MSGTR_LIBMENU_InvalidProperty "[MENU] Ungültige Eigenschaft '%s' im Einstellungsmenüeintrag. (Zeile %d).\n"
-#define MSGTR_LIBMENU_PrefMenuEntryDefinitionsNeed "[MENU] Definitionen für Konfigurationsmenüeinträge benötigen ein\n       gültiges 'property'- oder 'txt'Attribut (Zeile %d).\n"
+#define MSGTR_LIBMENU_PrefMenuEntryDefinitionsNeed "[MENU] Definitionen von 'pref'-Menüeinträgen benötigen ein gültiges\n       'property'- oder 'txt'-Attribut (Zeile %d).\n"
 #define MSGTR_LIBMENU_PrefMenuNeedsAnArgument "[MENU] Konfigurationsmenü benötigt einen Parameter.\n"
 
 // libmenu/menu_pt.c

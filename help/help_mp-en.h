@@ -1179,7 +1179,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_EwmhFullscreenStateFailed "\nX11: Couldn't send EWMH fullscreen event!\n"
 #define MSGTR_SelectedVideoMode "XF86VM: Selected video mode %dx%d for image size %dx%d.\n"
 #define MSGTR_X11Error "X11 error: %s\n"
-#define MSGTR_CouldntFindUTF8Locale "Could not find a UTF-8 locale,\ncharacter keys beyond Latin-1 will not be handled.\n"
+#define MSGTR_CouldntFindUTF8Locale "Could not find a suitable UTF-8 locale. Keys that\nsend characters beyond Latin-1 are not recognized.\n"
 #define MSGTR_CouldntOpenDisplay "vo: couldn't open the X11 display (%s)!\n"
 #define MSGTR_WindowDestroyed "Our window was destroyed, exiting\n"
 #define MSGTR_DPMSnotAvailable "DPMS not available?\n"

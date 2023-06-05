@@ -165,6 +165,7 @@ static const struct AVCodecTag mp_bmp_tags[] = {
     { AV_CODEC_ID_DSICINVIDEO,       MKTAG('D', 'C', 'I', 'V') },
     { AV_CODEC_ID_DXA,               MKTAG('D', 'X', 'A', '1') },
     { AV_CODEC_ID_FLIC,              MKTAG('f', 'l', 'i', 'c') },
+    { AV_CODEC_ID_GIF,               MKTAG('g', 'i', 'f', ' ') },
     { AV_CODEC_ID_HEVC,              MKTAG('H', 'E', 'V', 'C') },
     { AV_CODEC_ID_HNM4_VIDEO,        MKTAG('H', 'N', 'M', '4') },
     { AV_CODEC_ID_IDCIN,             MKTAG('I', 'D', 'C', 'I') },

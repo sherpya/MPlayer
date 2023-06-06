@@ -2238,7 +2238,8 @@ static XVisualInfo *getWindowVisualInfo(Window win) {
   XWindowAttributes xw_attr;
   XVisualInfo vinfo_template;
   int tmp;
-  XGetWindowAttributes(mDisplay, win, &xw_attr);
+  if (!XGetWindowAttributes(mDisplay, win, &xw_attr))
+    return DefaultVisual(mDisplay, 0);
   vinfo_template.visualid = XVisualIDFromVisual(xw_attr.visual);
   return XGetVisualInfo(mDisplay, VisualIDMask, &vinfo_template, &tmp);
 }

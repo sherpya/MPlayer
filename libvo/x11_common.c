@@ -1397,16 +1397,19 @@ static int vo_x11_get_fs_type(int supported)
  * \return returns current color depth of vo_window
  */
 int vo_x11_update_geometry(void) {
-    unsigned depth, w, h;
+    unsigned depth, w = 0, h = 0;
     int dummy_int;
     Window dummy_win;
     XGetGeometry(mDisplay, vo_window, &dummy_win, &dummy_int, &dummy_int,
                  &w, &h, &dummy_int, &depth);
-    if (w <= INT_MAX && h <= INT_MAX) {
+    if (w > 0 && h > 0 && w <= INT_MAX && h <= INT_MAX) {
         vo_dwidth = w;
         vo_dheight = h;
         vo_x11_update_fs_borders();
     }
+    // ensure minimum value of 1, to avoid e.g. division by 0.
+    if (vo_dwidth <= 0) vo_dwidth = 1;
+    if (vo_dheight <= 0) vo_dheight = 1;
     XTranslateCoordinates(mDisplay, vo_window, mRootWin, 0, 0, &vo_dx, &vo_dy,
                           &dummy_win);
 

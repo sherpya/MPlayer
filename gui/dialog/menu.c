@@ -379,6 +379,7 @@ static const Languages_t Languages[] =
   { lng( 'z','h' ), "zho", "漢語"                          },
   { lng( 'z','h' ), "chi", "漢語"                          },
   { lng( 'z','u' ), "zul", "isiZulu"                         },
+  { lng( '~','~' ), "fil", "Filipino"                        },
 };
 
 #ifdef CONFIG_DVDREAD

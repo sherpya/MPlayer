@@ -81,6 +81,7 @@ const mime_struct_t mime_type_table[] = {
 	{ "video/x-mpeg2", DEMUXER_TYPE_UNKNOWN },
 	// AVI ??? => video/x-msvideo
 	{ "video/x-msvideo", DEMUXER_TYPE_AVI },
+	{ "video/vnd.avi", DEMUXER_TYPE_AVI },
 	// MOV => video/quicktime
 	{ "video/quicktime", DEMUXER_TYPE_MOV },
 	// ASF

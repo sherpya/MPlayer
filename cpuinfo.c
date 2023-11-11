@@ -329,10 +329,10 @@ main(void)
         model = (regs.eax >> 4) & 0xf;
         stepping = regs.eax & 0xf;
 
-        if (family == 0xf)
-            family += (regs.eax >> 20) & 0xff;
         if (family == 0xf || family == 6)
             model += ((regs.eax >> 16) & 0xf) << 4;
+        if (family == 0xf)
+            family += (regs.eax >> 20) & 0xff;
 
         printf("cpu family\t: %d\n"
                "model\t\t: %d\n"

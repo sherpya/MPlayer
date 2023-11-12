@@ -119,6 +119,9 @@ main(void)
     unsigned int amd_flags;
     unsigned int amd_flags2;
     unsigned int ext_flags;
+    unsigned int ext_flags2;
+    unsigned int ext_flags3;
+    unsigned int ext_flags4;
     const char *model_name = NULL;
     int i;
     char processor_name[49];
@@ -162,8 +165,16 @@ main(void)
     if (max_cpuid >= 7) {
         regs_ext = cpuid(7, 0);
         ext_flags = regs_ext.ebx;
+        ext_flags2 = regs_ext.ecx;
+        ext_flags3 = regs_ext.edx;
+        if (regs_ext.eax >= 1) {
+            regs_ext = cpuid(7, 1);
+            ext_flags4 = regs_ext.eax;
+        } else {
+            ext_flags4 = 0;
+        }
     } else {
-        ext_flags = 0;
+        ext_flags = ext_flags2 = ext_flags3 = ext_flags4 = 0;
     }
 
     if (max_cpuid >= 1) {
@@ -310,6 +321,7 @@ main(void)
             CPUID_FEATURE_DEF(18, "rdseed", "The RDSEED instruction"),
             CPUID_FEATURE_DEF(19, "adx", "ADCX and ADOX instructions"),
             CPUID_FEATURE_DEF(20, "smap", "Supservisor mode access prevention"),
+            CPUID_FEATURE_DEF(21, "avx512ifma", "AVX-512 Integer FMA"),
             CPUID_FEATURE_DEF(22, "pcommit", "PCOMMIT instruction"),
             CPUID_FEATURE_DEF(23, "clflushopt", "CLFLUSHOPT instruction"),
             CPUID_FEATURE_DEF(24, "clwb", "CLWB instruction"),
@@ -319,6 +331,58 @@ main(void)
             CPUID_FEATURE_DEF(29, "sha_ni", "SHA extensions"),
             CPUID_FEATURE_DEF(30, "avx512bw", "AVX-512 Byte/Word granular"),
             CPUID_FEATURE_DEF(31, "avx512vl", "AVX-512 128/256 Vector Length"),
+            { -1 }
+        };
+        static struct {
+            int bit;
+            char *desc;
+        } cap_ext2[] = {
+            CPUID_FEATURE_DEF(1, "avx512vbmi", "AVX-512 Vector Bit Manipulation"),
+            CPUID_FEATURE_DEF(2, "umip", "User-mode instruction prevention"),
+            CPUID_FEATURE_DEF(3, "pku", "Protection Keys for Userspace"),
+            CPUID_FEATURE_DEF(4, "ospke", "OS Protection Keys Enable"),
+            CPUID_FEATURE_DEF(6, "avx512_vbmi2", "AVX-512 Vector Bit Manipulation 2"),
+            CPUID_FEATURE_DEF(8, "gfni", "Galois Field instructions"),
+            CPUID_FEATURE_DEF(9, "vaes", "VEX-256/EVEX AES"),
+            CPUID_FEATURE_DEF(10, "vpclmulqdq", "Carryless Multiplication Quadword"),
+            CPUID_FEATURE_DEF(11, "avx512_vnni", "Vector Neural Network Instructions"),
+            CPUID_FEATURE_DEF(12, "avx512_bitalg", "Support for VPOPCNT[B,W] and VPSHUF-BITQMB"),
+            CPUID_FEATURE_DEF(13, "tme", "Intel total memory encryption"),
+            CPUID_FEATURE_DEF(14, "avx512_vpopcntdq", "POPCNT for vectors of DW/QW"),
+            CPUID_FEATURE_DEF(16, "la57", "5-level page tables"),
+            CPUID_FEATURE_DEF(22, "rdpid", "Read Processor ID"),
+            CPUID_FEATURE_DEF(24, "bus_lock_detect", "Bus lock detect"),
+            CPUID_FEATURE_DEF(25, "cldemote", "CLDEMOTE instruction"),
+            CPUID_FEATURE_DEF(27, "movdiri", "MOVDIRI instruction"),
+            CPUID_FEATURE_DEF(28, "movdir64b", "MOVDIR64B instruction"),
+            CPUID_FEATURE_DEF(29, "enqcmd", "ENQCMD and ENQCMDS instructions"),
+            CPUID_FEATURE_DEF(30, "sgx_lc", "SGX launch configuration"),
+            { -1 }
+        };
+        static struct {
+            int bit;
+            char *desc;
+        } cap_ext3[] = {
+            CPUID_FEATURE_DEF(2, "avx512_4vnniw", "4 Register AVX-512 Neural Network Instructions"),
+            CPUID_FEATURE_DEF(3, "avx512_4fmaps", "4 Register AVX-512 Multiply Accumulation Single Precision"),
+            CPUID_FEATURE_DEF(4, "fsrm", "Fast short REP MOV"),
+            CPUID_FEATURE_DEF(8, "avx512_vp2intersect", "AVX-512 Intersect for D/Q"),
+            CPUID_FEATURE_DEF(10, "md_clear", "VERW clears CPU buffers"),
+            CPUID_FEATURE_DEF(14, "serialize", "SERIALIZE instruction"),
+            CPUID_FEATURE_DEF(16, "tsxldtrk", "TSX suspend load address tracking"),
+            CPUID_FEATURE_DEF(18, "pconfig", "Intel PCONFIG"),
+            CPUID_FEATURE_DEF(19, "arch_lbr", "Intel ARCH LBR"),
+            CPUID_FEATURE_DEF(23, "avx512_fp16", "AVX512 FP16"),
+            CPUID_FEATURE_DEF(28, "flush_l1d", "Flush L1D cache"),
+            CPUID_FEATURE_DEF(29, "arch_capabilities", "Intel IA32_ARCH_CAPABILITIES MSR"),
+            { -1 }
+        };
+        static struct {
+            int bit;
+            char *desc;
+        } cap_ext4[] = {
+            CPUID_FEATURE_DEF(4, "avx_vnni", "AVX VNNI instructions"),
+            CPUID_FEATURE_DEF(5, "avx512_bf16", "AVX512 BFLOAT16 instructions"),
             { -1 }
         };
 
@@ -388,6 +452,21 @@ main(void)
         for (i = 0; cap_ext[i].bit >= 0; i++) {
             if (ext_flags & (1 << cap_ext[i].bit)) {
                 printf(" %s", cap_ext[i].desc);
+            }
+        }
+        for (i = 0; cap_ext2[i].bit >= 0; i++) {
+            if (ext_flags2 & (1 << cap_ext2[i].bit)) {
+                printf(" %s", cap_ext2[i].desc);
+            }
+        }
+        for (i = 0; cap_ext3[i].bit >= 0; i++) {
+            if (ext_flags3 & (1 << cap_ext3[i].bit)) {
+                printf(" %s", cap_ext3[i].desc);
+            }
+        }
+        for (i = 0; cap_ext4[i].bit >= 0; i++) {
+            if (ext_flags4 & (1 << cap_ext4[i].bit)) {
+                printf(" %s", cap_ext4[i].desc);
             }
         }
         printf("\n");

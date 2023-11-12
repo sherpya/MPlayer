@@ -2083,6 +2083,15 @@ if x86 ; then
   # SSE implies MMX2, but not all SSE processors report the mmxext CPU flag.
   pparam=$(echo $pparam | sed -e 's/sse/sse mmxext/')
 
+  # fma3 is reported in cpuinfo simply as fma
+  contains_item "$pparam" "fma" && pparam="$pparam fma3"
+
+  # avx512 baseline requires F, CD, BW, DQ, VL
+  contains_item "$pparam" "avx512dq" && pparam="$pparam avx512"
+
+  # IceLake equivalent avx512 has further requirements
+  contains_item "$pparam" "avx512_vnni" && pparam="$pparam avx512icl"
+
   extcheck=kernel_check
   msvc && extcheck=yes
   for ext in $pparam ; do
@@ -2140,8 +2149,8 @@ EOF
   extcheck $_sse4_2   'sse4_2'   'pcmpgtq %%xmm0, %%xmm0'
   extcheck $_avx      'avx'      'vpabsw %%xmm0, %%xmm0'
   extcheck $_avx2     'avx2'     'vextracti128 $0, %%ymm0, %%xmm0'
-  extcheck $_avx512   'avx512'   'vmovdqa32 [eax]{k1}{z}, zmm0'
-  extcheck $_avx512icl 'avx512icl' 'vpdpwssds zmm31{k1}{z}, zmm29, zmm28'
+  extcheck $_avx512   'avx512'   'vmovdqa32 %%zmm0, (%%eax)%{%%k1%}'
+  extcheck $_avx512icl 'avx512icl' 'vpdpwssds %%zmm28, %%zmm29, %%zmm31%{%%k1%}%{z%}'
   extcheck $_xop      'xop'      'vpmacsdd %%xmm0, %%xmm1, %%xmm2, %%xmm3'
   extcheck $_fma3     'fma3'     'vfmadd132ps %%ymm0, %%ymm1, %%ymm2'
   extcheck $_fma4     'fma4'     'vfmaddps %%ymm0, %%ymm1, %%ymm2, %%ymm3'

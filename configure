@@ -566,7 +566,7 @@ Miscellaneous options:
   --host-cc=COMPILER     C compiler for tools needed while building [gcc]
   --as=ASSEMBLER         assembler to build MPlayer [as]
   --nm=NM                nm tool to build MPlayer [nm]
-  --yasm=YASM            Yasm assembler to build MPlayer [yasm]
+  --yasm=YASM            Yasm assembler to build MPlayer [nasm]
   --strip=STRIP          use strip tool STRIP [strip]
   --ar=AR                librarian to build MPlayer [ar]
   --ranlib=RANLIB        ranlib to build MPlayer [ranlib]
@@ -678,7 +678,7 @@ $_ar 2>&1 | grep -q "\[T\] " && _arflags=rcT
 test "$CC" && _cc="$CC"
 _as=auto
 _nm=auto
-_yasm=yasm
+_yasm=nasm
 _runtime_cpudetection=no
 _cross_compile=auto
 _prefix="/usr/local"

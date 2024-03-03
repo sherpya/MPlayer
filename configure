@@ -8441,6 +8441,7 @@ if test "$_dvdnav" = yes ; then
 else
   def_dvdnav='#undef CONFIG_DVDNAV'
   noinputmodules="dvdnav $noinputmodules"
+  libavdemuxers=$(filter_out_component demuxer 'DVDVIDEO')
 fi
 echores "$_dvdnav"
 
@@ -8991,6 +8992,8 @@ CONFIG_QPELDSP = yes
 CONFIG_QSV     = no
 CONFIG_HUFFYUVDSP = yes
 CONFIG_HUFFYUVENCDSP = yes
+CONFIG_IAMFDEC = yes
+CONFIG_IAMFENC = yes
 CONFIG_IDCTDSP = yes
 CONFIG_TPELDSP = yes
 CONFIG_HUFFMAN = yes
@@ -9700,6 +9703,8 @@ $def_struct_pollfd
 #define CONFIG_HEVCPARSE 1
 #define CONFIG_HEVC_SEI 1
 #define CONFIG_HUFFMAN 1
+#define CONFIG_IAMFDEC 1
+#define CONFIG_IAMFENC 1
 #define CONFIG_IDCTDSP 1
 #define CONFIG_IVIDSP 1
 #define CONFIG_LPC 1

@@ -3003,7 +3003,7 @@ fi
 if test "$cc_vendor" = "gnu" ; then
   cflag_check -fno-tree-vectorize && CFLAGS="$CFLAGS -fno-tree-vectorize"
   cflag_check -Wundef && WARNFLAGS="-Wundef $WARNFLAGS"
-  cflag_check -std=gnu99 && WARN_CFLAGS="-std=gnu99 $WARN_CFLAGS"
+  cflag_check -std=c11 && WARN_CFLAGS="-std=c11 $WARN_CFLAGS"
   cflag_check -Wdeclaration-after-statement && WARN_CFLAGS="-Wdeclaration-after-statement $WARN_CFLAGS"
   cflag_check -Wno-pointer-sign && WARN_CFLAGS="-Wno-pointer-sign $WARN_CFLAGS"
   cflag_check -Wdisabled-optimization && WARN_CFLAGS="-Wdisabled-optimization $WARN_CFLAGS"

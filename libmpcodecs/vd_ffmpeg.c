@@ -526,7 +526,6 @@ static void uninit(sh_video_t *sh){
 
         av_freep(&avctx->extradata);
         av_freep(&avctx->hwaccel_context);
-        av_freep(&avctx->slice_offset);
     }
 
     avcodec_free_context(&avctx);

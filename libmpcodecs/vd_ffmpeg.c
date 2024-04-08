@@ -515,8 +515,8 @@ static void uninit(sh_video_t *sh){
             mp_msg(MSGT_DECVIDEO, MSGL_INFO, "QP: %d, count: %d\n", i, ctx->qp_stat[i]);
         }
         mp_msg(MSGT_DECVIDEO, MSGL_INFO, MSGTR_MPCODECS_ArithmeticMeanOfQP,
-            ctx->qp_sum / avctx->frame_number,
-            1.0/(ctx->inv_qp_sum / avctx->frame_number)
+            ctx->qp_sum / avctx->frame_num,
+            1.0/(ctx->inv_qp_sum / avctx->frame_num)
             );
     }
 

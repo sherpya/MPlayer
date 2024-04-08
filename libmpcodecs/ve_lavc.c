@@ -740,7 +740,7 @@ static int encode_frame(struct vf_instance *vf, AVFrame *pic, double pts){
     int res;
 
     if(pts == MP_NOPTS_VALUE)
-        pts= lavc_venc_context->frame_number * av_q2d(lavc_venc_context->time_base);
+        pts= lavc_venc_context->frame_num * av_q2d(lavc_venc_context->time_base);
 
     if(pic){
 #if 0

@@ -57,6 +57,7 @@ typedef struct af_resample_s{
 // Initialization and runtime control
 static int control(struct af_instance_s* af, int cmd, void* arg)
 {
+  AVChannelLayout ch_layout;
   af_resample_t* s   = (af_resample_t*)af->setup;
   af_data_t *data= (af_data_t*)arg;
   int out_rate, test_output_res; // helpers for checking input format
@@ -73,6 +74,8 @@ static int control(struct af_instance_s* af, int cmd, void* arg)
     af->mul = (double)af->data->rate / data->rate;
     af->delay = af->data->nch * s->filter_length / FFMIN(af->mul, 1); // *bps*.5
 
+    av_channel_layout_default(&ch_layout, af->data->nch);
+
     if (s->ctx_out_rate != af->data->rate || s->ctx_in_rate != data->rate || s->ctx_filter_size != s->filter_length ||
         s->ctx_phase_shift != s->phase_shift || s->ctx_linear != s->linear || s->ctx_cutoff != s->cutoff) {
         swr_free(&s->swrctx);
@@ -85,8 +88,9 @@ static int control(struct af_instance_s* af, int cmd, void* arg)
         av_opt_set_double(s->swrctx, "cutoff", s->cutoff, 0);
         av_opt_set_sample_fmt(s->swrctx, "in_sample_fmt", AV_SAMPLE_FMT_S16, 0);
         av_opt_set_sample_fmt(s->swrctx, "out_sample_fmt", AV_SAMPLE_FMT_S16, 0);
-        av_opt_set_int(s->swrctx, "in_channel_count", af->data->nch, 0);
-        av_opt_set_int(s->swrctx, "out_channel_count", af->data->nch, 0);
+        if(av_opt_set_chlayout(s->swrctx, "in_chlayout",  &ch_layout, 0) < 0) return AF_ERROR;
+        if(av_opt_set_chlayout(s->swrctx, "out_chlayout", &ch_layout, 0) < 0) return AF_ERROR;
+
         if(swr_init(s->swrctx) < 0) return AF_ERROR;
         s->ctx_out_rate    = af->data->rate;
         s->ctx_in_rate     = data->rate;

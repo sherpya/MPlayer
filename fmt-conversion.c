@@ -138,7 +138,6 @@ static const struct {
     { IMGFMT_422P,       AV_PIX_FMT_YUVJ422P },
     { IMGFMT_444P,       AV_PIX_FMT_YUVJ444P },
     { IMGFMT_440P,       AV_PIX_FMT_YUVJ440P },
-    { IMGFMT_XVMC_IDCT_MPEG2, AV_PIX_FMT_XVMC },
     { 0,                      AV_PIX_FMT_NONE }
 };
 

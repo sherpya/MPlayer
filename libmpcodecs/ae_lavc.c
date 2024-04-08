@@ -50,7 +50,7 @@ static int bind_lavc(audio_encoder_t *encoder, muxer_stream_t *mux_a)
 {
 	mux_a->wf = malloc(sizeof(WAVEFORMATEX)+lavc_actx->extradata_size+256);
 	mux_a->wf->wFormatTag = lavc_param_atag;
-	mux_a->wf->nChannels = lavc_actx->channels;
+	mux_a->wf->nChannels = lavc_actx->ch_layout.nb_channels;
 	mux_a->wf->nSamplesPerSec = lavc_actx->sample_rate;
 	mux_a->wf->nAvgBytesPerSec = (lavc_actx->bit_rate / 8);
         mux_a->avg_rate= lavc_actx->bit_rate;
@@ -192,7 +192,7 @@ int mpae_init_lavc(audio_encoder_t *encoder)
             mp_msg(MSGT_MENCODER,MSGL_ERR, "Audio encoder requires unknown or unsupported input format\n");
             return 0;
 	}
-	lavc_actx->channels = encoder->params.channels;
+	lavc_actx->ch_layout.nb_channels = encoder->params.channels;
 	lavc_actx->sample_rate = encoder->params.sample_rate;
 	lavc_actx->time_base.num = 1;
 	lavc_actx->time_base.den = encoder->params.sample_rate;
@@ -219,7 +219,7 @@ int mpae_init_lavc(audio_encoder_t *encoder)
 	*/
 	if(lavc_param_atag == 0x11) {
 		int blkalign = 2048;
-		int framesize = (blkalign - 4 * lavc_actx->channels) * 8 / (4 * lavc_actx->channels) + 1;
+		int framesize = (blkalign - 4 * lavc_actx->ch_layout.nb_channels) * 8 / (4 * lavc_actx->ch_layout.nb_channels) + 1;
 		lavc_actx->bit_rate = lavc_actx->sample_rate*8*blkalign/framesize;
 	}
         if((lavc_param_audio_global_header&1)
@@ -238,7 +238,7 @@ int mpae_init_lavc(audio_encoder_t *encoder)
 
 	if(lavc_param_atag == 0x11) {
 		lavc_actx->block_align = 2048;
-		lavc_actx->frame_size = (lavc_actx->block_align - 4 * lavc_actx->channels) * 8 / (4 * lavc_actx->channels) + 1;
+		lavc_actx->frame_size = (lavc_actx->block_align - 4 * lavc_actx->ch_layout.nb_channels) * 8 / (4 * lavc_actx->ch_layout.nb_channels) + 1;
 	}
 
 	encoder->decode_buffer_size = lavc_actx->frame_size *

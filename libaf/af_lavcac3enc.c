@@ -96,7 +96,7 @@ static int control(struct af_instance_s *af, int cmd, void *arg)
 
         bit_rate = s->bit_rate ? s->bit_rate : default_bit_rate[af->data->nch];
 
-        if (s->lavc_actx->channels != af->data->nch ||
+        if (s->lavc_actx->ch_layout.nb_channels != af->data->nch ||
                 s->lavc_actx->sample_rate != af->data->rate ||
                 s->lavc_actx->bit_rate != bit_rate) {
 
@@ -104,7 +104,7 @@ static int control(struct af_instance_s *af, int cmd, void *arg)
                 avcodec_close(s->lavc_actx);
 
             // Put sample parameters
-            s->lavc_actx->channels = af->data->nch;
+            s->lavc_actx->ch_layout.nb_channels = af->data->nch;
             s->lavc_actx->sample_rate = af->data->rate;
             s->lavc_actx->sample_fmt  = AV_SAMPLE_FMT_S16P;
             s->lavc_actx->bit_rate = bit_rate;

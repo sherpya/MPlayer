@@ -192,7 +192,7 @@ int mpae_init_lavc(audio_encoder_t *encoder)
             mp_msg(MSGT_MENCODER,MSGL_ERR, "Audio encoder requires unknown or unsupported input format\n");
             return 0;
 	}
-	lavc_actx->ch_layout.nb_channels = encoder->params.channels;
+	av_channel_layout_default(&lavc_actx->ch_layout, encoder->params.channels);
 	lavc_actx->sample_rate = encoder->params.sample_rate;
 	lavc_actx->time_base.num = 1;
 	lavc_actx->time_base.den = encoder->params.sample_rate;

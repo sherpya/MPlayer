@@ -56,6 +56,8 @@ my ($lang) = ($ARGV[1] =~ /help\/po\/(.*).po/);
 open(po, "> $ARGV[1]") or die "Cannot open $ARGV[1]";
 
 print po "# DO NOT EDIT - this file is generated from $ARGV[0]\n";
+print po "\nmsgid \"\"\n";
+print po "msgstr \"Content-Type: text/plain; charset=UTF-8\"\n";
 
 foreach my $id (keys %podefs)
 {

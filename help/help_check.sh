@@ -43,7 +43,7 @@ for h in "$@"; do
 #endif
 #include "$h"
 void $CHECK () {
-strdup(help_text);
+(void) strlen(help_text);
 EOF
 
   while read line; do
@@ -52,7 +52,7 @@ EOF
 
     if [ "$DEFINE" ]; then
       eval "$DEFINE'"
-      echo "strdup($NAME);" >> ${CHECK}.c
+      echo "(void) strlen($NAME);" >> ${CHECK}.c
       ANY_CONVSPEC="$(eval "echo \$${NAME} \${STRING}")"
     else
       ANY_CONVSPEC=""

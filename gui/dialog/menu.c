@@ -544,9 +544,7 @@ GtkWidget * CreatePopUpMenu( int wType )
         gtk_widget_set_sensitive( MenuItem,FALSE );
        }
 #endif
-#if defined(CONFIG_LIBCDIO) || defined(CONFIG_DVDREAD)
     AddMenuItemEllipsis( SubMenu, image_png, _(MSGTR_GUI_Image), evPlayImage );
-#endif
     AddMenuItemEllipsis( SubMenu, url_png, _(MSGTR_GUI_URL), evLoadURL );
 #ifdef CONFIG_TV
     AddMenuItem( SubMenu, tv_png, _(MSGTR_GUI_TV), evPlayTV );

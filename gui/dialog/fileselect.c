@@ -139,6 +139,7 @@ char * const fsFontFileNames[][2] = {
 int fsLastFontFilterSelected = -1;
 
 char * const fsImageFilterNames[][2] = {
+    { MSGTR_GUI_FilterImageAudio, "*.cue"       },
 #ifdef CONFIG_LIBCDIO
     { MSGTR_GUI_FilterImageCD,  "*.cue"       },
     { MSGTR_GUI_FilterImageVCD, "*.cue"       },
@@ -617,7 +618,7 @@ static void fs_Ok_released(GtkButton *button, gpointer user_data)
 
         if (strcmp(fsVideoAudioFilterNames[fsLastVideoAudioFilterSelected][0], MSGTR_GUI_FilterFilePlaylist) == 0)
             type = STREAMTYPE_PLAYLIST;
-
+audio:
         uiSetFile(fsSelectedDirectory, fsSelectedFile, type);
         selected = g_strconcat(fsSelectedDirectory, "/", fsSelectedFile, NULL);
 
@@ -650,6 +651,11 @@ static void fs_Ok_released(GtkButton *button, gpointer user_data)
         break;
 
     case FILESELECT_IMAGE:
+
+        if (strcmp(fsImageFilterNames[fsLastImageFilterSelected][0], MSGTR_GUI_FilterImageAudio) == 0) {
+            uiLoadPlay = True;
+            goto audio;
+        }
 
         if (strcmp(fsImageFilterNames[fsLastImageFilterSelected][0], MSGTR_GUI_FilterImageCD) == 0)
             ev = evPlayCD;

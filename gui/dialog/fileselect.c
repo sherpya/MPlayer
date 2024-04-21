@@ -141,13 +141,13 @@ int fsLastFontFilterSelected = -1;
 char * const fsImageFilterNames[][2] = {
     { MSGTR_GUI_FilterImageAudio, "*.cue"       },
 #ifdef CONFIG_LIBCDIO
-    { MSGTR_GUI_FilterImageCD,  "*.cue"       },
-    { MSGTR_GUI_FilterImageVCD, "*.cue"       },
+    { MSGTR_GUI_FilterImageCD,    "*.cue"       },
+    { MSGTR_GUI_FilterImageVCD,   "*.cue"       },
 #endif
 #ifdef CONFIG_DVDREAD
-    { MSGTR_GUI_FilterImageDVD, "*.ifo,*.iso" },
+    { MSGTR_GUI_FilterImageDVD,   "*.ifo,*.iso" },
 #endif
-    { NULL,                     NULL          }
+    { NULL,                       NULL          }
 };
 int fsLastImageFilterSelected = -1;
 

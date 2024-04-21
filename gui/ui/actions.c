@@ -80,10 +80,14 @@ static void MediumPrepare(int type)
     case STREAMTYPE_TV:
     case STREAMTYPE_DVB:
         listMgr(PLAYLIST_DELETE, 0);
+        // fall through
+
     case STREAMTYPE_FILE:
     case STREAMTYPE_STREAM:
     case STREAMTYPE_PLAYLIST:
         guiInfo.Angles = 0;
+        // fall through
+
     case STREAMTYPE_BINCUE:
         guiInfo.AudioStreams = 0;
         guiInfo.Subtitles    = 0;
@@ -132,6 +136,7 @@ void uiEvent(int ev, float param)
 #ifdef CONFIG_CDDA
     case ivSetCDTrack:
         guiInfo.Track = iparam;
+        // fall through
 
     case evPlayCD:
         if (guiInfo.StreamType != STREAMTYPE_CDDA)
@@ -142,6 +147,7 @@ void uiEvent(int ev, float param)
 #ifdef CONFIG_VCD
     case ivSetVCDTrack:
         guiInfo.Track = iparam;
+        // fall through
 
     case evPlayVCD:
         if (guiInfo.StreamType != STREAMTYPE_VCD)
@@ -179,6 +185,7 @@ void uiEvent(int ev, float param)
         reset_stream_ids();
         if (guiInfo.StreamType != STREAMTYPE_DVD)
             guiInfo.Track = 0;
+        // fall through
 
     case ivPlayDVD:
         guiInfo.StreamType = STREAMTYPE_DVD;
@@ -217,6 +224,7 @@ play:
 
                 if (!guiInfo.Track)
                     guiInfo.Track = (guiInfo.StreamType == STREAMTYPE_VCD ? 2 : 1);
+                // fall through
 
             case STREAMTYPE_BINCUE:   // track 0 is OK and will auto-select first media data track
                 guiInfo.MediumChanged = GUI_MEDIUM_SAME;
@@ -242,6 +250,8 @@ play:
         uiLoadPlay = True;
 
 //      guiInfo.StreamType=STREAMTYPE_FILE;
+        // fall through
+
     case evLoad:
         gtkShow(evLoad, NULL);
         break;
@@ -432,6 +442,7 @@ play:
             break;
         } else if (!guiApp.videoWindow.isFullScreen)
             break;
+        // fall through
 
     case evFullScreen:
 

@@ -400,6 +400,7 @@ static void prButton( GtkButton * button, gpointer user_data )
           gtkMessageBox( MSGBOX_INFORMATION,_(MSGTR_GUI_MSG_PlaybackNeedsRestart) );
           inform = False;
          }
+         // fall through
 
    case bCancel:
         gtk_widget_destroy( Preferences );
@@ -1257,6 +1258,8 @@ void ShowPreferences( void )
  switch ( frame_dropping )
   {
    case 2: gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBHFramedrop ),TRUE );
+   // fall through
+
    case 1: gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBFramedrop ),TRUE );
   }
 
@@ -1661,6 +1664,8 @@ static void audioButton(GtkButton *button, gpointer user_data) {
         gtkAOESDDevice = gstrdup(getGtkEntryText(CEAudioDevice));
       }
 #endif
+      // fall through
+
    case 0:
       gtk_widget_destroy(AudioConfig);
       break;
@@ -1848,6 +1853,8 @@ static void dxr3Button( GtkButton * button,gpointer user_data )
   case 0: // Ok
        nfree( gtkDXR3Device ); gtkDXR3Device=strdup( gtk_entry_get_text( GTK_ENTRY( CEDXR3Device ) ) );
        gtkVfLAVC=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBVLavc ) );
+       // fall through
+
   case 1: // Cancel
        gtk_widget_destroy( DXR3Config );
        break;

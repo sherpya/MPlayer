@@ -301,12 +301,13 @@ void guiInit(void)
 
             gtkMessageBox(MSGBOX_WARNING | MSGBOX_WAIT, _(MSGTR_GUI_MSG_NoSkinInstalled));
             setdup(&skinName, "");
-            break;
         }
+        break;
 
     case -2:
         gmp_msg(MSGT_GPLAYER, MSGL_FATAL, _(MSGTR_GUI_MSG_SkinCfgError), skinName);
         mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
+        break;
     }
 
     /* initialize windows */

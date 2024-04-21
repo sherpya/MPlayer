@@ -181,6 +181,8 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
 
         listMgr(PLITEM_FREE, curr);
        }
+       // fall through
+
   case 0: // cancel
        NrOfSelected=NrOfEntrys=0;
        nfree( CLListSelected );

@@ -300,6 +300,8 @@ static void uiMainKey( int KeyCode,int Type,int Key )
               uiEvent( evNormalSize,0 );
               return;
              }
+             // fall through
+
       default:          vo_x11_putkey( Key ); return;
      }
    }

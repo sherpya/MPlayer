@@ -202,7 +202,7 @@ void wsInit(Display *display)
             wsUseXShm = False;
         }
 
-        mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[ws] display name: %s => %s display.\n", dispname, localdisp ? "local" : "REMOTE");
+        mp_msg(MSGT_GPLAYER, MSGL_DBG2, "[ws] display name: %s => %s display.\n", dispname ? dispname : "?", localdisp ? "local" : "REMOTE");
 
         if (!localdisp)
             mp_msg(MSGT_GPLAYER, MSGL_INFO, _(MSGTR_GUI_MSG_RemoteDisplay));

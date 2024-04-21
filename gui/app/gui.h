@@ -46,6 +46,26 @@
 #endif
 //@}
 
+#ifdef __GNUC__
+#define QUOTE(string) #string
+/// Turn off a compiler warning
+#define WARN_IGNORE(warning) _Pragma("GCC diagnostic push") _Pragma(QUOTE(GCC diagnostic ignored warning))
+/// Restore the command-line compiler warnings
+#define WARN_ON _Pragma("GCC diagnostic pop")
+/// Create a macro to turn off a compiler warning
+#define WARN_OFF(type) WARN_OFF_ ## type
+  #if __GNUC__ >= 8
+  #define WARN_OFF_cast_function_type WARN_IGNORE("-Wcast-function-type")
+  #define WARN_OFF_stringop_truncation WARN_IGNORE("-Wstringop-truncation")
+  #else
+  #define WARN_OFF_cast_function_type
+  #define WARN_OFF_stringop_truncation
+  #endif
+#else
+#define WARN_ON
+#define WARN_OFF(type)
+#endif
+
 /// A pseudo stream type indicating not to change the current one
 #define SAME_STREAMTYPE (STREAMTYPE_DUMMY - 1)
 

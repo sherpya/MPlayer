@@ -198,8 +198,9 @@ void uiEvent(int ev, float param)
 #endif
     case evPlay:
     case evPlaySwitchToPause:
+#if defined(CONFIG_CDDA) || defined(CONFIG_VCD) || defined(CONFIG_DVDREAD) || defined(CONFIG_TV)
 play:
-
+#endif
         if (guiInfo.Playing != GUI_PAUSE) {
             MediumPrepare(guiInfo.StreamType);
 

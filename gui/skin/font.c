@@ -238,7 +238,7 @@ int fntRead(char *path, char *fname)
                         continue;
                 }
 
-                strncpy(Fonts[id]->bit8_chr + Fonts[id]->bit8_count * UTF8LENGTH, item, UTF8LENGTH);
+                strncpy(Fonts[id]->bit8_chr + Fonts[id]->bit8_count * UTF8LENGTH, item, UTF8LENGTH); // deliberate output truncation (no null-termination required)
 
                 i = Fonts[id]->bit8_count++ + ASCII_CHRS;
             } else

@@ -735,7 +735,7 @@ static void fs_Destroy(void)
 
     g_hash_table_destroy(fsPathTable);
 
-    g_list_foreach(fsTopList_items, (GFunc)g_free, NULL);
+    g_list_foreach(fsTopList_items, (GFunc)g_free, NULL);  // deliberate cast between incompatible function types
     g_list_free(fsTopList_items);
     fsTopList_items = NULL;
 }

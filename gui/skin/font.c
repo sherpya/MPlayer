@@ -28,6 +28,7 @@
 
 #include "font.h"
 #include "skin.h"
+#include "gui/app/gui.h"
 #include "gui/util/mem.h"
 #include "gui/util/misc.h"
 #include "gui/util/string.h"
@@ -237,9 +238,9 @@ int fntRead(char *path, char *fname)
                         !fntAllocBit8Chr(Fonts[id], EXTRA_CHRS))
                         continue;
                 }
-
+WARN_OFF(stringop_truncation)
                 strncpy(Fonts[id]->bit8_chr + Fonts[id]->bit8_count * UTF8LENGTH, item, UTF8LENGTH); // deliberate output truncation (no null-termination required)
-
+WARN_ON
                 i = Fonts[id]->bit8_count++ + ASCII_CHRS;
             } else
                 i = item[0];

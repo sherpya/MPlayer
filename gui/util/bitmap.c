@@ -118,15 +118,15 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
     frame = av_frame_alloc();
 
     if (!(avctx && frame)) {
-        av_free(frame);
-        av_free(avctx);
+        av_frame_free(&frame);
+        avcodec_free_context(&avctx);
         av_free(data);
         return 6;
     }
 
     if (avcodec_open2(avctx, avcodec_find_decoder(AV_CODEC_ID_PNG), NULL) < 0) {
-        av_free(frame);
-        av_free(avctx);
+        av_frame_free(&frame);
+        avcodec_free_context(&avctx);
         av_free(data);
         return 7;
     }
@@ -188,8 +188,8 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
     avcodec_send_packet(avctx, NULL);   // flush the decoder
 
     avcodec_close(avctx);
-    av_free(frame);
-    av_free(avctx);
+    av_frame_free(&frame);
+    avcodec_free_context(&avctx);
     av_free(data);
 
     return !(decode_ok && img->Bpp);

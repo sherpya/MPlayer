@@ -82,8 +82,8 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
     void *data;
     int decode_ok, bpl;
     AVCodecContext *avctx;
-    AVFrame *frame;
     AVPacket *pkt;
+    AVFrame *frame;
 
     file = fopen(fname, "rb");
 
@@ -188,8 +188,8 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
     }
 
     avcodec_send_packet(avctx, NULL);   // flush the decoder
-
     avcodec_close(avctx);
+
     av_frame_free(&frame);
     av_packet_free(&pkt);
     avcodec_free_context(&avctx);

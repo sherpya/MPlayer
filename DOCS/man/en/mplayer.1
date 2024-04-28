@@ -296,7 +296,7 @@ Show filename on the OSD.
 Show progression bar, elapsed time and total duration on the OSD.
 .IPs "! and @"
 Seek to the beginning of the previous/next chapter.
-.IPs "D (\-vo xvmc, \-vo vdpau, \-vf yadif, \-vf kerndeint only)"
+.IPs "D (\-vo vdpau, \-vf yadif, \-vf kerndeint only)"
 Activate/deactivate deinterlacer.
 .IPs "A"
 Cycle through the available DVD angles.
@@ -949,15 +949,13 @@ only video (you can think of that as infinite fps).
 Changes the colorkey to an RGB value of your choice.
 0x000000 is black and 0xffffff is white.
 Only supported by the cvidix, fbdev, svga, vesa, winvidix, xmga, xvidix,
-xover, xv (see \-vo xv:ck), xvmc (see \-vo xv:ck) and directx video output
-drivers.
+xover, xv (see \-vo xv:ck) and directx video output drivers.
 .
 .TP
 .B \-nocolorkey
 Disables colorkeying.
 Only supported by the cvidix, fbdev, svga, vesa, winvidix, xmga, xvidix,
-xover, xv (see \-vo xv:ck), xvmc (see \-vo xv:ck) and directx video output
-drivers.
+xover, xv (see \-vo xv:ck) and directx video output drivers.
 .
 .TP
 .B \-correct\-pts (EXPERIMENTAL)
@@ -1218,7 +1216,7 @@ Display the main menu at MPlayer startup.
 Permit MPlayer to receive pointer events reported by the video
 output driver.
 Necessary to select the buttons in DVD menus.
-Supported for X11-based VOs (x11, xv, xvmc, etc) and the gl, gl_tiled, direct3d and
+Supported for X11-based VOs (x11, xv, etc) and the gl, gl_tiled, direct3d and
 corevideo VOs.
 .
 .TP
@@ -3554,10 +3552,10 @@ y coordinates are relative to the top-left corner of the window rather
 than the screen.
 The coordinates are relative to the screen given with \-screen for
 the video output drivers that fully support \-screen (direct3d, gl, gl_tiled,
-vdpau, x11, xv, xvmc, corevideo).
+vdpau, x11, xv, corevideo).
 .br
 .I NOTE:
-This option is only supported by the x11, xmga, xv, xvmc, xvidix,
+This option is only supported by the x11, xmga, xv, xvidix,
 gl, gl_tiled, direct3d, directx, fbdev, sdl, dfxfb and corevideo
 video output drivers.
 .sp 1
@@ -3670,14 +3668,14 @@ E.g.\& \-panscanrange \-3 allows a zoom factor of up to 4.
 This feature is experimental.
 .
 .TP
-.B \-border\-pos\-x <0.0\-1.0> (-vo gl,xv,xvmc,vdpau,direct3d only, default 0.5)
+.B \-border\-pos\-x <0.0\-1.0> (-vo gl,xv,vdpau,direct3d only, default 0.5)
 When black borders are added to adjust for aspect, this determines where they are placed.
 0.0 places borders on the right, 1.0 on the left.
 Values outside the range 0.0 \- 1.0 will add extra black borders on one side
 and remove part of the image on the other side.
 .
 .TP
-.B \-border\-pos\-y <0.0\-1.0> (-vo gl,xv,xvmc,vdpau,direct3d only, default 0.5)
+.B \-border\-pos\-y <0.0\-1.0> (-vo gl,xv,vdpau,direct3d only, default 0.5)
 As \-border\-pos\-x but for top/bottom borders.
 0.0 places borders on the bottom, 1.0 on the top.
 .
@@ -3982,38 +3980,6 @@ Forces the use of the VDPAU mixer, which implements all above options (default).
 Use noforce\-mixer to allow displaying BGRA colorspace.
 (Disables all above options and the hardware equalizer
 if image format BGRA is actually used.)
-.RE
-.PD 1
-.
-.TP
-.B xvmc (X11 with FFmpeg MPEG-1/2 decoder only)
-Video output driver that uses the XvMC (X Video Motion Compensation)
-extension of XFree86 4.x to speed up MPEG-1/2 and VCR2 decoding.
-.PD 0
-.RSs
-.IPs adaptor=<number>
-Select a specific XVideo adaptor (check xvinfo results).
-.IPs port=<number>
-Select a specific XVideo port.
-.IPs (no)benchmark
-Disables image display.
-Necessary for proper benchmarking of drivers that change
-image buffers on monitor retrace only (nVidia).
-Default is not to disable image display (nobenchmark).
-.IPs (no)bobdeint
-Very simple deinterlacer.
-Might not look better than \-vf tfields=1,
-but it is the only deinterlacer for xvmc (default: nobobdeint).
-.IPs (no)queue
-Queue frames for display to allow more parallel work of the video hardware.
-May add a small (not noticeable) constant A/V desync (default: noqueue).
-.IPs (no)sleep
-Use sleep function while waiting for rendering to finish
-(not recommended on Linux) (default: nosleep).
-.IPs ck=cur|use|set
-Same as \-vo xv:ck (see \-vo xv).
-.IPs ck-method=man|bg|auto
-Same as \-vo xv:ck-method (see \-vo xv).
 .RE
 .PD 1
 .
@@ -5068,7 +5034,7 @@ Disable automatic movie aspect ratio compensation.
 .B "\-field\-dominance <\-1\-1>"
 Set first field for interlaced content.
 Useful for deinterlacers that double the framerate: \-vf tfields=1,
-\-vf yadif=1, \-vo vdpau:deint and \-vo xvmc:bobdeint.
+\-vf yadif=1 and \-vo vdpau:deint.
 .PD 0
 .RSs
 .IPs \-1

@@ -139,8 +139,6 @@ const char *vo_format_name(int format)
     case IMGFMT_ZRMJPEGNI:       return "Zoran MJPEG non-interlaced";
     case IMGFMT_ZRMJPEGIT:       return "Zoran MJPEG top field first";
     case IMGFMT_ZRMJPEGIB:       return "Zoran MJPEG bottom field first";
-    case IMGFMT_XVMC_MOCO_MPEG2: return "MPEG1/2 Motion Compensation";
-    case IMGFMT_XVMC_IDCT_MPEG2: return "MPEG1/2 Motion Compensation and IDCT";
     case IMGFMT_VDPAU_MPEG1:     return "MPEG1 VDPAU acceleration";
     case IMGFMT_VDPAU_MPEG2:     return "MPEG2 VDPAU acceleration";
     case IMGFMT_VDPAU_H264:      return "H.264 VDPAU acceleration";

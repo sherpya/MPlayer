@@ -71,10 +71,6 @@ LIBVD_EXTERN(ffmpeg)
 #error palette too large, adapt libmpcodecs/vf.c:vf_get_image
 #endif
 
-#if CONFIG_XVMC
-#include "libavcodec/xvmc.h"
-#endif
-
 typedef struct {
     AVCodecContext *avctx;
     AVFrame *pic;
@@ -191,11 +187,6 @@ static int control(sh_video_t *sh, int cmd, void *arg, ...){
             if(ctx->best_csp == IMGFMT_YV12) return CONTROL_TRUE;// u/v swap
             if(ctx->best_csp == IMGFMT_422P && !ctx->do_dr1) return CONTROL_TRUE;// half stride
             break;
-#if CONFIG_XVMC
-        case IMGFMT_XVMC_IDCT_MPEG2:
-        case IMGFMT_XVMC_MOCO_MPEG2:
-            if(avctx->pix_fmt == AV_PIX_FMT_XVMC) return CONTROL_TRUE;
-#endif
         }
         return CONTROL_FALSE;
     }
@@ -301,8 +292,7 @@ static void set_format_params(struct AVCodecContext *avctx,
         ctx->do_dr1    = 1;
         ctx->nonref_dr = 0;
         avctx->get_buffer2 = get_buffer2;
-        mp_msg(MSGT_DECVIDEO, MSGL_V, IMGFMT_IS_XVMC(imgfmt) ?
-               MSGTR_MPCODECS_XVMCAcceleratedMPEG2 :
+        mp_msg(MSGT_DECVIDEO, MSGL_V,
                "[VD_FFMPEG] VDPAU accelerated decoding\n");
         if (ctx->use_vdpau) {
             avctx->draw_horiz_band = NULL;
@@ -739,21 +729,6 @@ static int get_buffer(AVCodecContext *avctx, AVFrame *pic, int isreference){
         VdpVideoSurface surface = (VdpVideoSurface)mpi->priv;
         avctx->draw_horiz_band= NULL;
         mpi->planes[3] = surface;
-    }
-#endif
-#if CONFIG_XVMC
-    if(IMGFMT_IS_XVMC(mpi->imgfmt)) {
-        struct xvmc_pix_fmt *render = mpi->priv; //same as data[2]
-        if(!(mpi->flags & MP_IMGFLAG_DIRECT)) {
-            mp_msg(MSGT_DECVIDEO, MSGL_ERR, MSGTR_MPCODECS_OnlyBuffersAllocatedByVoXvmcAllowed);
-            assert(0);
-            return -1;//!!fixme check error conditions in ffmpeg
-        }
-        if(mp_msg_test(MSGT_DECVIDEO, MSGL_DBG5))
-            mp_msg(MSGT_DECVIDEO, MSGL_DBG5, "vd_ffmpeg::get_buffer (xvmc render=%p)\n", render);
-        assert(render != 0);
-        assert(render->xvmc_id == AV_XVMC_ID);
-        avctx->draw_horiz_band= draw_slice;
     }
 #endif
 

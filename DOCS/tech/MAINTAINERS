@@ -190,7 +190,6 @@ libvo drivers:
     * vo_xover.c - Alban Bedel
     * vo_xv.c - Alexander Strasser
     * vo_xvidix.c - None
-    * vo_xvmc.c - Ivan Kalvachev
     * vo_yuv4mpeg.c - Robert Kesterson
     * vo_zr.c - Rik Snel
     * vo_zr2.c - Rik Snel

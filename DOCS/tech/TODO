@@ -52,7 +52,6 @@ mencoder:
 - stop/resume
 
 DOCS:
-- merge iive's XvMC docs into video.xml
 - enhance and merge the FAQ with the wiki FAQ
 - split man page into mplayer.1 and mencoder.1
 

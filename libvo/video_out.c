@@ -100,7 +100,6 @@ char *vo_wintitle;
 extern const vo_functions_t video_out_mga;
 extern const vo_functions_t video_out_xmga;
 extern const vo_functions_t video_out_x11;
-extern const vo_functions_t video_out_xvmc;
 extern const vo_functions_t video_out_vdpau;
 extern const vo_functions_t video_out_xv;
 extern const vo_functions_t video_out_gl_nosw;
@@ -274,10 +273,6 @@ const vo_functions_t* const video_out_drivers[] =
         &video_out_winvidix,
 #endif
         &video_out_cvidix,
-#endif
-        // should not be auto-selected
-#if CONFIG_XVMC
-        &video_out_xvmc,
 #endif
         &video_out_null,
         &video_out_mpegpes,

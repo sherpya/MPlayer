@@ -62,7 +62,7 @@ static GtkWidget * CreateAbout( void )
   accel_group=gtk_accel_group_new();
 
   About=gtk_window_new( GTK_WINDOW_TOPLEVEL );
-  gtk_widget_set_usize( About,370,425 );
+  gtk_widget_set_size_request( About,370,425 );
   gtk_window_set_title( GTK_WINDOW( About ),_(MSGTR_GUI_AboutMPlayer) );
   gtk_window_set_position( GTK_WINDOW( About ),GTK_WIN_POS_CENTER );
   gtk_window_set_policy( GTK_WINDOW( About ),FALSE,FALSE,TRUE );

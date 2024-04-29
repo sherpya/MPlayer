@@ -188,7 +188,7 @@ GtkWidget * gtkAddHSeparator( GtkWidget * parent )
  hseparator=gtk_hseparator_new();
  gtk_widget_show( hseparator );
  gtk_box_pack_start( GTK_BOX( parent ),hseparator,FALSE,FALSE,0 );
- gtk_widget_set_usize( hseparator,-2,6 );
+ gtk_widget_set_size_request( hseparator,-1,6 );
  return hseparator;
 }
 

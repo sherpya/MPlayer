@@ -103,7 +103,7 @@ static GtkWidget *CreateURLDialog(void)
     accel_group = gtk_accel_group_new();
 
     URLDialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_usize(URLDialog, 384, -1);
+    gtk_widget_set_size_request(URLDialog, 384, -1);
     gtk_window_set_title(GTK_WINDOW(URLDialog), _(MSGTR_GUI_NetworkStreaming));
     gtk_window_set_position(GTK_WINDOW(URLDialog), GTK_WIN_POS_CENTER);
     gtk_window_set_wmclass(GTK_WINDOW(URLDialog), "Network", MPlayer);

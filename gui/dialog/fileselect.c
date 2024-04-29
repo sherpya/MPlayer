@@ -759,7 +759,7 @@ static GtkWidget *CreateFileSelect(void)
     accel_group = gtk_accel_group_new();
 
     FileSelector = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_usize(FileSelector, 512, 440);
+    gtk_widget_set_size_request(FileSelector, 512, 440);
     gtk_window_set_title(GTK_WINDOW(FileSelector), MSGTR_GUI_SelectFile);
     gtk_window_set_position(GTK_WINDOW(FileSelector), GTK_WIN_POS_CENTER);
     gtk_window_get_position(GTK_WINDOW(FileSelector), &x, &y);
@@ -796,7 +796,7 @@ static GtkWidget *CreateFileSelect(void)
     gtk_button_set_image(GTK_BUTTON(fsUp), upimage);
     gtk_widget_show(fsUp);
     gtk_box_pack_start(GTK_BOX(hbox4), fsUp, FALSE, FALSE, 0);
-    gtk_widget_set_usize(fsUp, 60, -2);
+    gtk_widget_set_size_request(fsUp, 60, -1);
 
     gtkAddHSeparator(vbox4);
 

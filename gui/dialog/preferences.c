@@ -662,7 +662,7 @@ static GtkWidget * CreatePreferences( void )
   gtk_clist_set_column_width( GTK_CLIST( CLADrivers ),0,65 );
   gtk_clist_column_titles_show( GTK_CLIST( CLADrivers ) );
   gtk_clist_set_shadow_type( GTK_CLIST( CLADrivers ),GTK_SHADOW_NONE );
-  gtk_widget_set_usize( CLADrivers,250,-2 );
+  gtk_widget_set_size_request( CLADrivers,250,-1 );
   gtk_clist_set_column_widget( GTK_CLIST( CLADrivers ),0,
     gtkAddLabel( _(MSGTR_GUI_AvailableDrivers),NULL ) );
 
@@ -672,7 +672,7 @@ static GtkWidget * CreatePreferences( void )
   vbox3=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
       gtkAddFrame( NULL,GTK_SHADOW_ETCHED_OUT,hbox1,0 ),1 ),0 );
-    gtk_widget_set_usize( vbox3,250,-2 );
+    gtk_widget_set_size_request( vbox3,250,-1 );
 
   hbox10 = gtkAddHBox(vbox3, 1);
   CBReplayGain = gtkAddCheckButton(_(MSGTR_GUI_ReplayGain), hbox10);
@@ -729,7 +729,7 @@ static GtkWidget * CreatePreferences( void )
   gtk_clist_set_column_width( GTK_CLIST( CLVDrivers ),0,65 );
   gtk_clist_column_titles_show( GTK_CLIST( CLVDrivers ) );
   gtk_clist_set_shadow_type( GTK_CLIST( CLVDrivers ),GTK_SHADOW_NONE );
-  gtk_widget_set_usize( CLVDrivers,250,-2 );
+  gtk_widget_set_size_request( CLVDrivers,250,-1 );
 
   label=gtkAddLabel( _(MSGTR_GUI_AvailableDrivers),NULL );
     gtk_clist_set_column_widget( GTK_CLIST( CLVDrivers ),0,label );
@@ -740,7 +740,7 @@ static GtkWidget * CreatePreferences( void )
   vbox5=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
       gtkAddFrame( NULL,GTK_SHADOW_ETCHED_OUT,hbox2,0 ),1 ),0 );
-    gtk_widget_set_usize( vbox5,250,-2 );
+    gtk_widget_set_size_request( vbox5,250,-1 );
 
   CBDoubleBuffer=gtkAddCheckButton( _(MSGTR_GUI_EnableDoubleBuffering),vbox5 );
   CBDR=gtkAddCheckButton( _(MSGTR_GUI_EnableDirectRendering),vbox5 );
@@ -831,7 +831,7 @@ static GtkWidget * CreatePreferences( void )
   HSSubFPSadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,120,0.001,0,0 ) );
   HSSubFPS=gtk_spin_button_new( GTK_ADJUSTMENT( HSSubFPSadj ),1,3 );
     gtk_widget_show( HSSubFPS );
-    gtk_widget_set_usize( HSSubFPS,60,-1 );
+    gtk_widget_set_size_request( HSSubFPS,60,-1 );
     gtk_spin_button_set_numeric( GTK_SPIN_BUTTON( HSSubFPS ),TRUE );
     gtk_table_attach( GTK_TABLE( table1 ),HSSubFPS,1,2,2,3,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
@@ -1876,7 +1876,7 @@ GtkWidget * CreateDXR3Config( void )
  accel_group=gtk_accel_group_new();
 
  DXR3Config=gtk_window_new( GTK_WINDOW_TOPLEVEL );
-// gtk_widget_set_usize( DXR3Config,300,156 );
+// gtk_widget_set_size_request( DXR3Config,300,156 );
  gtk_window_set_title( GTK_WINDOW( DXR3Config ),"DXR3/H+" );
  gtk_window_set_position( GTK_WINDOW( DXR3Config ),GTK_WIN_POS_CENTER );
  gtk_window_set_policy( GTK_WINDOW( DXR3Config ),FALSE,FALSE,TRUE );

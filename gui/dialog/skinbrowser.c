@@ -98,7 +98,7 @@ void ShowSkinBrowser( void )
  accel_group = gtk_accel_group_new ();
 
  SkinBrowser=gtk_window_new( GTK_WINDOW_TOPLEVEL );
- gtk_widget_set_usize( SkinBrowser,256,320 );
+ gtk_widget_set_size_request( SkinBrowser,256,320 );
  gtk_container_set_border_width( GTK_CONTAINER( SkinBrowser ),1 );
  gtk_window_set_title( GTK_WINDOW( SkinBrowser ),_(MSGTR_GUI_SkinBrowser) );
  gtk_window_set_position( GTK_WINDOW( SkinBrowser ),GTK_WIN_POS_CENTER );

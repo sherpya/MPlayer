@@ -259,7 +259,7 @@ static GtkWidget * CreateEqualizer( void )
   accel_group=gtk_accel_group_new();
 
   Equalizer=gtk_window_new( GTK_WINDOW_TOPLEVEL );
-  gtk_widget_set_usize( Equalizer,-1,256 );
+  gtk_widget_set_size_request( Equalizer,-1,256 );
   gtk_window_set_title( GTK_WINDOW( Equalizer ),_(MSGTR_GUI_Equalizer) );
   gtk_window_set_position( GTK_WINDOW( Equalizer ),GTK_WIN_POS_CENTER );
   gtk_window_set_policy( GTK_WINDOW( Equalizer ),FALSE,FALSE,TRUE );
@@ -280,7 +280,7 @@ static GtkWidget * CreateEqualizer( void )
   scrolledwindow1=gtk_scrolled_window_new( NULL,NULL );
   gtk_widget_show( scrolledwindow1 );
   gtk_box_pack_start( GTK_BOX( hbox1 ),scrolledwindow1,FALSE,FALSE,0 );
-  gtk_widget_set_usize( scrolledwindow1,106,-2 );
+  gtk_widget_set_size_request( scrolledwindow1,106,-1 );
   gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( scrolledwindow1 ),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC );
 
   ChannelsList=gtk_clist_new( 1 );
@@ -401,22 +401,22 @@ static GtkWidget * CreateEqualizer( void )
   VContrastadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
   VContrast=gtkAddHScale( VContrastadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),VContrast,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
-    gtk_widget_set_usize( VContrast,-1,45 );
+    gtk_widget_set_size_request( VContrast,-1,45 );
 
   VBrightnessadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
   VBrightness=gtkAddHScale( VBrightnessadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),VBrightness,1,2,1,2,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
-    gtk_widget_set_usize( VBrightness,-1,45 );
+    gtk_widget_set_size_request( VBrightness,-1,45 );
 
   VHueadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
   VHue=gtkAddHScale( VHueadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),VHue,1,2,2,3,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
-    gtk_widget_set_usize( VHue,-1,45 );
+    gtk_widget_set_size_request( VHue,-1,45 );
 
   VSaturationadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
   VSaturation=gtkAddHScale( VSaturationadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),VSaturation,1,2,3,4,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
-    gtk_widget_set_usize( VSaturation,-1,45 );
+    gtk_widget_set_size_request( VSaturation,-1,45 );
 
   gtk_notebook_set_tab_label( GTK_NOTEBOOK( Notebook ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( Notebook ),1 ),
     gtkAddLabel( _(MSGTR_GUI_Video),NULL ) );
@@ -588,7 +588,7 @@ GtkWidget * CreateEquConfig( void )
   accel_group=gtk_accel_group_new();
 
   EquConfig=gtk_window_new( GTK_WINDOW_TOPLEVEL );
-  gtk_widget_set_usize( EquConfig,350,260 );
+  gtk_widget_set_size_request( EquConfig,350,260 );
   gtk_window_set_title( GTK_WINDOW( EquConfig ),_(MSGTR_GUI_EqualizerConfiguration) );
   gtk_window_set_position( GTK_WINDOW( EquConfig ),GTK_WIN_POS_CENTER );
 //  gtk_window_set_modal( GTK_WINDOW( EquConfig ),TRUE );

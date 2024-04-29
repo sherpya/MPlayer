@@ -477,8 +477,8 @@ static GtkWidget * CreatePlaylist( void )
   gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( scrolledwindow1 ),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC );
 
   CTDirTree=gtk_ctree_new( 1,0 );
-  gtk_signal_connect( GTK_OBJECT( CTDirTree ),"tree-expand",GTK_SIGNAL_FUNC( plCTree ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CTDirTree ),"select-row",GTK_SIGNAL_FUNC( plCTRow ),NULL );
+  g_signal_connect( G_OBJECT( CTDirTree ),"tree-expand",G_CALLBACK( plCTree ),NULL );
+  g_signal_connect( G_OBJECT( CTDirTree ),"select-row",G_CALLBACK( plCTRow ),NULL );
   gtk_container_add( GTK_CONTAINER( scrolledwindow1 ),CTDirTree );
   gtk_clist_set_column_auto_resize( GTK_CLIST( CTDirTree ),0,TRUE );
   gtk_clist_set_column_width( GTK_CLIST( CTDirTree ),0,80 );
@@ -566,21 +566,21 @@ static GtkWidget * CreatePlaylist( void )
 
   gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
 
-  gtk_signal_connect( GTK_OBJECT( Playlist ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&Playlist );
+  g_signal_connect( G_OBJECT( Playlist ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Playlist );
 
-  gtk_signal_connect( GTK_OBJECT( CLFiles ),"select-row",GTK_SIGNAL_FUNC( plRowSelect ),GINT_TO_POINTER(0) );
-  gtk_signal_connect( GTK_OBJECT( CLFiles ),"unselect-row",GTK_SIGNAL_FUNC( plUnRowSelect ),GINT_TO_POINTER(0) );
-  gtk_signal_connect( GTK_OBJECT( CLFiles ),"event",GTK_SIGNAL_FUNC( plEvent ),GINT_TO_POINTER(0) );
-  gtk_signal_connect( GTK_OBJECT( CLFiles ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(0) );
-  sigSel=gtk_signal_connect( GTK_OBJECT( CLSelected ),"select-row",GTK_SIGNAL_FUNC( plRowSelect ),GINT_TO_POINTER(1) );
-  sigUnsel=gtk_signal_connect( GTK_OBJECT( CLSelected ),"unselect-row",GTK_SIGNAL_FUNC( plUnRowSelect ),GINT_TO_POINTER(1) );
-  sigEvent=gtk_signal_connect( GTK_OBJECT( CLSelected ),"event",GTK_SIGNAL_FUNC( plEvent ),GINT_TO_POINTER(1) );
-  gtk_signal_connect( GTK_OBJECT( CLSelected ),"key-release-event",GTK_SIGNAL_FUNC( plKeyReleased ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( CLFiles ),"select-row",G_CALLBACK( plRowSelect ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( CLFiles ),"unselect-row",G_CALLBACK( plUnRowSelect ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( CLFiles ),"event",G_CALLBACK( plEvent ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( CLFiles ),"key-release-event",G_CALLBACK( plKeyReleased ),GINT_TO_POINTER(0) );
+  sigSel=g_signal_connect( G_OBJECT( CLSelected ),"select-row",G_CALLBACK( plRowSelect ),GINT_TO_POINTER(1) );
+  sigUnsel=g_signal_connect( G_OBJECT( CLSelected ),"unselect-row",G_CALLBACK( plUnRowSelect ),GINT_TO_POINTER(1) );
+  sigEvent=g_signal_connect( G_OBJECT( CLSelected ),"event",G_CALLBACK( plEvent ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( CLSelected ),"key-release-event",G_CALLBACK( plKeyReleased ),GINT_TO_POINTER(1) );
 
-  gtk_signal_connect( GTK_OBJECT( Add ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(3) );
-  gtk_signal_connect( GTK_OBJECT( Remove ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(2) );
-  gtk_signal_connect( GTK_OBJECT( Ok ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(1) );
-  gtk_signal_connect( GTK_OBJECT( Cancel ),"clicked",GTK_SIGNAL_FUNC( plButtonReleased ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( Add ),"clicked",G_CALLBACK( plButtonReleased ),GINT_TO_POINTER(3) );
+  g_signal_connect( G_OBJECT( Remove ),"clicked",G_CALLBACK( plButtonReleased ),GINT_TO_POINTER(2) );
+  g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( plButtonReleased ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( Cancel ),"clicked",G_CALLBACK( plButtonReleased ),GINT_TO_POINTER(0) );
 
   gtk_window_add_accel_group( GTK_WINDOW( Playlist ),accel_group );
 

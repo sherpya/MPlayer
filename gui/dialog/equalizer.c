@@ -434,32 +434,32 @@ static GtkWidget * CreateEqualizer( void )
   gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
   gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
 
-  gtk_signal_connect( GTK_OBJECT( Equalizer ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&Equalizer );
-  gtk_signal_connect( GTK_OBJECT( Equalizer ),"focus-in-event",GTK_SIGNAL_FUNC( eqFocus ),GINT_TO_POINTER(2) );
+  g_signal_connect( G_OBJECT( Equalizer ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Equalizer );
+  g_signal_connect( G_OBJECT( Equalizer ),"focus-in-event",G_CALLBACK( eqFocus ),GINT_TO_POINTER(2) );
 
-  gtk_signal_connect( GTK_OBJECT( ChannelsList ),"select-row",GTK_SIGNAL_FUNC( eqSelectChannelsListRow ),NULL );
+  g_signal_connect( G_OBJECT( ChannelsList ),"select-row",G_CALLBACK( eqSelectChannelsListRow ),NULL );
 
-  gtk_signal_connect( GTK_OBJECT( A3125 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(0) );
-  gtk_signal_connect( GTK_OBJECT( A6250 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(1) );
-  gtk_signal_connect( GTK_OBJECT( A125 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(2) );
-  gtk_signal_connect( GTK_OBJECT( A250 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(3) );
-  gtk_signal_connect( GTK_OBJECT( A500 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(4) );
-  gtk_signal_connect( GTK_OBJECT( A1000 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(5) );
-  gtk_signal_connect( GTK_OBJECT( A2000 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(6) );
-  gtk_signal_connect( GTK_OBJECT( A4000 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(7) );
-  gtk_signal_connect( GTK_OBJECT( A8000 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(8) );
-  gtk_signal_connect( GTK_OBJECT( A16000 ),"motion-notify-event",GTK_SIGNAL_FUNC( eqHScaleMotion ),GINT_TO_POINTER(9) );
+  g_signal_connect( G_OBJECT( A3125 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( A6250 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( A125 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(2) );
+  g_signal_connect( G_OBJECT( A250 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(3) );
+  g_signal_connect( G_OBJECT( A500 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(4) );
+  g_signal_connect( G_OBJECT( A1000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(5) );
+  g_signal_connect( G_OBJECT( A2000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(6) );
+  g_signal_connect( G_OBJECT( A4000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(7) );
+  g_signal_connect( G_OBJECT( A8000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(8) );
+  g_signal_connect( G_OBJECT( A16000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(9) );
 
-  gtk_signal_connect( GTK_OBJECT( VContrast ),"motion-notify-event",GTK_SIGNAL_FUNC( eqVScaleMotion ),GINT_TO_POINTER(1) );
-  gtk_signal_connect( GTK_OBJECT( VBrightness ),"motion-notify-event",GTK_SIGNAL_FUNC( eqVScaleMotion ),GINT_TO_POINTER(2) );
-  gtk_signal_connect( GTK_OBJECT( VHue ),"motion-notify-event",GTK_SIGNAL_FUNC( eqVScaleMotion ),GINT_TO_POINTER(3) );
-  gtk_signal_connect( GTK_OBJECT( VSaturation ),"motion-notify-event",GTK_SIGNAL_FUNC( eqVScaleMotion ),GINT_TO_POINTER(4) );
+  g_signal_connect( G_OBJECT( VContrast ),"motion-notify-event",G_CALLBACK( eqVScaleMotion ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( VBrightness ),"motion-notify-event",G_CALLBACK( eqVScaleMotion ),GINT_TO_POINTER(2) );
+  g_signal_connect( G_OBJECT( VHue ),"motion-notify-event",G_CALLBACK( eqVScaleMotion ),GINT_TO_POINTER(3) );
+  g_signal_connect( G_OBJECT( VSaturation ),"motion-notify-event",G_CALLBACK( eqVScaleMotion ),GINT_TO_POINTER(4) );
 
-  gtk_signal_connect( GTK_OBJECT( Ok ),"clicked",GTK_SIGNAL_FUNC( eqButtonReleased ),GINT_TO_POINTER(0) );
-  gtk_signal_connect( GTK_OBJECT( Clear ),"clicked",GTK_SIGNAL_FUNC( eqButtonReleased ),GINT_TO_POINTER(1) );
-  gtk_signal_connect( GTK_OBJECT( Config ),"clicked",GTK_SIGNAL_FUNC( eqButtonReleased ),GINT_TO_POINTER(2) );
+  g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( eqButtonReleased ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( Clear ),"clicked",G_CALLBACK( eqButtonReleased ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( Config ),"clicked",G_CALLBACK( eqButtonReleased ),GINT_TO_POINTER(2) );
 
-  gtk_signal_connect( GTK_OBJECT( Notebook ),"switch-page",GTK_SIGNAL_FUNC( eqNotebook ),NULL );
+  g_signal_connect( G_OBJECT( Notebook ),"switch-page",G_CALLBACK( eqNotebook ),NULL );
 
   gtk_window_add_accel_group( GTK_WINDOW( Equalizer ),accel_group );
 
@@ -678,10 +678,10 @@ GtkWidget * CreateEquConfig( void )
   gtk_widget_add_accelerator( ecOk,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
   gtk_widget_add_accelerator( ecCancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
 
-  gtk_signal_connect( GTK_OBJECT( EquConfig ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&EquConfig );
+  g_signal_connect( G_OBJECT( EquConfig ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&EquConfig );
 
-  gtk_signal_connect( GTK_OBJECT( ecOk ),"clicked",GTK_SIGNAL_FUNC( ecButtonReleased ),GINT_TO_POINTER(1) );
-  gtk_signal_connect( GTK_OBJECT( ecCancel ),"clicked",GTK_SIGNAL_FUNC( ecButtonReleased ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( ecOk ),"clicked",G_CALLBACK( ecButtonReleased ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( ecCancel ),"clicked",G_CALLBACK( ecButtonReleased ),GINT_TO_POINTER(0) );
 
   gtk_window_add_accel_group( GTK_WINDOW( EquConfig ),accel_group );
 

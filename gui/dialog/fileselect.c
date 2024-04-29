@@ -838,18 +838,18 @@ static GtkWidget *CreateFileSelect(void)
 
     gtk_widget_add_accelerator(fsCancel, "clicked", accel_group, GDK_Escape, 0, GTK_ACCEL_VISIBLE);
 
-    gtk_signal_connect(GTK_OBJECT(FileSelector), "destroy", GTK_SIGNAL_FUNC(fs_Destroy), NULL);
-    gtk_signal_connect(GTK_OBJECT(fsFNameListWindow), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
+    g_signal_connect(G_OBJECT(FileSelector), "destroy", G_CALLBACK(fs_Destroy), NULL);
+    g_signal_connect(G_OBJECT(fsFNameListWindow), "key-release-event", G_CALLBACK(fs_key_release_event), NULL);
 
-    gtk_signal_connect(GTK_OBJECT(fsFilterCombo), "changed", GTK_SIGNAL_FUNC(fs_fsFilterCombo_changed), fsFilterCombo);
-    gtk_signal_connect(GTK_OBJECT(fsFilterCombo), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
-    gtk_signal_connect(GTK_OBJECT(fsPathCombo), "changed", GTK_SIGNAL_FUNC(fs_fsPathCombo_changed), fsPathCombo);
-    gtk_signal_connect(GTK_OBJECT(fsPathCombo), "key-release-event", GTK_SIGNAL_FUNC(fs_key_release_event), NULL);
-    gtk_signal_connect(GTK_OBJECT(fsUp), "clicked", GTK_SIGNAL_FUNC(fs_Up_released), fsFNameList);
-    gtk_signal_connect(GTK_OBJECT(fsOk), "clicked", GTK_SIGNAL_FUNC(fs_Ok_released), fsCombo4);
-    gtk_signal_connect(GTK_OBJECT(fsCancel), "clicked", GTK_SIGNAL_FUNC(fs_Cancel_released), NULL);
-    gtk_signal_connect(GTK_OBJECT(fsFNameList), "select-row", (GtkSignalFunc)fs_fsFNameList_select_row, NULL);
-    gtk_signal_connect(GTK_OBJECT(fsFNameList), "event", (GtkSignalFunc)fs_fsFNameList_event, NULL);
+    g_signal_connect(G_OBJECT(fsFilterCombo), "changed", G_CALLBACK(fs_fsFilterCombo_changed), fsFilterCombo);
+    g_signal_connect(G_OBJECT(fsFilterCombo), "key-release-event", G_CALLBACK(fs_key_release_event), NULL);
+    g_signal_connect(G_OBJECT(fsPathCombo), "changed", G_CALLBACK(fs_fsPathCombo_changed), fsPathCombo);
+    g_signal_connect(G_OBJECT(fsPathCombo), "key-release-event", G_CALLBACK(fs_key_release_event), NULL);
+    g_signal_connect(G_OBJECT(fsUp), "clicked", G_CALLBACK(fs_Up_released), fsFNameList);
+    g_signal_connect(G_OBJECT(fsOk), "clicked", G_CALLBACK(fs_Ok_released), fsCombo4);
+    g_signal_connect(G_OBJECT(fsCancel), "clicked", G_CALLBACK(fs_Cancel_released), NULL);
+    g_signal_connect(G_OBJECT(fsFNameList), "select-row", G_CALLBACK(fs_fsFNameList_select_row), NULL);
+    g_signal_connect(G_OBJECT(fsFNameList), "event", G_CALLBACK(fs_fsFNameList_event), NULL);
 
     gtk_window_add_accel_group(GTK_WINDOW(FileSelector), accel_group);
 

@@ -142,10 +142,10 @@ void ShowSkinBrowser( void )
  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
  gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
 
- gtk_signal_connect( GTK_OBJECT( SkinBrowser ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&SkinBrowser );
- gtk_signal_connect( GTK_OBJECT( SkinList ),"select-row",GTK_SIGNAL_FUNC( on_SkinList_select_row ),NULL );
- gtk_signal_connect( GTK_OBJECT( Ok ),"clicked",GTK_SIGNAL_FUNC( prButton ),GINT_TO_POINTER(1) );
- gtk_signal_connect( GTK_OBJECT( Cancel ),"clicked",GTK_SIGNAL_FUNC( prButton ),GINT_TO_POINTER(0) );
+ g_signal_connect( G_OBJECT( SkinBrowser ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&SkinBrowser );
+ g_signal_connect( G_OBJECT( SkinList ),"select-row",G_CALLBACK( on_SkinList_select_row ),NULL );
+ g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( Cancel ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(0) );
 
  if ( ( sbSkinDirInHome=calloc( 1,strlen( skinDirInHome ) + 4 ) ) != NULL )
   { strcpy( sbSkinDirInHome,skinDirInHome ); strcat( sbSkinDirInHome,"/*" ); }

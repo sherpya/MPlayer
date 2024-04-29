@@ -210,7 +210,7 @@ GtkWidget * gtkAddHScale( GtkAdjustment * adj,GtkWidget * parent,int digit )
  if ( parent ) gtk_box_pack_start( GTK_BOX( parent ),HS,TRUE,TRUE,0 );
  gtk_scale_set_value_pos( GTK_SCALE( HS ),GTK_POS_RIGHT );
  gtk_scale_set_digits( GTK_SCALE( HS ),digit );
- if (digit > 0) gtk_signal_connect(GTK_OBJECT(HS), "format-value", GTK_SIGNAL_FUNC(scale_format_value), NULL);
+ if (digit > 0) g_signal_connect(G_OBJECT(HS), "format-value", G_CALLBACK(scale_format_value), NULL);
  return HS;
 }
 
@@ -223,7 +223,7 @@ GtkWidget * gtkAddVScale( GtkAdjustment * adj,GtkWidget * parent,int digit )
 // gtk_scale_set_value_pos( GTK_SCALE( VS ),GTK_POS_RIGHT );
  if ( digit == -1 ) gtk_scale_set_draw_value( GTK_SCALE( VS ),FALSE );
   else gtk_scale_set_digits( GTK_SCALE( VS ),digit );
- if (digit > 0) gtk_signal_connect(GTK_OBJECT(VS), "format-value", GTK_SIGNAL_FUNC(scale_format_value), NULL);
+ if (digit > 0) g_signal_connect(G_OBJECT(VS), "format-value", G_CALLBACK(scale_format_value), NULL);
  return VS;
 }
 

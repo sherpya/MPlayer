@@ -140,9 +140,9 @@ static GtkWidget *CreateURLDialog(void)
     gtk_widget_add_accelerator(Ok, "clicked", accel_group, GDK_Return, 0, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(Cancel, "clicked", accel_group, GDK_Escape, 0, GTK_ACCEL_VISIBLE);
 
-    gtk_signal_connect(GTK_OBJECT(URLDialog), "destroy", GTK_SIGNAL_FUNC(gtk_widget_destroyed), &URLDialog);
-    gtk_signal_connect(GTK_OBJECT(Ok), "clicked", GTK_SIGNAL_FUNC(button_clicked), Ok);
-    gtk_signal_connect(GTK_OBJECT(Cancel), "clicked", GTK_SIGNAL_FUNC(button_clicked), NULL);
+    g_signal_connect(G_OBJECT(URLDialog), "destroy", G_CALLBACK(gtk_widget_destroyed), &URLDialog);
+    g_signal_connect(G_OBJECT(Ok), "clicked", G_CALLBACK(button_clicked), Ok);
+    g_signal_connect(G_OBJECT(Cancel), "clicked", G_CALLBACK(button_clicked), NULL);
 
     gtk_widget_grab_focus(urlEntry);
     gtk_window_add_accel_group(GTK_WINDOW(URLDialog), accel_group);

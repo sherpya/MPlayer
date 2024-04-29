@@ -1144,52 +1144,52 @@ static GtkWidget * CreatePreferences( void )
   gtk_widget_add_accelerator( BOk,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
   gtk_widget_add_accelerator( BCancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
 
-  gtk_signal_connect( GTK_OBJECT( Preferences ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&Preferences );
+  g_signal_connect( G_OBJECT( Preferences ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Preferences );
 
-  gtk_signal_connect( GTK_OBJECT( AConfig ),"clicked",GTK_SIGNAL_FUNC( prButton ),GINT_TO_POINTER(bAConfig) );
-  gtk_signal_connect( GTK_OBJECT( BOk ),"clicked",GTK_SIGNAL_FUNC( prButton ),GINT_TO_POINTER(bOk) );
-  gtk_signal_connect( GTK_OBJECT( BCancel ),"clicked",GTK_SIGNAL_FUNC( prButton ),GINT_TO_POINTER(bCancel) );
-  gtk_signal_connect( GTK_OBJECT( VConfig ),"clicked",GTK_SIGNAL_FUNC( prButton ),GINT_TO_POINTER(bVconfig) );
+  g_signal_connect( G_OBJECT( AConfig ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bAConfig) );
+  g_signal_connect( G_OBJECT( BOk ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bOk) );
+  g_signal_connect( G_OBJECT( BCancel ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bCancel) );
+  g_signal_connect( G_OBJECT( VConfig ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bVconfig) );
 #if 0
-  gtk_signal_connect( GTK_OBJECT( BLoadSubtitle ),"clicked",GTK_SIGNAL_FUNC( prButton ),GINT_TO_POINTER(bLSubtitle) );
+  g_signal_connect( G_OBJECT( BLoadSubtitle ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bLSubtitle) );
 #endif
-  gtk_signal_connect( GTK_OBJECT( BLoadFont ),"clicked",GTK_SIGNAL_FUNC( prButton ),GINT_TO_POINTER(bLFont) );
+  g_signal_connect( G_OBJECT( BLoadFont ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bLFont) );
 
-  gtk_signal_connect( GTK_OBJECT( CBSubUtf8 ),"toggled",GTK_SIGNAL_FUNC( button_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBSubUnicode ),"toggled",GTK_SIGNAL_FUNC( button_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBSubUtf8 ),"toggled",G_CALLBACK( button_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBSubUnicode ),"toggled",G_CALLBACK( button_toggled ),NULL );
 #if 0
-  gtk_signal_connect( GTK_OBJECT( CBNormalize ),"toggled",GTK_SIGNAL_FUNC( on_CBNormalize_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBSoftwareMixer ),"toggled",GTK_SIGNAL_FUNC( on_CBSoftwareMixer_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBSurround ),"toggled",GTK_SIGNAL_FUNC( on_CBSurround_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBExtraStereo ),"toggled",GTK_SIGNAL_FUNC( on_CBExtraStereo_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBDoubleBuffer ),"toggled",GTK_SIGNAL_FUNC( on_CBDoubleBuffer_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBDR ),"toggled",GTK_SIGNAL_FUNC( on_CBDR_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBFramedrop ),"toggled",GTK_SIGNAL_FUNC( on_CBFramedrop_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBHFramedrop ),"toggled",GTK_SIGNAL_FUNC( on_CBHFramedrop_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBFullScreen ),"toggled",GTK_SIGNAL_FUNC( on_CBFullScreen_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBNonInterlaved ),"toggled",GTK_SIGNAL_FUNC( on_CBNonInterlaved_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBFlip ),"toggled",GTK_SIGNAL_FUNC( on_CBFlip_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBPostprocess ),"toggled",GTK_SIGNAL_FUNC( on_CBPostprocess_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBNoAutoSub ),"toggled",GTK_SIGNAL_FUNC( on_CBNoAutoSub_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBDumpMPSub ),"toggled",GTK_SIGNAL_FUNC( on_CBDumpMPSub_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBDumpSrt ),"toggled",GTK_SIGNAL_FUNC( on_CBDumpSrt_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBNormalize ),"toggled",G_CALLBACK( on_CBNormalize_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBSoftwareMixer ),"toggled",G_CALLBACK( on_CBSoftwareMixer_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBSurround ),"toggled",G_CALLBACK( on_CBSurround_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBExtraStereo ),"toggled",G_CALLBACK( on_CBExtraStereo_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBDoubleBuffer ),"toggled",G_CALLBACK( on_CBDoubleBuffer_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBDR ),"toggled",G_CALLBACK( on_CBDR_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBFramedrop ),"toggled",G_CALLBACK( on_CBFramedrop_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBHFramedrop ),"toggled",G_CALLBACK( on_CBHFramedrop_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBFullScreen ),"toggled",G_CALLBACK( on_CBFullScreen_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBNonInterlaved ),"toggled",G_CALLBACK( on_CBNonInterlaved_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBFlip ),"toggled",G_CALLBACK( on_CBFlip_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBPostprocess ),"toggled",G_CALLBACK( on_CBPostprocess_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBNoAutoSub ),"toggled",G_CALLBACK( on_CBNoAutoSub_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBDumpMPSub ),"toggled",G_CALLBACK( on_CBDumpMPSub_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBDumpSrt ),"toggled",G_CALLBACK( on_CBDumpSrt_toggled ),NULL );
 #endif
 #if 0
-  gtk_signal_connect( GTK_OBJECT( RBOSDNone ),"toggled",GTK_SIGNAL_FUNC( on_RBOSDNone_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( RBOSDIndicator ),"toggled",GTK_SIGNAL_FUNC( on_RBOSDIndicator_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( RBOSDTandP ),"toggled",GTK_SIGNAL_FUNC( on_RBOSDTandP_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( RBOSDTPTT ),"toggled",GTK_SIGNAL_FUNC( on_RBOSDIndicator_toggled ),NULL );
-  gtk_signal_connect( GTK_OBJECT( CBAudioEqualizer ),"toggled",GTK_SIGNAL_FUNC( on_CBAudioEqualizer_toggled ),NULL );
+  g_signal_connect( G_OBJECT( RBOSDNone ),"toggled",G_CALLBACK( on_RBOSDNone_toggled ),NULL );
+  g_signal_connect( G_OBJECT( RBOSDIndicator ),"toggled",G_CALLBACK( on_RBOSDIndicator_toggled ),NULL );
+  g_signal_connect( G_OBJECT( RBOSDTandP ),"toggled",G_CALLBACK( on_RBOSDTandP_toggled ),NULL );
+  g_signal_connect( G_OBJECT( RBOSDTPTT ),"toggled",G_CALLBACK( on_RBOSDIndicator_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBAudioEqualizer ),"toggled",G_CALLBACK( on_CBAudioEqualizer_toggled ),NULL );
 #endif
 #if 0
-  gtk_signal_connect( GTK_OBJECT( HSAudioDelay ),"motion-notify-event",GTK_SIGNAL_FUNC( on_HSAudioDelay_motion_notify_event ),NULL );
-  gtk_signal_connect( GTK_OBJECT( HSPanscan ),"motion-notify-event",GTK_SIGNAL_FUNC( on_HSPanscan_motion_notify_event ),NULL );
-  gtk_signal_connect( GTK_OBJECT( label2 ),"motion-notify-event",GTK_SIGNAL_FUNC( on_label2_motion_notify_event ),NULL );
-  gtk_signal_connect( GTK_OBJECT( HSSubDelay ),"motion-notify-event",GTK_SIGNAL_FUNC( on_HSSubDelay_motion_notify_event ),NULL );
-  gtk_signal_connect( GTK_OBJECT( HSSubPosition ),"motion-notify-event",GTK_SIGNAL_FUNC( on_HSSubPosition_motion_notify_event ),NULL );
-  gtk_signal_connect( GTK_OBJECT( HSSubFPS ),"motion-notify-event",GTK_SIGNAL_FUNC( on_HSSubFPS_motion_notify_event ),NULL );
-  gtk_signal_connect( GTK_OBJECT( HSFontFactor ),"motion-notify-event",GTK_SIGNAL_FUNC( on_HSFontFactor_motion_notify_event ),NULL );
-  gtk_signal_connect( GTK_OBJECT( HSPPQuality ),"motion-notify-event",GTK_SIGNAL_FUNC( on_HSPPQuality_motion_notify_event ),NULL );
+  g_signal_connect( G_OBJECT( HSAudioDelay ),"motion-notify-event",G_CALLBACK( on_HSAudioDelay_motion_notify_event ),NULL );
+  g_signal_connect( G_OBJECT( HSPanscan ),"motion-notify-event",G_CALLBACK( on_HSPanscan_motion_notify_event ),NULL );
+  g_signal_connect( G_OBJECT( label2 ),"motion-notify-event",G_CALLBACK( on_label2_motion_notify_event ),NULL );
+  g_signal_connect( G_OBJECT( HSSubDelay ),"motion-notify-event",G_CALLBACK( on_HSSubDelay_motion_notify_event ),NULL );
+  g_signal_connect( G_OBJECT( HSSubPosition ),"motion-notify-event",G_CALLBACK( on_HSSubPosition_motion_notify_event ),NULL );
+  g_signal_connect( G_OBJECT( HSSubFPS ),"motion-notify-event",G_CALLBACK( on_HSSubFPS_motion_notify_event ),NULL );
+  g_signal_connect( G_OBJECT( HSFontFactor ),"motion-notify-event",G_CALLBACK( on_HSFontFactor_motion_notify_event ),NULL );
+  g_signal_connect( G_OBJECT( HSPPQuality ),"motion-notify-event",G_CALLBACK( on_HSPPQuality_motion_notify_event ),NULL );
 #endif
 
   gtk_notebook_set_page( GTK_NOTEBOOK( notebook1 ),2 );
@@ -1446,45 +1446,45 @@ void ShowPreferences( void )
 #endif
 
 /* signals */
- gtk_signal_connect( GTK_OBJECT( CBExtraStereo ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(0) );
- gtk_signal_connect( GTK_OBJECT( CBNormalize ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(1) );
- gtk_signal_connect( GTK_OBJECT( CBSoftwareMixer ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(1) );
- gtk_signal_connect( GTK_OBJECT( CBAudioEqualizer ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(2) );
- gtk_signal_connect( GTK_OBJECT( CBShowVideoWindow ),"toggled",GTK_SIGNAL_FUNC( prToggled ), GINT_TO_POINTER(3) );
+ g_signal_connect( G_OBJECT( CBExtraStereo ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(0) );
+ g_signal_connect( G_OBJECT( CBNormalize ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( CBSoftwareMixer ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( CBAudioEqualizer ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(2) );
+ g_signal_connect( G_OBJECT( CBShowVideoWindow ),"toggled",G_CALLBACK( prToggled ), GINT_TO_POINTER(3) );
 #ifdef CONFIG_FREETYPE
- gtk_signal_connect( GTK_OBJECT( RBFontNoAutoScale ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(4) );
- gtk_signal_connect( GTK_OBJECT( RBFontAutoScaleHeight ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(5) );
- gtk_signal_connect( GTK_OBJECT( RBFontAutoScaleWidth ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(6) );
- gtk_signal_connect( GTK_OBJECT( RBFontAutoScaleDiagonal ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(7) );
+ g_signal_connect( G_OBJECT( RBFontNoAutoScale ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(4) );
+ g_signal_connect( G_OBJECT( RBFontAutoScaleHeight ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(5) );
+ g_signal_connect( G_OBJECT( RBFontAutoScaleWidth ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(6) );
+ g_signal_connect( G_OBJECT( RBFontAutoScaleDiagonal ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(7) );
 #endif
- gtk_signal_connect( GTK_OBJECT( CBCache ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(8));
- gtk_signal_connect( GTK_OBJECT( CBAutoSync ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(9));
+ g_signal_connect( G_OBJECT( CBCache ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(8));
+ g_signal_connect( G_OBJECT( CBAutoSync ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(9));
 #ifdef CONFIG_ASS
- gtk_signal_connect( GTK_OBJECT( CBUseASS ),"toggled",GTK_SIGNAL_FUNC( prToggled ),GINT_TO_POINTER(10));
+ g_signal_connect( G_OBJECT( CBUseASS ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(10));
 #endif
- gtk_signal_connect(GTK_OBJECT(CBReplayGain), "toggled", GTK_SIGNAL_FUNC(prToggled), GINT_TO_POINTER(11));
+ g_signal_connect(G_OBJECT(CBReplayGain), "toggled", G_CALLBACK(prToggled), GINT_TO_POINTER(11));
 
- gtk_signal_connect( GTK_OBJECT( HSExtraStereoMul ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(0) );
- gtk_signal_connect( GTK_OBJECT( HSAudioDelay ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(1) );
- gtk_signal_connect( GTK_OBJECT( HSPanscan ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(2) );
- gtk_signal_connect( GTK_OBJECT( HSSubDelay ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(3) );
- gtk_signal_connect( GTK_OBJECT( HSSubPosition ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(4) );
+ g_signal_connect( G_OBJECT( HSExtraStereoMul ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(0) );
+ g_signal_connect( G_OBJECT( HSAudioDelay ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( HSPanscan ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(2) );
+ g_signal_connect( G_OBJECT( HSSubDelay ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(3) );
+ g_signal_connect( G_OBJECT( HSSubPosition ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(4) );
 #ifdef CONFIG_FREETYPE
- gtk_signal_connect( GTK_OBJECT( HSFontBlur ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(6) );
- gtk_signal_connect( GTK_OBJECT( HSFontOutLine ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(7) );
- gtk_signal_connect( GTK_OBJECT( HSFontTextScale ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(8) );
- gtk_signal_connect( GTK_OBJECT( HSFontOSDScale ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(9) );
- gtk_signal_connect( GTK_OBJECT( EFontEncoding ),"changed",GTK_SIGNAL_FUNC( prEntry ),GINT_TO_POINTER(0) );
+ g_signal_connect( G_OBJECT( HSFontBlur ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(6) );
+ g_signal_connect( G_OBJECT( HSFontOutLine ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(7) );
+ g_signal_connect( G_OBJECT( HSFontTextScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(8) );
+ g_signal_connect( G_OBJECT( HSFontOSDScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(9) );
+ g_signal_connect( G_OBJECT( EFontEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(0) );
 #else
- gtk_signal_connect( GTK_OBJECT( HSFontFactor ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(5) );
+ g_signal_connect( G_OBJECT( HSFontFactor ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(5) );
 #endif
 #ifdef CONFIG_ICONV
- gtk_signal_connect( GTK_OBJECT( ESubEncoding ),"changed",GTK_SIGNAL_FUNC( prEntry ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( ESubEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(1) );
 #endif
- gtk_signal_connect( GTK_OBJECT( HSPPQuality ),"motion-notify-event",GTK_SIGNAL_FUNC( prHScaler ),GINT_TO_POINTER(10) );
+ g_signal_connect( G_OBJECT( HSPPQuality ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(10) );
 
- gtk_signal_connect( GTK_OBJECT( CLADrivers ),"select-row",GTK_SIGNAL_FUNC( prCListRow ),GINT_TO_POINTER(0) );
- gtk_signal_connect( GTK_OBJECT( CLVDrivers ),"select-row",GTK_SIGNAL_FUNC( prCListRow ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( CLADrivers ),"select-row",G_CALLBACK( prCListRow ),GINT_TO_POINTER(0) );
+ g_signal_connect( G_OBJECT( CLVDrivers ),"select-row",G_CALLBACK( prCListRow ),GINT_TO_POINTER(1) );
 
  gtk_widget_show( Preferences );
  gtkSetLayer( Preferences );
@@ -1775,9 +1775,9 @@ static GtkWidget *CreateAudioConfig( void ) {
   BAudioOk = gtkAddButton(_(MSGTR_GUI_Ok), hbuttonbox);
   BAudioCancel = gtkAddButton(_(MSGTR_GUI_Cancel), hbuttonbox);
 
-  gtk_signal_connect(GTK_OBJECT(AudioConfig), "destroy", GTK_SIGNAL_FUNC(gtk_widget_destroyed), &AudioConfig);
-  gtk_signal_connect(GTK_OBJECT(BAudioOk), "clicked", GTK_SIGNAL_FUNC(audioButton), GINT_TO_POINTER(1));
-  gtk_signal_connect(GTK_OBJECT(BAudioCancel), "clicked", GTK_SIGNAL_FUNC(audioButton), GINT_TO_POINTER(0));
+  g_signal_connect(G_OBJECT(AudioConfig), "destroy", G_CALLBACK(gtk_widget_destroyed), &AudioConfig);
+  g_signal_connect(G_OBJECT(BAudioOk), "clicked", G_CALLBACK(audioButton), GINT_TO_POINTER(1));
+  g_signal_connect(G_OBJECT(BAudioCancel), "clicked", G_CALLBACK(audioButton), GINT_TO_POINTER(0));
 
   accel_group = gtk_accel_group_new();
   gtk_widget_add_accelerator(BAudioOk, "clicked", accel_group, GDK_Return, 0, GTK_ACCEL_VISIBLE);
@@ -1921,10 +1921,10 @@ GtkWidget * CreateDXR3Config( void )
  gtk_widget_add_accelerator( dxr3BOk,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
  gtk_widget_add_accelerator( dxr3BCancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
 
- gtk_signal_connect( GTK_OBJECT( DXR3Config ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&DXR3Config );
+ g_signal_connect( G_OBJECT( DXR3Config ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&DXR3Config );
 
- gtk_signal_connect( GTK_OBJECT( dxr3BOk ),"clicked",GTK_SIGNAL_FUNC( dxr3Button ),GINT_TO_POINTER(0) );
- gtk_signal_connect( GTK_OBJECT( dxr3BCancel ),"clicked",GTK_SIGNAL_FUNC( dxr3Button ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( dxr3BOk ),"clicked",G_CALLBACK( dxr3Button ),GINT_TO_POINTER(0) );
+ g_signal_connect( G_OBJECT( dxr3BCancel ),"clicked",G_CALLBACK( dxr3Button ),GINT_TO_POINTER(1) );
 
  gtk_window_add_accel_group( GTK_WINDOW( DXR3Config ),accel_group );
 

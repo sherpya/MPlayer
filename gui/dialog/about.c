@@ -334,7 +334,7 @@ static GtkWidget * CreateAbout( void )
   gtkAddHSeparator( vbox );
   Ok=gtkAddButton( _(MSGTR_GUI_Ok),gtkAddHButtonBox( vbox ) );
 
-  gtk_signal_connect( GTK_OBJECT( About ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&About );
+  g_signal_connect( G_OBJECT( About ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&About );
   gtk_signal_connect_object( GTK_OBJECT( Ok ),"clicked",GTK_SIGNAL_FUNC( abWidgetDestroy ),NULL );
 
   gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );

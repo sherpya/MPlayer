@@ -100,8 +100,8 @@ static GtkWidget * CreateMessageBox( void )
  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
 
- gtk_signal_connect( GTK_OBJECT( MessageBox ),"destroy",GTK_SIGNAL_FUNC( gtk_widget_destroyed ),&MessageBox );
- gtk_signal_connect( GTK_OBJECT( Ok ),"clicked",GTK_SIGNAL_FUNC( on_Ok_released ),NULL );
+ g_signal_connect( G_OBJECT( MessageBox ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&MessageBox );
+ g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( on_Ok_released ),NULL );
 
  gtk_window_add_accel_group( GTK_WINDOW( MessageBox ),accel_group );
 

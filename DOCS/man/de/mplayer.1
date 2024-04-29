@@ -33,7 +33,7 @@
 .\" Titel
 .\" --------------------------------------------------------------------------
 .
-.TH MPlayer 1 "27.02.2022" "Das MPlayer Projekt"
+.TH MPlayer 1 "28.04.2024" "Das MPlayer Projekt"
 .
 .SH NAME
 mplayer  \- Movie Player
@@ -303,7 +303,7 @@ Zeige den Dateinamen im OSD.
 Zeige den Fortschrittsbalken, die abgelaufene Zeit und die Gesamtzeit im OSD.
 .IPs "! und @"
 Spult zum Anfang des vorigen/nächsten Kapitels.
-.IPs "D (nur bei \-vo xvmc, \-vf yadif, \-vf kerndeint)"
+.IPs "D (nur bei \-vf yadif, \-vf kerndeint)"
 Aktiviere/deaktiviere Deinterlacer.
 .IPs "A"
 Wechselt bei DVD durch die verfügbaren Perspektiven.
@@ -973,15 +973,13 @@ vorstellen).
 Ändert den Farbwert auf einen RGB-Wert deiner Wahl.
 0x000000 ist schwarz und 0xffffff ist weiß.
 Wird nur von folgenden Videoausgabetreibern unterstützt: cvidix, fbdev,
-svga, vesa, winvidix, xmga, xvidix, xover, xv (siehe \-vo xv:ck), xvmc
-(siehe \-vo xv:ck) und directx.
+svga, vesa, winvidix, xmga, xvidix, xover, xv (siehe \-vo xv:ck) und directx.
 .
 .TP
 .B \-nocolorkey
 Schaltet die Wahl des Farbwertes ab.
 Wird nur von folgenden Videoausgabetreibern unterstützt: cvidix, fbdev,
-svga, vesa, winvidix, xmga, xvidix, xover, xv (siehe \-vo xv:ck), xvmc
-(siehe \-vo xv:ck) und directx.
+svga, vesa, winvidix, xmga, xvidix, xover, xv (siehe \-vo xv:ck) und directx.
 .
 .TP
 .B \-correct\-pts (EXPERIMENTELL)
@@ -3412,7 +3410,7 @@ Koordinaten x und y relativ zur linken oberen Ecke des Fensters und nicht zu
 der des Bildschirms.
 .br
 .I ANMERKUNG:
-Diese Option wird nur von x11-, xmga-, xv-, xvmc-, xvidix-, gl, gl2,
+Diese Option wird nur von x11-, xmga-, xv-, xvidix-, gl, gl2,
 directx-, fbdev- und tdfxfb-Videoausgabetreibern unterstützt.
 .sp 1
 .I BEISPIEL:
@@ -3752,41 +3750,6 @@ Momentan nur von tdfx_vid unterstützt.
 .IPs <vo_Treiber>
 Wähle den Treiber, der als Quelle für das auf X11 aufsetzende Overlay benutzt
 werden soll.
-.RE
-.PD 1
-.
-.TP
-.B xvmc (nur bei X11 mit \-vc ffmpeg12mc)
-Ein Videoausgabetreiber, der die XvMC- (X Video Motion Compensation)
-Unterstützung von XFree86 4.x benutzt, um das Decodieren von MPEG-1/\:2 und
-VCR2 zu beschleunigen.
-.PD 0
-.RSs
-.IPs adaptor=<Nummer>
-Wähle einen bestimmten XVideo-Adapter (siehe xvinfo-Ergebnisse).
-.IPs port=<Nummer>
-Wählt einen speziellen XVideo-Port.
-.IPs (no)benchmark
-Deaktiviert die Anzeige von Bildern.
-Benötigt für einwandfreies Benchmarking von Treibern, die den Bildpuffer nur
-bei einem Monitor-Retrace ändern (nVidia).
-Voreinstellung ist, die Bildwiedergabe nicht zu deaktivieren (nobenchmark).
-.IPs (no)bobdeint
-Sehr einfacher Deinterlacer.
-Sieht möglicherweise nicht besser als \-vf tfields=1 aus, ist aber
-der einzige Deinterlacer, der mit xvmc funktioniert (Standard: nobobdeint).
-.IPs (no)queue
-Frames werden in einer Queue angeordnet, um der Videohardware weitergehendes
-paralleles Arbeiten zu ermöglichen.
-Dies kann eine geringe konstante (nicht bemerkbare) A/V-Desynchronisation mit
-sich bringen (Standard: noqueue).
-.IPs (no)sleep
-Benutze die Sleep-Funktion, während auf Beendigung des Renderns gewartet
-wird (nicht empfohlen unter Linux) (Standard: nosleep).
-.IPs ck=cur|use|set
-Das gleiche wie \-vo xv:ck (siehe \-vo xv).
-.IPs ck-method=man|bg|auto
-Das gleiche wie die \-vo xv:ck-Methode (siehe \-vo xv).
 .RE
 .PD 1
 .
@@ -4775,8 +4738,8 @@ Deaktiviert die automatische Anpassung des Höhen-/\:Breitenverhältnisses.
 .TP
 .B "\-field\-dominance <\-1\-1>"
 Stellt das erste Feld ein bei interlaced Inhalten.
-Nützlich für Deinterlacer, die die Framerate verdoppeln: \-vf tfields=1,
-\-vf yadif=1 und \-vo xvmc:bobdeint.
+Nützlich für Deinterlacer, die die Framerate verdoppeln: \-vf tfields=1
+und \-vf yadif=1.
 .PD 0
 .RSs
 .IPs \-1

@@ -262,7 +262,7 @@ static GtkWidget * CreateEqualizer( void )
   gtk_widget_set_size_request( Equalizer,-1,256 );
   gtk_window_set_title( GTK_WINDOW( Equalizer ),_(MSGTR_GUI_Equalizer) );
   gtk_window_set_position( GTK_WINDOW( Equalizer ),GTK_WIN_POS_CENTER );
-  gtk_window_set_policy( GTK_WINDOW( Equalizer ),FALSE,FALSE,TRUE );
+  gtk_window_set_resizable( GTK_WINDOW( Equalizer ),FALSE );
   gtk_window_set_wmclass( GTK_WINDOW( Equalizer ),"Equalizer",MPlayer );
 
   gtk_widget_realize( Equalizer );
@@ -592,7 +592,7 @@ GtkWidget * CreateEquConfig( void )
   gtk_window_set_title( GTK_WINDOW( EquConfig ),_(MSGTR_GUI_EqualizerConfiguration) );
   gtk_window_set_position( GTK_WINDOW( EquConfig ),GTK_WIN_POS_CENTER );
 //  gtk_window_set_modal( GTK_WINDOW( EquConfig ),TRUE );
-  gtk_window_set_policy( GTK_WINDOW( EquConfig ),FALSE,FALSE,TRUE );
+  gtk_window_set_resizable( GTK_WINDOW( EquConfig ),FALSE );
   gtk_window_set_wmclass( GTK_WINDOW( EquConfig ),"EqualizerConfig",MPlayer );
 
   gtk_widget_realize( EquConfig );

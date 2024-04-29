@@ -102,7 +102,7 @@ void ShowSkinBrowser( void )
  gtk_container_set_border_width( GTK_CONTAINER( SkinBrowser ),1 );
  gtk_window_set_title( GTK_WINDOW( SkinBrowser ),_(MSGTR_GUI_SkinBrowser) );
  gtk_window_set_position( GTK_WINDOW( SkinBrowser ),GTK_WIN_POS_CENTER );
- gtk_window_set_policy( GTK_WINDOW( SkinBrowser ),FALSE,FALSE,TRUE );
+ gtk_window_set_resizable( GTK_WINDOW( SkinBrowser ),FALSE );
  gtk_window_set_wmclass( GTK_WINDOW( SkinBrowser ),"SkinBrowser",MPlayer );
 
  gtk_widget_realize( SkinBrowser );

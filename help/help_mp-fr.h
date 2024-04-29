@@ -1431,10 +1431,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_MPCODECS_ArithmeticMeanOfQP "[VD_FFMPEG] Moyenne arithmétique de QP : %2.4f, moyenne harmonique de QP : %2.4f\n"
 #define MSGTR_MPCODECS_DRIFailure "[VD_FFMPEG] Échec DRI.\n"
 #define MSGTR_MPCODECS_CouldntAllocateImageForCodec "[VD_FFMPEG] Impossible d'allouer image pour codec.\n"
-#define MSGTR_MPCODECS_XVMCAcceleratedMPEG2 "[VD_FFMPEG] MPEG2 accéléré XVMC.\n"
 #define MSGTR_MPCODECS_TryingPixfmt "[VD_FFMPEG] Essaie pixfmt=%d.\n"
-#define MSGTR_MPCODECS_McGetBufferShouldWorkOnlyWithXVMC "[VD_FFMPEG] Le mc_get_buffer devrait fonctionner seulement avec accélération XVMC !!"
-#define MSGTR_MPCODECS_OnlyBuffersAllocatedByVoXvmcAllowed "[VD_FFMPEG] Seuls les tampons alloués par vo_xvmc permis.\n"
 
 // libmpcodecs/ve_lavc.c
 #define MSGTR_MPCODECS_HighQualityEncodingSelected "[VE_LAVC] Codage haute qualité sélectionné (non temps réel) !\n"

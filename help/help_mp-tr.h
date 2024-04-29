@@ -1435,10 +1435,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_MPCODECS_ArithmeticMeanOfQP "[VD_FFMPEG] QP'nin aritmetik karşılığı : %2.4f, QP'nin harmonik karşılığı: %2.4f\n"
 #define MSGTR_MPCODECS_DRIFailure "[VD_FFMPEG] DRI hatası.\n"
 #define MSGTR_MPCODECS_CouldntAllocateImageForCodec "[VD_FFMPEG] Kodeğine görüntü atanmadı.\n"
-#define MSGTR_MPCODECS_XVMCAcceleratedMPEG2 "[VD_FFMPEG] XVMC hızlı MPEG2.\n"
 #define MSGTR_MPCODECS_TryingPixfmt "[VD_FFMPEG] Deneyiniz pixfmt=%d.\n"
-#define MSGTR_MPCODECS_McGetBufferShouldWorkOnlyWithXVMC "[VD_FFMPEG]  mc_get_buffer sadece XVMC hızlandırmasıyla çalışmalı!!"
-#define MSGTR_MPCODECS_OnlyBuffersAllocatedByVoXvmcAllowed "[VD_FFMPEG] Sadece izin verilen vo_xvmc ile tamponlar atandı.\n"
 
 // libmpcodecs/ve_lavc.c
 #define MSGTR_MPCODECS_HighQualityEncodingSelected "[VE_LAVC] Yüksek kalite kodlama seçildi (gerçek zamanlı değil)!\n"

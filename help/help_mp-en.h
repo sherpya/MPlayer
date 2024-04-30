@@ -842,6 +842,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_TurnOffXScreenSaver "Turn off XScreenSaver"
 #define MSGTR_GUI_TV "TV"
 #define MSGTR_GUI_Unknown "Unknown"
+#define MSGTR_GUI_Up "Up"
 #define MSGTR_GUI_URL "URL"
 #define MSGTR_GUI_VCD "VCD"
 #define MSGTR_GUI_Video "Video"
@@ -876,7 +877,6 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_WIN32_SelectTitleChapter "Select title/chapter"
 #define MSGTR_GUI_WIN32_ShowHide "Show/Hide"
 #define MSGTR_GUI_WIN32_SubtitleOnOff "Subtitle visibility on/off"
-#define MSGTR_GUI_WIN32_Up "Up"
 
 // ======================= video output drivers ========================
 

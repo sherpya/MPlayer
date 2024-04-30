@@ -26,4 +26,8 @@
 
 #include <gtk/gtk.h>
 
+#if !GTK_CHECK_VERSION(2,6,0)
+#define gtk_button_set_image(button, image) gtk_button_set_label(button, MSGTR_GUI_ ## image)
+#endif
+
 #endif

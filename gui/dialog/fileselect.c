@@ -36,6 +36,7 @@
 #include "pixmaps/file_playlist.xpm"
 #include "pixmaps/file_subtitle.xpm"
 #include "pixmaps/file_video.xpm"
+#include "gui/gtk-compat.h"
 #include "gui/interface.h"
 #include "gui/app/app.h"
 #include "gui/app/cfg.h"
@@ -753,7 +754,7 @@ static GtkWidget *CreateFileSelect(void)
     GtkWidget *fsFNameListWindow;
     GtkWidget *hbuttonbox3;
 
-    GtkWidget *upimage;
+    GtkWidget *Up;
     GdkPixbuf *uppixbuf;
 
     accel_group = gtk_accel_group_new();
@@ -788,12 +789,12 @@ static GtkWidget *CreateFileSelect(void)
     gtk_box_pack_start(GTK_BOX(hbox4), vseparator1, FALSE, TRUE, 0);
 
     uppixbuf = gdk_pixbuf_new_from_inline(-1, dir_up_png, FALSE, NULL);
-    upimage  = gtk_image_new_from_pixbuf(uppixbuf);
+    Up       = gtk_image_new_from_pixbuf(uppixbuf);
     g_object_unref(uppixbuf);
-    gtk_widget_show(upimage);
+    gtk_widget_show(Up);
 
     fsUp = gtk_button_new();
-    gtk_button_set_image(GTK_BUTTON(fsUp), upimage);
+    gtk_button_set_image(GTK_BUTTON(fsUp), Up);
     gtk_widget_show(fsUp);
     gtk_box_pack_start(GTK_BOX(hbox4), fsUp, FALSE, FALSE, 0);
     gtk_widget_set_size_request(fsUp, 60, -1);

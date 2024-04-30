@@ -437,7 +437,7 @@ static LRESULT CALLBACK PlayListWndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPA
                                NULL);
             SendMessage(wdg, WM_SETFONT, (WPARAM) GetStockObject(DEFAULT_GUI_FONT), 0);
 
-            wdg = CreateWindow ("button", acp(MSGTR_GUI_WIN32_Up),
+            wdg = CreateWindow ("button", acp(MSGTR_GUI_Up),
                                 WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                                 4, 37, 80, 25, hwnd,
                                 (HMENU) ID_UP,

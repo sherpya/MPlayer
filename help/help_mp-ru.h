@@ -837,6 +837,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_TurnOffXScreenSaver "Останавливать XScreenSaver"
 #define MSGTR_GUI_TV "ТВ"
 #define MSGTR_GUI_Unknown "Неизвестный"
+#define MSGTR_GUI_Up "Вверх"
 #define MSGTR_GUI_URL "URL-адрес"
 #define MSGTR_GUI_VCD "VCD"
 #define MSGTR_GUI_Video "Видео"
@@ -871,7 +872,6 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_WIN32_SelectTitleChapter "Выбрать ролик/раздел"
 #define MSGTR_GUI_WIN32_ShowHide "Показать/Скрыть"
 #define MSGTR_GUI_WIN32_SubtitleOnOff "Показывать субтитры вкл/выкл"
-#define MSGTR_GUI_WIN32_Up "Вверх"
 
 // ======================= video output drivers ========================
 

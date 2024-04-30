@@ -185,7 +185,7 @@ Lásd a <link linkend="subosd">Feliratok és az OSD</link> részt bővebben.
 <title>Mi a helyzet a GUI-val?</title>
 
 <para>
-A GUI-hoz GTK 1.2.x vagy GTK 2.0 kell (nem teljesen GTK-s, de a panelek igen),
+A GUI-hoz GTK+ 2 kell (nem teljesen GTK-s, de a panelek igen),
 így telepített <systemitem class="library">GTK</systemitem> (és a fejlesztői
 cuccok, amik általában <systemitem class="library">gtk-dev</systemitem>) szükséges.
 A <filename>./configure</filename>-nak az <option>--enable-gui</option> kapcsoló

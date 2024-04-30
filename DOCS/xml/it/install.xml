@@ -184,7 +184,7 @@ Vedi la sezione <link linkend="subosd">Sottotitoli e OSD</link> per i dettagli.
 <title>E relativamente alla GUI?</title>
 
 <para>
-La GUI abbisogna di GTK 1.2.x o GTK 2.0 (non è completamente in GTK, ma i
+La GUI abbisogna di GTK+ 2 (non è completamente in GTK, ma i
 pannelli lo sono), per cui le <systemitem class="library">GTK</systemitem> (e
 le controparti di sviluppo, solitamente chiamate
 <systemitem class="library">gtk-dev</systemitem>) devono essere installate.

@@ -200,7 +200,7 @@ szczegółowych informacji.
 <title>A co z GUI?</title>
 
 <para>
-GUI wymaga biblioteki GTK 1.2.x lub GTK 2.0 (nie jest w pełni w GTK, ale jego
+GUI wymaga biblioteki GTK+ 2 (nie jest w pełni w GTK, ale jego
 panele są). Skórki przechowywane są w formacie PNG, tak więc musi być
 zainstalowane GTK, <systemitem class="library">libpng</systemitem>
 (i ich pakiety rozwojowe, zazwyczaj nazwane

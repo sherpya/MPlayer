@@ -184,7 +184,7 @@ See the <link linkend="subosd">Subtitles and OSD</link> section for details.
 <title>What about the GUI?</title>
 
 <para>
-The GUI needs GTK 1.2.x or GTK 2.0 (it isn't fully GTK, but the panels are),
+The GUI needs GTK+ 2 (it isn't fully GTK, but the panels are),
 so <systemitem class="library">GTK</systemitem> (and the devel stuff, usually
 called <systemitem class="library">gtk-dev</systemitem>) has to be installed.
 You can build it by specifying <option>--enable-gui</option> during

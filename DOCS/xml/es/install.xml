@@ -204,7 +204,7 @@ para más detalles.
 <title>¿Qué hay acerca de la GUI?</title>
 
 <para>
-La GUI necesita GTK 1.2.x (no es totalmente GTK, pero los paneles son). Las pieles
+La GUI necesita GTK+ 2 (no es totalmente GTK, pero los paneles son). Las pieles
 están guardadas en formato PNG, por lo tanto GTK, <systemitem class="library">libpng</systemitem>
 (y sus archivos de desarrollos, normalmente llamados <systemitem class="library">gtk-dev
 </systemitem> y <systemitem class="library">libpng-dev</systemitem>)

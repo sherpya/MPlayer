@@ -184,7 +184,7 @@ section <link linkend="osdmenu">Sous-titres et OSD</link> pour les détails.
 <title>À propos de l'interface graphique</title>
 
 <para>
-La GUI à besoin de GTK 1.2.x ou GTK 2.0 (elle n'est pas entièrement basée dessus, mais les
+La GUI à besoin de GTK+ 2 (elle n'est pas entièrement basée dessus, mais les
 menus le sont). Les skins sont stockées au format PNG, donc GTK,
 <systemitem class="library">libpng</systemitem> (ainsi que leurs paquets de dev,
 généralement nommés <systemitem class="library">gtk-dev</systemitem> et <systemitem class="library">libpng-dev</systemitem>)

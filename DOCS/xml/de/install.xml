@@ -225,7 +225,7 @@ make install</screen>
     <title>Was ist mit der GUI?</title>
 
     <para>
-      Die GUI benötigt GTK 1.2.x oder GTK 2.0 (sie ist nicht vollständig GTK, aber
+      Die GUI benötigt GTK+ 2 (sie ist nicht vollständig GTK, aber
       die Panels). Die Skins werden im PNG-Format gespeichert, daher müssen GTK,
       <systemitem class="library">libpng</systemitem> (und deren Entwicklungskram,
       normalerweise <systemitem class="library">gtk-dev</systemitem> genannt),

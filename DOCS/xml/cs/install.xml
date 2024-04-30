@@ -176,7 +176,7 @@ make install
 <title>Chtěli byste GUI?</title>
 
 <para>
-  GUI potřebuje GTK 1.2.x nebo GTK 2.0 (není plně GTK, ale panely jsou).
+  GUI potřebuje GTK+ 2 (není plně GTK, ale panely jsou).
   Skiny jsou uloženy v PNG formátu,
   takže GTK, <systemitem class="library">libpng</systemitem>
   (a jejich příslušenství, obvykle nazývané

@@ -192,7 +192,7 @@ make install
 <title>Как насчёт GUI?</title>
 
 <para>
-Для GUI требуется GTK 1.2.x или GTK 2.0 (он не целиком GTK'шный, но панельки - да). Шкуры
+Для GUI требуется GTK+ 2 (он не целиком GTK'шный, но панельки - да). Шкуры
 хранятся в PNG формате, поэтому GTK, <systemitem class="library">libpng</systemitem>
 (и их части для разработчиков, обычно они называются
 <systemitem class="library">gtk-dev</systemitem> и

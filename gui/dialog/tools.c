@@ -141,7 +141,7 @@ GtkWidget * gtkAddRadioButton( const char * title,GSList ** group,GtkWidget * pa
 {
  GtkWidget * RB;
  RB=gtk_radio_button_new_with_label( *group,title );
- *group=gtk_radio_button_group( GTK_RADIO_BUTTON( RB ) );
+ *group=gtk_radio_button_get_group( GTK_RADIO_BUTTON( RB ) );
  gtk_widget_show( RB );
  gtk_box_pack_start( GTK_BOX( parent ),RB,FALSE,FALSE,0 );
  return RB;

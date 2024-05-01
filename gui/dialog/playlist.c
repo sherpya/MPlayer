@@ -488,8 +488,8 @@ static GtkWidget * CreatePlaylist( void )
   gtk_clist_column_titles_show( GTK_CLIST( CTDirTree ) );
   gtk_clist_set_shadow_type( GTK_CLIST( CTDirTree ),GTK_SHADOW_NONE );
 
-  if ( !pxOpenedBook ) pxOpenedBook=gdk_pixmap_create_from_xpm_d( Playlist->window,&msOpenedBook,&transparent,(gchar **)dir_xpm );
-  if ( !pxClosedBook ) pxClosedBook=gdk_pixmap_create_from_xpm_d( Playlist->window,&msClosedBook,&transparent,(gchar **)open_xpm );
+  if ( !pxOpenedBook ) pxOpenedBook=gdk_pixmap_create_from_xpm_d( gtk_widget_get_window(Playlist),&msOpenedBook,&transparent,(gchar **)dir_xpm );
+  if ( !pxClosedBook ) pxClosedBook=gdk_pixmap_create_from_xpm_d( gtk_widget_get_window(Playlist),&msClosedBook,&transparent,(gchar **)open_xpm );
 
   parent=gtk_ctree_insert_node( GTK_CTREE( CTDirTree ),NULL,NULL,&root,4,pxOpenedBook,msOpenedBook,pxClosedBook,msClosedBook,FALSE,FALSE );
   DirNode=malloc( sizeof( *DirNode ) );

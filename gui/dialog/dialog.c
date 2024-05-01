@@ -32,6 +32,7 @@
 #include "skinbrowser.h"
 #include "tools.h"
 #include "url.h"
+#include "gui/gtk-compat.h"
 #include "gui/interface.h"
 #include "gui/app/app.h"
 #include "gui/app/gui.h"
@@ -164,7 +165,7 @@ void gtkInit(char *display_name)
  */
 void gtkAddIcon(GtkWidget *window)
 {
-    wsWindowIcon(XDISPLAY, GDK_WINDOW_XWINDOW(window->window), &guiIcon);
+    wsWindowIcon(XDISPLAY, GDK_WINDOW_XWINDOW(gtk_widget_get_window(window)), &guiIcon);
 }
 
 /**
@@ -242,7 +243,7 @@ void gtkMessageBox(int type, const gchar *str)
  */
 void gtkSetLayer(GtkWidget *window)
 {
-    wsWindowLayer(XDISPLAY, GDK_WINDOW_XWINDOW(window->window), guiApp.videoWindow.isFullScreen);
+    wsWindowLayer(XDISPLAY, GDK_WINDOW_XWINDOW(gtk_widget_get_window(window)), guiApp.videoWindow.isFullScreen);
     gtkRaise(window);
 }
 
@@ -253,7 +254,7 @@ void gtkSetLayer(GtkWidget *window)
  */
 void gtkRaise(GtkWidget *window)
 {
-    wsWindowRaiseTop(XDISPLAY, GDK_WINDOW_XWINDOW(window->window));
+    wsWindowRaiseTop(XDISPLAY, GDK_WINDOW_XWINDOW(gtk_widget_get_window(window)));
 }
 
 static void gtkSelectInCList(GtkWidget *list, char *item)

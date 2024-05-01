@@ -257,28 +257,28 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
     switch (fsType) {
     case FILESELECT_SUBTITLE:
         if (!spixmap)
-            spixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &smask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_subtitle_xpm);
+            spixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &smask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_subtitle_xpm);
         *pixmap = spixmap;
         *mask   = smask;
         break;
 
     case FILESELECT_AUDIO_TRACK:
         if (!atpixmap)
-            atpixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &atmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_audio_track_xpm);
+            atpixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &atmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_audio_track_xpm);
         *pixmap = atpixmap;
         *mask   = atmask;
         break;
 
     case FILESELECT_FONT:
         if (!fpixmap)
-            fpixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &fmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_font_xpm);
+            fpixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &fmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_font_xpm);
         *pixmap = fpixmap;
         *mask   = fmask;
         break;
 
     case FILESELECT_IMAGE:
         if (!ipixmap)
-            ipixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &imask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_image_xpm);
+            ipixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &imask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_image_xpm);
         *pixmap = ipixmap;
         *mask   = imask;
         break;
@@ -291,7 +291,7 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
             if (strcmp(MSGTR_GUI_FilterVideoAll, fsVideoAudioFilterNames[i][0]) == 0) {
                 if ((p = strstr(fsVideoAudioFilterNames[i][1], ext)) && (p[len] == ',' || p[len] == 0)) {
                     if (!vpixmap)
-                        vpixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &vmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_video_xpm);
+                        vpixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &vmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_video_xpm);
                     *pixmap = vpixmap;
                     *mask   = vmask;
                     break;
@@ -301,7 +301,7 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
             if (strcmp(MSGTR_GUI_FilterAudioAll, fsVideoAudioFilterNames[i][0]) == 0) {
                 if ((p = strstr(fsVideoAudioFilterNames[i][1], ext)) && (p[len] == ',' || p[len] == 0)) {
                     if (!apixmap)
-                        apixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &amask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_audio_xpm);
+                        apixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &amask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_audio_xpm);
                     *pixmap = apixmap;
                     *mask   = amask;
                     break;
@@ -311,7 +311,7 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
             if (strcmp(MSGTR_GUI_FilterFilePlaylist, fsVideoAudioFilterNames[i][0]) == 0) {
                 if ((p = strstr(fsVideoAudioFilterNames[i][1], ext)) && (p[len] == ',' || p[len] == 0)) {
                     if (!ppixmap)
-                        ppixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &pmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_playlist_xpm);
+                        ppixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &pmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_playlist_xpm);
                     *pixmap = ppixmap;
                     *mask   = pmask;
                     break;
@@ -321,7 +321,7 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
             if (strcmp(MSGTR_GUI_FilterImageCue, fsVideoAudioFilterNames[i][0]) == 0) {
                 if ((p = strstr(fsVideoAudioFilterNames[i][1], ext)) && (p[len] == ',' || p[len] == 0)) {
                     if (!ipixmap)
-                        ipixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &imask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_image_xpm);
+                        ipixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &imask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_image_xpm);
                     *pixmap = ipixmap;
                     *mask   = imask;
                     break;
@@ -332,7 +332,7 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
         for (i = 0; !*pixmap && ext && fsSubtitleFilterNames[i][0]; i++) {
             if ((p = strstr(fsSubtitleFilterNames[i][1], ext)) && (p[len] == ',' || p[len] == 0)) {
                 if (!spixmap)
-                    spixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &smask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_subtitle_xpm);
+                    spixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &smask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_subtitle_xpm);
                 *pixmap = spixmap;
                 *mask   = smask;
                 break;
@@ -342,7 +342,7 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
         for (i = 0; !*pixmap && ext && fsImageFilterNames[i][0]; i++) {
             if ((p = strstr(fsImageFilterNames[i][1], ext)) && (p[len] == ',' || p[len] == 0)) {
                 if (!ipixmap)
-                    ipixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &imask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_image_xpm);
+                    ipixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &imask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_image_xpm);
                 *pixmap = ipixmap;
                 *mask   = imask;
                 break;
@@ -351,7 +351,7 @@ static void fs_get_pixmap(const char *ext, GdkPixmap **pixmap, GdkBitmap **mask)
 
         if (!*pixmap) {
             if (!avpixmap)
-                avpixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &avmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_xpm);
+                avpixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &avmask, &style->bg[GTK_STATE_NORMAL], (gchar **)file_xpm);
             *pixmap = avpixmap;
             *mask   = avmask;
         }
@@ -772,7 +772,7 @@ static GtkWidget *CreateFileSelect(void)
     gtkAddIcon(FileSelector);
 
     style   = gtk_widget_get_style(FileSelector);
-    dpixmap = gdk_pixmap_colormap_create_from_xpm_d(FileSelector->window, fsColorMap, &dmask, &style->bg[GTK_STATE_NORMAL], (gchar **)dir_xpm);
+    dpixmap = gdk_pixmap_colormap_create_from_xpm_d(gtk_widget_get_window(FileSelector), fsColorMap, &dmask, &style->bg[GTK_STATE_NORMAL], (gchar **)dir_xpm);
 
     vbox4 = gtkAddVBox(gtkAddDialogFrame(FileSelector), 0);
     hbox4 = gtkAddHBox(vbox4, 1);

@@ -165,7 +165,7 @@ void gtkInit(char *display_name)
  */
 void gtkAddIcon(GtkWidget *window)
 {
-    wsWindowIcon(XDISPLAY, GDK_WINDOW_XWINDOW(gtk_widget_get_window(window)), &guiIcon);
+    wsWindowIcon(XDISPLAY, GDK_WINDOW_XID(gtk_widget_get_window(window)), &guiIcon);
 }
 
 /**
@@ -243,7 +243,7 @@ void gtkMessageBox(int type, const gchar *str)
  */
 void gtkSetLayer(GtkWidget *window)
 {
-    wsWindowLayer(XDISPLAY, GDK_WINDOW_XWINDOW(gtk_widget_get_window(window)), guiApp.videoWindow.isFullScreen);
+    wsWindowLayer(XDISPLAY, GDK_WINDOW_XID(gtk_widget_get_window(window)), guiApp.videoWindow.isFullScreen);
     gtkRaise(window);
 }
 
@@ -254,7 +254,7 @@ void gtkSetLayer(GtkWidget *window)
  */
 void gtkRaise(GtkWidget *window)
 {
-    wsWindowRaiseTop(XDISPLAY, GDK_WINDOW_XWINDOW(gtk_widget_get_window(window)));
+    wsWindowRaiseTop(XDISPLAY, GDK_WINDOW_XID(gtk_widget_get_window(window)));
 }
 
 static void gtkSelectInCList(GtkWidget *list, char *item)

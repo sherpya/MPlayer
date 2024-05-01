@@ -141,7 +141,7 @@ static GtkWidget * HSPPQuality;
 static GtkWidget * HSFPS;
 
 static GtkWidget *RGbox;
-static GtkObject *RGadj;
+static GtkAdjustment *RGadj;
 
 static GtkAdjustment * HSExtraStereoMuladj, * HSAudioDelayadj, * HSPanscanadj, * HSSubDelayadj;
 static GtkAdjustment * HSSubPositionadj, * HSSubFPSadj, * HSPPQualityadj, * HSFPSadj;
@@ -293,13 +293,13 @@ static void prButton( GtkButton * button, gpointer user_data )
    case bOk:
         /* 1st page */
         gtkReplayGainOn = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBReplayGain));
-        gtkReplayGainAdjustment = GTK_ADJUSTMENT(RGadj)->value;
+        gtkReplayGainAdjustment = gtk_adjustment_get_value(RGadj);
         gtkEnableAudioEqualizer=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBAudioEqualizer ) );
         gtkAOExtraStereo=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBExtraStereo ) );
         gtkAONorm=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBNormalize ) );
         soft_vol=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ) );
-        mplayer( MPLAYER_SET_EXTRA_STEREO,HSExtraStereoMuladj->value,0 );
-        audio_delay=HSAudioDelayadj->value;
+        mplayer( MPLAYER_SET_EXTRA_STEREO,gtk_adjustment_get_value(HSExtraStereoMuladj),0 );
+        audio_delay=gtk_adjustment_get_value(HSAudioDelayadj);
 
         listSet( &audio_driver_list,ao_driver[0] );
         listSet( &video_driver_list,vo_driver[0] );
@@ -315,7 +315,7 @@ static void prButton( GtkButton * button, gpointer user_data )
         flip=-1;
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBFlip ) ) ) flip=1;
 
-        force_fps=HSFPSadj->value;
+        force_fps=gtk_adjustment_get_value(HSFPSadj);
 
         /* 3rd page */
         suboverlap_enabled=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBSubOverlap ) );
@@ -330,9 +330,9 @@ static void prButton( GtkButton * button, gpointer user_data )
         gtkASS.top_margin=gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON( SBASSTopMargin ) );
         gtkASS.bottom_margin=gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON( SBASSBottomMargin ) );
 #endif
-        sub_delay=HSSubDelayadj->value;
-        sub_fps=HSSubFPSadj->value;
-        sub_pos=(int)HSSubPositionadj->value;
+        sub_delay=gtk_adjustment_get_value(HSSubDelayadj);
+        sub_fps=gtk_adjustment_get_value(HSSubFPSadj);
+        sub_pos=(int)gtk_adjustment_get_value(HSSubPositionadj);
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBOSDNone ) ) ) osd_level=0;
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBOSDIndicator ) ) ) osd_level=1;
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBOSDTandP ) ) ) osd_level=2;
@@ -342,16 +342,16 @@ static void prButton( GtkButton * button, gpointer user_data )
         /* 4th page */
         setdup( &font_name,gtk_entry_get_text( GTK_ENTRY( prEFontName ) ) );
 #ifdef CONFIG_FREETYPE
-        mplayer( MPLAYER_SET_FONT_BLUR,HSFontBluradj->value,0 );
-        mplayer( MPLAYER_SET_FONT_OUTLINE,HSFontOutLineadj->value,0 );
-        mplayer( MPLAYER_SET_FONT_TEXTSCALE,HSFontTextScaleadj->value,0 );
-        mplayer( MPLAYER_SET_FONT_OSDSCALE,HSFontOSDScaleadj->value,0 );
+        mplayer( MPLAYER_SET_FONT_BLUR,gtk_adjustment_get_value(HSFontBluradj),0 );
+        mplayer( MPLAYER_SET_FONT_OUTLINE,gtk_adjustment_get_value(HSFontOutLineadj),0 );
+        mplayer( MPLAYER_SET_FONT_TEXTSCALE,gtk_adjustment_get_value(HSFontTextScaleadj),0 );
+        mplayer( MPLAYER_SET_FONT_OSDSCALE,gtk_adjustment_get_value(HSFontOSDScaleadj),0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontNoAutoScale ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,0,0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleHeight ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,1,0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleWidth ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,2,0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleDiagonal ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,3,0 );
 #else
-        mplayer( MPLAYER_SET_FONT_FACTOR,HSFontFactoradj->value,0 );
+        mplayer( MPLAYER_SET_FONT_FACTOR,gtk_adjustment_get_value(HSFontFactoradj),0 );
 #endif
 
         /* -- 5th page */
@@ -385,12 +385,12 @@ static void prButton( GtkButton * button, gpointer user_data )
         gui_tv_digital=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBTVDigital ) );
         player_idle_mode=!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBNoIdle ) );
         allow_playlist_parsing = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBPlaylists));
-        mplayer( MPLAYER_SET_AUTO_QUALITY,HSPPQualityadj->value,0 );
+        mplayer( MPLAYER_SET_AUTO_QUALITY,gtk_adjustment_get_value(HSPPQualityadj),0 );
 
-        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBCache ) ) ) { gtkCacheSize=(int)SBCacheadj->value; gtkCacheOn=True; }
+        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBCache ) ) ) { gtkCacheSize=(int)gtk_adjustment_get_value(SBCacheadj); gtkCacheOn=True; }
          else gtkCacheOn=False;
 
-        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBAutoSync ) ) ) { gtkAutoSync=(int)SBAutoSyncadj->value; gtkAutoSyncOn=True; }
+        if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBAutoSync ) ) ) { gtkAutoSync=(int)gtk_adjustment_get_value(SBAutoSyncadj); gtkAutoSyncOn=True; }
          else gtkAutoSyncOn=False;
 
         setdup( &dvd_device,gtk_entry_get_text( GTK_ENTRY( prEDVDDevice ) ) );
@@ -448,40 +448,40 @@ static gboolean prHScaler( GtkWidget * widget,GdkEvent * event,gpointer user_dat
   {
    case 0: // extra stereo coefficient
         if ( !guiInfo.Playing ) break;
-        mplayer( MPLAYER_SET_EXTRA_STEREO,HSExtraStereoMuladj->value,0 );
+        mplayer( MPLAYER_SET_EXTRA_STEREO,gtk_adjustment_get_value(HSExtraStereoMuladj),0 );
         break;
    case 1: // audio delay
-        audio_delay=HSAudioDelayadj->value;
+        audio_delay=gtk_adjustment_get_value(HSAudioDelayadj);
         break;
    case 2: // panscan
-        mplayer( MPLAYER_SET_PANSCAN,HSPanscanadj->value,0 );
+        mplayer( MPLAYER_SET_PANSCAN,gtk_adjustment_get_value(HSPanscanadj),0 );
         break;
    case 3: // sub delay
-        sub_delay=HSSubDelayadj->value;
+        sub_delay=gtk_adjustment_get_value(HSSubDelayadj);
         break;
    case 4: // sub position
-        sub_pos=(int)HSSubPositionadj->value;
+        sub_pos=(int)gtk_adjustment_get_value(HSSubPositionadj);
         break;
 #ifdef CONFIG_FREETYPE
    case 6: // font blur
-        mplayer( MPLAYER_SET_FONT_BLUR,HSFontBluradj->value,0 );
+        mplayer( MPLAYER_SET_FONT_BLUR,gtk_adjustment_get_value(HSFontBluradj),0 );
         break;
    case 7: // font outline
-        mplayer( MPLAYER_SET_FONT_OUTLINE,HSFontOutLineadj->value,0 );
+        mplayer( MPLAYER_SET_FONT_OUTLINE,gtk_adjustment_get_value(HSFontOutLineadj),0 );
         break;
    case 8: // text scale
-        mplayer( MPLAYER_SET_FONT_TEXTSCALE,HSFontTextScaleadj->value,0 );
+        mplayer( MPLAYER_SET_FONT_TEXTSCALE,gtk_adjustment_get_value(HSFontTextScaleadj),0 );
         break;
    case 9: // osd scale
-        mplayer( MPLAYER_SET_FONT_OSDSCALE,HSFontOSDScaleadj->value,0 );
+        mplayer( MPLAYER_SET_FONT_OSDSCALE,gtk_adjustment_get_value(HSFontOSDScaleadj),0 );
         break;
 #else
    case 5: // font factor
-        mplayer( MPLAYER_SET_FONT_FACTOR,HSFontFactoradj->value,0 );
+        mplayer( MPLAYER_SET_FONT_FACTOR,gtk_adjustment_get_value(HSFontFactoradj),0 );
         break;
 #endif
    case 10: // auto quality
-        mplayer( MPLAYER_SET_AUTO_QUALITY,HSPPQualityadj->value,0 );
+        mplayer( MPLAYER_SET_AUTO_QUALITY,gtk_adjustment_get_value(HSPPQualityadj),0 );
         break;
   }
  return FALSE;
@@ -679,8 +679,8 @@ static GtkWidget * CreatePreferences( void )
   CBReplayGain = gtkAddCheckButton(_(MSGTR_GUI_ReplayGain), hbox10);
   RGbox = gtkAddHBox(hbox10, 1);
   gtkAddLabel(_(MSGTR_GUI_ReplayGainAdjustment), RGbox);
-  RGadj = gtk_adjustment_new(gtkReplayGainAdjustment, -30, 10, 1, 5, 0);
-  RGspin = gtk_spin_button_new(GTK_ADJUSTMENT(RGadj), 1, 0);
+  RGadj = GTK_ADJUSTMENT(gtk_adjustment_new(gtkReplayGainAdjustment, -30, 10, 1, 5, 0));
+  RGspin = gtk_spin_button_new(RGadj, 1, 0);
   gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(RGspin), TRUE);
   gtk_box_pack_start(GTK_BOX(RGbox), GTK_WIDGET(RGspin), FALSE, FALSE, 0);
   gtkAddLabel(_(MSGTR_GUI_dB), RGbox);
@@ -1211,7 +1211,7 @@ void ShowPreferences( void )
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSurround ),gtkAOSurround );
 #endif
  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(CBReplayGain), gtkReplayGainOn);
- gtk_adjustment_set_value(GTK_ADJUSTMENT(RGadj), gtkReplayGainAdjustment);
+ gtk_adjustment_set_value(RGadj, gtkReplayGainAdjustment);
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBExtraStereo ),gtkAOExtraStereo );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBNormalize ),gtkAONorm );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ),soft_vol );

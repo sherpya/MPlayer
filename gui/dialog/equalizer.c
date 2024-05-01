@@ -136,16 +136,16 @@ static gboolean eqHScaleMotion( GtkWidget * widget,GdkEventMotion  * event,gpoin
 
  switch ( GPOINTER_TO_INT(user_data) )
   {
-   case 0: eq.gain=A3125adj->value; break;
-   case 1: eq.gain=A6250adj->value; break;
-   case 2: eq.gain=A125adj->value; break;
-   case 3: eq.gain=A250adj->value; break;
-   case 4: eq.gain=A500adj->value; break;
-   case 5: eq.gain=A1000adj->value; break;
-   case 6: eq.gain=A2000adj->value; break;
-   case 7: eq.gain=A4000adj->value; break;
-   case 8: eq.gain=A8000adj->value; break;
-   case 9: eq.gain=A16000adj->value; break;
+   case 0: eq.gain=gtk_adjustment_get_value(A3125adj); break;
+   case 1: eq.gain=gtk_adjustment_get_value(A6250adj); break;
+   case 2: eq.gain=gtk_adjustment_get_value(A125adj); break;
+   case 3: eq.gain=gtk_adjustment_get_value(A250adj); break;
+   case 4: eq.gain=gtk_adjustment_get_value(A500adj); break;
+   case 5: eq.gain=gtk_adjustment_get_value(A1000adj); break;
+   case 6: eq.gain=gtk_adjustment_get_value(A2000adj); break;
+   case 7: eq.gain=gtk_adjustment_get_value(A4000adj); break;
+   case 8: eq.gain=gtk_adjustment_get_value(A8000adj); break;
+   case 9: eq.gain=gtk_adjustment_get_value(A16000adj); break;
    default: return FALSE;
   }
  eq.gain=-eq.gain;
@@ -167,10 +167,10 @@ static gboolean eqVScaleMotion( GtkWidget * widget,GdkEventMotion  * event,gpoin
 
  switch( GPOINTER_TO_INT(user_data) )
   {
-   case 1: mplayer( MPLAYER_SET_CONTRAST,VContrastadj->value,0 );      break;
-   case 2: mplayer( MPLAYER_SET_BRIGHTNESS,VBrightnessadj->value,0 );  break;
-   case 3: mplayer( MPLAYER_SET_HUE,VHueadj->value,0 );                break;
-   case 4: mplayer( MPLAYER_SET_SATURATION,VSaturationadj->value,0 );  break;
+   case 1: mplayer( MPLAYER_SET_CONTRAST,gtk_adjustment_get_value(VContrastadj),0 );      break;
+   case 2: mplayer( MPLAYER_SET_BRIGHTNESS,gtk_adjustment_get_value(VBrightnessadj),0 );  break;
+   case 3: mplayer( MPLAYER_SET_HUE,gtk_adjustment_get_value(VHueadj),0 );                break;
+   case 4: mplayer( MPLAYER_SET_SATURATION,gtk_adjustment_get_value(VSaturationadj),0 );  break;
   }
 
  return FALSE;

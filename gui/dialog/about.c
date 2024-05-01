@@ -19,6 +19,7 @@
 #include <stdio.h>
 
 #include "config.h"
+#include "gui/gtk-compat.h"
 #include "gui/app/app.h"
 #include "gui/app/gui.h"
 #include "help_mp.h"
@@ -337,8 +338,8 @@ static GtkWidget * CreateAbout( void )
   g_signal_connect( G_OBJECT( About ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&About );
   g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( abWidgetDestroy ),NULL );
 
-  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
-  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
   gtk_window_add_accel_group( GTK_WINDOW( About ),accel_group );
 
   return About;

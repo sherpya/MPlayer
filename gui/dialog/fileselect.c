@@ -708,7 +708,7 @@ static gboolean fs_key_release_event(GtkWidget *widget, GdkEvent *event, gpointe
     (void)user_data;
 
     switch (event->key.keyval) {
-    case GDK_Return:
+    case GDK_KEY_Return:
 
         if (GTK_IS_SCROLLED_WINDOW(widget))
             gtk_button_clicked(GTK_BUTTON(fsOk));
@@ -717,7 +717,7 @@ static gboolean fs_key_release_event(GtkWidget *widget, GdkEvent *event, gpointe
 
         break;
 
-    case GDK_BackSpace:
+    case GDK_KEY_BackSpace:
 
         if (GTK_IS_SCROLLED_WINDOW(widget)) {
             gtk_button_clicked(GTK_BUTTON(fsUp));
@@ -837,7 +837,7 @@ static GtkWidget *CreateFileSelect(void)
     fsOk     = gtkAddButton(MSGTR_GUI_Ok, hbuttonbox3);
     fsCancel = gtkAddButton(MSGTR_GUI_Cancel, hbuttonbox3);
 
-    gtk_widget_add_accelerator(fsCancel, "clicked", accel_group, GDK_Escape, 0, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(fsCancel, "clicked", accel_group, GDK_KEY_Escape, 0, GTK_ACCEL_VISIBLE);
 
     g_signal_connect(G_OBJECT(FileSelector), "destroy", G_CALLBACK(fs_Destroy), NULL);
     g_signal_connect(G_OBJECT(fsFNameListWindow), "key-release-event", G_CALLBACK(fs_key_release_event), NULL);

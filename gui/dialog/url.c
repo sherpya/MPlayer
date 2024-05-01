@@ -23,6 +23,7 @@
 #include "url.h"
 #include "dialog.h"
 #include "tools.h"
+#include "gui/gtk-compat.h"
 #include "gui/interface.h"
 #include "gui/app/app.h"
 #include "gui/app/gui.h"
@@ -137,8 +138,8 @@ static GtkWidget *CreateURLDialog(void)
     geometry.max_height = -1;
     gtk_window_set_geometry_hints(GTK_WINDOW(URLDialog), NULL, &geometry, GDK_HINT_MAX_SIZE);
 
-    gtk_widget_add_accelerator(Ok, "clicked", accel_group, GDK_Return, 0, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(Cancel, "clicked", accel_group, GDK_Escape, 0, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(Ok, "clicked", accel_group, GDK_KEY_Return, 0, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(Cancel, "clicked", accel_group, GDK_KEY_Escape, 0, GTK_ACCEL_VISIBLE);
 
     g_signal_connect(G_OBJECT(URLDialog), "destroy", G_CALLBACK(gtk_widget_destroyed), &URLDialog);
     g_signal_connect(G_OBJECT(Ok), "clicked", G_CALLBACK(button_clicked), Ok);

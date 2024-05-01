@@ -31,6 +31,7 @@
 #include "help_mp.h"
 #include "stream/stream.h"
 
+#include "gui/gtk-compat.h"
 #include "gui/app/cfg.h"
 #include "gui/app/gui.h"
 #include "gui/interface.h"
@@ -264,7 +265,7 @@ static gboolean plKeyReleased( GtkWidget * widget,
                                GdkEventKey * event,
                                gpointer user_data )
 {
- if (event->keyval == GDK_Return)
+ if (event->keyval == GDK_KEY_Return)
   {
    if ( GTK_WIDGET_TYPE( widget ) == GTK_TYPE_CLIST )
     {
@@ -564,7 +565,7 @@ static GtkWidget * CreatePlaylist( void )
   Ok=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
   Cancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox1 );
 
-  gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
   g_signal_connect( G_OBJECT( Playlist ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Playlist );
 

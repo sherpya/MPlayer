@@ -41,6 +41,7 @@
 #include "libmpcodecs/dec_video.h"
 #include "sub/font_load.h"
 
+#include "gui/gtk-compat.h"
 #include "gui/app/app.h"
 #include "gui/app/cfg.h"
 #include "gui/app/gui.h"
@@ -1141,8 +1142,8 @@ static GtkWidget * CreatePreferences( void )
   BOk=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
   BCancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox1 );
 
-  gtk_widget_add_accelerator( BOk,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
-  gtk_widget_add_accelerator( BCancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( BOk,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( BCancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
   g_signal_connect( G_OBJECT( Preferences ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Preferences );
 
@@ -1780,8 +1781,8 @@ static GtkWidget *CreateAudioConfig( void ) {
   g_signal_connect(G_OBJECT(BAudioCancel), "clicked", G_CALLBACK(audioButton), GINT_TO_POINTER(0));
 
   accel_group = gtk_accel_group_new();
-  gtk_widget_add_accelerator(BAudioOk, "clicked", accel_group, GDK_Return, 0, GTK_ACCEL_VISIBLE);
-  gtk_widget_add_accelerator(BAudioCancel, "clicked", accel_group, GDK_Escape, 0, GTK_ACCEL_VISIBLE);
+  gtk_widget_add_accelerator(BAudioOk, "clicked", accel_group, GDK_KEY_Return, 0, GTK_ACCEL_VISIBLE);
+  gtk_widget_add_accelerator(BAudioCancel, "clicked", accel_group, GDK_KEY_Escape, 0, GTK_ACCEL_VISIBLE);
   gtk_window_add_accel_group(GTK_WINDOW(AudioConfig), accel_group);
 
   return AudioConfig;
@@ -1918,8 +1919,8 @@ GtkWidget * CreateDXR3Config( void )
  dxr3BOk=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
  dxr3BCancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox1 );
 
- gtk_widget_add_accelerator( dxr3BOk,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
- gtk_widget_add_accelerator( dxr3BCancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
+ gtk_widget_add_accelerator( dxr3BOk,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
+ gtk_widget_add_accelerator( dxr3BCancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
  g_signal_connect( G_OBJECT( DXR3Config ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&DXR3Config );
 

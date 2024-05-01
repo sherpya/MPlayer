@@ -30,4 +30,10 @@
 #define gtk_button_set_image(button, image) gtk_button_set_label(button, MSGTR_GUI_ ## image)
 #endif
 
+#if !GTK_CHECK_VERSION(2,22,0)
+#define GDK_KEY_BackSpace GDK_BackSpace
+#define GDK_KEY_Escape GDK_Escape
+#define GDK_KEY_Return GDK_Return
+#endif
+
 #endif

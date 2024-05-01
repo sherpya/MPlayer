@@ -26,6 +26,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
+#include "gui/gtk-compat.h"
 #include "gui/app/app.h"
 #include "gui/app/cfg.h"
 #include "gui/app/gui.h"
@@ -431,8 +432,8 @@ static GtkWidget * CreateEqualizer( void )
   Clear=gtkAddButton( _(MSGTR_GUI_Clear),hbuttonbox1 );
   Ok=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
 
-  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
-  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
 
   g_signal_connect( G_OBJECT( Equalizer ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Equalizer );
   g_signal_connect( G_OBJECT( Equalizer ),"focus-in-event",G_CALLBACK( eqFocus ),GINT_TO_POINTER(2) );
@@ -675,8 +676,8 @@ GtkWidget * CreateEquConfig( void )
   ecOk=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
   ecCancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox1 );
 
-  gtk_widget_add_accelerator( ecOk,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
-  gtk_widget_add_accelerator( ecCancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( ecOk,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
+  gtk_widget_add_accelerator( ecCancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
   g_signal_connect( G_OBJECT( EquConfig ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&EquConfig );
 

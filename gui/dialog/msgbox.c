@@ -18,6 +18,7 @@
 
 #include <string.h>
 
+#include "gui/gtk-compat.h"
 #include "gui/app/app.h"
 #include "gui/app/gui.h"
 #include "help_mp.h"
@@ -97,8 +98,8 @@ static GtkWidget * CreateMessageBox( void )
  hbuttonbox1=gtkAddHButtonBox( vbox1 );
  Ok=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
 
- gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
- gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
+ gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
+ gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
  g_signal_connect( G_OBJECT( MessageBox ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&MessageBox );
  g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( on_Ok_released ),NULL );

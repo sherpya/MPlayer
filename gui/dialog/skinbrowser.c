@@ -26,6 +26,7 @@
 #include "skinbrowser.h"
 #include "tools.h"
 
+#include "gui/gtk-compat.h"
 #include "gui/app/app.h"
 #include "gui/app/cfg.h"
 #include "gui/app/gui.h"
@@ -139,8 +140,8 @@ void ShowSkinBrowser( void )
  Ok=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox4 );
  Cancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox4 );
 
- gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_Return,0,GTK_ACCEL_VISIBLE );
- gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_Escape,0,GTK_ACCEL_VISIBLE );
+ gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
+ gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
  g_signal_connect( G_OBJECT( SkinBrowser ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&SkinBrowser );
  g_signal_connect( G_OBJECT( SkinList ),"select-row",G_CALLBACK( on_SkinList_select_row ),NULL );

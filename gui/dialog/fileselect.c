@@ -832,7 +832,7 @@ static GtkWidget *CreateFileSelect(void)
 
     hbuttonbox3 = gtkAddHButtonBox(vbox4);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(hbuttonbox3), GTK_BUTTONBOX_END);
-    gtk_button_box_set_spacing(GTK_BUTTON_BOX(hbuttonbox3), 10);
+    gtk_box_set_spacing(GTK_BOX(hbuttonbox3), 10);
 
     fsOk     = gtkAddButton(MSGTR_GUI_Ok, hbuttonbox3);
     fsCancel = gtkAddButton(MSGTR_GUI_Cancel, hbuttonbox3);

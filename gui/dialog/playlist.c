@@ -558,7 +558,7 @@ static GtkWidget * CreatePlaylist( void )
 
   hbuttonbox1=gtkAddHButtonBox( vbox1 );
     gtk_button_box_set_layout( GTK_BUTTON_BOX( hbuttonbox1 ),GTK_BUTTONBOX_END );
-    gtk_button_box_set_spacing( GTK_BUTTON_BOX( hbuttonbox1 ),10 );
+  gtk_box_set_spacing(GTK_BOX(hbuttonbox1), 10);
 
   Add=gtkAddButton( _(MSGTR_GUI_Add),hbuttonbox1 );
   Remove=gtkAddButton( _(MSGTR_GUI_Remove),hbuttonbox1 );

@@ -1138,7 +1138,7 @@ static GtkWidget * CreatePreferences( void )
 
   hbuttonbox1=gtkAddHButtonBox( vbox1 );
     gtk_button_box_set_layout( GTK_BUTTON_BOX( hbuttonbox1 ),GTK_BUTTONBOX_END );
-    gtk_button_box_set_spacing( GTK_BUTTON_BOX( hbuttonbox1 ),10 );
+  gtk_box_set_spacing(GTK_BOX(hbuttonbox1), 10);
   BOk=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
   BCancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox1 );
 
@@ -1772,7 +1772,7 @@ static GtkWidget *CreateAudioConfig( void ) {
 
   hbuttonbox = gtkAddHButtonBox(vbox);
   gtk_button_box_set_layout(GTK_BUTTON_BOX(hbuttonbox), GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing(GTK_BUTTON_BOX(hbuttonbox), 10);
+  gtk_box_set_spacing(GTK_BOX(hbuttonbox), 10);
   BAudioOk = gtkAddButton(_(MSGTR_GUI_Ok), hbuttonbox);
   BAudioCancel = gtkAddButton(_(MSGTR_GUI_Cancel), hbuttonbox);
 
@@ -1915,7 +1915,7 @@ GtkWidget * CreateDXR3Config( void )
 
  hbuttonbox1=gtkAddHButtonBox( vbox1 );
    gtk_button_box_set_layout( GTK_BUTTON_BOX( hbuttonbox1 ),GTK_BUTTONBOX_END );
-   gtk_button_box_set_spacing( GTK_BUTTON_BOX( hbuttonbox1 ),10 );
+ gtk_box_set_spacing(GTK_BOX(hbuttonbox1), 10);
  dxr3BOk=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox1 );
  dxr3BCancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox1 );
 

@@ -135,7 +135,7 @@ void ShowSkinBrowser( void )
 
  hbuttonbox4=gtkAddHButtonBox( vbox5 );
   gtk_button_box_set_layout( GTK_BUTTON_BOX( hbuttonbox4 ),GTK_BUTTONBOX_SPREAD );
-  gtk_button_box_set_spacing( GTK_BUTTON_BOX( hbuttonbox4 ),10 );
+ gtk_box_set_spacing(GTK_BOX(hbuttonbox4), 10);
 
  Ok=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox4 );
  Cancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox4 );

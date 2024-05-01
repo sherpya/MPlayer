@@ -113,7 +113,7 @@ void ShowSkinBrowser( void )
 
  scrolledwindow1=gtk_scrolled_window_new( NULL,NULL );
  g_object_ref( scrolledwindow1 );
- gtk_object_set_data_full( GTK_OBJECT( SkinBrowser ),"scrolledwindow1",scrolledwindow1,(GtkDestroyNotify)g_object_unref );
+ g_object_set_data_full( G_OBJECT( SkinBrowser ),"scrolledwindow1",scrolledwindow1,(GDestroyNotify)g_object_unref );
  gtk_widget_show( scrolledwindow1 );
  gtk_box_pack_start( GTK_BOX( vbox5 ),scrolledwindow1,TRUE,TRUE,0 );
  gtk_container_set_border_width( GTK_CONTAINER( scrolledwindow1 ),2 );
@@ -121,7 +121,7 @@ void ShowSkinBrowser( void )
 
  SkinList=gtk_clist_new( 1 );
  g_object_ref( SkinList );
- gtk_object_set_data_full( GTK_OBJECT( SkinBrowser ),"SkinList",SkinList,(GtkDestroyNotify)g_object_unref );
+ g_object_set_data_full( G_OBJECT( SkinBrowser ),"SkinList",SkinList,(GDestroyNotify)g_object_unref );
  gtk_widget_show( SkinList );
  gtk_container_add( GTK_CONTAINER( scrolledwindow1 ),SkinList );
  gtk_clist_set_column_width( GTK_CLIST( SkinList ),0,80 );

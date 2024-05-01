@@ -820,7 +820,7 @@ static GtkWidget *CreateFileSelect(void)
 
     List = gtk_combo_new();
     g_object_ref(List);
-    gtk_object_set_data_full(GTK_OBJECT(FileSelector), "List", List, (GtkDestroyNotify)g_object_unref);
+    g_object_set_data_full(G_OBJECT(FileSelector), "List", List, (GDestroyNotify)g_object_unref);
     gtk_widget_show(List);
     gtk_box_pack_start(GTK_BOX(vbox4), List, FALSE, FALSE, 0);
 

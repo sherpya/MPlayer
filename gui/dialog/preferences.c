@@ -1193,7 +1193,7 @@ static GtkWidget * CreatePreferences( void )
   g_signal_connect( G_OBJECT( HSPPQuality ),"motion-notify-event",G_CALLBACK( on_HSPPQuality_motion_notify_event ),NULL );
 #endif
 
-  gtk_notebook_set_page( GTK_NOTEBOOK( notebook1 ),2 );
+  gtk_notebook_set_current_page( GTK_NOTEBOOK( notebook1 ),2 );
 
   gtk_window_add_accel_group( GTK_WINDOW( Preferences ),accel_group );
 

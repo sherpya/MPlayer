@@ -267,7 +267,7 @@ static gboolean plKeyReleased( GtkWidget * widget,
 {
  if (event->keyval == GDK_KEY_Return)
   {
-   if ( GTK_WIDGET_TYPE( widget ) == GTK_TYPE_CLIST )
+   if ( G_OBJECT_TYPE( widget ) == GTK_TYPE_CLIST )
     {
      switch ( GPOINTER_TO_INT( user_data) )
       {

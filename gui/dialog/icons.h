@@ -43,6 +43,7 @@ extern const guint8 chapter_png[];
 extern const guint8 dir_up_png[];
 extern const guint8 dvd_png[];
 extern const guint8 dvd_play_png[];
+extern const guint8 emblem_png[];
 extern const guint8 equalizer_png[];
 extern const guint8 error_png[];
 extern const guint8 exit_png[];

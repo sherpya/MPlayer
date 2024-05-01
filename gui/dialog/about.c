@@ -25,7 +25,7 @@
 #include "help_mp.h"
 #include "version.h"
 
-#include "pixmaps/emblem.xpm"
+#include "icons.h"
 #include "dialog.h"
 #include "about.h"
 #include "tools.h"
@@ -43,7 +43,7 @@ static void abWidgetDestroy( GtkButton * button, gpointer user_data )
 static GtkWidget * CreateAbout( void )
 {
   GtkWidget     * vbox;
-  GtkWidget     * pixmap1;
+  GtkWidget     * emblem;
   GtkWidget     * scrolledwindow1;
   GtkWidget     * AboutText;
   GtkWidget     * Ok;
@@ -51,9 +51,7 @@ static GtkWidget * CreateAbout( void )
   GtkTextBuffer * AboutTextBuffer;
   GtkTextIter   iter;
 
-  GtkStyle      * pixmapstyle;
-  GdkPixmap     * pixmapwid;
-  GdkBitmap     * mask;
+  GdkPixbuf     * pixbuf;
 
   GtkAccelGroup * accel_group;
 
@@ -74,12 +72,12 @@ static GtkWidget * CreateAbout( void )
 
   vbox=gtkAddVBox( gtkAddDialogFrame( About ),0 );
 
-  pixmapstyle=gtk_widget_get_style( About );
-  pixmapwid=gdk_pixmap_colormap_create_from_xpm_d( About->window,gdk_colormap_get_system(),&mask,&pixmapstyle->bg[GTK_STATE_NORMAL],(gchar **) emblem_xpm );
-  pixmap1=gtk_pixmap_new( pixmapwid,mask );
+  pixbuf = gdk_pixbuf_new_from_inline(-1, emblem_png, FALSE, NULL);
+  emblem = gtk_image_new_from_pixbuf(pixbuf);
+  g_object_unref(pixbuf);
 
-  gtk_widget_show( pixmap1 );
-  gtk_box_pack_start( GTK_BOX( vbox ),pixmap1,FALSE,FALSE,0 );
+  gtk_widget_show(emblem);
+  gtk_box_pack_start(GTK_BOX(vbox), emblem, FALSE, FALSE, 0);
 
   gtkAddHSeparator( vbox );
 

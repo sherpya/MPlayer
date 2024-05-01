@@ -47,6 +47,8 @@
 #define THRESHOLD 128   // transparency values equal to or above this will become
                         // opaque, all values below this will become transparent
 
+#define XDISPLAY gdk_x11_display_get_xdisplay(gdk_display_get_default())
+
 guiIcon_t guiIcon;
 
 static const char guiIconName[] = "mplayer";
@@ -162,7 +164,7 @@ void gtkInit(char *display_name)
  */
 void gtkAddIcon(GtkWidget *window)
 {
-    wsWindowIcon(gdk_display, GDK_WINDOW_XWINDOW(window->window), &guiIcon);
+    wsWindowIcon(XDISPLAY, GDK_WINDOW_XWINDOW(window->window), &guiIcon);
 }
 
 /**
@@ -240,7 +242,7 @@ void gtkMessageBox(int type, const gchar *str)
  */
 void gtkSetLayer(GtkWidget *window)
 {
-    wsWindowLayer(gdk_display, GDK_WINDOW_XWINDOW(window->window), guiApp.videoWindow.isFullScreen);
+    wsWindowLayer(XDISPLAY, GDK_WINDOW_XWINDOW(window->window), guiApp.videoWindow.isFullScreen);
     gtkRaise(window);
 }
 
@@ -251,7 +253,7 @@ void gtkSetLayer(GtkWidget *window)
  */
 void gtkRaise(GtkWidget *window)
 {
-    wsWindowRaiseTop(gdk_display, GDK_WINDOW_XWINDOW(window->window));
+    wsWindowRaiseTop(XDISPLAY, GDK_WINDOW_XWINDOW(window->window));
 }
 
 static void gtkSelectInCList(GtkWidget *list, char *item)

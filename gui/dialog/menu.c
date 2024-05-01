@@ -90,7 +90,7 @@ static GtkWidget * AddMenuCheckItem( GtkWidget *Menu, const guint8 *icon, const 
  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(Item),state);
  g_signal_connect_swapped( G_OBJECT(Item),"activate",
    G_CALLBACK(ActivateMenuItem), GINT_TO_POINTER(message) );
- gtk_menu_item_right_justify (GTK_MENU_ITEM (Item));
+ gtk_menu_item_set_right_justified(GTK_MENU_ITEM(Item), TRUE);
  gtk_widget_show_all(Item);
 
  return Item;
@@ -125,7 +125,7 @@ static GtkWidget * AddMenuItem( GtkWidget *Menu, const guint8 *icon, const char 
  g_signal_connect_swapped( G_OBJECT(Item),"activate",
    G_CALLBACK(ActivateMenuItem), GINT_TO_POINTER(message) );
 
- gtk_menu_item_right_justify (GTK_MENU_ITEM (Item));
+ gtk_menu_item_set_right_justified(GTK_MENU_ITEM(Item), TRUE);
  gtk_widget_show_all(Item);
  return Item;
 }

@@ -196,9 +196,9 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
        {
         int i; int j;
 
-        gtk_signal_handler_block( GTK_OBJECT( CLSelected ),sigSel );
-        gtk_signal_handler_block( GTK_OBJECT( CLSelected ),sigUnsel );
-        gtk_signal_handler_block( GTK_OBJECT( CLSelected ),sigEvent );
+        g_signal_handler_block( G_OBJECT( CLSelected ),sigSel );
+        g_signal_handler_block( G_OBJECT( CLSelected ),sigUnsel );
+        g_signal_handler_block( G_OBJECT( CLSelected ),sigEvent );
 
         gtk_clist_freeze( GTK_CLIST( CLSelected ) );
         i = 0;
@@ -215,9 +215,9 @@ static void plButtonReleased( GtkButton * button,gpointer user_data )
         }
         gtk_clist_thaw( GTK_CLIST( CLSelected ) );
 
-        gtk_signal_handler_unblock( GTK_OBJECT( CLSelected ),sigSel );
-        gtk_signal_handler_unblock( GTK_OBJECT( CLSelected ),sigUnsel );
-        gtk_signal_handler_unblock( GTK_OBJECT( CLSelected ),sigEvent );
+        g_signal_handler_unblock( G_OBJECT( CLSelected ),sigSel );
+        g_signal_handler_unblock( G_OBJECT( CLSelected ),sigUnsel );
+        g_signal_handler_unblock( G_OBJECT( CLSelected ),sigEvent );
 
        }
        break;

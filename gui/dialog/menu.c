@@ -85,7 +85,7 @@ static GtkWidget * AddMenuCheckItem( GtkWidget *Menu, const guint8 *icon, const 
  gtk_box_pack_start (GTK_BOX (hbox), Label, FALSE, FALSE, 0);
  gtk_container_add (GTK_CONTAINER (Item), hbox);
 
- gtk_menu_append( GTK_MENU( Menu ),Item );
+ gtk_menu_shell_append(GTK_MENU_SHELL(Menu), Item);
 
  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(Item),state);
  g_signal_connect_swapped( G_OBJECT(Item),"activate",
@@ -121,7 +121,7 @@ static GtkWidget * AddMenuItem( GtkWidget *Menu, const guint8 *icon, const char 
  gtk_container_add (GTK_CONTAINER (Item), hbox);
 
 
- gtk_menu_append( GTK_MENU( Menu ), Item );
+ gtk_menu_shell_append(GTK_MENU_SHELL(Menu), Item);
  g_signal_connect_swapped( G_OBJECT(Item),"activate",
    G_CALLBACK(ActivateMenuItem), GINT_TO_POINTER(message) );
 
@@ -168,7 +168,7 @@ static GtkWidget * AddSubMenu( GtkWidget *Menu, const guint8 *icon, const char *
  gtk_box_pack_start (GTK_BOX (hbox), Label, FALSE, FALSE, 0);
  gtk_container_add (GTK_CONTAINER (SubItem), hbox);
 
- gtk_menu_append( GTK_MENU( Menu ),SubItem );
+ gtk_menu_shell_append(GTK_MENU_SHELL(Menu), SubItem);
  gtk_menu_item_set_submenu( GTK_MENU_ITEM( SubItem ),Item );
 
  gtk_widget_show_all( SubItem );

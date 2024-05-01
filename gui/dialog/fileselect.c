@@ -819,8 +819,8 @@ static GtkWidget *CreateFileSelect(void)
     gtkAddHSeparator(vbox4);
 
     List = gtk_combo_new();
-    gtk_widget_ref(List);
-    gtk_object_set_data_full(GTK_OBJECT(FileSelector), "List", List, (GtkDestroyNotify)gtk_widget_unref);
+    g_object_ref(List);
+    gtk_object_set_data_full(GTK_OBJECT(FileSelector), "List", List, (GtkDestroyNotify)g_object_unref);
     gtk_widget_show(List);
     gtk_box_pack_start(GTK_BOX(vbox4), List, FALSE, FALSE, 0);
 

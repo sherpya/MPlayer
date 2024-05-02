@@ -841,9 +841,7 @@ static GtkWidget * CreatePreferences( void )
 
 #ifdef CONFIG_ICONV
   gtk_misc_set_alignment( GTK_MISC( label ),0,0 );
-  CBSubEncoding=gtk_combo_new();
-  gtk_widget_show( CBSubEncoding );
-  gtk_box_pack_start( GTK_BOX( vbox10 ),CBSubEncoding,TRUE,FALSE,0 );
+  CBSubEncoding=gtkAddCombo(vbox10);
   CBSubEncoding_items=g_list_append( CBSubEncoding_items,_(MSGTR_GUI__Default_) );
   {
    int i, listed=(sub_cp == NULL);
@@ -940,8 +938,7 @@ static GtkWidget * CreatePreferences( void )
   label=gtkAddLabelColon( _(MSGTR_GUI_Encoding),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  CBFontEncoding=gtk_combo_new();
-  gtk_widget_show( CBFontEncoding );
+  CBFontEncoding=gtkAddCombo(NULL);
   gtk_table_attach( GTK_TABLE( table1 ),CBFontEncoding,1,2,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
   {
    int i, append, listed=(subtitle_font_encoding == NULL);
@@ -1030,9 +1027,7 @@ static GtkWidget * CreatePreferences( void )
 
   gtkAddLabelColon( _(MSGTR_GUI_CodecFamilyVideo),hbox5 );
 
-  CBVFM=gtk_combo_new();
-  gtk_widget_show( CBVFM );
-  gtk_box_pack_start( GTK_BOX( hbox5 ),CBVFM,TRUE,TRUE,0 );
+  CBVFM=gtkAddCombo(hbox5);
 
   EVFM=GTK_COMBO( CBVFM )->entry;
   gtk_entry_set_editable( GTK_ENTRY( EVFM ),FALSE );
@@ -1042,9 +1037,7 @@ static GtkWidget * CreatePreferences( void )
 
   gtkAddLabelColon( _(MSGTR_GUI_CodecFamilyAudio),hbox5 );
 
-  CBAFM=gtk_combo_new();
-  gtk_widget_show( CBAFM );
-  gtk_box_pack_start( GTK_BOX( hbox5 ),CBAFM,TRUE,TRUE,0 );
+  CBAFM=gtkAddCombo(hbox5);
 
   EAFM=GTK_COMBO( CBAFM )->entry;
   gtk_entry_set_editable( GTK_ENTRY( EAFM ),FALSE );

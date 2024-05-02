@@ -777,9 +777,7 @@ static GtkWidget *CreateFileSelect(void)
     vbox4 = gtkAddVBox(gtkAddDialogFrame(FileSelector), 0);
     hbox4 = gtkAddHBox(vbox4, 1);
 
-    fsCombo4 = gtk_combo_new();
-    gtk_widget_show(fsCombo4);
-    gtk_box_pack_start(GTK_BOX(hbox4), fsCombo4, TRUE, TRUE, 0);
+    fsCombo4 = gtkAddCombo(hbox4);
 
     fsPathCombo = GTK_COMBO(fsCombo4)->entry;
     gtk_widget_show(fsPathCombo);
@@ -818,10 +816,9 @@ static GtkWidget *CreateFileSelect(void)
 
     gtkAddHSeparator(vbox4);
 
-    List = gtk_combo_new();
+    List = gtkAddCombo(NULL);
     g_object_ref(List);
     g_object_set_data_full(G_OBJECT(FileSelector), "List", List, (GDestroyNotify)g_object_unref);
-    gtk_widget_show(List);
     gtk_box_pack_start(GTK_BOX(vbox4), List, FALSE, FALSE, 0);
 
     fsFilterCombo = GTK_COMBO(List)->entry;

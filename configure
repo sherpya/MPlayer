@@ -8171,7 +8171,7 @@ EOF
     echocheck "GTK+ version"
 
     if $_pkg_config --exists gtk+-2.0 ; then
-      _gtk=$($_pkg_config --modversion "gtk+-2.0 >= 2.4.0" 2>&1)
+      _gtk=$($_pkg_config --modversion "gtk+-2.0 >= 2.6.0" 2>&1)
       if [ $? -eq 0 ]; then
         extra_cflags="$extra_cflags $($_pkg_config --cflags gtk+-2.0 2>/dev/null)"
         libs_mplayer="$libs_mplayer $($_pkg_config --libs gtk+-2.0 2>/dev/null)"
@@ -8182,9 +8182,7 @@ EOF
         die "$_gtk"
       fi
 
-      # Check for specific minimum version of GLib
-      # (version 2.4.0, required by GTK+ 2.4.0, would have been
-      # checked automatically, but doesn't meet our requirements)
+      # Check for GLib
       echocheck "GLib version"
       if $_pkg_config --exists glib-2.0 ; then
         _glib=$($_pkg_config --modversion "glib-2.0 >= 2.6.0" 2>&1)

@@ -512,17 +512,11 @@ void ShowEqualizer( void )
 /* equalizer config dialog box */
 
 static GtkWidget * CBChannel1;
-static GtkWidget * CEChannel1;
 static GtkWidget * CBChannel2;
-static GtkWidget * CEChannel2;
 static GtkWidget * CBChannel3;
-static GtkWidget * CEChannel3;
 static GtkWidget * CBChannel4;
-static GtkWidget * CEChannel4;
 static GtkWidget * CBChannel5;
-static GtkWidget * CEChannel5;
 static GtkWidget * CBChannel6;
-static GtkWidget * CEChannel6;
 static GtkWidget * ecOk;
 static GtkWidget * ecCancel;
 
@@ -530,7 +524,7 @@ GtkWidget * CreateEquConfig( void );
 
 void ShowEquConfig( void )
 {
- GList * Items = NULL;
+ GList * Items = NULL, *list;
 
  if ( EquConfig ) gtkRaise( EquConfig );
     else EquConfig=CreateEquConfig();
@@ -542,21 +536,28 @@ void ShowEquConfig( void )
  Items=g_list_append( Items,(gpointer)_(MSGTR_GUI_Center) );
  Items=g_list_append( Items,(gpointer)_(MSGTR_GUI_Bass) );
 
- gtk_combo_set_popdown_strings( GTK_COMBO( CBChannel1 ),Items );
- gtk_combo_set_popdown_strings( GTK_COMBO( CBChannel2 ),Items );
- gtk_combo_set_popdown_strings( GTK_COMBO( CBChannel3 ),Items );
- gtk_combo_set_popdown_strings( GTK_COMBO( CBChannel4 ),Items );
- gtk_combo_set_popdown_strings( GTK_COMBO( CBChannel5 ),Items );
- gtk_combo_set_popdown_strings( GTK_COMBO( CBChannel6 ),Items );
+ list = Items;
+
+ while (list)
+ {
+   gtk_combo_box_append_text(GTK_COMBO_BOX(CBChannel1), list->data);
+   gtk_combo_box_append_text(GTK_COMBO_BOX(CBChannel2), list->data);
+   gtk_combo_box_append_text(GTK_COMBO_BOX(CBChannel3), list->data);
+   gtk_combo_box_append_text(GTK_COMBO_BOX(CBChannel4), list->data);
+   gtk_combo_box_append_text(GTK_COMBO_BOX(CBChannel5), list->data);
+   gtk_combo_box_append_text(GTK_COMBO_BOX(CBChannel6), list->data);
+
+   list = list->next;
+ }
 
  g_list_free( Items );
 
- gtk_entry_set_text( GTK_ENTRY( CEChannel1 ),gtkEquChannel1 ); gtk_entry_set_editable( GTK_ENTRY( CEChannel1 ),FALSE );
- gtk_entry_set_text( GTK_ENTRY( CEChannel2 ),gtkEquChannel2 ); gtk_entry_set_editable( GTK_ENTRY( CEChannel2 ),FALSE );
- gtk_entry_set_text( GTK_ENTRY( CEChannel3 ),gtkEquChannel3 ); gtk_entry_set_editable( GTK_ENTRY( CEChannel3 ),FALSE );
- gtk_entry_set_text( GTK_ENTRY( CEChannel4 ),gtkEquChannel4 ); gtk_entry_set_editable( GTK_ENTRY( CEChannel4 ),FALSE );
- gtk_entry_set_text( GTK_ENTRY( CEChannel5 ),gtkEquChannel5 ); gtk_entry_set_editable( GTK_ENTRY( CEChannel5 ),FALSE );
- gtk_entry_set_text( GTK_ENTRY( CEChannel6 ),gtkEquChannel6 ); gtk_entry_set_editable( GTK_ENTRY( CEChannel6 ),FALSE );
+ gtk_entry_set_text(gtkEntry(CBChannel1), gtkEquChannel1); gtkEntrySetEditable(CBChannel1, FALSE);
+ gtk_entry_set_text(gtkEntry(CBChannel2), gtkEquChannel2); gtkEntrySetEditable(CBChannel2, FALSE);
+ gtk_entry_set_text(gtkEntry(CBChannel3), gtkEquChannel3); gtkEntrySetEditable(CBChannel3, FALSE);
+ gtk_entry_set_text(gtkEntry(CBChannel4), gtkEquChannel4); gtkEntrySetEditable(CBChannel4, FALSE);
+ gtk_entry_set_text(gtkEntry(CBChannel5), gtkEquChannel5); gtkEntrySetEditable(CBChannel5, FALSE);
+ gtk_entry_set_text(gtkEntry(CBChannel6), gtkEquChannel6); gtkEntrySetEditable(CBChannel6, FALSE);
 
  gtk_widget_show( EquConfig );
  gtkSetLayer( EquConfig );
@@ -568,12 +569,12 @@ static void ecButtonReleased( GtkButton * button,gpointer user_data )
 
  if ( GPOINTER_TO_INT(user_data) )
  { // if you pressed Ok
-  nfree( gtkEquChannel1 ); gtkEquChannel1=gstrdup( gtk_entry_get_text( GTK_ENTRY( CEChannel1 ) ) );
-  nfree( gtkEquChannel2 ); gtkEquChannel2=gstrdup( gtk_entry_get_text( GTK_ENTRY( CEChannel2 ) ) );
-  nfree( gtkEquChannel3 ); gtkEquChannel3=gstrdup( gtk_entry_get_text( GTK_ENTRY( CEChannel3 ) ) );
-  nfree( gtkEquChannel4 ); gtkEquChannel4=gstrdup( gtk_entry_get_text( GTK_ENTRY( CEChannel4 ) ) );
-  nfree( gtkEquChannel5 ); gtkEquChannel5=gstrdup( gtk_entry_get_text( GTK_ENTRY( CEChannel5 ) ) );
-  nfree( gtkEquChannel6 ); gtkEquChannel6=gstrdup( gtk_entry_get_text( GTK_ENTRY( CEChannel6 ) ) );
+  nfree( gtkEquChannel1 ); gtkEquChannel1=gstrdup( gtk_entry_get_text( gtkEntry( CBChannel1 ) ) );
+  nfree( gtkEquChannel2 ); gtkEquChannel2=gstrdup( gtk_entry_get_text( gtkEntry( CBChannel2 ) ) );
+  nfree( gtkEquChannel3 ); gtkEquChannel3=gstrdup( gtk_entry_get_text( gtkEntry( CBChannel3 ) ) );
+  nfree( gtkEquChannel4 ); gtkEquChannel4=gstrdup( gtk_entry_get_text( gtkEntry( CBChannel4 ) ) );
+  nfree( gtkEquChannel5 ); gtkEquChannel5=gstrdup( gtk_entry_get_text( gtkEntry( CBChannel5 ) ) );
+  nfree( gtkEquChannel6 ); gtkEquChannel6=gstrdup( gtk_entry_get_text( gtkEntry( CBChannel6 ) ) );
   eqSetChannelNames();
  }
  gtk_widget_destroy( EquConfig );
@@ -634,38 +635,20 @@ GtkWidget * CreateEquConfig( void )
   CBChannel1=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel1,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  CEChannel1=GTK_COMBO( CBChannel1 )->entry;
-  gtk_widget_show( CEChannel1 );
-
   CBChannel2=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel2,1,2,1,2,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
-
-  CEChannel2=GTK_COMBO( CBChannel2 )->entry;
-  gtk_widget_show( CEChannel2 );
 
   CBChannel3=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel3,1,2,2,3,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  CEChannel3=GTK_COMBO( CBChannel3 )->entry;
-  gtk_widget_show( CEChannel3 );
-
   CBChannel4=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel4,1,2,3,4,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
-
-  CEChannel4=GTK_COMBO( CBChannel4 )->entry;
-  gtk_widget_show( CEChannel4 );
 
   CBChannel5=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel5,1,2,4,5,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  CEChannel5=GTK_COMBO( CBChannel5 )->entry;
-  gtk_widget_show( CEChannel5 );
-
   CBChannel6=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel6,1,2,5,6,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
-
-  CEChannel6=GTK_COMBO( CBChannel6 )->entry;
-  gtk_widget_show( CEChannel6 );
 
   gtkAddHSeparator( vbox1 );
 

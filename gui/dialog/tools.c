@@ -230,7 +230,7 @@ GtkWidget * gtkAddVScale( GtkAdjustment * adj,GtkWidget * parent,int digit )
 GtkWidget * gtkAddCombo( GtkWidget * parent )
 {
  GtkWidget * CB;
- CB=gtk_combo_new();
+ CB=gtk_combo_box_entry_new_text();
  gtk_widget_show( CB );
  if ( parent ) gtk_box_pack_start( GTK_BOX( parent ),CB,TRUE,TRUE,0 );
  return CB;
@@ -249,4 +249,14 @@ int gtkFindInCList (GtkWidget *list, char *item)
   }
 
   return -1;
+}
+
+GtkEntry *gtkEntry (GtkWidget *combo_box)
+{
+  return GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box)));
+}
+
+void gtkEntrySetEditable (GtkWidget *combo_box, gboolean editable)
+{
+  gtk_editable_set_editable(GTK_EDITABLE(gtkEntry(combo_box)), editable);
 }

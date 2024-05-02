@@ -36,8 +36,6 @@
 GtkWidget *URLDialog;
 
 static GtkWidget *urlCombo;
-static GtkWidget *urlEntry;
-static GList *urlEntries;
 
 /**
  * @brief Add the entered URL to the URL list and stream it,
@@ -55,7 +53,7 @@ static void button_clicked(GtkButton *button, gpointer user_data)
     (void)button;
 
     if (user_data) {
-        char *str = strdup(gtk_entry_get_text(GTK_ENTRY(urlEntry)));
+        char *str = strdup(gtk_entry_get_text(gtkEntry(urlCombo)));
 
         if (str) {
             if (!strstr(str, "://")) {
@@ -117,13 +115,6 @@ static GtkWidget *CreateURLDialog(void)
     gtkAddLabel("URL: ", hbox1);
 
     urlCombo = gtkAddCombo(hbox1);
-/*
- * gtk_combo_new();
- * gtk_widget_show( urlCombo );
- * gtk_box_pack_start( GTK_BOX( hbox1 ),urlCombo,TRUE,TRUE,0 );
- */
-    urlEntry = GTK_COMBO(urlCombo)->entry;
-    gtk_widget_show(urlEntry);
 
     gtkAddHSeparator(vbox1);
 
@@ -145,7 +136,7 @@ static GtkWidget *CreateURLDialog(void)
     g_signal_connect(G_OBJECT(Ok), "clicked", G_CALLBACK(button_clicked), Ok);
     g_signal_connect(G_OBJECT(Cancel), "clicked", G_CALLBACK(button_clicked), NULL);
 
-    gtk_widget_grab_focus(urlEntry);
+    gtk_widget_grab_focus(urlCombo);
     gtk_window_add_accel_group(GTK_WINDOW(URLDialog), accel_group);
 
     return URLDialog;
@@ -163,18 +154,12 @@ void ShowURLDialog(void)
     item = listMgr(URLLIST_GET, 0);
 
     if (item) {
-        g_list_free(urlEntries);
-        urlEntries = NULL;
-
         while (item) {
-            urlEntries = g_list_append(urlEntries, item->url);
-            item       = item->next;
+            gtk_combo_box_append_text(GTK_COMBO_BOX(urlCombo), item->url);
+            item = item->next;
         }
-    }
 
-    if (urlEntries) {
-        gtk_entry_set_text(GTK_ENTRY(urlEntry), urlEntries->data);
-        gtk_combo_set_popdown_strings(GTK_COMBO(urlCombo), urlEntries);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(urlCombo), 0);
     }
 
     gtk_widget_show(URLDialog);

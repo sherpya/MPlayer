@@ -79,8 +79,6 @@ static GtkWidget * CLVDrivers;
        GtkWidget * prEFontName;
        GtkWidget * prEDVDDevice;
        GtkWidget * prECDRomDevice;
-static GtkWidget * EVFM;
-static GtkWidget * EAFM;
 
 static GtkWidget * CBVFM;
 static GtkWidget * CBAFM;
@@ -149,7 +147,7 @@ static GtkAdjustment * HSSubPositionadj, * HSSubFPSadj, * HSPPQualityadj, * HSFP
 #ifdef CONFIG_FREETYPE
 static GtkWidget     * HSFontBlur, * HSFontOutLine, * HSFontTextScale, * HSFontOSDScale;
 static GtkAdjustment * HSFontBluradj, * HSFontOutLineadj, * HSFontTextScaleadj, * HSFontOSDScaleadj;
-static GtkWidget     * CBFontEncoding, * EFontEncoding;
+static GtkWidget     * CBFontEncoding;
 static GtkWidget     * RBFontNoAutoScale, * RBFontAutoScaleWidth, * RBFontAutoScaleHeight, * RBFontAutoScaleDiagonal;
 //static GtkWidget     * AutoScale;
 #else
@@ -158,7 +156,7 @@ static GtkAdjustment * HSFontFactoradj;
 #endif
 
 #ifdef CONFIG_ICONV
-static GtkWidget     * CBSubEncoding, * ESubEncoding;
+static GtkWidget *CBSubEncoding;
 #endif
 
 #if defined(CONFIG_FREETYPE) || defined(CONFIG_ICONV)
@@ -237,7 +235,7 @@ static void prEntry( GtkEditable * editable,gpointer user_data )
   {
 #ifdef CONFIG_FREETYPE
    case 0: // font encoding
-        comment=gtk_entry_get_text( GTK_ENTRY( EFontEncoding ) );
+        comment=gtk_entry_get_text(gtkEntry(CBFontEncoding));
         for ( i=0;lEncoding[i].name;i++ )
           if ( !gstrcmp( _(lEncoding[i].comment),comment ) ) break;
         if ( lEncoding[i].comment ) mplayer( MPLAYER_SET_FONT_ENCODING,0,lEncoding[i].name );
@@ -246,7 +244,7 @@ static void prEntry( GtkEditable * editable,gpointer user_data )
 #endif
 #ifdef CONFIG_ICONV
    case 1: // sub encoding
-        comment=gtk_entry_get_text( GTK_ENTRY( ESubEncoding ) );
+        comment=gtk_entry_get_text(gtkEntry(CBSubEncoding));
         for ( i=0;lEncoding[i].name;i++ )
           if ( !gstrcmp( _(lEncoding[i].comment),comment ) ) break;
         if ( lEncoding[i].comment ) mplayer( MPLAYER_SET_SUB_ENCODING,0,lEncoding[i].name );
@@ -361,7 +359,7 @@ static void prButton( GtkButton * button, gpointer user_data )
 
         {
          int i;
-         const char * tmp = gtk_entry_get_text( GTK_ENTRY( EVFM ) );
+         const char *tmp = gtk_entry_get_text(gtkEntry(CBVFM));
          for( i=0;mpcodecs_vd_drivers[i];i++ )
           if ( !gstrcmp( tmp,mpcodecs_vd_drivers[i]->info->name ) )
            { listSet( &video_fm_list,mpcodecs_vd_drivers[i]->info->short_name ); break; }
@@ -369,7 +367,7 @@ static void prButton( GtkButton * button, gpointer user_data )
 
         {
          int i;
-         const char * tmp = gtk_entry_get_text( GTK_ENTRY( EAFM ) );
+         const char *tmp = gtk_entry_get_text(gtkEntry(CBAFM));
          for( i=0;mpcodecs_ad_drivers[i];i++ )
           if ( !gstrcmp( tmp,mpcodecs_ad_drivers[i]->info->name ) )
            { listSet( &audio_fm_list,mpcodecs_ad_drivers[i]->info->short_name ); break; }
@@ -607,6 +605,7 @@ static GtkWidget * CreatePreferences( void )
   iconv_t     cd;
   GList     * CBSubEncoding_items = NULL;
 #endif
+  GList *list;
   GtkWidget * vbox7;
   GtkWidget * vbox8;
   GtkWidget * table1;
@@ -861,12 +860,18 @@ static GtkWidget * CreatePreferences( void )
    }
    if ( !listed ) CBSubEncoding_items=g_list_insert( CBSubEncoding_items,sub_cp,1 );
   }
-  gtk_combo_set_popdown_strings( GTK_COMBO( CBSubEncoding ),CBSubEncoding_items );
+
+  list = CBSubEncoding_items;
+
+  while (list)
+  {
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBSubEncoding), list->data);
+    list = list->next;
+  }
+
   g_list_free( CBSubEncoding_items );
 
-  ESubEncoding=GTK_COMBO( CBSubEncoding )->entry;
-  gtk_entry_set_editable( GTK_ENTRY( ESubEncoding ),FALSE );
-  gtk_widget_show( ESubEncoding );
+  gtkEntrySetEditable(CBSubEncoding, FALSE);
 #endif
 
   hbox3=gtkAddHBox( NULL,0 );
@@ -964,12 +969,18 @@ static GtkWidget * CreatePreferences( void )
    }
    if ( !listed ) CBFontEncoding_items=g_list_insert( CBFontEncoding_items,subtitle_font_encoding,1 );
   }
-  gtk_combo_set_popdown_strings( GTK_COMBO( CBFontEncoding ),CBFontEncoding_items );
+
+  list = CBFontEncoding_items;
+
+  while (list)
+  {
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBFontEncoding), list->data);
+    list = list->next;
+  }
+
   g_list_free( CBFontEncoding_items );
 
-  EFontEncoding=GTK_COMBO( CBFontEncoding )->entry;
-  gtk_entry_set_editable( GTK_ENTRY( EFontEncoding ),FALSE );
-  gtk_widget_show( EFontEncoding );
+  gtkEntrySetEditable(CBFontEncoding, FALSE);
 
   label=gtkAddLabelColon( _(MSGTR_GUI_Blur),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,2,3,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
@@ -1029,9 +1040,7 @@ static GtkWidget * CreatePreferences( void )
 
   CBVFM=gtkAddCombo(hbox5);
 
-  EVFM=GTK_COMBO( CBVFM )->entry;
-  gtk_entry_set_editable( GTK_ENTRY( EVFM ),FALSE );
-  gtk_widget_show( EVFM );
+  gtkEntrySetEditable(CBVFM, FALSE);
 
   hbox5=gtkAddHBox( vbox604,1 );
 
@@ -1039,9 +1048,7 @@ static GtkWidget * CreatePreferences( void )
 
   CBAFM=gtkAddCombo(hbox5);
 
-  EAFM=GTK_COMBO( CBAFM )->entry;
-  gtk_entry_set_editable( GTK_ENTRY( EAFM ),FALSE );
-  gtk_widget_show( EAFM );
+  gtkEntrySetEditable(CBAFM, FALSE);
 
   label=gtkAddLabel( _(MSGTR_GUI_Demuxers_Codecs),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),4 ),label );
@@ -1195,6 +1202,8 @@ static GtkWidget * CreatePreferences( void )
 
 void ShowPreferences( void )
 {
+ GList *list;
+
  if ( Preferences ) gtkRaise( Preferences );
    else Preferences=CreatePreferences();
 
@@ -1325,12 +1334,16 @@ void ShowPreferences( void )
    int i;
    for ( i=0;lEncoding[i].name;i++ )
     if ( !av_strcasecmp( sub_cp,lEncoding[i].name ) ) break;
-   if ( lEncoding[i].name ) gtk_entry_set_text( GTK_ENTRY( ESubEncoding ),_(lEncoding[i].comment) );
-   else gtk_entry_set_text( GTK_ENTRY( ESubEncoding ),sub_cp );
+   if (lEncoding[i].name) gtk_entry_set_text(gtkEntry(CBSubEncoding), _(lEncoding[i].comment));
+   else gtk_entry_set_text(gtkEntry(CBSubEncoding), sub_cp);
    gtk_widget_set_sensitive( CBSubUtf8,FALSE );
    gtk_widget_set_sensitive( CBSubUnicode,FALSE );
   }
-  else gtk_widget_set_sensitive( CBSubEncoding,(!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBSubUtf8)) && !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBSubUnicode))) );
+ else
+  {
+   gtk_combo_box_set_active(GTK_COMBO_BOX(CBSubEncoding), 0);
+   gtk_widget_set_sensitive(CBSubEncoding, !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBSubUtf8)) && !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBSubUnicode)));
+  }
 #endif
 
 /* 4th page */
@@ -1346,8 +1359,8 @@ void ShowPreferences( void )
   const char *s = (subtitle_font_encoding ? subtitle_font_encoding : ENC_UNICODE);
   for ( i=0;lEncoding[i].name;i++ )
    if ( !av_strcasecmp( s,lEncoding[i].name ) ) break;
-  if ( lEncoding[i].name ) gtk_entry_set_text( GTK_ENTRY( EFontEncoding ),_(lEncoding[i].comment) );
-  else gtk_entry_set_text( GTK_ENTRY( EFontEncoding ),s );
+  if (lEncoding[i].name) gtk_entry_set_text(gtkEntry(CBFontEncoding) ,_(lEncoding[i].comment));
+  else gtk_entry_set_text(gtkEntry(CBFontEncoding), s);
  }
  switch ( subtitle_autoscale )
   {
@@ -1366,33 +1379,55 @@ void ShowPreferences( void )
  {
   int     i;
   GList * Items = NULL;
-  const char  * name = NULL;
+  const char *name;
 
   Items=g_list_append( Items,_(MSGTR_GUI__Default_) );
+  name = Items->data;
+
   for( i=0;mpcodecs_vd_drivers[i];i++ )
    {
     Items=g_list_append( Items,(char *)mpcodecs_vd_drivers[i]->info->name );
     if ( video_fm_list && !gstrcmp( video_fm_list[0],mpcodecs_vd_drivers[i]->info->short_name ) ) name=mpcodecs_vd_drivers[i]->info->name;
    }
-  gtk_combo_set_popdown_strings( GTK_COMBO( CBVFM ),Items );
+
+  list = Items;
+
+  while (list)
+  {
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBVFM), list->data);
+    list = list->next;
+  }
+
+  gtk_entry_set_text(gtkEntry(CBVFM), name);
+
   g_list_free( Items );
-  if ( name ) gtk_entry_set_text( GTK_ENTRY( EVFM ),name );
  }
 
  {
   int     i;
   GList * Items = NULL;
-  const char  * name = NULL;
+  const char *name;
 
   Items=g_list_append( Items,_(MSGTR_GUI__Default_) );
+  name = Items->data;
+
   for( i=0;mpcodecs_ad_drivers[i];i++ )
    {
     Items=g_list_append( Items,(char *)mpcodecs_ad_drivers[i]->info->name );
     if ( audio_fm_list && !gstrcmp( audio_fm_list[0],mpcodecs_ad_drivers[i]->info->short_name ) ) name=mpcodecs_ad_drivers[i]->info->name;
    }
-  gtk_combo_set_popdown_strings( GTK_COMBO( CBAFM ),Items );
+
+  list = Items;
+
+  while (list)
+  {
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBAFM), list->data);
+    list = list->next;
+  }
+
+  gtk_entry_set_text(gtkEntry(CBAFM), name);
+
   g_list_free( Items );
-  if ( name ) gtk_entry_set_text( GTK_ENTRY( EAFM ),name );
  }
 
 /* 6th page */
@@ -1468,12 +1503,12 @@ void ShowPreferences( void )
  g_signal_connect( G_OBJECT( HSFontOutLine ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(7) );
  g_signal_connect( G_OBJECT( HSFontTextScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(8) );
  g_signal_connect( G_OBJECT( HSFontOSDScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(9) );
- g_signal_connect( G_OBJECT( EFontEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(0) );
+ g_signal_connect( G_OBJECT( CBFontEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(0) );
 #else
  g_signal_connect( G_OBJECT( HSFontFactor ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(5) );
 #endif
 #ifdef CONFIG_ICONV
- g_signal_connect( G_OBJECT( ESubEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( CBSubEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(1) );
 #endif
  g_signal_connect( G_OBJECT( HSPPQuality ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(10) );
 
@@ -1594,7 +1629,7 @@ static GList *appendESDDevices(GList *l)
 // _(MSGTR_GUI_DefaultSetting) as null string.
 static const char *getGtkEntryText(GtkWidget *from)
 {
-  const char *tmp = gtk_entry_get_text(GTK_ENTRY(from));
+  const char *tmp = gtk_entry_get_text(gtkEntry(from));
   if (strcmp(tmp, _(MSGTR_GUI_DefaultSetting)) == 0) {
     tmp = NULL;
   }
@@ -1608,15 +1643,12 @@ static void setGtkEntryText(GtkWidget *dest, char *to)
   if (!to) {
     to = _(MSGTR_GUI_DefaultSetting);
   }
-  gtk_entry_set_text(GTK_ENTRY(dest),to);
+  gtk_entry_set_text(gtkEntry(dest), to);
 }
 #endif
 
-static GtkWidget *CEAudioDevice;
 static GtkWidget *CBAudioDevice;
-static GtkWidget *CEAudioMixer;
 static GtkWidget *CBAudioMixer;
-static GtkWidget *CEAudioMixerChannel;
 static GtkWidget *CBAudioMixerChannel;
 static GtkWidget *BAudioOk;
 static GtkWidget *BAudioCancel;
@@ -1630,33 +1662,33 @@ static void audioButton(GtkButton *button, gpointer user_data) {
 #ifdef CONFIG_OSS_AUDIO
       if (strncmp(ao_driver[0], "oss", 3) == 0) {
         nfree(gtkAOOSSDevice);
-        gtkAOOSSDevice = gstrdup(getGtkEntryText(CEAudioDevice));
+        gtkAOOSSDevice = gstrdup(getGtkEntryText(CBAudioDevice));
         nfree(gtkAOOSSMixer);
-        gtkAOOSSMixer = gstrdup(getGtkEntryText(CEAudioMixer));
+        gtkAOOSSMixer = gstrdup(getGtkEntryText(CBAudioMixer));
         nfree(gtkAOOSSMixerChannel);
-        gtkAOOSSMixerChannel = gstrdup(getGtkEntryText(CEAudioMixerChannel));
+        gtkAOOSSMixerChannel = gstrdup(getGtkEntryText(CBAudioMixerChannel));
       }
 #endif
 #ifdef CONFIG_ALSA
       if (strncmp(ao_driver[0], "alsa", 4) == 0) {
         nfree(gtkAOALSADevice);
-        gtkAOALSADevice = gstrdup(getGtkEntryText(CEAudioDevice));
+        gtkAOALSADevice = gstrdup(getGtkEntryText(CBAudioDevice));
         nfree(gtkAOALSAMixer);
-        gtkAOALSAMixer = gstrdup(getGtkEntryText(CEAudioMixer));
+        gtkAOALSAMixer = gstrdup(getGtkEntryText(CBAudioMixer));
         nfree(gtkAOALSAMixerChannel);
-        gtkAOALSAMixerChannel = gstrdup(getGtkEntryText(CEAudioMixerChannel));
+        gtkAOALSAMixerChannel = gstrdup(getGtkEntryText(CBAudioMixerChannel));
       }
 #endif
 #ifdef CONFIG_SDL
       if (strncmp(ao_driver[0], "sdl", 3) == 0) {
         nfree(gtkAOSDLDriver);
-        gtkAOSDLDriver = gstrdup(getGtkEntryText(CEAudioDevice));
+        gtkAOSDLDriver = gstrdup(getGtkEntryText(CBAudioDevice));
       }
 #endif
 #ifdef CONFIG_ESD
       if (strncmp(ao_driver[0], "esd", 3) == 0) {
         nfree(gtkAOESDDevice);
-        gtkAOESDDevice = gstrdup(getGtkEntryText(CEAudioDevice));
+        gtkAOESDDevice = gstrdup(getGtkEntryText(CBAudioDevice));
       }
 #endif
       // fall through
@@ -1668,7 +1700,7 @@ static void audioButton(GtkButton *button, gpointer user_data) {
 }
 
 static GtkWidget *CreateAudioConfig( void ) {
-  GList *items = NULL;
+  GList *items = NULL, *list;
   GtkWidget *vbox;
   GtkWidget *table;
   GtkWidget *label;
@@ -1712,12 +1744,17 @@ static GtkWidget *CreateAudioConfig( void ) {
   if (strncmp(ao_driver[0], "esd", 3) == 0)
     items = appendESDDevices(items);
 #endif
-  gtk_combo_set_popdown_strings(GTK_COMBO(CBAudioDevice), items);
+
+  list = items;
+
+  while (list)
+  {
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBAudioDevice), list->data);
+    list = list->next;
+  }
+
   g_list_free(items);
   items = NULL;
-
-  CEAudioDevice = GTK_COMBO(CBAudioDevice)->entry;
-  gtk_widget_show(CEAudioDevice);
 
   label = gtkAddLabelColon(_(MSGTR_GUI_Mixer), NULL);
   gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(0), 0, 0);
@@ -1733,12 +1770,17 @@ static GtkWidget *CreateAudioConfig( void ) {
   if (strncmp(ao_driver[0], "alsa", 4) == 0)
     items = appendALSAMixers(items);
 #endif
-  gtk_combo_set_popdown_strings(GTK_COMBO(CBAudioMixer), items);
+
+  list = items;
+
+  while (list)
+  {
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBAudioMixer), list->data);
+    list = list->next;
+  }
+
   g_list_free(items);
   items = NULL;
-
-  CEAudioMixer = GTK_COMBO(CBAudioMixer)->entry;
-  gtk_widget_show(CEAudioMixer);
 
   label = gtkAddLabelColon(_(MSGTR_GUI_MixerChannel), NULL);
   gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(0), 0, 0);
@@ -1754,12 +1796,16 @@ static GtkWidget *CreateAudioConfig( void ) {
   if (strncmp(ao_driver[0], "alsa", 4) == 0)
     items = appendALSAMixerChannels(items);
 #endif
-  gtk_combo_set_popdown_strings(GTK_COMBO(CBAudioMixerChannel), items);
-  g_list_free(items);
-  items = NULL;
 
-  CEAudioMixerChannel = GTK_COMBO(CBAudioMixerChannel)->entry;
-  gtk_widget_show(CEAudioMixerChannel);
+  list = items;
+
+  while (list)
+  {
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBAudioMixerChannel), list->data);
+    list = list->next;
+  }
+
+  g_list_free(items);
 
   gtkAddHSeparator(vbox);
 
@@ -1787,26 +1833,26 @@ void ShowAudioConfig( void ) {
 
 #ifdef CONFIG_OSS_AUDIO
   if (strncmp(ao_driver[0], "oss", 3) == 0) {
-    setGtkEntryText(CEAudioDevice, gtkAOOSSDevice);
-    setGtkEntryText(CEAudioMixer, gtkAOOSSMixer);
-    setGtkEntryText(CEAudioMixerChannel, gtkAOOSSMixerChannel);
+    setGtkEntryText(CBAudioDevice, gtkAOOSSDevice);
+    setGtkEntryText(CBAudioMixer, gtkAOOSSMixer);
+    setGtkEntryText(CBAudioMixerChannel, gtkAOOSSMixerChannel);
   }
 #endif
 #ifdef CONFIG_ALSA
   if (strncmp(ao_driver[0], "alsa", 4) == 0) {
-    setGtkEntryText(CEAudioDevice, gtkAOALSADevice);
-    setGtkEntryText(CEAudioMixer, gtkAOALSAMixer);
-    setGtkEntryText(CEAudioMixerChannel, gtkAOALSAMixerChannel);
+    setGtkEntryText(CBAudioDevice, gtkAOALSADevice);
+    setGtkEntryText(CBAudioMixer, gtkAOALSAMixer);
+    setGtkEntryText(CBAudioMixerChannel, gtkAOALSAMixerChannel);
   }
 #endif
 #ifdef CONFIG_SDL
   if (strncmp(ao_driver[0], "sdl", 3) == 0) {
-    setGtkEntryText(CEAudioDevice, gtkAOSDLDriver);
+    setGtkEntryText(CBAudioDevice, gtkAOSDLDriver);
   }
 #endif
 #ifdef CONFIG_ESD
   if (strncmp(ao_driver[0], "esd", 3) == 0) {
-    setGtkEntryText(CEAudioDevice, gtkAOESDDevice);
+    setGtkEntryText(CBAudioDevice, gtkAOESDDevice);
   }
 #endif
 
@@ -1816,8 +1862,7 @@ void ShowAudioConfig( void ) {
 
 /* dxr3 config box */
 
-static GtkWidget * CBDevice;
-static GtkWidget * CEDXR3Device;
+static GtkWidget * CBDXR3Device;
 static GtkWidget * RBVNone;
 static GtkWidget * RBVLavc;
 static GtkWidget * dxr3BOk;
@@ -1830,7 +1875,7 @@ void ShowDXR3Config( void )
  if ( DXR3Config ) gtkRaise( DXR3Config );
   else DXR3Config=CreateDXR3Config();
 
- gtk_entry_set_text( GTK_ENTRY( CEDXR3Device ),gtkDXR3Device );
+ gtk_entry_set_text(gtkEntry(CBDXR3Device), gtkDXR3Device);
 
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( RBVNone ),TRUE );
  if ( gtkVfLAVC ) gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( RBVLavc ),TRUE );
@@ -1846,7 +1891,7 @@ static void dxr3Button( GtkButton * button,gpointer user_data )
  switch ( GPOINTER_TO_INT(user_data) )
  {
   case 0: // Ok
-       nfree( gtkDXR3Device ); gtkDXR3Device=strdup( gtk_entry_get_text( GTK_ENTRY( CEDXR3Device ) ) );
+       nfree(gtkDXR3Device); gtkDXR3Device = strdup(gtk_entry_get_text(gtkEntry(CBDXR3Device)));
        gtkVfLAVC=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBVLavc ) );
        // fall through
 
@@ -1861,7 +1906,6 @@ GtkWidget * CreateDXR3Config( void )
  GtkWidget * vbox1;
  GtkWidget * vbox2;
  GtkWidget * hbox1;
- GList     * CBDevice_items = NULL;
  GtkWidget * vbox3;
  GSList    * VEncoder_group = NULL;
  GtkWidget * hbuttonbox1;
@@ -1884,19 +1928,15 @@ GtkWidget * CreateDXR3Config( void )
  hbox1=gtkAddHBox( vbox2,1 );
  gtkAddLabelColon( _(MSGTR_GUI_Device),hbox1 );
 
- CBDevice=gtkAddCombo( hbox1 );
+ CBDXR3Device=gtkAddCombo( hbox1 );
 
- CBDevice_items=g_list_append( CBDevice_items,( gpointer ) "/dev/em8300" );
- CBDevice_items=g_list_append( CBDevice_items,( gpointer ) "/dev/em8300-0" );
- CBDevice_items=g_list_append( CBDevice_items,( gpointer ) "/dev/em8300-1" );
- CBDevice_items=g_list_append( CBDevice_items,( gpointer ) "/dev/em8300-2" );
- CBDevice_items=g_list_append( CBDevice_items,( gpointer ) "/dev/em8300-3" );
- gtk_combo_set_popdown_strings( GTK_COMBO( CBDevice ),CBDevice_items );
- g_list_free( CBDevice_items );
+ gtk_combo_box_append_text(GTK_COMBO_BOX(CBDXR3Device), "/dev/em8300");
+ gtk_combo_box_append_text(GTK_COMBO_BOX(CBDXR3Device), "/dev/em8300-0");
+ gtk_combo_box_append_text(GTK_COMBO_BOX(CBDXR3Device), "/dev/em8300-1");
+ gtk_combo_box_append_text(GTK_COMBO_BOX(CBDXR3Device), "/dev/em8300-2");
+ gtk_combo_box_append_text(GTK_COMBO_BOX(CBDXR3Device), "/dev/em8300-3");
 
- CEDXR3Device=GTK_COMBO( CBDevice )->entry;
- gtk_widget_show( CEDXR3Device );
- gtk_entry_set_text( GTK_ENTRY( CEDXR3Device ),"/dev/em8300" );
+ gtk_entry_set_text(gtkEntry(CBDXR3Device), "/dev/em8300");
 
  gtkAddHSeparator( vbox2 );
  vbox3=gtkAddVBox( vbox2,0 );

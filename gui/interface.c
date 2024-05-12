@@ -643,11 +643,6 @@ int gui(int what, void *data)
 
         /* video opts */
 
-        if (0) {
-            gmp_msg(MSGT_GPLAYER, MSGL_FATAL, _(MSGTR_GUI_MSG_VideoOutError));
-            mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
-        }
-
         {
             int i = 0;
 

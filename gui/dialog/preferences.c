@@ -223,6 +223,14 @@ static gboolean prHScaler( GtkWidget * widget,GdkEvent * event,gpointer user_dat
 static void prToggled( GtkToggleButton * togglebutton,gpointer user_data );
 static void prCListRow( GtkCList * clist,gint row,gint column,GdkEvent * event,gpointer user_data );
 
+static void notebook_switch_page (GtkNotebook *notebook, gpointer page, guint page_num, gpointer user_data)
+{
+  (void) notebook;
+  (void) page;
+
+  if (page_num == 1 && ((GtkCList *) user_data)->rows == 0) gtkMessageBox(MSGBOX_FATAL, _(MSGTR_GUI_MSG_VideoOutError));
+}
+
 #if defined(CONFIG_FREETYPE) || defined(CONFIG_ICONV)
 static void prEntry( GtkEditable * editable,gpointer user_data )
 {
@@ -1146,6 +1154,8 @@ static GtkWidget * CreatePreferences( void )
   gtk_widget_add_accelerator( BCancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
   g_signal_connect( G_OBJECT( Preferences ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Preferences );
+
+  g_signal_connect(G_OBJECT(notebook1), "switch-page", G_CALLBACK(notebook_switch_page), CLVDrivers);
 
   g_signal_connect( G_OBJECT( AConfig ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bAConfig) );
   g_signal_connect( G_OBJECT( BOk ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bOk) );

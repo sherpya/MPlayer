@@ -31,7 +31,7 @@
 .\" Title
 .\" --------------------------------------------------------------------------
 .
-.TH MPlayer 1 "2024-05-11" "The MPlayer Project" "The Movie Player"
+.TH MPlayer 1 "2024-05-12" "The MPlayer Project" "The Movie Player"
 .
 .SH NAME
 mplayer  \- movie player
@@ -1174,9 +1174,16 @@ Print a list of the available properties.
 .
 .TP
 .B \-loop <number>
-Loops movie playback <number> times.
+Loops the playback <number> times.
+.br
 0 means forever.
-Use \-loop 0 to automatically reconnect to live streaming URLs.
+Use \-loop 0 <URL|filename> to automatically reconnect to live streaming URLs
+or files yet to be created or to be replaced.
+.br
+\-loop <number> <URL|filename> opens the URL or file <number> times in a row
+and plays it once each time, while <URL|filename> \-loop <number> opens the
+URL or file once and plays it <number> times in a loop, which is usually what
+you want.
 .
 .TP
 .B \-menu (OSD menu only)

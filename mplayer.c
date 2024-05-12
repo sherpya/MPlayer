@@ -2826,6 +2826,7 @@ int main(int argc, char *argv[])
 
 #ifdef CONFIG_GUI
     if (use_gui) {
+        gui(GUI_SET_CONTEXT, mpctx);
         initialized_flags |= INITIALIZED_GUI;
         cfg_read();
     }
@@ -3084,7 +3085,6 @@ int main(int argc, char *argv[])
 #ifdef CONFIG_GUI
     if (use_gui) {
         guiInit();
-        gui(GUI_SET_CONTEXT, mpctx);
         gui(GUI_SET_STATE, (void *)(intptr_t)(filename ? GUI_PLAY : GUI_STOP));
     }
 #endif

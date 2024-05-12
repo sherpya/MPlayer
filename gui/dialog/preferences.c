@@ -307,8 +307,8 @@ static void prButton( GtkButton * button, gpointer user_data )
         mplayer( MPLAYER_SET_EXTRA_STEREO,gtk_adjustment_get_value(HSExtraStereoMuladj),0 );
         audio_delay=gtk_adjustment_get_value(HSAudioDelayadj);
 
-        listSet( &audio_driver_list,ao_driver[0] );
-        listSet( &video_driver_list,vo_driver[0] );
+        if (ao_driver[0]) listSet(&audio_driver_list, ao_driver[0]);
+        if (vo_driver[0]) listSet(&video_driver_list, vo_driver[0]);
 
         /* 2nd page */
         vo_doublebuffering=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBDoubleBuffer ) );

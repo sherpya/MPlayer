@@ -33,7 +33,7 @@
 .\" Titel
 .\" --------------------------------------------------------------------------
 .
-.TH MPlayer 1 "28.04.2024" "Das MPlayer Projekt"
+.TH MPlayer 1 "12.05.2024" "Das MPlayer Projekt"
 .
 .SH NAME
 mplayer  \- Movie Player
@@ -1181,8 +1181,17 @@ Gibt eine Liste der verfügbaren Eigenschaften aus.
 .
 .TP
 .B \-loop <Anzahl>
-Wiederholt die Wiedergabe <Anzahl> mal.
-0 bedeutet ständige Wiederholung.
+Wiederholt die Wiedergabe <Anzahl> Mal.
+.br
+0 bedeutet endlose Wiederholung.
+Verwenden Sie \-loop 0 <URL|Dateiname>, um die Verbindung zu
+Live-Streaming-URLs oder Dateien, die noch erstellt werden oder ersetzt
+werden sollen, automatisch wiederherzustellen.
+.br
+\-loop <Anzahl> <URL|Dateiname> öffnet die URL oder Datei nacheinander
+<Anzahl> Mal und spielt sie jeweils einmal ab, während <URL|Dateiname>
+\-loop <Anzahl> die URL oder Datei einmal öffnet und sie <Anzahl> Mal
+in einer Schleife abspielt, was normalerweise das ist, was man möchte.
 .
 .TP
 .B \-menu
@@ -6698,7 +6707,7 @@ unterstützen.
 .RSs
 .IPs <\-180\-180>
 initiale Farbtonstärke (Standard: 0.0)
-.IPs <\-100\-100>
+.IPs <\-10\-10>
 initiale Sättigung, wobei negative Werte zu negativer Chrominanz führen
 (Standard: 1.0)
 .RE

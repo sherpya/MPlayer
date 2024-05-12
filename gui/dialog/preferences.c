@@ -1242,7 +1242,7 @@ void ShowPreferences( void )
     if ( audio_driver_list )
      {
       char * name = gstrdup( audio_driver_list[0] );
-      char * sep = gstrchr( audio_driver_list[0],':' );
+      char * sep = gstrchr( name,':' );
       if ( sep ) *sep=0;
       if ( !gstrcmp( name,info->short_name ) ) old_audio_driver=c;
       free( name );

@@ -751,7 +751,7 @@ static GtkWidget *CreateFileSelect(void)
     GtkWidget *fsFNameListWindow;
     GtkWidget *hbuttonbox3;
 
-    GtkWidget *Up;
+    GtkWidget *up;
     GdkPixbuf *pixbuf;
 
     accel_group = gtk_accel_group_new();
@@ -781,12 +781,11 @@ static GtkWidget *CreateFileSelect(void)
     gtk_box_pack_start(GTK_BOX(hbox4), vseparator1, FALSE, TRUE, 0);
 
     pixbuf = gdk_pixbuf_new_from_inline(-1, dir_up_png, FALSE, NULL);
-    Up     = gtk_image_new_from_pixbuf(pixbuf);
+    up     = gtk_image_new_from_pixbuf(pixbuf);
     g_object_unref(pixbuf);
-    gtk_widget_show(Up);
 
     fsUp = gtk_button_new();
-    gtk_button_set_image(GTK_BUTTON(fsUp), Up);
+    gtk_button_set_image(GTK_BUTTON(fsUp), up);
     gtk_widget_show(fsUp);
     gtk_box_pack_start(GTK_BOX(hbox4), fsUp, FALSE, FALSE, 0);
     gtk_widget_set_size_request(fsUp, 60, -1);

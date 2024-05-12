@@ -823,7 +823,6 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_TurnOffXScreenSaver "关闭 XScreenSaver 屏保"
 #define MSGTR_GUI_TV "电视"
 #define MSGTR_GUI_Unknown "未知"
-#define MSGTR_GUI_Up "向上"
 #define MSGTR_GUI_URL "网络链接"
 #define MSGTR_GUI_VCD "VCD"
 #define MSGTR_GUI_Video "视频"
@@ -858,6 +857,7 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_WIN32_SelectTitleChapter "选择标题/章节"
 #define MSGTR_GUI_WIN32_ShowHide "显示/隐藏"
 #define MSGTR_GUI_WIN32_SubtitleOnOff "显示字幕开/关"
+#define MSGTR_GUI_WIN32_Up "向上"
 
 // ======================= video output drivers ========================
 

@@ -26,8 +26,9 @@
 
 #include <gtk/gtk.h>
 
-#if !GTK_CHECK_VERSION(2,6,0)
-#define gtk_button_set_image(button, image) gtk_button_set_label(button, MSGTR_GUI_ ## image)
+#if !GTK_CHECK_VERSION(2,8,14)
+/* a bug: unlabeled buttons do not show the image */
+#define gtk_button_set_image(button, image) do { gtk_button_set_label(button, ""); gtk_button_set_image(button, image); } while (0)
 #endif
 
 #if !GTK_CHECK_VERSION(2,14,0)

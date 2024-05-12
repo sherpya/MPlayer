@@ -1229,7 +1229,7 @@ void ShowPreferences( void )
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ),soft_vol );
  gtk_adjustment_set_value( HSExtraStereoMuladj,gtkAOExtraStereoMul );
  {
-  int    i = 0;
+  int    i = 0, c = 0;
   char * tmp[3]; tmp[2]="";
   old_audio_driver=-1;
   if ( CLADrivers ) gtk_clist_clear( GTK_CLIST( CLADrivers ) );
@@ -1244,9 +1244,10 @@ void ShowPreferences( void )
       char * name = gstrdup( audio_driver_list[0] );
       char * sep = gstrchr( audio_driver_list[0],':' );
       if ( sep ) *sep=0;
-      if ( !gstrcmp( name,info->short_name ) ) old_audio_driver=i - 1;
+      if ( !gstrcmp( name,info->short_name ) ) old_audio_driver=c;
       free( name );
      }
+    c++;
     tmp[0]=(char *)info->short_name; tmp[1]=(char *)info->name; gtk_clist_append( GTK_CLIST( CLADrivers ),tmp );
    }
   if ( old_audio_driver > -1 )

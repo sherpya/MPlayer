@@ -1261,6 +1261,7 @@ void ShowPreferences( void )
          !strncmp( ao_driver[0],"sdl",3 ) )
       gtk_widget_set_sensitive( AConfig,TRUE );
    }
+  else ao_driver[0] = NULL;
  }
 
 /* 2nd page */

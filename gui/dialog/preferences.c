@@ -1273,7 +1273,7 @@ void ShowPreferences( void )
  {
   int i = 0, c = 0;
   char * tmp[3]; tmp[2]="";
-  old_video_driver=0;
+  old_video_driver = -1;
   if ( CLVDrivers ) gtk_clist_clear( GTK_CLIST( CLVDrivers ) );
   while ( video_out_drivers[i] )
    if ( video_out_drivers[i++]->control( VOCTRL_GUISUPPORT,NULL ) == VO_TRUE )
@@ -1283,6 +1283,7 @@ void ShowPreferences( void )
      tmp[0]=(char *)video_out_drivers[i - 1]->info->short_name; tmp[1]=(char *)video_out_drivers[i - 1]->info->name;
      gtk_clist_append( GTK_CLIST( CLVDrivers ),tmp );
     }
+  vo_driver[0] = NULL;
   gtk_clist_select_row( GTK_CLIST( CLVDrivers ),old_video_driver,0 );
   gtk_clist_get_text( GTK_CLIST( CLVDrivers ),old_video_driver,0,(char **)&vo_driver );
   gtk_widget_set_sensitive( VConfig,FALSE );

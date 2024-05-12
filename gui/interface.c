@@ -643,18 +643,7 @@ int gui(int what, void *data)
 
         /* video opts */
 
-        if (!video_driver_list) {
-            int i = 0;
-
-            while (video_out_drivers[i++]) {
-                if (video_out_drivers[i - 1]->control(VOCTRL_GUISUPPORT, NULL) == VO_TRUE) {
-                    listSet(&video_driver_list, video_out_drivers[i - 1]->info->short_name);
-                    break;
-                }
-            }
-        }
-
-        if (!video_driver_list && !video_driver_list[0]) {
+        if (0) {
             gmp_msg(MSGT_GPLAYER, MSGL_FATAL, _(MSGTR_GUI_MSG_VideoOutError));
             mplayer(MPLAYER_EXIT_GUI, EXIT_ERROR, 0);
         }

@@ -3083,8 +3083,10 @@ int main(int argc, char *argv[])
 
 #ifdef CONFIG_GUI
     if (use_gui) {
+        current_module = "init_gui";
         guiInit();
         initialized_flags |= INITIALIZED_GUI;
+        current_module     = NULL;
         gui(GUI_SET_STATE, (void *)(intptr_t)(filename ? GUI_PLAY : GUI_STOP));
     }
 #endif

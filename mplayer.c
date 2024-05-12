@@ -4163,9 +4163,11 @@ goto_next_file:  // don't jump here after ao/vo/getch initialization!
     }
 
 #ifdef CONFIG_GUI
-    if (use_gui)
+    if (use_gui) {
+        gui(GUI_REDRAW, 0);
         if (guiInfo.MediumChanged != GUI_MEDIUM_SAME)
             gui(GUI_END_PLAY, 0);
+    }
 #endif
 
     if (

@@ -1192,7 +1192,7 @@ int guiPlaylist(int what, play_tree_t *playtree, m_config_t *config, int enqueue
 {
     play_tree_iter_t *pt_iter;
     const char *file;
-    int added = False;
+    unsigned int max, added = False, i = 0;
     plItem *curr;
 
     pt_iter = pt_iter_create(&playtree, config);
@@ -1206,9 +1206,16 @@ int guiPlaylist(int what, play_tree_t *playtree, m_config_t *config, int enqueue
         if (!enqueue)
             listMgr(PLAYLIST_DELETE, 0);
 
-        while ((file = pt_iter_get_next_file(pt_iter)))
+        max = m_config_get_option(config, "loop")->max;
+
+        while ((file = pt_iter_get_next_file(pt_iter))) {
             if (add_to_gui_playlist(file, PLAYLIST_ITEM_APPEND))
                 added = True;
+
+            /* -loop 0 file returns an infinite number of files, so limit it */
+            if (++i == max)
+                break;
+        }
 
         uiCurr();   // update filename
         guiInfo.PlaylistNext = True;

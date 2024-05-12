@@ -41,4 +41,9 @@
 #define GDK_KEY_Return GDK_Return
 #endif
 
+#if GTK_CHECK_VERSION(2,24,0)
+#define gtk_combo_box_entry_new_text gtk_combo_box_text_new_with_entry
+#define gtk_combo_box_append_text(combo_box, text) gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo_box), text)
+#endif
+
 #endif

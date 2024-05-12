@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "tools.h"
+#include "gui/gtk-compat.h"
 #include "gui/app/gui.h"
 
 #include "help_mp.h"

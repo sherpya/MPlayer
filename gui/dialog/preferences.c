@@ -1244,7 +1244,7 @@ void ShowPreferences( void )
       char * name = gstrdup( audio_driver_list[0] );
       char * sep = gstrchr( name,':' );
       if ( sep ) *sep=0;
-      if ( !gstrcmp( name,info->short_name ) ) old_audio_driver=c;
+      if ( !gstrcmp( name,info->short_name ) && !audio_driver_list[1] ) old_audio_driver=c;
       free( name );
      }
     c++;
@@ -1290,7 +1290,7 @@ void ShowPreferences( void )
   while ( video_out_drivers[i] )
    if ( video_out_drivers[i++]->control( VOCTRL_GUISUPPORT,NULL ) == VO_TRUE )
     {
-     if ( video_driver_list && !gstrcmp( video_driver_list[0],video_out_drivers[i - 1]->info->short_name ) ) old_video_driver=c;
+     if ( video_driver_list && !gstrcmp( video_driver_list[0],video_out_drivers[i - 1]->info->short_name ) && !video_driver_list[1] ) old_video_driver=c;
      c++;
      tmp[0]=(char *)video_out_drivers[i - 1]->info->short_name; tmp[1]=(char *)video_out_drivers[i - 1]->info->name;
      gtk_clist_append( GTK_CLIST( CLVDrivers ),tmp );

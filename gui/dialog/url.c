@@ -108,9 +108,9 @@ static GtkWidget *CreateURLDialog(void)
     GtkAccelGroup *accel_group;
 
     URLDialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_size_request(URLDialog, 384, -1);
     gtk_window_set_title(GTK_WINDOW(URLDialog), _(MSGTR_GUI_NetworkStreaming));
     gtk_window_set_position(GTK_WINDOW(URLDialog), GTK_WIN_POS_CENTER);
+    gtk_widget_set_size_request(URLDialog, 384, -1);
     gtk_window_set_wmclass(GTK_WINDOW(URLDialog), "Network", MPlayer);
 
     geometry.max_width  = gdk_screen_get_width(gtk_widget_get_screen(URLDialog));
@@ -144,10 +144,10 @@ static GtkWidget *CreateURLDialog(void)
 
     gtk_window_add_accel_group(GTK_WINDOW(URLDialog), accel_group);
 
-    g_signal_connect(G_OBJECT(URLDialog), "destroy", G_CALLBACK(gtk_widget_destroyed), &URLDialog);
     g_signal_connect(G_OBJECT(urlCombo), "changed", G_CALLBACK(entry_changed), Ok);
     g_signal_connect(G_OBJECT(Ok), "clicked", G_CALLBACK(button_clicked), Ok);
     g_signal_connect(G_OBJECT(Cancel), "clicked", G_CALLBACK(button_clicked), NULL);
+    g_signal_connect(G_OBJECT(URLDialog), "destroy", G_CALLBACK(gtk_widget_destroyed), &URLDialog);
 
     gtk_widget_grab_focus(urlCombo);
 

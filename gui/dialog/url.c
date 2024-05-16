@@ -99,9 +99,9 @@ static void button_clicked(GtkButton *button, gpointer user_data)
 
 static GtkWidget *CreateURLDialog(void)
 {
-    GtkWidget *vbox1;
-    GtkWidget *hbox1;
-    GtkWidget *hbuttonbox1;
+    GtkWidget *vbox;
+    GtkWidget *hbox;
+    GtkWidget *hbuttonbox;
     GtkWidget *Ok;
     GtkWidget *Cancel;
     GtkAccelGroup *accel_group;
@@ -118,20 +118,20 @@ static GtkWidget *CreateURLDialog(void)
     gtk_widget_realize(URLDialog);
     gtkAddIcon(URLDialog);
 
-    vbox1 = gtkAddVBox(gtkAddDialogFrame(URLDialog), 0);
-    hbox1 = gtkAddHBox(vbox1, 1);
-    gtkAddLabel("URL: ", hbox1);
+    vbox = gtkAddVBox(gtkAddDialogFrame(URLDialog), 0);
+    hbox = gtkAddHBox(vbox, 1);
+    gtkAddLabel("URL: ", hbox);
 
-    urlCombo = gtkAddCombo(hbox1);
+    urlCombo = gtkAddCombo(hbox);
 
-    gtkAddHSeparator(vbox1);
+    gtkAddHSeparator(vbox);
 
-    hbuttonbox1 = gtkAddHButtonBox(vbox1);
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(hbuttonbox1), GTK_BUTTONBOX_END);
-    gtk_box_set_spacing(GTK_BOX(hbuttonbox1), 10);
+    hbuttonbox = gtkAddHButtonBox(vbox);
+    gtk_button_box_set_layout(GTK_BUTTON_BOX(hbuttonbox), GTK_BUTTONBOX_END);
+    gtk_box_set_spacing(GTK_BOX(hbuttonbox), 10);
 
-    Ok     = gtkAddButton(_(MSGTR_GUI_Ok), hbuttonbox1);
-    Cancel = gtkAddButton(_(MSGTR_GUI_Cancel), hbuttonbox1);
+    Ok     = gtkAddButton(_(MSGTR_GUI_Ok), hbuttonbox);
+    Cancel = gtkAddButton(_(MSGTR_GUI_Cancel), hbuttonbox);
 
     gtk_widget_set_sensitive(Ok, FALSE);
 

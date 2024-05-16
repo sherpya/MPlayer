@@ -121,9 +121,9 @@ static GtkWidget *CreateURLDialog(void)
     gtkAddIcon(URLDialog);
 
     vbox = gtkAddVBox(gtkAddDialogFrame(URLDialog), 0);
+
     hbox = gtkAddHBox(vbox, 1);
     gtkAddLabel("URL: ", hbox);
-
     urlCombo = gtkAddCombo(hbox);
 
     gtkAddHSeparator(vbox);

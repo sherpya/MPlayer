@@ -153,10 +153,10 @@ void ShowURLDialog(void)
 
     item = listMgr(URLLIST_GET, 0);
 
-        while (item) {
-            gtk_combo_box_append_text(GTK_COMBO_BOX(urlCombo), item->url);
-            item = item->next;
-        }
+    while (item) {
+        gtk_combo_box_append_text(GTK_COMBO_BOX(urlCombo), item->url);
+        item = item->next;
+    }
 
     gtk_widget_show(URLDialog);
 }

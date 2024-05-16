@@ -16,6 +16,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/**
+ * @file
+ * @brief URL opening dialog
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,6 +42,15 @@ GtkWidget *URLDialog;
 
 static GtkWidget *urlCombo;
 
+/**
+ * @brief Enable the OK button if there is an entry
+ *        or disable it if there is no entry.
+ *
+ * @param combo_box object which received the signal
+ * @param user_data user data set when the signal handler was connected
+ *
+ * @note The @a user_data is the OK button widget.
+ */
 static void entry_changed(GtkComboBox *combo_box, gpointer user_data)
 {
     gboolean set = (*gtk_entry_get_text(gtkEntry(GTK_WIDGET(combo_box))) != 0);
@@ -97,6 +111,11 @@ static void button_clicked(GtkButton *button, gpointer user_data)
     gtk_widget_destroy(URLDialog);
 }
 
+/**
+ * @brief Create the URL dialog.
+ *
+ * @return pointer to the new URL dialog window
+ */
 static GtkWidget *CreateURLDialog(void)
 {
     GdkGeometry geometry;
@@ -154,6 +173,9 @@ static GtkWidget *CreateURLDialog(void)
     return URLDialog;
 }
 
+/**
+ * @brief Create and show the URL dialog.
+ */
 void ShowURLDialog(void)
 {
     urlItem *item;

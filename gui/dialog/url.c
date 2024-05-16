@@ -158,9 +158,10 @@ void ShowURLDialog(void)
 {
     urlItem *item;
 
-    if (URLDialog)
+    if (URLDialog) {
         gtkRaise(URLDialog);
-    else
+        return;
+    } else
         URLDialog = CreateURLDialog();
 
     item = listMgr(URLLIST_GET, 0);

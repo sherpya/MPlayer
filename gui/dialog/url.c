@@ -99,13 +99,13 @@ static void button_clicked(GtkButton *button, gpointer user_data)
 
 static GtkWidget *CreateURLDialog(void)
 {
+    GdkGeometry geometry;
     GtkWidget *vbox;
     GtkWidget *hbox;
     GtkWidget *hbuttonbox;
     GtkWidget *Ok;
     GtkWidget *Cancel;
     GtkAccelGroup *accel_group;
-    GdkGeometry geometry;
 
     accel_group = gtk_accel_group_new();
 
@@ -114,6 +114,10 @@ static GtkWidget *CreateURLDialog(void)
     gtk_window_set_title(GTK_WINDOW(URLDialog), _(MSGTR_GUI_NetworkStreaming));
     gtk_window_set_position(GTK_WINDOW(URLDialog), GTK_WIN_POS_CENTER);
     gtk_window_set_wmclass(GTK_WINDOW(URLDialog), "Network", MPlayer);
+
+    geometry.max_width  = gdk_screen_get_width(gtk_widget_get_screen(URLDialog));
+    geometry.max_height = -1;
+    gtk_window_set_geometry_hints(GTK_WINDOW(URLDialog), NULL, &geometry, GDK_HINT_MAX_SIZE);
 
     gtk_widget_realize(URLDialog);
     gtkAddIcon(URLDialog);
@@ -134,10 +138,6 @@ static GtkWidget *CreateURLDialog(void)
     Cancel = gtkAddButton(_(MSGTR_GUI_Cancel), hbuttonbox);
 
     gtk_widget_set_sensitive(Ok, FALSE);
-
-    geometry.max_width  = gdk_screen_get_width(gtk_widget_get_screen(URLDialog));
-    geometry.max_height = -1;
-    gtk_window_set_geometry_hints(GTK_WINDOW(URLDialog), NULL, &geometry, GDK_HINT_MAX_SIZE);
 
     gtk_widget_add_accelerator(Ok, "clicked", accel_group, GDK_KEY_Return, 0, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(Cancel, "clicked", accel_group, GDK_KEY_Escape, 0, GTK_ACCEL_VISIBLE);

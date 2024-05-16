@@ -37,6 +37,14 @@ GtkWidget *URLDialog;
 
 static GtkWidget *urlCombo;
 
+static void entry_changed(GtkComboBox *combo_box, gpointer user_data)
+{
+    gboolean set = (*gtk_entry_get_text(gtkEntry(GTK_WIDGET(combo_box))) != 0);
+
+    if (gtk_widget_get_sensitive(GTK_WIDGET(user_data)) ^ set)
+        gtk_widget_set_sensitive(GTK_WIDGET(user_data), set);
+}
+
 /**
  * @brief Add the entered URL to the URL list and stream it,
  *        if the button clicked is the OK button
@@ -55,7 +63,7 @@ static void button_clicked(GtkButton *button, gpointer user_data)
     if (user_data) {
         char *str = strdup(gtk_entry_get_text(gtkEntry(urlCombo)));
 
-        if (str) {
+        if (str && *str) {
             if (!strstr(str, "://")) {
                 char *tmp = malloc(strlen(str) + 8);
 
@@ -125,6 +133,8 @@ static GtkWidget *CreateURLDialog(void)
     Ok     = gtkAddButton(_(MSGTR_GUI_Ok), hbuttonbox1);
     Cancel = gtkAddButton(_(MSGTR_GUI_Cancel), hbuttonbox1);
 
+    gtk_widget_set_sensitive(Ok, FALSE);
+
     geometry.max_width  = gdk_screen_get_width(gtk_widget_get_screen(URLDialog));
     geometry.max_height = -1;
     gtk_window_set_geometry_hints(GTK_WINDOW(URLDialog), NULL, &geometry, GDK_HINT_MAX_SIZE);
@@ -133,6 +143,7 @@ static GtkWidget *CreateURLDialog(void)
     gtk_widget_add_accelerator(Cancel, "clicked", accel_group, GDK_KEY_Escape, 0, GTK_ACCEL_VISIBLE);
 
     g_signal_connect(G_OBJECT(URLDialog), "destroy", G_CALLBACK(gtk_widget_destroyed), &URLDialog);
+    g_signal_connect(G_OBJECT(urlCombo), "changed", G_CALLBACK(entry_changed), Ok);
     g_signal_connect(G_OBJECT(Ok), "clicked", G_CALLBACK(button_clicked), Ok);
     g_signal_connect(G_OBJECT(Cancel), "clicked", G_CALLBACK(button_clicked), NULL);
 

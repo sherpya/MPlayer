@@ -35,6 +35,10 @@
 #define gtk_widget_get_window(widget) widget->window
 #endif
 
+#if !GTK_CHECK_VERSION(2,18,0)
+#define gtk_widget_get_sensitive(widget) GTK_WIDGET_SENSITIVE(widget)
+#endif
+
 #if !GTK_CHECK_VERSION(2,22,0)
 #define GDK_KEY_BackSpace GDK_BackSpace
 #define GDK_KEY_Escape GDK_Escape

@@ -107,8 +107,6 @@ static GtkWidget *CreateURLDialog(void)
     GtkWidget *Cancel;
     GtkAccelGroup *accel_group;
 
-    accel_group = gtk_accel_group_new();
-
     URLDialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request(URLDialog, 384, -1);
     gtk_window_set_title(GTK_WINDOW(URLDialog), _(MSGTR_GUI_NetworkStreaming));
@@ -139,8 +137,12 @@ static GtkWidget *CreateURLDialog(void)
 
     gtk_widget_set_sensitive(Ok, FALSE);
 
+    accel_group = gtk_accel_group_new();
+
     gtk_widget_add_accelerator(Ok, "clicked", accel_group, GDK_KEY_Return, 0, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(Cancel, "clicked", accel_group, GDK_KEY_Escape, 0, GTK_ACCEL_VISIBLE);
+
+    gtk_window_add_accel_group(GTK_WINDOW(URLDialog), accel_group);
 
     g_signal_connect(G_OBJECT(URLDialog), "destroy", G_CALLBACK(gtk_widget_destroyed), &URLDialog);
     g_signal_connect(G_OBJECT(urlCombo), "changed", G_CALLBACK(entry_changed), Ok);
@@ -148,7 +150,6 @@ static GtkWidget *CreateURLDialog(void)
     g_signal_connect(G_OBJECT(Cancel), "clicked", G_CALLBACK(button_clicked), NULL);
 
     gtk_widget_grab_focus(urlCombo);
-    gtk_window_add_accel_group(GTK_WINDOW(URLDialog), accel_group);
 
     return URLDialog;
 }

@@ -160,7 +160,7 @@ GtkWidget *fsOk;
 GtkWidget *fsUp;
 GtkWidget *fsCancel;
 GtkWidget *fsPathCombo;
-GList *fsPathList;
+GSList *fsPathList;
 GHashTable *fsPathTable;
 GtkWidget *fsFilterCombo;
 
@@ -205,13 +205,13 @@ static gchar *get_current_dir_name_utf8(void)
     return utf8dir;
 }
 
-static GList *fs_AddPath(GList *list, gpointer data, GtkPositionType pos)
+static GSList *fs_AddPath(GSList *list, gpointer data, GtkPositionType pos)
 {
-    if (!g_list_find_custom(list, data, (GCompareFunc)strcmp)) {
+    if (!g_slist_find_custom(list, data, (GCompareFunc)strcmp)) {
         if (pos == GTK_POS_TOP)
-            list = g_list_prepend(list, data);
+            list = g_slist_prepend(list, data);
         else
-            list = g_list_append(list, data);
+            list = g_slist_append(list, data);
     }
 
     return list;
@@ -734,9 +734,9 @@ static void fs_Destroy(void)
     g_hash_table_destroy(fsPathTable);
 
 WARN_OFF(cast_function_type)
-    g_list_foreach(fsPathList, (GFunc)g_free, NULL);  // deliberate cast between incompatible function types
+    g_slist_foreach(fsPathList, (GFunc)g_free, NULL);  // deliberate cast between incompatible function types
 WARN_ON
-    g_list_free(fsPathList);
+    g_slist_free(fsPathList);
     fsPathList = NULL;
 }
 
@@ -850,7 +850,7 @@ void ShowFileSelector(int type)
     char *tmp = NULL, *dir = NULL;
     const gchar *fname;
     struct stat f;
-    GList *list;
+    GSList *list;
 
     if (FileSelector)
         gtkRaise(FileSelector);

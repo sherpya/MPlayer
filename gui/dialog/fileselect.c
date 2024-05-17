@@ -834,7 +834,7 @@ static GtkWidget *CreateFileSelect(void)
     g_signal_connect(G_OBJECT(fsPathCombo), "changed", G_CALLBACK(fs_fsPathCombo_changed), fsPathCombo);
     g_signal_connect(G_OBJECT(fsPathCombo), "key-release-event", G_CALLBACK(fs_key_release_event), NULL);
     g_signal_connect(G_OBJECT(fsUp), "clicked", G_CALLBACK(fs_Up_released), fsFNameList);
-    g_signal_connect(G_OBJECT(fsOk), "clicked", G_CALLBACK(fs_Ok_released), fsPathCombo);
+    g_signal_connect(G_OBJECT(fsOk), "clicked", G_CALLBACK(fs_Ok_released), NULL);
     g_signal_connect(G_OBJECT(fsCancel), "clicked", G_CALLBACK(fs_Cancel_released), NULL);
     g_signal_connect(G_OBJECT(fsFNameList), "select-row", G_CALLBACK(fs_fsFNameList_select_row), NULL);
     g_signal_connect(G_OBJECT(fsFNameList), "event", G_CALLBACK(fs_fsFNameList_event), NULL);

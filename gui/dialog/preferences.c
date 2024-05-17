@@ -605,15 +605,15 @@ static GtkWidget * CreatePreferences( void )
 #ifdef CONFIG_FREETYPE
   GtkWidget * vbox11;
   GSList    * Font_group = NULL;
-  GList     * CBFontEncoding_items = NULL;
+  GSList    * CBFontEncoding_items = NULL;
 #else
   GtkWidget * hbox7;
 #endif
 #ifdef CONFIG_ICONV
   iconv_t     cd;
-  GList     * CBSubEncoding_items = NULL;
+  GSList    * CBSubEncoding_items = NULL;
 #endif
-  GList *list;
+  GSList *list;
   GtkWidget * vbox7;
   GtkWidget * vbox8;
   GtkWidget * table1;
@@ -849,7 +849,7 @@ static GtkWidget * CreatePreferences( void )
 #ifdef CONFIG_ICONV
   gtk_misc_set_alignment( GTK_MISC( label ),0,0 );
   CBSubEncoding=gtkAddCombo(vbox10);
-  CBSubEncoding_items=g_list_append( CBSubEncoding_items,_(MSGTR_GUI__Default_) );
+  CBSubEncoding_items = g_slist_append(CBSubEncoding_items, _(MSGTR_GUI__Default_));
   {
    int i, listed=(sub_cp == NULL);
 
@@ -860,13 +860,13 @@ static GtkWidget * CreatePreferences( void )
     if (cd != (iconv_t) -1)
     {
      iconv_close(cd);
-     CBSubEncoding_items=g_list_append( CBSubEncoding_items,_(lEncoding[i].comment) );
+     CBSubEncoding_items = g_slist_append(CBSubEncoding_items, _(lEncoding[i].comment));
 
      if ( !listed )
       if ( av_strcasecmp ( lEncoding[i].name, sub_cp ) == 0 ) listed=True;
     }
    }
-   if ( !listed ) CBSubEncoding_items=g_list_insert( CBSubEncoding_items,sub_cp,1 );
+   if (!listed) CBSubEncoding_items = g_slist_insert(CBSubEncoding_items, sub_cp, 1);
   }
 
   list = CBSubEncoding_items;
@@ -877,7 +877,7 @@ static GtkWidget * CreatePreferences( void )
     list = list->next;
   }
 
-  g_list_free( CBSubEncoding_items );
+  g_slist_free(CBSubEncoding_items);
 
   gtkEntrySetEditable(CBSubEncoding, FALSE);
 #endif
@@ -969,13 +969,13 @@ static GtkWidget * CreatePreferences( void )
 #endif
     if ( append )
     {
-     CBFontEncoding_items=g_list_append( CBFontEncoding_items,_(lEncoding[i].comment) );
+     CBFontEncoding_items = g_slist_append(CBFontEncoding_items, _(lEncoding[i].comment));
 
      if ( !listed )
       if ( av_strcasecmp ( lEncoding[i].name, subtitle_font_encoding ) == 0 ) listed=True;
     }
    }
-   if ( !listed ) CBFontEncoding_items=g_list_insert( CBFontEncoding_items,subtitle_font_encoding,1 );
+   if (!listed) CBFontEncoding_items = g_slist_insert(CBFontEncoding_items, subtitle_font_encoding, 1);
   }
 
   list = CBFontEncoding_items;
@@ -986,7 +986,7 @@ static GtkWidget * CreatePreferences( void )
     list = list->next;
   }
 
-  g_list_free( CBFontEncoding_items );
+  g_slist_free(CBFontEncoding_items);
 
   gtkEntrySetEditable(CBFontEncoding, FALSE);
 
@@ -1212,7 +1212,7 @@ static GtkWidget * CreatePreferences( void )
 
 void ShowPreferences( void )
 {
- GList *list;
+ GSList *list;
 
  if ( Preferences ) gtkRaise( Preferences );
    else Preferences=CreatePreferences();
@@ -1391,15 +1391,15 @@ void ShowPreferences( void )
  if ( index_mode == 1 ) gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBIndex ),1 );
  {
   int     i;
-  GList * Items = NULL;
+  GSList * Items = NULL;
   const char *name;
 
-  Items=g_list_append( Items,_(MSGTR_GUI__Default_) );
+  Items = g_slist_append(Items, _(MSGTR_GUI__Default_));
   name = Items->data;
 
   for( i=0;mpcodecs_vd_drivers[i];i++ )
    {
-    Items=g_list_append( Items,(char *)mpcodecs_vd_drivers[i]->info->name );
+    Items = g_slist_append(Items, (char *) mpcodecs_vd_drivers[i]->info->name);
     if ( video_fm_list && !gstrcmp( video_fm_list[0],mpcodecs_vd_drivers[i]->info->short_name ) ) name=mpcodecs_vd_drivers[i]->info->name;
    }
 
@@ -1413,20 +1413,20 @@ void ShowPreferences( void )
 
   gtk_entry_set_text(gtkEntry(CBVideoFamily), name);
 
-  g_list_free( Items );
+  g_slist_free(Items);
  }
 
  {
   int     i;
-  GList * Items = NULL;
+  GSList * Items = NULL;
   const char *name;
 
-  Items=g_list_append( Items,_(MSGTR_GUI__Default_) );
+  Items = g_slist_append(Items, _(MSGTR_GUI__Default_));
   name = Items->data;
 
   for( i=0;mpcodecs_ad_drivers[i];i++ )
    {
-    Items=g_list_append( Items,(char *)mpcodecs_ad_drivers[i]->info->name );
+    Items = g_slist_append(Items, (char *) mpcodecs_ad_drivers[i]->info->name);
     if ( audio_fm_list && !gstrcmp( audio_fm_list[0],mpcodecs_ad_drivers[i]->info->short_name ) ) name=mpcodecs_ad_drivers[i]->info->name;
    }
 
@@ -1440,7 +1440,7 @@ void ShowPreferences( void )
 
   gtk_entry_set_text(gtkEntry(CBAudioFamily), name);
 
-  g_list_free( Items );
+  g_slist_free(Items);
  }
 
 /* 6th page */
@@ -1532,106 +1532,106 @@ void ShowPreferences( void )
 }
 
 #ifdef CONFIG_OSS_AUDIO
-static GList *appendOSSDevices(GList *l)
+static GSList *appendOSSDevices (GSList *l)
 {
   /* careful! the current implementation allows only string constants! */
-  l = g_list_append(l, (gpointer)"/dev/dsp");
+  l = g_slist_append(l, "/dev/dsp");
   if (gtkAOOSSDevice && strncmp(gtkAOOSSDevice, "/dev/sound", 10) == 0) {
-    l = g_list_append(l, (gpointer)"/dev/sound/dsp0");
-    l = g_list_append(l, (gpointer)"/dev/sound/dsp1");
-    l = g_list_append(l, (gpointer)"/dev/sound/dsp2");
-    l = g_list_append(l, (gpointer)"/dev/sound/dsp3");
+    l = g_slist_append(l, "/dev/sound/dsp0");
+    l = g_slist_append(l, "/dev/sound/dsp1");
+    l = g_slist_append(l, "/dev/sound/dsp2");
+    l = g_slist_append(l, "/dev/sound/dsp3");
   } else {
-    l = g_list_append(l, (gpointer)"/dev/dsp0");
-    l = g_list_append(l, (gpointer)"/dev/dsp1");
-    l = g_list_append(l, (gpointer)"/dev/dsp2");
-    l = g_list_append(l, (gpointer)"/dev/dsp3");
+    l = g_slist_append(l, "/dev/dsp0");
+    l = g_slist_append(l, "/dev/dsp1");
+    l = g_slist_append(l, "/dev/dsp2");
+    l = g_slist_append(l, "/dev/dsp3");
   }
 #ifdef CONFIG_DXR3
-  l = g_list_append(l, (gpointer)"/dev/em8300_ma");
-  l = g_list_append(l, (gpointer)"/dev/em8300_ma-0");
-  l = g_list_append(l, (gpointer)"/dev/em8300_ma-1");
-  l = g_list_append(l, (gpointer)"/dev/em8300_ma-2");
-  l = g_list_append(l, (gpointer)"/dev/em8300_ma-3");
+  l = g_slist_append(l, "/dev/em8300_ma");
+  l = g_slist_append(l, "/dev/em8300_ma-0");
+  l = g_slist_append(l, "/dev/em8300_ma-1");
+  l = g_slist_append(l, "/dev/em8300_ma-2");
+  l = g_slist_append(l, "/dev/em8300_ma-3");
 #endif
   return l;
 }
 
-static GList *appendOSSMixers(GList *l)
+static GSList *appendOSSMixers (GSList *l)
 {
   /* careful! the current implementation allows only string constants! */
-  l = g_list_append(l, (gpointer)"/dev/mixer");
+  l = g_slist_append(l, "/dev/mixer");
   if (gtkAOOSSMixer && strncmp(gtkAOOSSMixer, "/dev/sound", 10) == 0) {
-    l = g_list_append(l, (gpointer)"/dev/sound/mixer0");
-    l = g_list_append(l, (gpointer)"/dev/sound/mixer1");
-    l = g_list_append(l, (gpointer)"/dev/sound/mixer2");
-    l = g_list_append(l, (gpointer)"/dev/sound/mixer3");
+    l = g_slist_append(l, "/dev/sound/mixer0");
+    l = g_slist_append(l, "/dev/sound/mixer1");
+    l = g_slist_append(l, "/dev/sound/mixer2");
+    l = g_slist_append(l, "/dev/sound/mixer3");
   } else {
-    l = g_list_append(l, (gpointer)"/dev/mixer0");
-    l = g_list_append(l, (gpointer)"/dev/mixer1");
-    l = g_list_append(l, (gpointer)"/dev/mixer2");
-    l = g_list_append(l, (gpointer)"/dev/mixer3");
+    l = g_slist_append(l, "/dev/mixer0");
+    l = g_slist_append(l, "/dev/mixer1");
+    l = g_slist_append(l, "/dev/mixer2");
+    l = g_slist_append(l, "/dev/mixer3");
   }
   return l;
 }
 
-static GList *appendOSSMixerChannels(GList *l)
+static GSList *appendOSSMixerChannels (GSList *l)
 {
-  l = g_list_append(l, (gpointer)"vol");
-  l = g_list_append(l, (gpointer)"pcm");
-  l = g_list_append(l, (gpointer)"line");
+  l = g_slist_append(l, "vol");
+  l = g_slist_append(l, "pcm");
+  l = g_slist_append(l, "line");
   return l;
 }
 #endif
 
 #ifdef CONFIG_ALSA
-static GList *appendALSADevices(GList *l)
+static GSList *appendALSADevices (GSList *l)
 {
-  l = g_list_append(l, (gpointer)"default");
-  l = g_list_append(l, (gpointer)"hw=0.0");
-  l = g_list_append(l, (gpointer)"hw=0.1");
-  l = g_list_append(l, (gpointer)"hw=0.2");
-  l = g_list_append(l, (gpointer)"surround40");
-  l = g_list_append(l, (gpointer)"surround51");
-  l = g_list_append(l, (gpointer)"plug=surround40");
-  l = g_list_append(l, (gpointer)"plug=surround51");
+  l = g_slist_append(l, "default");
+  l = g_slist_append(l, "hw=0.0");
+  l = g_slist_append(l, "hw=0.1");
+  l = g_slist_append(l, "hw=0.2");
+  l = g_slist_append(l, "surround40");
+  l = g_slist_append(l, "surround51");
+  l = g_slist_append(l, "plug=surround40");
+  l = g_slist_append(l, "plug=surround51");
   return l;
 }
 
-static GList *appendALSAMixers(GList *l)
+static GSList *appendALSAMixers (GSList *l)
 {
-  l = g_list_append(l, (gpointer)"default");
+  l = g_slist_append(l, "default");
   return l;
 }
 
-static GList *appendALSAMixerChannels(GList *l)
+static GSList *appendALSAMixerChannels (GSList *l)
 {
-  l = g_list_append(l, (gpointer)"Master");
-  l = g_list_append(l, (gpointer)"Line");
-  l = g_list_append(l, (gpointer)"PCM");
-  l = g_list_append(l, (gpointer)"PCM,1");
+  l = g_slist_append(l, "Master");
+  l = g_slist_append(l, "Line");
+  l = g_slist_append(l, "PCM");
+  l = g_slist_append(l, "PCM,1");
   return l;
 }
 #endif
 
 #ifdef CONFIG_SDL
-static GList *appendSDLDevices(GList *l)
+static GSList *appendSDLDevices (GSList *l)
 {
-  l = g_list_append(l, (gpointer)"alsa");
-  l = g_list_append(l, (gpointer)"arts");
-  l = g_list_append(l, (gpointer)"esd");
-  l = g_list_append(l, (gpointer)"jack");
-  l = g_list_append(l, (gpointer)"oss");
-  l = g_list_append(l, (gpointer)"nas");
+  l = g_slist_append(l, "alsa");
+  l = g_slist_append(l, "arts");
+  l = g_slist_append(l, "esd");
+  l = g_slist_append(l, "jack");
+  l = g_slist_append(l, "oss");
+  l = g_slist_append(l, "nas");
   return l;
 }
 #endif
 
 #ifdef CONFIG_ESD
-static GList *appendESDDevices(GList *l)
+static GSList *appendESDDevices (GSList *l)
 {
-  l = g_list_append(l, (gpointer)"Enter Remote IP");
-  l = g_list_append(l, (gpointer)"Use Software Mixer");
+  l = g_slist_append(l, "Enter Remote IP");
+  l = g_slist_append(l, "Use Software Mixer");
   return l;
 }
 #endif
@@ -1712,7 +1712,7 @@ static void audioButton(GtkButton *button, gpointer user_data) {
 }
 
 static GtkWidget *CreateAudioConfig( void ) {
-  GList *items = NULL, *list;
+  GSList *items = NULL, *list;
   GtkWidget *vbox;
   GtkWidget *table;
   GtkWidget *label;
@@ -1739,7 +1739,7 @@ static GtkWidget *CreateAudioConfig( void ) {
 
   CBAudioDevice = gtkAddCombo(NULL);
   gtk_table_attach(GTK_TABLE(table), CBAudioDevice, 1, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  items = g_list_append(items,(gpointer)_(MSGTR_GUI_DefaultSetting));
+  items = g_slist_append(items, _(MSGTR_GUI_DefaultSetting));
 #ifdef CONFIG_OSS_AUDIO
   if (strncmp(ao_driver[0], "oss", 3) == 0)
     items = appendOSSDevices(items);
@@ -1765,7 +1765,7 @@ static GtkWidget *CreateAudioConfig( void ) {
     list = list->next;
   }
 
-  g_list_free(items);
+  g_slist_free(items);
   items = NULL;
 
   label = gtkAddLabelColon(_(MSGTR_GUI_Mixer), NULL);
@@ -1773,7 +1773,7 @@ static GtkWidget *CreateAudioConfig( void ) {
 
   CBAudioMixer = gtkAddCombo(NULL);
   gtk_table_attach(GTK_TABLE(table), CBAudioMixer, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  items = g_list_append(items, (gpointer)_(MSGTR_GUI_DefaultSetting));
+  items = g_slist_append(items, _(MSGTR_GUI_DefaultSetting));
 #ifdef CONFIG_OSS_AUDIO
   if (strncmp(ao_driver[0], "oss", 3) == 0)
     items = appendOSSMixers(items);
@@ -1791,7 +1791,7 @@ static GtkWidget *CreateAudioConfig( void ) {
     list = list->next;
   }
 
-  g_list_free(items);
+  g_slist_free(items);
   items = NULL;
 
   label = gtkAddLabelColon(_(MSGTR_GUI_MixerChannel), NULL);
@@ -1799,7 +1799,7 @@ static GtkWidget *CreateAudioConfig( void ) {
 
   CBAudioMixerChannel = gtkAddCombo(NULL);
   gtk_table_attach(GTK_TABLE(table), CBAudioMixerChannel, 1, 2, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  items = g_list_append(items, (gpointer)_(MSGTR_GUI_DefaultSetting));
+  items = g_slist_append(items, _(MSGTR_GUI_DefaultSetting));
 #ifdef CONFIG_OSS_AUDIO
   if (strncmp(ao_driver[0], "oss", 3) == 0)
     items = appendOSSMixerChannels(items);
@@ -1817,7 +1817,7 @@ static GtkWidget *CreateAudioConfig( void ) {
     list = list->next;
   }
 
-  g_list_free(items);
+  g_slist_free(items);
 
   gtkAddHSeparator(vbox);
 

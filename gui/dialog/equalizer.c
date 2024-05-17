@@ -524,17 +524,17 @@ GtkWidget * CreateEquConfig( void );
 
 void ShowEquConfig( void )
 {
- GList * Items = NULL, *list;
+ GSList *Items = NULL, *list;
 
  if ( EquConfig ) gtkRaise( EquConfig );
     else EquConfig=CreateEquConfig();
 
- Items=g_list_append( Items,(gpointer)_(MSGTR_GUI_FrontRight)  );
- Items=g_list_append( Items,(gpointer)_(MSGTR_GUI_FrontLeft) );
- Items=g_list_append( Items,(gpointer)_(MSGTR_GUI_RearRight) );
- Items=g_list_append( Items,(gpointer)_(MSGTR_GUI_RearLeft) );
- Items=g_list_append( Items,(gpointer)_(MSGTR_GUI_Center) );
- Items=g_list_append( Items,(gpointer)_(MSGTR_GUI_Bass) );
+ Items = g_slist_append(Items, _(MSGTR_GUI_FrontRight));
+ Items = g_slist_append(Items, _(MSGTR_GUI_FrontLeft));
+ Items = g_slist_append(Items, _(MSGTR_GUI_RearRight));
+ Items = g_slist_append(Items, _(MSGTR_GUI_RearLeft));
+ Items = g_slist_append(Items, _(MSGTR_GUI_Center));
+ Items = g_slist_append(Items, _(MSGTR_GUI_Bass));
 
  list = Items;
 
@@ -550,7 +550,7 @@ void ShowEquConfig( void )
    list = list->next;
  }
 
- g_list_free( Items );
+ g_slist_free(Items);
 
  gtk_entry_set_text(gtkEntry(CBChannel1), gtkEquChannel1); gtkEntrySetEditable(CBChannel1, FALSE);
  gtk_entry_set_text(gtkEntry(CBChannel2), gtkEquChannel2); gtkEntrySetEditable(CBChannel2, FALSE);

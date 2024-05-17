@@ -80,8 +80,8 @@ static GtkWidget * CLVDrivers;
        GtkWidget * prEDVDDevice;
        GtkWidget * prECDRomDevice;
 
-static GtkWidget * CBVFM;
-static GtkWidget * CBAFM;
+static GtkWidget * CBVideoFamily;
+static GtkWidget * CBAudioFamily;
 static GtkWidget * CBAudioEqualizer;
 //static GtkWidget * CBSurround;
 static GtkWidget * CBExtraStereo;
@@ -367,7 +367,7 @@ static void prButton( GtkButton * button, gpointer user_data )
 
         {
          int i;
-         const char *tmp = gtk_entry_get_text(gtkEntry(CBVFM));
+         const char *tmp = gtk_entry_get_text(gtkEntry(CBVideoFamily));
          for( i=0;mpcodecs_vd_drivers[i];i++ )
           if ( !gstrcmp( tmp,mpcodecs_vd_drivers[i]->info->name ) )
            { listSet( &video_fm_list,mpcodecs_vd_drivers[i]->info->short_name ); break; }
@@ -375,7 +375,7 @@ static void prButton( GtkButton * button, gpointer user_data )
 
         {
          int i;
-         const char *tmp = gtk_entry_get_text(gtkEntry(CBAFM));
+         const char *tmp = gtk_entry_get_text(gtkEntry(CBAudioFamily));
          for( i=0;mpcodecs_ad_drivers[i];i++ )
           if ( !gstrcmp( tmp,mpcodecs_ad_drivers[i]->info->name ) )
            { listSet( &audio_fm_list,mpcodecs_ad_drivers[i]->info->short_name ); break; }
@@ -1046,17 +1046,17 @@ static GtkWidget * CreatePreferences( void )
 
   gtkAddLabelColon( _(MSGTR_GUI_CodecFamilyVideo),hbox5 );
 
-  CBVFM=gtkAddCombo(hbox5);
+  CBVideoFamily = gtkAddCombo(hbox5);
 
-  gtkEntrySetEditable(CBVFM, FALSE);
+  gtkEntrySetEditable(CBVideoFamily, FALSE);
 
   hbox5=gtkAddHBox( vbox604,1 );
 
   gtkAddLabelColon( _(MSGTR_GUI_CodecFamilyAudio),hbox5 );
 
-  CBAFM=gtkAddCombo(hbox5);
+  CBAudioFamily = gtkAddCombo(hbox5);
 
-  gtkEntrySetEditable(CBAFM, FALSE);
+  gtkEntrySetEditable(CBAudioFamily, FALSE);
 
   label=gtkAddLabel( _(MSGTR_GUI_Demuxers_Codecs),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),4 ),label );
@@ -1407,11 +1407,11 @@ void ShowPreferences( void )
 
   while (list)
   {
-    gtk_combo_box_append_text(GTK_COMBO_BOX(CBVFM), list->data);
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBVideoFamily), list->data);
     list = list->next;
   }
 
-  gtk_entry_set_text(gtkEntry(CBVFM), name);
+  gtk_entry_set_text(gtkEntry(CBVideoFamily), name);
 
   g_list_free( Items );
  }
@@ -1434,11 +1434,11 @@ void ShowPreferences( void )
 
   while (list)
   {
-    gtk_combo_box_append_text(GTK_COMBO_BOX(CBAFM), list->data);
+    gtk_combo_box_append_text(GTK_COMBO_BOX(CBAudioFamily), list->data);
     list = list->next;
   }
 
-  gtk_entry_set_text(gtkEntry(CBAFM), name);
+  gtk_entry_set_text(gtkEntry(CBAudioFamily), name);
 
   g_list_free( Items );
  }

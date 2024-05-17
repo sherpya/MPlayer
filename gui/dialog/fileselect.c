@@ -160,7 +160,7 @@ GtkWidget *fsOk;
 GtkWidget *fsUp;
 GtkWidget *fsCancel;
 GtkWidget *fsPathCombo;
-GList *fsTopList_items;
+GList *fsPathList;
 GHashTable *fsPathTable;
 GtkWidget *fsFilterCombo;
 
@@ -222,7 +222,7 @@ static void fs_AddPathUtf8(const char *name, GtkPositionType pos)
     gchar *utf8name;
 
     utf8name = g_filename_display_name(name);
-    fsTopList_items = fs_AddPath(fsTopList_items, utf8name, pos);
+    fsPathList = fs_AddPath(fsPathList, utf8name, pos);
     g_hash_table_insert(fsPathTable, strdup(utf8name), strdup(name));
 }
 
@@ -734,10 +734,10 @@ static void fs_Destroy(void)
     g_hash_table_destroy(fsPathTable);
 
 WARN_OFF(cast_function_type)
-    g_list_foreach(fsTopList_items, (GFunc)g_free, NULL);  // deliberate cast between incompatible function types
+    g_list_foreach(fsPathList, (GFunc)g_free, NULL);  // deliberate cast between incompatible function types
 WARN_ON
-    g_list_free(fsTopList_items);
-    fsTopList_items = NULL;
+    g_list_free(fsPathList);
+    fsPathList = NULL;
 }
 
 static GtkWidget *CreateFileSelect(void)
@@ -963,17 +963,17 @@ void ShowFileSelector(int type)
     if (fname)
         fs_AddPathUtf8(fname, GTK_POS_BOTTOM);
     else
-        fsTopList_items = fs_AddPath(fsTopList_items, g_strdup("/home"), GTK_POS_BOTTOM);
+        fsPathList = fs_AddPath(fsPathList, g_strdup("/home"), GTK_POS_BOTTOM);
 
     if (stat("/media", &f) == 0)
-        fsTopList_items = fs_AddPath(fsTopList_items, g_strdup("/media"), GTK_POS_BOTTOM);
+        fsPathList = fs_AddPath(fsPathList, g_strdup("/media"), GTK_POS_BOTTOM);
 
     if (stat("/mnt", &f) == 0)
-        fsTopList_items = fs_AddPath(fsTopList_items, g_strdup("/mnt"), GTK_POS_BOTTOM);
+        fsPathList = fs_AddPath(fsPathList, g_strdup("/mnt"), GTK_POS_BOTTOM);
 
-    fsTopList_items = fs_AddPath(fsTopList_items, g_strdup("/"), GTK_POS_BOTTOM);
+    fsPathList = fs_AddPath(fsPathList, g_strdup("/"), GTK_POS_BOTTOM);
 
-    list = fsTopList_items;
+    list = fsPathList;
     gtk_list_store_clear(GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(fsPathCombo))));
 
     while (list) {

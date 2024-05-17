@@ -221,7 +221,7 @@ static void fs_AddPathUtf8(const char *name, GtkPositionType pos)
 {
     gchar *utf8name;
 
-    utf8name = g_filename_display_name(name);
+    utf8name   = g_filename_display_name(name);
     fsPathList = fs_AddPath(fsPathList, utf8name, pos);
     g_hash_table_insert(fsPathTable, strdup(utf8name), strdup(name));
 }

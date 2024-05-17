@@ -1529,7 +1529,6 @@ void ShowPreferences( void )
  g_signal_connect( G_OBJECT( CLVDrivers ),"select-row",G_CALLBACK( prCListRow ),GINT_TO_POINTER(1) );
 
  gtk_widget_show( Preferences );
- gtkSetLayer( Preferences );
 }
 
 #ifdef CONFIG_OSS_AUDIO

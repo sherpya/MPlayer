@@ -537,7 +537,11 @@ void ShowEquConfig( void )
 {
  GSList *Items = NULL, *list;
 
- if ( EquConfig ) gtkRaise( EquConfig );
+ if (EquConfig)
+ {
+   gtkRaise(EquConfig);
+   return;
+ }
     else EquConfig=CreateEquConfig();
 
  Items = g_slist_append(Items, _(MSGTR_GUI_FrontRight));

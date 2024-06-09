@@ -505,7 +505,6 @@ void ShowEqualizer( void )
    gtk_widget_set_sensitive( A16000,FALSE );
   }
 
- if ( gtk_notebook_get_current_page( GTK_NOTEBOOK( Notebook ) ) == 0 ) gtk_widget_show( Config );
  gtk_widget_show( Equalizer );
 }
 

@@ -1888,7 +1888,11 @@ GtkWidget * CreateDXR3Config( void );
 
 void ShowDXR3Config( void )
 {
- if ( DXR3Config ) gtkRaise( DXR3Config );
+ if (DXR3Config)
+ {
+   gtkSetLayer(DXR3Config);
+   return;
+ }
   else DXR3Config=CreateDXR3Config();
 
  gtk_entry_set_text(gtkEntry(CBDXR3Device), gtkDXR3Device);

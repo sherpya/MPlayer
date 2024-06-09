@@ -1893,7 +1893,7 @@ void ShowDXR3Config( void )
    gtkSetLayer(DXR3Config);
    return;
  }
-  else DXR3Config=CreateDXR3Config();
+ else DXR3Config = CreateDXR3Config();
 
  gtk_entry_set_text(gtkEntry(CBDXR3Device), gtkDXR3Device);
 

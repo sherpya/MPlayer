@@ -542,7 +542,7 @@ void ShowEquConfig( void )
    gtkRaise(EquConfig);
    return;
  }
-    else EquConfig=CreateEquConfig();
+ else EquConfig = CreateEquConfig();
 
  Items = g_slist_append(Items, _(MSGTR_GUI_FrontRight));
  Items = g_slist_append(Items, _(MSGTR_GUI_FrontLeft));

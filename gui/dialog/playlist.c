@@ -597,7 +597,7 @@ void ShowPlaylist( void )
    gtkRaise(Playlist);
    return;
  }
-  else Playlist=CreatePlaylist();
+ else Playlist = CreatePlaylist();
 
  if ( old_path && *old_path )
   {

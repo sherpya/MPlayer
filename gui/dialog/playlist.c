@@ -592,7 +592,11 @@ void ShowPlaylist( void )
 {
  plItem * next;
 
- if ( Playlist ) gtkRaise( Playlist );
+ if (Playlist)
+ {
+   gtkRaise(Playlist);
+   return;
+ }
   else Playlist=CreatePlaylist();
 
  if ( old_path && *old_path )

@@ -244,8 +244,18 @@ static void eqNotebook( GtkNotebook * notebook, gpointer page,
  (void) page;
  (void) user_data;
 
- if ( page_num ) gtk_widget_hide( Config );
-   else gtk_widget_show( Config );
+  if (page_num)
+  {
+    gtk_widget_hide(Config);
+
+    if (EquConfig) gtk_widget_hide(EquConfig);
+  }
+  else
+  {
+    gtk_widget_show(Config);
+
+    if (EquConfig) gtk_widget_show(EquConfig);
+  }
 }
 
 static GtkWidget * CreateEqualizer( void )
@@ -592,7 +602,6 @@ GtkWidget * CreateEquConfig( void )
   gtk_widget_set_size_request( EquConfig,350,260 );
   gtk_window_set_title( GTK_WINDOW( EquConfig ),_(MSGTR_GUI_EqualizerConfiguration) );
   gtk_window_set_position( GTK_WINDOW( EquConfig ),GTK_WIN_POS_CENTER );
-//  gtk_window_set_modal( GTK_WINDOW( EquConfig ),TRUE );
   gtk_window_set_resizable( GTK_WINDOW( EquConfig ),FALSE );
   gtk_window_set_wmclass( GTK_WINDOW( EquConfig ),"EqualizerConfig",MPlayer );
 

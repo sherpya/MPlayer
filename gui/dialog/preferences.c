@@ -1840,7 +1840,11 @@ static GtkWidget *CreateAudioConfig( void ) {
 }
 
 void ShowAudioConfig( void ) {
-  if (AudioConfig) gtkRaise(AudioConfig);
+  if (AudioConfig)
+  {
+    gtkSetLayer(AudioConfig);
+    return;
+  }
   else AudioConfig = CreateAudioConfig();
 
 #ifdef CONFIG_OSS_AUDIO

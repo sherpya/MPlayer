@@ -539,7 +539,7 @@ void ShowEquConfig( void )
 
  if (EquConfig)
  {
-   gtkRaise(EquConfig);
+   gtkSetLayer(EquConfig);
    return;
  }
  else EquConfig = CreateEquConfig();

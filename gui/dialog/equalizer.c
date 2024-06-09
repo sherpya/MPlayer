@@ -479,6 +479,8 @@ static GtkWidget * CreateEqualizer( void )
 
 void ShowEqualizer( void )
 {
+ gboolean set;
+
  if ( Equalizer ) gtkRaise( Equalizer );
     else Equalizer=CreateEqualizer();
 
@@ -491,29 +493,29 @@ void ShowEqualizer( void )
 
  eqSetChannelNames();
 
- if ( !guiInfo.Playing || !guiInfo.sh_video )
-  {
-   gtk_widget_set_sensitive( VContrast,FALSE );
-   gtk_widget_set_sensitive( VBrightness,FALSE );
-   gtk_widget_set_sensitive( VHue,FALSE );
-   gtk_widget_set_sensitive( VSaturation,FALSE );
-  }
+ set = (guiInfo.Playing && guiInfo.sh_video);
+
+ gtk_widget_set_sensitive(VContrast, set);
+ gtk_widget_set_sensitive(VBrightness, set);
+ gtk_widget_set_sensitive(VHue, set);
+ gtk_widget_set_sensitive(VSaturation, set);
+
  Channel=-1;
  eqSetBands( 0 );
- if ( !guiInfo.Playing || !gtkEnableAudioEqualizer )
-  {
-   gtk_widget_set_sensitive( ChannelsList,FALSE );
-   gtk_widget_set_sensitive( A3125,FALSE );
-   gtk_widget_set_sensitive( A125,FALSE );
-   gtk_widget_set_sensitive( A6250,FALSE );
-   gtk_widget_set_sensitive( A250,FALSE );
-   gtk_widget_set_sensitive( A500,FALSE );
-   gtk_widget_set_sensitive( A1000,FALSE );
-   gtk_widget_set_sensitive( A2000,FALSE );
-   gtk_widget_set_sensitive( A4000,FALSE );
-   gtk_widget_set_sensitive( A8000,FALSE );
-   gtk_widget_set_sensitive( A16000,FALSE );
-  }
+
+ set = (guiInfo.Playing && gtkEnableAudioEqualizer);
+
+ gtk_widget_set_sensitive(ChannelsList, set);
+ gtk_widget_set_sensitive(A3125, set);
+ gtk_widget_set_sensitive(A125, set);
+ gtk_widget_set_sensitive(A6250, set);
+ gtk_widget_set_sensitive(A250, set);
+ gtk_widget_set_sensitive(A500, set);
+ gtk_widget_set_sensitive(A1000, set);
+ gtk_widget_set_sensitive(A2000, set);
+ gtk_widget_set_sensitive(A4000, set);
+ gtk_widget_set_sensitive(A8000, set);
+ gtk_widget_set_sensitive(A16000, set);
 
  gtk_widget_show( Equalizer );
 }

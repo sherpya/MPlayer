@@ -551,12 +551,12 @@ void ShowEquConfig( void )
 
  g_slist_free(Items);
 
- gtk_entry_set_text(gtkEntry(CBChannel1), gtkEquChannel1); gtkEntrySetEditable(CBChannel1, FALSE);
- gtk_entry_set_text(gtkEntry(CBChannel2), gtkEquChannel2); gtkEntrySetEditable(CBChannel2, FALSE);
- gtk_entry_set_text(gtkEntry(CBChannel3), gtkEquChannel3); gtkEntrySetEditable(CBChannel3, FALSE);
- gtk_entry_set_text(gtkEntry(CBChannel4), gtkEquChannel4); gtkEntrySetEditable(CBChannel4, FALSE);
- gtk_entry_set_text(gtkEntry(CBChannel5), gtkEquChannel5); gtkEntrySetEditable(CBChannel5, FALSE);
- gtk_entry_set_text(gtkEntry(CBChannel6), gtkEquChannel6); gtkEntrySetEditable(CBChannel6, FALSE);
+ gtk_entry_set_text(gtkEntry(CBChannel1), gtkEquChannel1);
+ gtk_entry_set_text(gtkEntry(CBChannel2), gtkEquChannel2);
+ gtk_entry_set_text(gtkEntry(CBChannel3), gtkEquChannel3);
+ gtk_entry_set_text(gtkEntry(CBChannel4), gtkEquChannel4);
+ gtk_entry_set_text(gtkEntry(CBChannel5), gtkEquChannel5);
+ gtk_entry_set_text(gtkEntry(CBChannel6), gtkEquChannel6);
 
  gtk_widget_show( EquConfig );
  gtkSetLayer( EquConfig );
@@ -633,21 +633,27 @@ GtkWidget * CreateEquConfig( void )
 
   CBChannel1=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel1,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
+  gtkEntrySetEditable(CBChannel1, FALSE);
 
   CBChannel2=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel2,1,2,1,2,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
+  gtkEntrySetEditable(CBChannel2, FALSE);
 
   CBChannel3=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel3,1,2,2,3,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
+  gtkEntrySetEditable(CBChannel3, FALSE);
 
   CBChannel4=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel4,1,2,3,4,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
+  gtkEntrySetEditable(CBChannel4, FALSE);
 
   CBChannel5=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel5,1,2,4,5,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
+  gtkEntrySetEditable(CBChannel5, FALSE);
 
   CBChannel6=gtkAddCombo( NULL );
     gtk_table_attach( GTK_TABLE( table1 ),CBChannel6,1,2,5,6,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
+  gtkEntrySetEditable(CBChannel6, FALSE);
 
   gtkAddHSeparator( vbox1 );
 

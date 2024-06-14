@@ -257,14 +257,6 @@ void gtkRaise(GtkWidget *window)
     wsWindowRaiseTop(XDISPLAY, GDK_WINDOW_XID(gtk_widget_get_window(window)));
 }
 
-static void gtkSelectInCList(GtkWidget *list, char *item)
-{
-    gint i;
-
-    if ((i = gtkFindInCList(list, item)) > -1)
-        gtk_clist_select_row(GTK_CLIST(list), i, 0);
-}
-
 void gtkShow(int type, char *param)
 {
     switch (type) {
@@ -279,7 +271,11 @@ void gtkShow(int type, char *param)
 //        gtk_clist_clear(GTK_CLIST(SkinList));
         if (FillSkinList(sbSkinDirInHome) &&
             FillSkinList(sbSkinDirInData)) {
-            gtkSelectInCList(SkinList, param);
+            gint i;
+
+            if ((i = gtkFindInCList(SkinList, param)) > -1)
+                gtk_clist_select_row(GTK_CLIST(SkinList), i, 0);
+
             gtk_clist_sort(GTK_CLIST(SkinList));
             gtkSetLayer(SkinBrowser);
         }

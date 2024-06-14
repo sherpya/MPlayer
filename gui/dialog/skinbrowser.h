@@ -22,9 +22,6 @@
 #include <gtk/gtk.h>
 
 extern GtkWidget * SkinBrowser;
-extern GtkWidget *SkinList;
-extern char *sbSkinDirInHome;
-extern char *sbSkinDirInData;
 
 int FillSkinList(gchar *dir);
 void ShowSkinBrowser( void );

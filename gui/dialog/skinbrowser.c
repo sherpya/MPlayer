@@ -36,10 +36,10 @@
 
 #include "dialog.h"
 
-GtkWidget * SkinList = NULL;
+static GtkWidget *SkinList;
 char      * sbSelectedSkin=NULL;
-char      * sbSkinDirInHome=NULL;
-char      * sbSkinDirInData=NULL;
+static char *sbSkinDirInHome;
+static char *sbSkinDirInData;
 
 static char *prevSelected;
 

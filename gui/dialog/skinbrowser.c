@@ -75,26 +75,6 @@ static void FillSkinList (char *dir)
  free(mdir);
 }
 
-static void prButton( GtkButton * button,gpointer user_data )
-{
- (void) button;
-
- if ( sbSelectedSkin )
- {
-  switch ( GPOINTER_TO_INT(user_data) )
-   {
-    case 0: // cancel
-      if ( strcmp( sbSelectedSkin,skinName ) ) uiChangeSkin( skinName );
-      break;
-   case 1: // ok
-      free( skinName );
-      skinName=strdup( sbSelectedSkin );
-      break;
-  }
- }
- gtk_widget_destroy( SkinBrowser );
-}
-
 static void on_SkinList_select_row( GtkCList * clist,gint row,gint column,GdkEvent * event,gpointer user_data )
 {
  (void) column;
@@ -115,6 +95,26 @@ static void on_SkinList_select_row( GtkCList * clist,gint row,gint column,GdkEve
    skinName=strdup( sbSelectedSkin );
    gtk_widget_destroy( SkinBrowser );
   }
+}
+
+static void prButton( GtkButton * button,gpointer user_data )
+{
+ (void) button;
+
+ if ( sbSelectedSkin )
+ {
+  switch ( GPOINTER_TO_INT(user_data) )
+   {
+    case 0: // cancel
+      if ( strcmp( sbSelectedSkin,skinName ) ) uiChangeSkin( skinName );
+      break;
+   case 1: // ok
+      free( skinName );
+      skinName=strdup( sbSelectedSkin );
+      break;
+  }
+ }
+ gtk_widget_destroy( SkinBrowser );
 }
 
 static gboolean window_delete (GtkWidget *widget, GdkEvent *event, gpointer user_data)

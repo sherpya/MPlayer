@@ -16,25 +16,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <sys/stat.h>
 #include <glob.h>
-#include <unistd.h>
-#include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
 
 #include "skinbrowser.h"
+#include "dialog.h"
 #include "tools.h"
-
 #include "gui/gtk-compat.h"
-#include "gui/app/app.h"
 #include "gui/app/cfg.h"
 #include "gui/app/gui.h"
-#include "gui/ui/actions.h"
 #include "gui/skin/skin.h"
-#include "help_mp.h"
+#include "gui/ui/actions.h"
 
-#include "dialog.h"
+#include "help_mp.h"
 
 static GtkWidget *SkinList;
 static char *sbSelectedSkin;

@@ -267,7 +267,7 @@ void gtkShow(int type, char *param)
 
     case evSkinBrowser:
         ShowSkinBrowser();
-            gtkSetLayer(SkinBrowser);
+        gtkSetLayer(SkinBrowser);
         break;
 
     case evPreferences:

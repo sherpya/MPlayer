@@ -45,6 +45,34 @@ static char *prevSelected;
 
 GtkWidget * SkinBrowser = NULL;
 
+static void FillSkinList (gchar *mdir)
+{
+ gchar         * str[1];
+ gchar         * tmp;
+ size_t          i;
+ glob_t          gg;
+ struct stat     fs;
+
+ glob( mdir,GLOB_NOSORT,NULL,&gg );
+ for( i=0;i<gg.gl_pathc;i++ )
+  {
+   if ( !strcmp( gg.gl_pathv[i],"." ) || !strcmp( gg.gl_pathv[i],".." ) ) continue;
+   if ( ( lstat( gg.gl_pathv[i],&fs ) == 0 ) )
+    {
+     tmp=strrchr( gg.gl_pathv[i],'/' );
+     if (tmp) tmp++;
+     else tmp = gg.gl_pathv[i];
+     // only directories or a link named "default"
+     if ( S_ISDIR( fs.st_mode ) || ( ( fs.st_mode & S_IFMT ) == S_IFLNK  && strcmp( tmp,"default" ) == 0 ) )
+      {
+       str[0]=tmp;
+       if ( gtkFindInCList( SkinList,str[0] ) == -1 ) gtk_clist_append( GTK_CLIST( SkinList ),str );
+      }
+    }
+  }
+ globfree( &gg );
+}
+
 static void prButton( GtkButton * button,gpointer user_data )
 {
  (void) button;
@@ -169,32 +197,4 @@ void ShowSkinBrowser( void )
 
    gtk_clist_sort(GTK_CLIST(SkinList));
   }
-}
-
-void FillSkinList (gchar *mdir)
-{
- gchar         * str[1];
- gchar         * tmp;
- size_t          i;
- glob_t          gg;
- struct stat     fs;
-
- glob( mdir,GLOB_NOSORT,NULL,&gg );
- for( i=0;i<gg.gl_pathc;i++ )
-  {
-   if ( !strcmp( gg.gl_pathv[i],"." ) || !strcmp( gg.gl_pathv[i],".." ) ) continue;
-   if ( ( lstat( gg.gl_pathv[i],&fs ) == 0 ) )
-    {
-     tmp=strrchr( gg.gl_pathv[i],'/' );
-     if (tmp) tmp++;
-     else tmp = gg.gl_pathv[i];
-     // only directories or a link named "default"
-     if ( S_ISDIR( fs.st_mode ) || ( ( fs.st_mode & S_IFMT ) == S_IFLNK  && strcmp( tmp,"default" ) == 0 ) )
-      {
-       str[0]=tmp;
-       if ( gtkFindInCList( SkinList,str[0] ) == -1 ) gtk_clist_append( GTK_CLIST( SkinList ),str );
-      }
-    }
-  }
- globfree( &gg );
 }

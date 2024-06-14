@@ -23,7 +23,6 @@
 
 extern GtkWidget * SkinBrowser;
 
-void FillSkinList(gchar *dir);
 void ShowSkinBrowser( void );
 
 #endif /* MPLAYER_GUI_SKINBROWSER_H */

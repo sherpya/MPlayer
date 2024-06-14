@@ -21,8 +21,8 @@
 
 #include <gtk/gtk.h>
 
-extern GtkWidget * SkinBrowser;
+extern GtkWidget *SkinBrowser;
 
-void ShowSkinBrowser( void );
+void ShowSkinBrowser(void);
 
 #endif /* MPLAYER_GUI_SKINBROWSER_H */

@@ -38,20 +38,26 @@
 
 static GtkWidget *SkinList;
 char      * sbSelectedSkin=NULL;
-static char *sbSkinDirInHome;
-static char *sbSkinDirInData;
 
 static char *prevSelected;
 
 GtkWidget * SkinBrowser = NULL;
 
-static void FillSkinList (gchar *mdir)
+static void FillSkinList (char *dir)
 {
+ char          * mdir;
  gchar         * str[1];
  gchar         * tmp;
  size_t          i;
  glob_t          gg;
  struct stat     fs;
+
+ if ((mdir = calloc(1, strlen(dir) + 4)))
+ {
+   strcpy(mdir, dir);
+   strcat(mdir, "/*");
+ }
+ else return;
 
  glob( mdir,GLOB_NOSORT,NULL,&gg );
  for( i=0;i<gg.gl_pathc;i++ )
@@ -71,6 +77,7 @@ static void FillSkinList (gchar *mdir)
     }
   }
  globfree( &gg );
+ free(mdir);
 }
 
 static void prButton( GtkButton * button,gpointer user_data )
@@ -176,11 +183,6 @@ static GtkWidget *CreateSkinBrowser (void)
  g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(1) );
  g_signal_connect( G_OBJECT( Cancel ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(0) );
 
- if ( ( sbSkinDirInHome=calloc( 1,strlen( skinDirInHome ) + 4 ) ) != NULL )
-  { strcpy( sbSkinDirInHome,skinDirInHome ); strcat( sbSkinDirInHome,"/*" ); }
- if ( ( sbSkinDirInData=calloc( 1,strlen( skinDirInData ) + 4 ) ) != NULL )
-  { strcpy( sbSkinDirInData,skinDirInData ); strcat( sbSkinDirInData,"/*" ); }
-
  gtk_window_add_accel_group( GTK_WINDOW( SkinBrowser ),accel_group );
  gtk_widget_grab_focus( scrolledwindow1 );
 
@@ -200,8 +202,8 @@ void ShowSkinBrowser (void)
   }
   else SkinBrowser = CreateSkinBrowser();
 
-  FillSkinList(sbSkinDirInHome);
-  FillSkinList(sbSkinDirInData);
+  FillSkinList(skinDirInHome);
+  FillSkinList(skinDirInData);
 
   if ((i = gtkFindInCList(SkinList, skinName)) > -1)
     gtk_clist_select_row(GTK_CLIST(SkinList), i, 0);

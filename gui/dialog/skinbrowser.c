@@ -37,7 +37,7 @@
 #include "dialog.h"
 
 static GtkWidget *SkinList;
-char      * sbSelectedSkin=NULL;
+static char *sbSelectedSkin;
 
 static char *prevSelected;
 
@@ -213,6 +213,8 @@ void ShowSkinBrowser (void)
     return;
   }
   else SkinBrowser = CreateSkinBrowser();
+
+  sbSelectedSkin = NULL;
 
   FillSkinList(skinDirInHome);
   FillSkinList(skinDirInData);

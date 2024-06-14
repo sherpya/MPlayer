@@ -32,12 +32,11 @@
 
 #include "help_mp.h"
 
+GtkWidget *SkinBrowser;
+
 static GtkWidget *SkinList;
 static char *sbSelectedSkin;
-
 static char *prevSelected;
-
-GtkWidget * SkinBrowser = NULL;
 
 static void FillSkinList (char *dir)
 {

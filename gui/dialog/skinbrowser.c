@@ -136,8 +136,6 @@ static GtkWidget *CreateSkinBrowser (void)
  GtkWidget     * Cancel;
  GtkAccelGroup * accel_group;
 
- accel_group = gtk_accel_group_new ();
-
  SkinBrowser=gtk_window_new( GTK_WINDOW_TOPLEVEL );
  gtk_widget_set_size_request( SkinBrowser,256,320 );
  gtk_container_set_border_width( GTK_CONTAINER( SkinBrowser ),1 );
@@ -180,8 +178,12 @@ static GtkWidget *CreateSkinBrowser (void)
  Ok=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox );
  Cancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox );
 
+ accel_group = gtk_accel_group_new ();
+
  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
  gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
+
+ gtk_window_add_accel_group( GTK_WINDOW( SkinBrowser ),accel_group );
 
  g_signal_connect( G_OBJECT( SkinBrowser ),"delete-event",G_CALLBACK( window_delete ),NULL );
  g_signal_connect( G_OBJECT( SkinBrowser ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&SkinBrowser );
@@ -189,7 +191,6 @@ static GtkWidget *CreateSkinBrowser (void)
  g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( button_clicked ),GINT_TO_POINTER(1) );
  g_signal_connect( G_OBJECT( Cancel ),"clicked",G_CALLBACK( button_clicked ),GINT_TO_POINTER(0) );
 
- gtk_window_add_accel_group( GTK_WINDOW( SkinBrowser ),accel_group );
  gtk_widget_grab_focus( scrolledwindow );
 
  return SkinBrowser;

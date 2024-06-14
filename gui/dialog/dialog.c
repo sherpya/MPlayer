@@ -267,19 +267,7 @@ void gtkShow(int type, char *param)
 
     case evSkinBrowser:
         ShowSkinBrowser();
-
-//        gtk_clist_clear(GTK_CLIST(SkinList));
-        if (FillSkinList(sbSkinDirInHome) &&
-            FillSkinList(sbSkinDirInData)) {
-            gint i;
-
-            if ((i = gtkFindInCList(SkinList, param)) > -1)
-                gtk_clist_select_row(GTK_CLIST(SkinList), i, 0);
-
-            gtk_clist_sort(GTK_CLIST(SkinList));
             gtkSetLayer(SkinBrowser);
-        }
-
         break;
 
     case evPreferences:

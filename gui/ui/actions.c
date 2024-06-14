@@ -286,7 +286,7 @@ play:
         break;
 
     case evSkinBrowser:
-        gtkShow(evSkinBrowser, skinName);
+        gtkShow(evSkinBrowser, NULL);
         break;
 
     case evAbout:

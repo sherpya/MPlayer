@@ -198,8 +198,6 @@ static GtkWidget *CreateSkinBrowser (void)
  gtk_window_add_accel_group( GTK_WINDOW( SkinBrowser ),accel_group );
  gtk_widget_grab_focus( scrolledwindow1 );
 
- prevSelected = skinName;
-
  return SkinBrowser;
 }
 
@@ -215,6 +213,7 @@ void ShowSkinBrowser (void)
   else SkinBrowser = CreateSkinBrowser();
 
   sbSelectedSkin = NULL;
+  prevSelected = skinName;
 
   FillSkinList(skinDirInHome);
   FillSkinList(skinDirInData);

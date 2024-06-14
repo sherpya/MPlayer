@@ -282,9 +282,6 @@ void gtkShow(int type, char *param)
             gtkSelectInCList(SkinList, param);
             gtk_clist_sort(GTK_CLIST(SkinList));
             gtkSetLayer(SkinBrowser);
-        } else {
-            gtk_widget_destroy(SkinBrowser);
-            gtkMessageBox(MSGBOX_ERROR, _(MSGTR_GUI_MSG_SkinDirNotFound));
         }
 
         break;

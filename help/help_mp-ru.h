@@ -721,7 +721,6 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_MSG_SkinCfgError "Ошибка обработки конфигурационного файла с оболочкой «%s»\n"
 #define MSGTR_GUI_MSG_SkinCfgNotFound "Оболочка не найдена (%s).\n"
 #define MSGTR_GUI_MSG_SkinCfgSelectedNotFound "Выбранная оболочка «%s» не найдена, попытка загрузки оболочки «по умолчанию»…\n"
-#define MSGTR_GUI_MSG_SkinDirNotFound "Не удалось найти каталог оболочки! Установите оболочку."
 #define MSGTR_GUI_MSG_SkinErrorBitmap16Bit "Глубина битовой матрицы в 16 бит и меньше не поддерживается (%s).\n"
 #define MSGTR_GUI_MSG_SkinErrorDefault "Значение по умолчанию (%d) выходит за пределы диапазона\n"
 #define MSGTR_GUI_MSG_SkinErrorItem "Данный элемент не поддерживается «%s».\n"

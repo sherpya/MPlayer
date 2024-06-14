@@ -726,7 +726,6 @@ static const char help_text[] = MSGTR_Help;
 #define MSGTR_GUI_MSG_SkinCfgError "Config file processing error with skin '%s'\n"
 #define MSGTR_GUI_MSG_SkinCfgNotFound "Skin '%s' not found.\n"
 #define MSGTR_GUI_MSG_SkinCfgSelectedNotFound "Selected skin '%s' not found, trying skin 'default'...\n"
-#define MSGTR_GUI_MSG_SkinDirNotFound "No skin directory found! Please install a skin."
 #define MSGTR_GUI_MSG_SkinErrorBitmap16Bit "Color depth of bitmap %s is 16 bits or less which is not supported.\n"
 #define MSGTR_GUI_MSG_SkinErrorDefault "Default (%d) out of range\n"
 #define MSGTR_GUI_MSG_SkinErrorItem "This item is not supported by '%s'.\n"

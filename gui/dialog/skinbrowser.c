@@ -159,8 +159,8 @@ void ShowSkinBrowser( void )
  prevSelected = skinName;
  gtk_widget_show(SkinBrowser);
 
- if (FillSkinList(sbSkinDirInHome) &&
-     FillSkinList(sbSkinDirInData))
+ FillSkinList(sbSkinDirInHome);
+ FillSkinList(sbSkinDirInData);
   {
    gint i;
 
@@ -171,7 +171,7 @@ void ShowSkinBrowser( void )
   }
 }
 
-int FillSkinList( gchar * mdir )
+void FillSkinList (gchar *mdir)
 {
  gchar         * str[1];
  gchar         * tmp;
@@ -197,5 +197,4 @@ int FillSkinList( gchar * mdir )
     }
   }
  globfree( &gg );
- return True;
 }

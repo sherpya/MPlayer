@@ -35,44 +35,43 @@
 GtkWidget *SkinBrowser;
 
 static GtkWidget *SkinList;
-static char *sbSelectedSkin;
+static char *currSelected;
 static char *prevSelected;
 
 static void FillSkinList (char *dir)
 {
- char          * mdir;
- gchar         * str[1];
- gchar         * tmp;
+ char          * pattern;
  size_t          i;
  glob_t          gg;
  struct stat     fs;
+ gchar         * name[1];
 
- if ((mdir = calloc(1, strlen(dir) + 4)))
+ if ((pattern = calloc(1, strlen(dir) + 4)))
  {
-   strcpy(mdir, dir);
-   strcat(mdir, "/*");
+   strcpy(pattern, dir);
+   strcat(pattern, "/*");
  }
  else return;
 
- glob( mdir,GLOB_NOSORT,NULL,&gg );
+ glob( pattern,GLOB_NOSORT,NULL,&gg );
  for( i=0;i<gg.gl_pathc;i++ )
   {
    if ( !strcmp( gg.gl_pathv[i],"." ) || !strcmp( gg.gl_pathv[i],".." ) ) continue;
    if ( ( lstat( gg.gl_pathv[i],&fs ) == 0 ) )
     {
-     tmp=strrchr( gg.gl_pathv[i],'/' );
-     if (tmp) tmp++;
-     else tmp = gg.gl_pathv[i];
+     dir=strrchr( gg.gl_pathv[i],'/' );
+     if (dir) dir++;
+     else dir = gg.gl_pathv[i];
      // only directories or a link named "default"
-     if ( S_ISDIR( fs.st_mode ) || ( ( fs.st_mode & S_IFMT ) == S_IFLNK  && strcmp( tmp,"default" ) == 0 ) )
+     if ( S_ISDIR( fs.st_mode ) || ( ( fs.st_mode & S_IFMT ) == S_IFLNK  && strcmp( dir,"default" ) == 0 ) )
       {
-       str[0]=tmp;
-       if ( gtkFindInCList( SkinList,str[0] ) == -1 ) gtk_clist_append( GTK_CLIST( SkinList ),str );
+       name[0]=dir;
+       if ( gtkFindInCList( SkinList,name[0] ) == -1 ) gtk_clist_append( GTK_CLIST( SkinList ),name );
       }
     }
   }
  globfree( &gg );
- free(mdir);
+ free(pattern);
 }
 
 static void select_row (GtkCList *clist, gint row, gint column, GdkEvent *event, gpointer user_data)
@@ -80,11 +79,11 @@ static void select_row (GtkCList *clist, gint row, gint column, GdkEvent *event,
  (void) column;
  (void) user_data;
 
- gtk_clist_get_text( clist,row,0,&sbSelectedSkin );
- if ( strcmp( prevSelected,sbSelectedSkin ) )
+ gtk_clist_get_text( clist,row,0,&currSelected );
+ if ( strcmp( prevSelected,currSelected ) )
   {
-   prevSelected=sbSelectedSkin;
-   uiChangeSkin( sbSelectedSkin );
+   prevSelected=currSelected;
+   uiChangeSkin( currSelected );
    gtk_widget_hide( SkinBrowser );
    gtk_widget_show( SkinBrowser );
   }
@@ -92,7 +91,7 @@ static void select_row (GtkCList *clist, gint row, gint column, GdkEvent *event,
  if( event->type == GDK_2BUTTON_PRESS )
   {
    free( skinName );
-   skinName=strdup( sbSelectedSkin );
+   skinName=strdup( currSelected );
    gtk_widget_destroy( SkinBrowser );
   }
 }
@@ -101,16 +100,16 @@ static void button_clicked (GtkButton *button, gpointer user_data)
 {
  (void) button;
 
- if ( sbSelectedSkin )
+ if ( currSelected )
  {
   switch ( GPOINTER_TO_INT(user_data) )
    {
     case 0: // cancel
-      if ( strcmp( sbSelectedSkin,skinName ) ) uiChangeSkin( skinName );
+      if ( strcmp( currSelected,skinName ) ) uiChangeSkin( skinName );
       break;
    case 1: // ok
       free( skinName );
-      skinName=strdup( sbSelectedSkin );
+      skinName=strdup( currSelected );
       break;
   }
  }
@@ -130,11 +129,11 @@ static gboolean window_delete (GtkWidget *widget, GdkEvent *event, gpointer user
 
 static GtkWidget *CreateSkinBrowser (void)
 {
- GtkWidget     * vbox5;
- GtkWidget     * scrolledwindow1;
- GtkWidget     * hbuttonbox4;
- GtkWidget     * Cancel;
+ GtkWidget     * vbox;
+ GtkWidget     * scrolledwindow;
+ GtkWidget     * hbuttonbox;
  GtkWidget     * Ok;
+ GtkWidget     * Cancel;
  GtkAccelGroup * accel_group;
 
  accel_group = gtk_accel_group_new ();
@@ -150,21 +149,21 @@ static GtkWidget *CreateSkinBrowser (void)
  gtk_widget_realize( SkinBrowser );
  gtkAddIcon( SkinBrowser );
 
- vbox5=gtkAddVBox( gtkAddDialogFrame( SkinBrowser ),0 );
+ vbox=gtkAddVBox( gtkAddDialogFrame( SkinBrowser ),0 );
 
- scrolledwindow1=gtk_scrolled_window_new( NULL,NULL );
- g_object_ref( scrolledwindow1 );
- g_object_set_data_full( G_OBJECT( SkinBrowser ),"scrolledwindow1",scrolledwindow1,(GDestroyNotify)g_object_unref );
- gtk_widget_show( scrolledwindow1 );
- gtk_box_pack_start( GTK_BOX( vbox5 ),scrolledwindow1,TRUE,TRUE,0 );
- gtk_container_set_border_width( GTK_CONTAINER( scrolledwindow1 ),2 );
- gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( scrolledwindow1 ),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC );
+ scrolledwindow=gtk_scrolled_window_new( NULL,NULL );
+ g_object_ref( scrolledwindow );
+ g_object_set_data_full( G_OBJECT( SkinBrowser ),"sbScrolledWindow",scrolledwindow,(GDestroyNotify)g_object_unref );
+ gtk_widget_show( scrolledwindow );
+ gtk_box_pack_start( GTK_BOX( vbox ),scrolledwindow,TRUE,TRUE,0 );
+ gtk_container_set_border_width( GTK_CONTAINER( scrolledwindow ),2 );
+ gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( scrolledwindow ),GTK_POLICY_NEVER,GTK_POLICY_AUTOMATIC );
 
  SkinList=gtk_clist_new( 1 );
  g_object_ref( SkinList );
  g_object_set_data_full( G_OBJECT( SkinBrowser ),"SkinList",SkinList,(GDestroyNotify)g_object_unref );
  gtk_widget_show( SkinList );
- gtk_container_add( GTK_CONTAINER( scrolledwindow1 ),SkinList );
+ gtk_container_add( GTK_CONTAINER( scrolledwindow ),SkinList );
  gtk_clist_set_column_width( GTK_CLIST( SkinList ),0,80 );
  gtk_clist_set_selection_mode( GTK_CLIST( SkinList ),GTK_SELECTION_SINGLE );
  gtk_clist_column_titles_show( GTK_CLIST( SkinList ) );
@@ -172,14 +171,14 @@ static GtkWidget *CreateSkinBrowser (void)
  gtk_clist_set_column_widget( GTK_CLIST( SkinList ),0, gtkAddLabel( _(MSGTR_GUI_AvailableSkins),NULL ) );
  gtk_clist_column_title_passive( GTK_CLIST( SkinList ),0 );
 
- gtkAddHSeparator( vbox5 );
+ gtkAddHSeparator( vbox );
 
- hbuttonbox4=gtkAddHButtonBox( vbox5 );
-  gtk_button_box_set_layout( GTK_BUTTON_BOX( hbuttonbox4 ),GTK_BUTTONBOX_SPREAD );
- gtk_box_set_spacing(GTK_BOX(hbuttonbox4), 10);
+ hbuttonbox=gtkAddHButtonBox( vbox );
+  gtk_button_box_set_layout( GTK_BUTTON_BOX( hbuttonbox ),GTK_BUTTONBOX_SPREAD );
+ gtk_box_set_spacing(GTK_BOX(hbuttonbox), 10);
 
- Ok=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox4 );
- Cancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox4 );
+ Ok=gtkAddButton( _(MSGTR_GUI_Ok),hbuttonbox );
+ Cancel=gtkAddButton( _(MSGTR_GUI_Cancel),hbuttonbox );
 
  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
  gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
@@ -191,7 +190,7 @@ static GtkWidget *CreateSkinBrowser (void)
  g_signal_connect( G_OBJECT( Cancel ),"clicked",G_CALLBACK( button_clicked ),GINT_TO_POINTER(0) );
 
  gtk_window_add_accel_group( GTK_WINDOW( SkinBrowser ),accel_group );
- gtk_widget_grab_focus( scrolledwindow1 );
+ gtk_widget_grab_focus( scrolledwindow );
 
  return SkinBrowser;
 }
@@ -207,7 +206,7 @@ void ShowSkinBrowser (void)
   }
   else SkinBrowser = CreateSkinBrowser();
 
-  sbSelectedSkin = NULL;
+  currSelected = NULL;
   prevSelected = skinName;
 
   FillSkinList(skinDirInHome);

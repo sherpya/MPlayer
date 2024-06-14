@@ -200,13 +200,13 @@ void ShowSkinBrowser (void)
   }
   else SkinBrowser = CreateSkinBrowser();
 
- FillSkinList(sbSkinDirInHome);
- FillSkinList(sbSkinDirInData);
+  FillSkinList(sbSkinDirInHome);
+  FillSkinList(sbSkinDirInData);
 
-   if ((i = gtkFindInCList(SkinList, skinName)) > -1)
-     gtk_clist_select_row(GTK_CLIST(SkinList), i, 0);
+  if ((i = gtkFindInCList(SkinList, skinName)) > -1)
+    gtk_clist_select_row(GTK_CLIST(SkinList), i, 0);
 
-   gtk_clist_sort(GTK_CLIST(SkinList));
+  gtk_clist_sort(GTK_CLIST(SkinList));
 
   gtk_widget_show(SkinBrowser);
 }

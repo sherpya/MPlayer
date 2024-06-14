@@ -115,7 +115,7 @@ static void on_SkinList_select_row( GtkCList * clist,gint row,gint column,GdkEve
   }
 }
 
-void ShowSkinBrowser( void )
+static GtkWidget *CreateSkinBrowser (void)
 {
  GtkWidget     * vbox5;
  GtkWidget     * scrolledwindow1;
@@ -185,16 +185,28 @@ void ShowSkinBrowser( void )
  gtk_widget_grab_focus( scrolledwindow1 );
 
  prevSelected = skinName;
- gtk_widget_show(SkinBrowser);
+
+ return SkinBrowser;
+}
+
+void ShowSkinBrowser (void)
+{
+  gint i;
+
+  if (SkinBrowser)
+  {
+    gtkRaise(SkinBrowser);
+    return;
+  }
+  else SkinBrowser = CreateSkinBrowser();
 
  FillSkinList(sbSkinDirInHome);
  FillSkinList(sbSkinDirInData);
-  {
-   gint i;
 
    if ((i = gtkFindInCList(SkinList, skinName)) > -1)
      gtk_clist_select_row(GTK_CLIST(SkinList), i, 0);
 
    gtk_clist_sort(GTK_CLIST(SkinList));
-  }
+
+  gtk_widget_show(SkinBrowser);
 }

@@ -122,6 +122,17 @@ static void on_SkinList_select_row( GtkCList * clist,gint row,gint column,GdkEve
   }
 }
 
+static gboolean window_delete (GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+  (void) widget;
+  (void) event;
+  (void) user_data;
+
+  prButton(NULL, 0); // press cancel and destroy window
+
+  return TRUE;
+}
+
 static GtkWidget *CreateSkinBrowser (void)
 {
  GtkWidget     * vbox5;
@@ -178,6 +189,7 @@ static GtkWidget *CreateSkinBrowser (void)
  gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
  gtk_widget_add_accelerator( Cancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
+ g_signal_connect( G_OBJECT( SkinBrowser ),"delete-event",G_CALLBACK( window_delete ),NULL );
  g_signal_connect( G_OBJECT( SkinBrowser ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&SkinBrowser );
  g_signal_connect( G_OBJECT( SkinList ),"select-row",G_CALLBACK( on_SkinList_select_row ),NULL );
  g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(1) );

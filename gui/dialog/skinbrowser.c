@@ -75,7 +75,7 @@ static void FillSkinList (char *dir)
  free(mdir);
 }
 
-static void on_SkinList_select_row( GtkCList * clist,gint row,gint column,GdkEvent * event,gpointer user_data )
+static void select_row (GtkCList *clist, gint row, gint column, GdkEvent *event, gpointer user_data)
 {
  (void) column;
  (void) user_data;
@@ -97,7 +97,7 @@ static void on_SkinList_select_row( GtkCList * clist,gint row,gint column,GdkEve
   }
 }
 
-static void prButton( GtkButton * button,gpointer user_data )
+static void button_clicked (GtkButton *button, gpointer user_data)
 {
  (void) button;
 
@@ -123,7 +123,7 @@ static gboolean window_delete (GtkWidget *widget, GdkEvent *event, gpointer user
   (void) event;
   (void) user_data;
 
-  prButton(NULL, 0); // press cancel and destroy window
+  button_clicked(NULL, 0); // press cancel and destroy window
 
   return TRUE;
 }
@@ -186,9 +186,9 @@ static GtkWidget *CreateSkinBrowser (void)
 
  g_signal_connect( G_OBJECT( SkinBrowser ),"delete-event",G_CALLBACK( window_delete ),NULL );
  g_signal_connect( G_OBJECT( SkinBrowser ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&SkinBrowser );
- g_signal_connect( G_OBJECT( SkinList ),"select-row",G_CALLBACK( on_SkinList_select_row ),NULL );
- g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(1) );
- g_signal_connect( G_OBJECT( Cancel ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(0) );
+ g_signal_connect( G_OBJECT( SkinList ),"select-row",G_CALLBACK( select_row ),NULL );
+ g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( button_clicked ),GINT_TO_POINTER(1) );
+ g_signal_connect( G_OBJECT( Cancel ),"clicked",G_CALLBACK( button_clicked ),GINT_TO_POINTER(0) );
 
  gtk_window_add_accel_group( GTK_WINDOW( SkinBrowser ),accel_group );
  gtk_widget_grab_focus( scrolledwindow1 );

@@ -16,6 +16,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/**
+ * @file
+ * @brief Skin browsing dialog
+ */
+
 #include <glob.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,6 +43,11 @@ static GtkWidget *SkinList;
 static char *currSelected;
 static char *prevSelected;
 
+/**
+ * @brief Add all subdirectory names in a directory to the skin list.
+ *
+ * @param dir directory to search for the subdirectories
+ */
 static void FillSkinList(char *dir)
 {
     char *pattern;
@@ -80,6 +90,15 @@ static void FillSkinList(char *dir)
     free(pattern);
 }
 
+/**
+ * @brief Select a row containing a skin name.
+ *
+ * @param clist list holding the rows
+ * @param row selected row
+ * @param column selected column
+ * @param event event triggering the signal
+ * @param user_data user data set when the signal handler was connected
+ */
 static void select_row(GtkCList *clist, gint row, gint column, GdkEvent *event, gpointer user_data)
 {
     (void)column;
@@ -104,6 +123,14 @@ static void select_row(GtkCList *clist, gint row, gint column, GdkEvent *event, 
     }
 }
 
+/**
+ * @brief Close the dialog.
+ *
+ * @param button object which received the signal
+ * @param user_data user data set when the signal handler was connected
+ *
+ * @note The button is determined by checking @a user_data.
+ */
 static void button_clicked(GtkButton *button, gpointer user_data)
 {
     (void)button;
@@ -125,6 +152,15 @@ static void button_clicked(GtkButton *button, gpointer user_data)
     gtk_widget_destroy(SkinBrowser);
 }
 
+/**
+ * @brief Close the window.
+ *
+ * @param widget widget which received the signal
+ * @param event event triggering the signal
+ * @param user_data user data set when the signal handler was connected
+ *
+ * @return always TRUE
+ */
 static gboolean window_delete(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
     (void)widget;
@@ -136,6 +172,11 @@ static gboolean window_delete(GtkWidget *widget, GdkEvent *event, gpointer user_
     return TRUE;
 }
 
+/**
+ * @brief Create the SkinBrowser dialog.
+ *
+ * @return pointer to the new SkinBrowser dialog window
+ */
 static GtkWidget *CreateSkinBrowser(void)
 {
     GtkWidget *vbox;
@@ -205,6 +246,9 @@ static GtkWidget *CreateSkinBrowser(void)
     return SkinBrowser;
 }
 
+/**
+ * @brief Create and show the SkinBrowser dialog.
+ */
 void ShowSkinBrowser(void)
 {
     gint i;

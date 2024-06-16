@@ -380,7 +380,7 @@ void listFree(char ***list)
  * @brief Set string list to @a entry.
  *
  * @param list pointer to the string list
- * @param entry the new (and only) element of the list
+ * @param entry new (and only) element of the list
  *
  * @note Actually, a new list will be created and the old list will be freed.
  */

@@ -42,7 +42,7 @@
 
 /**
  * @brief Time in milliseconds a scrolling dlabel stops
- *        when reaching the left margin until scrolling starts over
+ *        when reaching the left margin until scrolling starts over.
  */
 #define DLABEL_DELAY 2500
 

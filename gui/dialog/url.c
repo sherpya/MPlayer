@@ -61,7 +61,7 @@ static void entry_changed(GtkComboBox *combo_box, gpointer user_data)
 
 /**
  * @brief Add the entered URL to the URL list and stream it,
- *        if the button clicked is the OK button
+ *        if the button clicked is the OK button.
  *
  * @note If the scheme is missing, http is assumed (and added).
  *

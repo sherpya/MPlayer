@@ -944,21 +944,21 @@ void ShowFileSelector(int type)
 
     fsPathTable = g_hash_table_new_full(g_str_hash, g_str_equal, free, free);
 
-        if (fsMedium) {
-            unsigned int i;
+    if (fsMedium) {
+        unsigned int i;
 
-            for (i = 0; i < FF_ARRAY_ELEMS(fsHistory); i++)
-                if (fsHistory[i]) {
-                    fname = cfg_old_filename_from_utf8(fsHistory[i]);
-                    fs_AddPathUtf8(fname, GTK_POS_BOTTOM);
+        for (i = 0; i < FF_ARRAY_ELEMS(fsHistory); i++)
+            if (fsHistory[i]) {
+                fname = cfg_old_filename_from_utf8(fsHistory[i]);
+                fs_AddPathUtf8(fname, GTK_POS_BOTTOM);
 
-                    if (c)
-                        c = gstrcmp(dir, fname);
-                }
-        }
+                if (c)
+                    c = gstrcmp(dir, fname);
+            }
+    }
 
-        if (c && dir)
-            fs_AddPathUtf8(dir, GTK_POS_TOP);
+    if (c && dir)
+        fs_AddPathUtf8(dir, GTK_POS_TOP);
 
     free(dir);
     fname = getenv("HOME");

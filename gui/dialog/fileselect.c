@@ -850,7 +850,7 @@ static GtkWidget *CreateFileSelect(void)
 void ShowFileSelector(int type)
 {
     int i, k, fsMedium;
-    char *tmp = NULL, *dir = NULL;
+    char *filepath = NULL, *dir = NULL;
     const gchar *fname;
     struct stat f;
     GSList *list;
@@ -874,7 +874,7 @@ void ShowFileSelector(int type)
 
         k = fsLastVideoAudioFilterSelected;
         gtk_entry_set_text(gtkEntry(fsFilterCombo), _(fsVideoAudioFilterNames[k >= 0 ? k : i - 4][0]));
-        //tmp=guiInfo.Filename;
+        //filepath=guiInfo.Filename;
         break;
 
     case FILESELECT_SUBTITLE:
@@ -885,7 +885,7 @@ void ShowFileSelector(int type)
 
         k = fsLastSubtitleFilterSelected;
         gtk_entry_set_text(gtkEntry(fsFilterCombo), _(fsSubtitleFilterNames[k >= 0 ? k : i - 2][0]));
-        tmp = guiInfo.SubtitleFilename;
+        filepath = guiInfo.SubtitleFilename;
         break;
 
     case FILESELECT_AUDIO_TRACK:
@@ -896,7 +896,7 @@ void ShowFileSelector(int type)
 
         k = fsLastAudioFilterSelected;
         gtk_entry_set_text(gtkEntry(fsFilterCombo), _(fsAudioFileNames[k >= 0 ? k : i - 2][0]));
-        tmp = guiInfo.AudioFilename;
+        filepath = guiInfo.AudioFilename;
         break;
 
     case FILESELECT_FONT:
@@ -907,7 +907,7 @@ void ShowFileSelector(int type)
 
         k = fsLastFontFilterSelected;
         gtk_entry_set_text(gtkEntry(fsFilterCombo), _(fsFontFileNames[k >= 0 ? k : i - 2][0]));
-        tmp = font_name;
+        filepath = font_name;
         break;
 
     case FILESELECT_IMAGE:
@@ -918,14 +918,14 @@ void ShowFileSelector(int type)
 
         k = fsLastImageFilterSelected;
         gtk_entry_set_text(gtkEntry(fsFilterCombo), _(fsImageFilterNames[k >= 0 ? k : 0][0]));
-        tmp = guiInfo.ImageFilename;
+        filepath = guiInfo.ImageFilename;
         break;
     }
 
     fsMedium = (fsType == FILESELECT_VIDEO_AUDIO || fsType == FILESELECT_SUBTITLE || fsType == FILESELECT_AUDIO_TRACK || fsType == FILESELECT_IMAGE);
 
-    if (tmp && tmp[0] && !strstr(tmp, "://")) {
-        dir = strdup(tmp);
+    if (filepath && filepath[0] && !strstr(filepath, "://")) {
+        dir = strdup(filepath);
 
         do {
             char *c = strrchr(dir, '/');

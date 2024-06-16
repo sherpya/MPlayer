@@ -69,6 +69,7 @@ const char *fsThisDir = ".";
 const gchar *fsFilter = "*";
 
 int fsType;
+static gboolean fsMedium;
 
 static gint fsCurrFNameListSelected, fsLastFNameListSelected;
 
@@ -580,8 +581,10 @@ static void fs_Cancel_released(GtkButton *button, gpointer user_data)
     (void)button;
     (void)user_data;
 
+    if (fsMedium)
+        fsLastFNameListSelected = fsCurrFNameListSelected;
+
     gtk_widget_destroy(FileSelector);
-    fsLastFNameListSelected = fsCurrFNameListSelected;
 }
 
 static void fs_Ok_released(GtkButton *button, gpointer user_data)
@@ -849,7 +852,7 @@ static GtkWidget *CreateFileSelect(void)
 
 void ShowFileSelector(int type)
 {
-    int i, k, fsMedium, c = 1;
+    int i, k, c = 1;
     char *filepath = NULL, *dir = NULL;
     const gchar *fname;
     struct stat f;
@@ -861,6 +864,7 @@ void ShowFileSelector(int type)
         FileSelector = CreateFileSelect();
 
     fsType = type;
+    fsMedium = (fsType == FILESELECT_VIDEO_AUDIO || fsType == FILESELECT_SUBTITLE || fsType == FILESELECT_AUDIO_TRACK || fsType == FILESELECT_IMAGE);
 
     gtk_list_store_clear(GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(fsFilterCombo))));
 
@@ -919,8 +923,6 @@ void ShowFileSelector(int type)
         gtk_entry_set_text(gtkEntry(fsFilterCombo), _(fsImageFilterNames[k >= 0 ? k : 0][0]));
         break;
     }
-
-    fsMedium = (fsType == FILESELECT_VIDEO_AUDIO || fsType == FILESELECT_SUBTITLE || fsType == FILESELECT_AUDIO_TRACK || fsType == FILESELECT_IMAGE);
 
     if (filepath && filepath[0] && !strstr(filepath, "://")) {
         dir = strdup(filepath);
@@ -988,12 +990,13 @@ void ShowFileSelector(int type)
 
     gtk_widget_grab_focus(fsFNameList);
 
+    if (fsMedium) {
     if (fsLastFNameListSelected + 1 > ((GtkCList *)fsFNameList)->rows)
         fsLastFNameListSelected = 0;
 
     ((GtkCList *)fsFNameList)->focus_row = fsLastFNameListSelected;
     gtk_clist_select_row(GTK_CLIST(fsFNameList), fsLastFNameListSelected, 1);
-    fsLastFNameListSelected = 0;
+    }
 
     gtk_widget_show(FileSelector);
 }

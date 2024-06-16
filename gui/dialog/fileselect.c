@@ -874,7 +874,6 @@ void ShowFileSelector(int type)
 
         k = fsLastVideoAudioFilterSelected;
         gtk_entry_set_text(gtkEntry(fsFilterCombo), _(fsVideoAudioFilterNames[k >= 0 ? k : i - 4][0]));
-        //filepath=guiInfo.Filename;
         break;
 
     case FILESELECT_SUBTITLE:
@@ -918,7 +917,6 @@ void ShowFileSelector(int type)
 
         k = fsLastImageFilterSelected;
         gtk_entry_set_text(gtkEntry(fsFilterCombo), _(fsImageFilterNames[k >= 0 ? k : 0][0]));
-        filepath = guiInfo.ImageFilename;
         break;
     }
 

@@ -758,7 +758,6 @@ static GtkWidget *CreateFileSelect(void)
 
     FileSelector = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request(FileSelector, 512, 440);
-    gtk_window_set_title(GTK_WINDOW(FileSelector), MSGTR_GUI_SelectFile);
     gtk_window_set_position(GTK_WINDOW(FileSelector), GTK_WIN_POS_CENTER);
     gtk_window_get_position(GTK_WINDOW(FileSelector), &x, &y);
     gtk_window_move(GTK_WINDOW(FileSelector), x, y * 5 / 6);

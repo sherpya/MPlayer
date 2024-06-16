@@ -741,6 +741,17 @@ WARN_ON
     fsPathList = NULL;
 }
 
+static gboolean fs_Delete(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+    (void)widget;
+    (void)event;
+    (void)user_data;
+
+    fs_Cancel_released(NULL, NULL); // press cancel
+
+    return TRUE;
+}
+
 static void fs_Destroy(void)
 {
     fs_PathClear();
@@ -832,6 +843,7 @@ static GtkWidget *CreateFileSelect(void)
 
     gtk_widget_add_accelerator(fsCancel, "clicked", accel_group, GDK_KEY_Escape, 0, GTK_ACCEL_VISIBLE);
 
+    g_signal_connect(G_OBJECT(FileSelector), "delete-event", G_CALLBACK(fs_Delete), NULL);
     g_signal_connect(G_OBJECT(FileSelector), "destroy", G_CALLBACK(fs_Destroy), NULL);
     g_signal_connect(G_OBJECT(fsFNameListWindow), "key-release-event", G_CALLBACK(fs_key_release_event), NULL);
 

@@ -849,7 +849,7 @@ static GtkWidget *CreateFileSelect(void)
 
 void ShowFileSelector(int type)
 {
-    int i, k, fsMedium;
+    int i, k, fsMedium, c = 1;
     char *filepath = NULL, *dir = NULL;
     const gchar *fname;
     struct stat f;
@@ -944,10 +944,9 @@ void ShowFileSelector(int type)
 
     fsPathTable = g_hash_table_new_full(g_str_hash, g_str_equal, free, free);
 
-    {
-        unsigned int i, c = 1;
-
         if (fsMedium) {
+            unsigned int i;
+
             for (i = 0; i < FF_ARRAY_ELEMS(fsHistory); i++)
                 if (fsHistory[i]) {
                     fname = cfg_old_filename_from_utf8(fsHistory[i]);
@@ -960,7 +959,7 @@ void ShowFileSelector(int type)
 
         if (c && dir)
             fs_AddPathUtf8(dir, GTK_POS_TOP);
-    }
+
     free(dir);
     fname = getenv("HOME");
 

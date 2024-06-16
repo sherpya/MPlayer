@@ -727,10 +727,8 @@ static gboolean fs_key_release_event(GtkWidget *widget, GdkEvent *event, gpointe
     return FALSE;
 }
 
-static void fs_Destroy(void)
+static void fs_PathClear(void)
 {
-    gtk_widget_destroyed(FileSelector, &FileSelector);
-
     g_hash_table_destroy(fsPathTable);
 
 WARN_OFF(cast_function_type)
@@ -738,6 +736,12 @@ WARN_OFF(cast_function_type)
 WARN_ON
     g_slist_free(fsPathList);
     fsPathList = NULL;
+}
+
+static void fs_Destroy(void)
+{
+    fs_PathClear();
+    gtk_widget_destroyed(FileSelector, &FileSelector);
 }
 
 static GtkWidget *CreateFileSelect(void)
@@ -936,6 +940,9 @@ void ShowFileSelector(int type)
         if (!dir[0])
             nfree(dir);
     }
+
+    if (fsPathList)
+        fs_PathClear();
 
     fsPathTable = g_hash_table_new_full(g_str_hash, g_str_equal, free, free);
 

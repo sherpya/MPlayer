@@ -863,7 +863,7 @@ void ShowFileSelector(int type)
     else
         FileSelector = CreateFileSelect();
 
-    fsType = type;
+    fsType   = type;
     fsMedium = (fsType == FILESELECT_VIDEO_AUDIO || fsType == FILESELECT_SUBTITLE || fsType == FILESELECT_AUDIO_TRACK || fsType == FILESELECT_IMAGE);
 
     gtk_list_store_clear(GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(fsFilterCombo))));
@@ -991,11 +991,11 @@ void ShowFileSelector(int type)
     gtk_widget_grab_focus(fsFNameList);
 
     if (fsMedium) {
-    if (fsLastFNameListSelected + 1 > ((GtkCList *)fsFNameList)->rows)
-        fsLastFNameListSelected = 0;
+        if (fsLastFNameListSelected + 1 > ((GtkCList *)fsFNameList)->rows)
+            fsLastFNameListSelected = 0;
 
-    ((GtkCList *)fsFNameList)->focus_row = fsLastFNameListSelected;
-    gtk_clist_select_row(GTK_CLIST(fsFNameList), fsLastFNameListSelected, 1);
+        ((GtkCList *)fsFNameList)->focus_row = fsLastFNameListSelected;
+        gtk_clist_select_row(GTK_CLIST(fsFNameList), fsLastFNameListSelected, 1);
     }
 
     gtk_widget_show(FileSelector);

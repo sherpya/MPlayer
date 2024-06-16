@@ -422,6 +422,7 @@ void guiDone(void)
     listMgr(URLLIST_DELETE, 0);
     appFreeStruct();
     free(guiIcon.collection);
+    free(skinDirInHome);
 
     if (gui_conf) {
         m_config_free(gui_conf);

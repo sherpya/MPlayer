@@ -81,19 +81,13 @@ guiInterface_t guiInfo = {
 static int skin;
 static int current_volume;
 static int guiInitialized;
+#ifdef CONFIG_FONTCONFIG
 static int orig_fontconfig;
+#endif
 static struct {
     int changed;
     char *name;
 } orig_demuxer;
-
-/**
- * @brief Set option 'fontconfig' depending on #font_name.
- */
-static void set_fontconfig(void)
-{
-    font_fontconfig = (font_name && strchr(font_name, '/') ? -1 : orig_fontconfig);
-}
 
 /**
  * @brief Add a video filter
@@ -382,8 +376,12 @@ void guiInit(void)
         filename       = NULL; // don't start playing
     }
 
+#ifdef CONFIG_FONTCONFIG
     orig_fontconfig = font_fontconfig;
-    set_fontconfig();
+
+    if (font_name && strchr(font_name, '/'))
+        font_fontconfig = -1;
+#endif
 
     guiInitialized = True;
 }
@@ -1260,6 +1258,12 @@ void mplayer(int what, float value, void *data)
         mplayer(MPLAYER_LOAD_FONT, 0, 0);
         break;
 
+#ifdef CONFIG_FREETYPE
+    case MPLAYER_SET_FONT_AUTOSCALE:
+        subtitle_autoscale = (int)value;
+        mplayer(MPLAYER_LOAD_FONT, 0, 0);
+        break;
+
     case MPLAYER_SET_FONT_OUTLINE:
         subtitle_font_thickness = 8.0 * value / 100.0;   // transform 0..100 to 0..8
         mplayer(MPLAYER_LOAD_FONT, 0, 0);
@@ -1279,6 +1283,7 @@ void mplayer(int what, float value, void *data)
         osd_font_scale_factor = value;
         mplayer(MPLAYER_LOAD_FONT, 0, 0);
         break;
+#endif
 
     case MPLAYER_SET_FONT_ENCODING:
         nfree(subtitle_font_encoding);
@@ -1286,19 +1291,13 @@ void mplayer(int what, float value, void *data)
         mplayer(MPLAYER_LOAD_FONT, 0, 0);
         break;
 
-    case MPLAYER_SET_FONT_AUTOSCALE:
-        subtitle_autoscale = (int)value;
-        mplayer(MPLAYER_LOAD_FONT, 0, 0);
-        break;
-
     case MPLAYER_LOAD_FONT:
+#ifdef CONFIG_FONTCONFIG
+        font_fontconfig = (font_name && strchr(font_name, '/') ? -1 : orig_fontconfig);
+#endif
 #ifdef CONFIG_FREETYPE
-        set_fontconfig();
-
         force_load_font = 1;
 #else
-        free_font_desc(vo_font);
-
         if (font_name) {
             vo_font = read_font_desc(font_name, font_factor, 0);
 

@@ -65,6 +65,8 @@
 #endif
 
        GtkWidget * Preferences = NULL;
+static GtkWidget *notebook1;
+static guint prNotebookPage = 2;
 static GtkWidget * AConfig;
 static GtkWidget * VConfig;
 //static GtkWidget * BLoadSubtitle;
@@ -407,6 +409,8 @@ static void prButton( GtkButton * button, gpointer user_data )
           gtkMessageBox( MSGBOX_INFORMATION,_(MSGTR_GUI_MSG_PlaybackNeedsRestart) );
           inform = False;
          }
+
+        prNotebookPage = gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook1));
          // fall through
 
    case bCancel:
@@ -587,7 +591,6 @@ static GtkWidget * CreatePreferences( void )
   GtkWidget * frame;
 
   GtkWidget * vbox1;
-  GtkWidget * notebook1;
   GtkWidget * hbox1;
   GtkWidget * vbox2;
   GtkWidget * scrolledwindow3;
@@ -1203,7 +1206,7 @@ static GtkWidget * CreatePreferences( void )
   g_signal_connect( G_OBJECT( HSPPQuality ),"motion-notify-event",G_CALLBACK( on_HSPPQuality_motion_notify_event ),NULL );
 #endif
 
-  gtk_notebook_set_current_page( GTK_NOTEBOOK( notebook1 ),2 );
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook1), prNotebookPage);
 
   gtk_window_add_accel_group( GTK_WINDOW( Preferences ),accel_group );
 

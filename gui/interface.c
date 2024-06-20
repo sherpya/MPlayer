@@ -255,10 +255,12 @@ void guiInit(void)
         gtkAutoSync   = autosync;
     }
 
+#ifdef CONFIG_ASS
     gtkASS.enabled       = ass_enabled;
     gtkASS.use_margins   = ass_use_margins;
     gtkASS.top_margin    = ass_top_margin;
     gtkASS.bottom_margin = ass_bottom_margin;
+#endif
 
     argvf = get_vf("rotate");
     guiInfo.Rotation = (argvf && argvf[1] ? atoi(argvf[1]) : -1);
@@ -399,10 +401,12 @@ void guiDone(void)
             gui_video_pos_y = guiApp.videoWindow.Y;
         }
 
+#ifdef CONFIG_ASS
         ass_enabled       = gtkASS.enabled;
         ass_use_margins   = gtkASS.use_margins;
         ass_top_margin    = gtkASS.top_margin;
         ass_bottom_margin = gtkASS.bottom_margin;
+#endif
 
         cfg_write();
 
@@ -793,10 +797,12 @@ int gui(int what, void *data)
 
         guiInfo.MediumChanged = False;
 
+#ifdef CONFIG_ASS
         ass_enabled       = gtkASS.enabled;
         ass_use_margins   = gtkASS.use_margins;
         ass_top_margin    = gtkASS.top_margin;
         ass_bottom_margin = gtkASS.bottom_margin;
+#endif
 
         break;
 

@@ -1482,8 +1482,9 @@ void ShowPreferences( void )
    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBPlayBar ),0 );
    gtk_widget_set_sensitive( CBPlayBar,FALSE );
   }
+#ifdef CONFIG_TV
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBTVDigital ),gui_tv_digital );
-#ifndef CONFIG_TV
+#else
    gtk_widget_set_sensitive( CBTVDigital,FALSE );
 #endif
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBNoIdle ),!player_idle_mode );

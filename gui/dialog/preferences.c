@@ -932,9 +932,10 @@ static GtkWidget * CreatePreferences( void )
 
   label=gtkAddLabel( _(MSGTR_GUI_OSD_Subtitles),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),2 ),label );
-  vbox601=gtkAddVBox( notebook1,0 );
 
 /* 4th page */
+
+  vbox601=gtkAddVBox( notebook1,0 );
 
   vbox603=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
@@ -1079,9 +1080,9 @@ static GtkWidget * CreatePreferences( void )
   label=gtkAddLabel( _(MSGTR_GUI_Demuxers_Codecs),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),4 ),label );
 
-  vbox601=gtkAddVBox( notebook1,0 );
-
 /* 6th page */
+
+  vbox601=gtkAddVBox( notebook1,0 );
 
   vbox602=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,

@@ -800,6 +800,7 @@ static GtkWidget * CreatePreferences( void )
 /* 3rd page */
 
   vbox6=gtkAddVBox( notebook1,0 );
+  gtk_box_set_spacing(GTK_BOX(vbox6), 2);
 
   vbox600=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
@@ -1049,6 +1050,7 @@ static GtkWidget * CreatePreferences( void )
 /* 5th page */
 
   vbox601=gtkAddVBox( notebook1,0 );
+  gtk_box_set_spacing(GTK_BOX(vbox601), 2);
 
   vbox602=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,
@@ -1083,6 +1085,7 @@ static GtkWidget * CreatePreferences( void )
 /* 6th page */
 
   vbox601=gtkAddVBox( notebook1,0 );
+  gtk_box_set_spacing(GTK_BOX(vbox601), 2);
 
   vbox602=gtkAddVBox(
     gtkAddFrame( NULL,GTK_SHADOW_NONE,

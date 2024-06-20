@@ -290,6 +290,22 @@ static void button_toggled( GtkToggleButton *button, gpointer user_data )
  gtk_widget_set_sensitive( CBSubUnicode,!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBSubUtf8)) );
 }
 
+static void on_framedrop_toggled (GtkToggleButton *button, gpointer user_data)
+{
+  gboolean active = gtk_toggle_button_get_active(button);
+
+  switch (GPOINTER_TO_INT(user_data))
+  {
+    case 1:
+      if (!active) gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(CBHFramedrop), FALSE);
+      break;
+
+    case 2:
+      if (active) gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(CBFramedrop), TRUE);
+      break;
+  }
+}
+
 static void prButton( GtkButton * button, gpointer user_data )
 {
  static int inform = True;
@@ -1177,8 +1193,10 @@ static GtkWidget * CreatePreferences( void )
   g_signal_connect( G_OBJECT( CBExtraStereo ),"toggled",G_CALLBACK( on_CBExtraStereo_toggled ),NULL );
   g_signal_connect( G_OBJECT( CBDoubleBuffer ),"toggled",G_CALLBACK( on_CBDoubleBuffer_toggled ),NULL );
   g_signal_connect( G_OBJECT( CBDR ),"toggled",G_CALLBACK( on_CBDR_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBFramedrop ),"toggled",G_CALLBACK( on_CBFramedrop_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBHFramedrop ),"toggled",G_CALLBACK( on_CBHFramedrop_toggled ),NULL );
+#endif
+  g_signal_connect( G_OBJECT( CBFramedrop ),"toggled",G_CALLBACK( on_framedrop_toggled ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( CBHFramedrop ),"toggled",G_CALLBACK( on_framedrop_toggled ),GINT_TO_POINTER(2) );
+#if 0
   g_signal_connect( G_OBJECT( CBFullScreen ),"toggled",G_CALLBACK( on_CBFullScreen_toggled ),NULL );
   g_signal_connect( G_OBJECT( CBNonInterlaved ),"toggled",G_CALLBACK( on_CBNonInterlaved_toggled ),NULL );
   g_signal_connect( G_OBJECT( CBFlip ),"toggled",G_CALLBACK( on_CBFlip_toggled ),NULL );

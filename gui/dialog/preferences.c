@@ -1482,10 +1482,17 @@ void ShowPreferences( void )
  g_signal_connect( G_OBJECT( CBAudioEqualizer ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(2) );
  g_signal_connect( G_OBJECT( CBShowVideoWindow ),"toggled",G_CALLBACK( prToggled ), GINT_TO_POINTER(3) );
 #ifdef CONFIG_FREETYPE
+ g_signal_connect( G_OBJECT( CBFontEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(0) );
  g_signal_connect( G_OBJECT( RBFontNoAutoScale ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(4) );
  g_signal_connect( G_OBJECT( RBFontAutoScaleHeight ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(5) );
  g_signal_connect( G_OBJECT( RBFontAutoScaleWidth ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(6) );
  g_signal_connect( G_OBJECT( RBFontAutoScaleDiagonal ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(7) );
+ g_signal_connect( G_OBJECT( HSFontBlur ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(6) );
+ g_signal_connect( G_OBJECT( HSFontOutLine ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(7) );
+ g_signal_connect( G_OBJECT( HSFontTextScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(8) );
+ g_signal_connect( G_OBJECT( HSFontOSDScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(9) );
+#else
+ g_signal_connect( G_OBJECT( HSFontFactor ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(5) );
 #endif
  g_signal_connect( G_OBJECT( CBCache ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(8));
  g_signal_connect( G_OBJECT( CBAutoSync ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(9));
@@ -1499,15 +1506,6 @@ void ShowPreferences( void )
  g_signal_connect( G_OBJECT( HSPanscan ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(2) );
  g_signal_connect( G_OBJECT( HSSubDelay ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(3) );
  g_signal_connect( G_OBJECT( HSSubPosition ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(4) );
-#ifdef CONFIG_FREETYPE
- g_signal_connect( G_OBJECT( HSFontBlur ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(6) );
- g_signal_connect( G_OBJECT( HSFontOutLine ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(7) );
- g_signal_connect( G_OBJECT( HSFontTextScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(8) );
- g_signal_connect( G_OBJECT( HSFontOSDScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(9) );
- g_signal_connect( G_OBJECT( CBFontEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(0) );
-#else
- g_signal_connect( G_OBJECT( HSFontFactor ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(5) );
-#endif
 #ifdef CONFIG_ICONV
  g_signal_connect( G_OBJECT( CBSubEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(1) );
 #endif

@@ -1299,20 +1299,26 @@ void mplayer(int what, float value, void *data)
         force_load_font = 1;
 #else
         if (font_name) {
-            vo_font = read_font_desc(font_name, font_factor, 0);
+            if (sub_font != vo_font) {
+                free(sub_font->fpath);
+                free(sub_font->name);
+                free(sub_font);
+            }
 
-            if (!vo_font)
-                gmp_msg(MSGT_GPLAYER, MSGL_ERR, _(MSGTR_GUI_CantLoadFont), font_name);
-        } else {
-            char *fname = get_path("font/font.desc");
+            if (vo_font) {
+                free(vo_font->fpath);
+                free(vo_font->name);
+                free(vo_font);
+            }
 
-            setdup(&font_name, fname);
-            free(fname);
-            vo_font = read_font_desc(font_name, font_factor, 0);
+            sub_font = vo_font = read_font_desc(font_name, font_factor, 0);
 
             if (!vo_font) {
-                setdup(&font_name, MPLAYER_DATADIR "/font/font.desc");
-                vo_font = read_font_desc(font_name, font_factor, 0);
+                gchar *msg;
+
+                msg = g_strdup_printf(_(MSGTR_GUI_CantLoadFont), font_name);
+                gtkMessageBox(MSGBOX_ERROR, msg);
+                g_free(msg);
             }
         }
 #endif

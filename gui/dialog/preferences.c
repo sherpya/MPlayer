@@ -94,7 +94,6 @@ static GtkWidget * CBDoubleBuffer;
 static GtkWidget * CBDR;
 static GtkWidget * CBFramedrop;
 static GtkWidget * CBHFramedrop;
-//static GtkWidget * CBFullScreen;
 static GtkWidget * CBShowVideoWindow;
 static GtkWidget * CBNonInterlaved;
 static GtkWidget * CBIndex;
@@ -1191,41 +1190,10 @@ static GtkWidget * CreatePreferences( void )
   g_signal_connect( G_OBJECT( CBSubUtf8 ),"toggled",G_CALLBACK( button_toggled ),NULL );
   g_signal_connect( G_OBJECT( CBSubUnicode ),"toggled",G_CALLBACK( button_toggled ),NULL );
 #if 0
-  g_signal_connect( G_OBJECT( CBNormalize ),"toggled",G_CALLBACK( on_CBNormalize_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBSoftwareMixer ),"toggled",G_CALLBACK( on_CBSoftwareMixer_toggled ),NULL );
   g_signal_connect( G_OBJECT( CBSurround ),"toggled",G_CALLBACK( on_CBSurround_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBExtraStereo ),"toggled",G_CALLBACK( on_CBExtraStereo_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBDoubleBuffer ),"toggled",G_CALLBACK( on_CBDoubleBuffer_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBDR ),"toggled",G_CALLBACK( on_CBDR_toggled ),NULL );
 #endif
   g_signal_connect( G_OBJECT( CBFramedrop ),"toggled",G_CALLBACK( on_framedrop_toggled ),GINT_TO_POINTER(1) );
   g_signal_connect( G_OBJECT( CBHFramedrop ),"toggled",G_CALLBACK( on_framedrop_toggled ),GINT_TO_POINTER(2) );
-#if 0
-  g_signal_connect( G_OBJECT( CBFullScreen ),"toggled",G_CALLBACK( on_CBFullScreen_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBNonInterlaved ),"toggled",G_CALLBACK( on_CBNonInterlaved_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBFlip ),"toggled",G_CALLBACK( on_CBFlip_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBPostprocess ),"toggled",G_CALLBACK( on_CBPostprocess_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBNoAutoSub ),"toggled",G_CALLBACK( on_CBNoAutoSub_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBDumpMPSub ),"toggled",G_CALLBACK( on_CBDumpMPSub_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBDumpSrt ),"toggled",G_CALLBACK( on_CBDumpSrt_toggled ),NULL );
-#endif
-#if 0
-  g_signal_connect( G_OBJECT( RBOSDNone ),"toggled",G_CALLBACK( on_RBOSDNone_toggled ),NULL );
-  g_signal_connect( G_OBJECT( RBOSDIndicator ),"toggled",G_CALLBACK( on_RBOSDIndicator_toggled ),NULL );
-  g_signal_connect( G_OBJECT( RBOSDTandP ),"toggled",G_CALLBACK( on_RBOSDTandP_toggled ),NULL );
-  g_signal_connect( G_OBJECT( RBOSDTPTT ),"toggled",G_CALLBACK( on_RBOSDIndicator_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBAudioEqualizer ),"toggled",G_CALLBACK( on_CBAudioEqualizer_toggled ),NULL );
-#endif
-#if 0
-  g_signal_connect( G_OBJECT( HSAudioDelay ),"motion-notify-event",G_CALLBACK( on_HSAudioDelay_motion_notify_event ),NULL );
-  g_signal_connect( G_OBJECT( HSPanscan ),"motion-notify-event",G_CALLBACK( on_HSPanscan_motion_notify_event ),NULL );
-  g_signal_connect( G_OBJECT( label2 ),"motion-notify-event",G_CALLBACK( on_label2_motion_notify_event ),NULL );
-  g_signal_connect( G_OBJECT( HSSubDelay ),"motion-notify-event",G_CALLBACK( on_HSSubDelay_motion_notify_event ),NULL );
-  g_signal_connect( G_OBJECT( HSSubPosition ),"motion-notify-event",G_CALLBACK( on_HSSubPosition_motion_notify_event ),NULL );
-  g_signal_connect( G_OBJECT( HSSubFPS ),"motion-notify-event",G_CALLBACK( on_HSSubFPS_motion_notify_event ),NULL );
-  g_signal_connect( G_OBJECT( HSFontFactor ),"motion-notify-event",G_CALLBACK( on_HSFontFactor_motion_notify_event ),NULL );
-  g_signal_connect( G_OBJECT( HSPPQuality ),"motion-notify-event",G_CALLBACK( on_HSPPQuality_motion_notify_event ),NULL );
-#endif
 
   gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook1), prNotebookPage);
 

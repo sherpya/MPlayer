@@ -1182,16 +1182,13 @@ static GtkWidget * CreatePreferences( void )
   g_signal_connect( G_OBJECT( BOk ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bOk) );
   g_signal_connect( G_OBJECT( BCancel ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bCancel) );
   g_signal_connect( G_OBJECT( VConfig ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bVconfig) );
+  g_signal_connect( G_OBJECT( BLoadFont ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bLFont) );
 #if 0
   g_signal_connect( G_OBJECT( BLoadSubtitle ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bLSubtitle) );
-#endif
-  g_signal_connect( G_OBJECT( BLoadFont ),"clicked",G_CALLBACK( prButton ),GINT_TO_POINTER(bLFont) );
-
-  g_signal_connect( G_OBJECT( CBSubUtf8 ),"toggled",G_CALLBACK( button_toggled ),NULL );
-  g_signal_connect( G_OBJECT( CBSubUnicode ),"toggled",G_CALLBACK( button_toggled ),NULL );
-#if 0
   g_signal_connect( G_OBJECT( CBSurround ),"toggled",G_CALLBACK( on_CBSurround_toggled ),NULL );
 #endif
+  g_signal_connect( G_OBJECT( CBSubUtf8 ),"toggled",G_CALLBACK( button_toggled ),NULL );
+  g_signal_connect( G_OBJECT( CBSubUnicode ),"toggled",G_CALLBACK( button_toggled ),NULL );
   g_signal_connect( G_OBJECT( CBFramedrop ),"toggled",G_CALLBACK( on_framedrop_toggled ),GINT_TO_POINTER(1) );
   g_signal_connect( G_OBJECT( CBHFramedrop ),"toggled",G_CALLBACK( on_framedrop_toggled ),GINT_TO_POINTER(2) );
 

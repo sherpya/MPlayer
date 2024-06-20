@@ -694,7 +694,6 @@ static GtkWidget * CreatePreferences( void )
   gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(RGspin), TRUE);
   gtk_box_pack_start(GTK_BOX(RGbox), GTK_WIDGET(RGspin), FALSE, FALSE, 0);
   gtkAddLabel(_(MSGTR_GUI_dB), RGbox);
-  gtk_widget_set_sensitive(RGbox, gtkReplayGainOn);
   gtk_widget_show(RGspin);
 
   CBNormalize=gtkAddCheckButton( _(MSGTR_GUI_NormalizeSound),vbox3 );
@@ -1226,6 +1225,7 @@ void ShowPreferences( void )
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSurround ),gtkAOSurround );
 #endif
  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(CBReplayGain), gtkReplayGainOn);
+ prToggled(NULL, GINT_TO_POINTER(11)); // 11 is CBReplayGain, sets sensitivity of RGbox
  gtk_adjustment_set_value(RGadj, gtkReplayGainAdjustment);
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBExtraStereo ),gtkAOExtraStereo );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBNormalize ),gtkAONorm );

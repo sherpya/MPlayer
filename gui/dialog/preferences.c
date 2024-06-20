@@ -1350,6 +1350,11 @@ void ShowPreferences( void )
    gtk_widget_set_sensitive( SBASSTopMargin,FALSE );
    gtk_widget_set_sensitive( SBASSBottomMargin,FALSE );
   }
+#else
+ gtk_widget_set_sensitive( CBUseASS,FALSE );
+ gtk_widget_set_sensitive( CBASSUseMargins,FALSE );
+ gtk_widget_set_sensitive( SBASSTopMargin,FALSE );
+ gtk_widget_set_sensitive( SBASSBottomMargin,FALSE );
 #endif
 
  gtk_adjustment_set_value( HSSubDelayadj,sub_delay );
@@ -1504,14 +1509,6 @@ void ShowPreferences( void )
   else gtk_entry_set_text( GTK_ENTRY( prEDVDDevice ),DEFAULT_DVD_DEVICE );
  if ( cdrom_device ) gtk_entry_set_text( GTK_ENTRY( prECDRomDevice ),cdrom_device );
   else gtk_entry_set_text( GTK_ENTRY( prECDRomDevice ),DEFAULT_CDROM_DEVICE );
-
-/* disables */
-#ifndef CONFIG_ASS
- gtk_widget_set_sensitive( CBUseASS,FALSE );
- gtk_widget_set_sensitive( CBASSUseMargins,FALSE );
- gtk_widget_set_sensitive( SBASSTopMargin,FALSE );
- gtk_widget_set_sensitive( SBASSBottomMargin,FALSE );
-#endif
 
 /* signals */
  g_signal_connect( G_OBJECT( CBExtraStereo ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(0) );

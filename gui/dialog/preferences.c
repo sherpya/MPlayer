@@ -481,7 +481,6 @@ static void prHScaleChanged (GtkRange *range, gpointer user_data)
  switch ( GPOINTER_TO_INT(user_data) )
   {
    case 0: // extra stereo coefficient
-        if ( !guiInfo.Playing ) break;
         mplayer( MPLAYER_SET_EXTRA_STEREO,gtk_adjustment_get_value(HSExtraStereoMuladj),0 );
         break;
    case 1: // audio delay
@@ -529,7 +528,6 @@ static void prToggled( GtkToggleButton * togglebutton,gpointer user_data )
  switch ( GPOINTER_TO_INT(user_data) )
   {
    case 0: // extra stereo coefficient
-        if ( guiInfo.Playing )
         gtk_widget_set_sensitive( HSExtraStereoMul,gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBExtraStereo ) ) );
         break;
 //   case 1: // normalize

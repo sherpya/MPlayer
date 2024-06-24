@@ -1350,6 +1350,8 @@ void mplayer(int what, float value, void *data)
     break;
 
     case MPLAYER_SET_AUTO_QUALITY:
+        if (guiInfo.sh_video)
+            value = FFMIN(value, get_video_quality_max(guiInfo.sh_video));
         auto_quality = (int)value;
         break;
 

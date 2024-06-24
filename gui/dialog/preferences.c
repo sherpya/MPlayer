@@ -215,6 +215,7 @@ static char * vo_driver[3];
 static int    old_video_driver = 0;
 
 static float old_gtkAOExtraStereoMul;
+static float old_audio_delay;
 
 static GtkWidget *AudioConfig;
 static GtkWidget *DXR3Config;
@@ -322,7 +323,6 @@ static void prButton( GtkButton * button, gpointer user_data )
         gtkAOExtraStereo=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBExtraStereo ) );
         gtkAONorm=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBNormalize ) );
         soft_vol=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ) );
-        audio_delay=gtk_adjustment_get_value(HSAudioDelayadj);
 
         if (ao_driver[0]) listSet(&audio_driver_list, ao_driver[0]);
         if (vo_driver[0]) listSet(&video_driver_list, vo_driver[0]);
@@ -430,6 +430,7 @@ static void prButton( GtkButton * button, gpointer user_data )
 
    case bCancel:
         if (gtkAOExtraStereoMul != old_gtkAOExtraStereoMul) mplayer(MPLAYER_SET_EXTRA_STEREO, old_gtkAOExtraStereoMul, 0);
+        if (audio_delay != old_audio_delay) audio_delay = old_audio_delay;
 destroy:
         gtk_widget_destroy( Preferences );
         if ( AudioConfig ) gtk_widget_destroy( AudioConfig );
@@ -740,7 +741,8 @@ static GtkWidget * CreatePreferences( void )
   hbox8=gtkAddHBox( vbox3,1 );
   gtkAddLabelColon( _(MSGTR_GUI_AudioDelay),hbox8 );
 
-  HSAudioDelayadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,0.1,0,0 ) );
+  old_audio_delay = audio_delay;
+  HSAudioDelayadj=GTK_ADJUSTMENT( gtk_adjustment_new( audio_delay,-100,100,0.1,0,0 ) );
   HSAudioDelay=gtkAddHScale( HSAudioDelayadj,hbox8,1 );
   label=gtkAddLabel( _(MSGTR_GUI_Audio),NULL );
     gtk_notebook_set_tab_label( GTK_NOTEBOOK( notebook1 ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( notebook1 ),0 ),label );

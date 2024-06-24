@@ -218,6 +218,7 @@ static float old_gtkAOExtraStereoMul;
 static float old_audio_delay;
 static float old_vo_panscan;
 static float old_sub_delay;
+static int old_sub_pos;
 
 static GtkWidget *AudioConfig;
 static GtkWidget *DXR3Config;
@@ -356,7 +357,6 @@ static void prButton( GtkButton * button, gpointer user_data )
         gtkASS.bottom_margin=gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON( SBASSBottomMargin ) );
 #endif
         sub_fps=gtk_adjustment_get_value(HSSubFPSadj);
-        sub_pos=(int)gtk_adjustment_get_value(HSSubPositionadj);
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBOSDNone ) ) ) osd_level=0;
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBOSDIndicator ) ) ) osd_level=1;
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBOSDTandP ) ) ) osd_level=2;
@@ -434,6 +434,7 @@ static void prButton( GtkButton * button, gpointer user_data )
         if (audio_delay != old_audio_delay) audio_delay = old_audio_delay;
         if (vo_panscan != old_vo_panscan) mplayer(MPLAYER_SET_PANSCAN, old_vo_panscan, 0);
         if (sub_delay != old_sub_delay) sub_delay = old_sub_delay;
+        if (sub_pos != old_sub_pos) sub_pos = old_sub_pos;
 destroy:
         gtk_widget_destroy( Preferences );
         if ( AudioConfig ) gtk_widget_destroy( AudioConfig );
@@ -867,7 +868,8 @@ static GtkWidget * CreatePreferences( void )
   HSSubDelay=gtkAddHScale( HSSubDelayadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSSubDelay,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  HSSubPositionadj=GTK_ADJUSTMENT( gtk_adjustment_new( 100,0,150,1,0,0 ) );
+  old_sub_pos = sub_pos;
+  HSSubPositionadj=GTK_ADJUSTMENT( gtk_adjustment_new( sub_pos,0,150,1,0,0 ) );
   HSSubPosition=gtkAddHScale( HSSubPositionadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),HSSubPosition,1,2,1,2,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
@@ -1395,7 +1397,7 @@ void ShowPreferences( void )
 #endif
 
  gtk_adjustment_set_value( HSSubFPSadj,sub_fps );
- gtk_adjustment_set_value( HSSubPositionadj,sub_pos );
+
  switch ( osd_level )
   {
    case 0: gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( RBOSDNone ),TRUE ); break;

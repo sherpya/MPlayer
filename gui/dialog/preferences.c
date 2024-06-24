@@ -602,6 +602,9 @@ static void prToggled( GtkToggleButton * togglebutton,gpointer user_data )
   case 11:
     gtk_widget_set_sensitive(RGbox, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBReplayGain)));
     break;
+  case 12:
+    gtk_widget_set_sensitive(HSPPQuality, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(CBPostprocess)));
+    break;
   }
 }
 
@@ -1258,6 +1261,7 @@ static GtkWidget * CreatePreferences( void )
   g_signal_connect( G_OBJECT( CBUseASS ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(10));
 #endif
   g_signal_connect(G_OBJECT(CBReplayGain), "toggled", G_CALLBACK(prToggled), GINT_TO_POINTER(11));
+  g_signal_connect(G_OBJECT(CBPostprocess), "toggled", G_CALLBACK(prToggled), GINT_TO_POINTER(12));
 
   g_signal_connect(G_OBJECT(HSExtraStereoMul), "value-changed", G_CALLBACK(prHScaleChanged), GINT_TO_POINTER(0));
   g_signal_connect(G_OBJECT(HSAudioDelay), "value-changed", G_CALLBACK(prHScaleChanged), GINT_TO_POINTER(1));
@@ -1530,6 +1534,7 @@ void ShowPreferences( void )
 
 /* 6th page */
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBPostprocess ),gtkVfPP );
+ prToggled(NULL, GINT_TO_POINTER(12)); // 12 is CBPostprocess, sets sensitivity of HSPPQuality
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBLoadFullscreen ),fullscreen );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSaveWinPos ),gui_save_pos );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBShowVideoWindow ),!gtkShowVideoWindow );

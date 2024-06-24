@@ -1192,6 +1192,44 @@ static GtkWidget * CreatePreferences( void )
   g_signal_connect( G_OBJECT( CBFramedrop ),"toggled",G_CALLBACK( on_framedrop_toggled ),GINT_TO_POINTER(1) );
   g_signal_connect( G_OBJECT( CBHFramedrop ),"toggled",G_CALLBACK( on_framedrop_toggled ),GINT_TO_POINTER(2) );
 
+  g_signal_connect( G_OBJECT( CBExtraStereo ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( CBNormalize ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( CBSoftwareMixer ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( CBAudioEqualizer ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(2) );
+  g_signal_connect( G_OBJECT( CBShowVideoWindow ),"toggled",G_CALLBACK( prToggled ), GINT_TO_POINTER(3) );
+#ifdef CONFIG_FREETYPE
+  g_signal_connect( G_OBJECT( CBFontEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( RBFontNoAutoScale ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(4) );
+  g_signal_connect( G_OBJECT( RBFontAutoScaleHeight ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(5) );
+  g_signal_connect( G_OBJECT( RBFontAutoScaleWidth ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(6) );
+  g_signal_connect( G_OBJECT( RBFontAutoScaleDiagonal ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(7) );
+  g_signal_connect( G_OBJECT( HSFontBlur ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(6) );
+  g_signal_connect( G_OBJECT( HSFontOutLine ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(7) );
+  g_signal_connect( G_OBJECT( HSFontTextScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(8) );
+  g_signal_connect( G_OBJECT( HSFontOSDScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(9) );
+#else
+  g_signal_connect( G_OBJECT( HSFontFactor ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(5) );
+#endif
+  g_signal_connect( G_OBJECT( CBCache ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(8));
+  g_signal_connect( G_OBJECT( CBAutoSync ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(9));
+#ifdef CONFIG_ASS
+  g_signal_connect( G_OBJECT( CBUseASS ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(10));
+#endif
+  g_signal_connect(G_OBJECT(CBReplayGain), "toggled", G_CALLBACK(prToggled), GINT_TO_POINTER(11));
+
+  g_signal_connect( G_OBJECT( HSExtraStereoMul ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( HSAudioDelay ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(1) );
+  g_signal_connect( G_OBJECT( HSPanscan ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(2) );
+  g_signal_connect( G_OBJECT( HSSubDelay ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(3) );
+  g_signal_connect( G_OBJECT( HSSubPosition ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(4) );
+#ifdef CONFIG_ICONV
+  g_signal_connect( G_OBJECT( CBSubEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(1) );
+#endif
+  g_signal_connect( G_OBJECT( HSPPQuality ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(10) );
+
+  g_signal_connect( G_OBJECT( CLADrivers ),"select-row",G_CALLBACK( prCListRow ),GINT_TO_POINTER(0) );
+  g_signal_connect( G_OBJECT( CLVDrivers ),"select-row",G_CALLBACK( prCListRow ),GINT_TO_POINTER(1) );
+
   gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook1), prNotebookPage);
 
   gtk_window_add_accel_group( GTK_WINDOW( Preferences ),accel_group );
@@ -1474,45 +1512,6 @@ void ShowPreferences( void )
   else gtk_entry_set_text( GTK_ENTRY( prEDVDDevice ),DEFAULT_DVD_DEVICE );
  if ( cdrom_device ) gtk_entry_set_text( GTK_ENTRY( prECDRomDevice ),cdrom_device );
   else gtk_entry_set_text( GTK_ENTRY( prECDRomDevice ),DEFAULT_CDROM_DEVICE );
-
-/* signals */
- g_signal_connect( G_OBJECT( CBExtraStereo ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(0) );
- g_signal_connect( G_OBJECT( CBNormalize ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(1) );
- g_signal_connect( G_OBJECT( CBSoftwareMixer ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(1) );
- g_signal_connect( G_OBJECT( CBAudioEqualizer ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(2) );
- g_signal_connect( G_OBJECT( CBShowVideoWindow ),"toggled",G_CALLBACK( prToggled ), GINT_TO_POINTER(3) );
-#ifdef CONFIG_FREETYPE
- g_signal_connect( G_OBJECT( CBFontEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(0) );
- g_signal_connect( G_OBJECT( RBFontNoAutoScale ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(4) );
- g_signal_connect( G_OBJECT( RBFontAutoScaleHeight ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(5) );
- g_signal_connect( G_OBJECT( RBFontAutoScaleWidth ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(6) );
- g_signal_connect( G_OBJECT( RBFontAutoScaleDiagonal ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(7) );
- g_signal_connect( G_OBJECT( HSFontBlur ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(6) );
- g_signal_connect( G_OBJECT( HSFontOutLine ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(7) );
- g_signal_connect( G_OBJECT( HSFontTextScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(8) );
- g_signal_connect( G_OBJECT( HSFontOSDScale ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(9) );
-#else
- g_signal_connect( G_OBJECT( HSFontFactor ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(5) );
-#endif
- g_signal_connect( G_OBJECT( CBCache ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(8));
- g_signal_connect( G_OBJECT( CBAutoSync ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(9));
-#ifdef CONFIG_ASS
- g_signal_connect( G_OBJECT( CBUseASS ),"toggled",G_CALLBACK( prToggled ),GINT_TO_POINTER(10));
-#endif
- g_signal_connect(G_OBJECT(CBReplayGain), "toggled", G_CALLBACK(prToggled), GINT_TO_POINTER(11));
-
- g_signal_connect( G_OBJECT( HSExtraStereoMul ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(0) );
- g_signal_connect( G_OBJECT( HSAudioDelay ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(1) );
- g_signal_connect( G_OBJECT( HSPanscan ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(2) );
- g_signal_connect( G_OBJECT( HSSubDelay ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(3) );
- g_signal_connect( G_OBJECT( HSSubPosition ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(4) );
-#ifdef CONFIG_ICONV
- g_signal_connect( G_OBJECT( CBSubEncoding ),"changed",G_CALLBACK( prEntry ),GINT_TO_POINTER(1) );
-#endif
- g_signal_connect( G_OBJECT( HSPPQuality ),"motion-notify-event",G_CALLBACK( prHScaler ),GINT_TO_POINTER(10) );
-
- g_signal_connect( G_OBJECT( CLADrivers ),"select-row",G_CALLBACK( prCListRow ),GINT_TO_POINTER(0) );
- g_signal_connect( G_OBJECT( CLVDrivers ),"select-row",G_CALLBACK( prCListRow ),GINT_TO_POINTER(1) );
 
  gtk_widget_show( Preferences );
 }

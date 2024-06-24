@@ -223,6 +223,7 @@ static int old_sub_pos;
 #ifdef CONFIG_FREETYPE
 static float old_subtitle_font_radius;
 static float old_subtitle_font_thickness;
+static float old_text_font_scale_factor;
 #endif
 
 static GtkWidget *AudioConfig;
@@ -371,7 +372,6 @@ static void prButton( GtkButton * button, gpointer user_data )
         /* 4th page */
         setdup( &font_name,gtk_entry_get_text( GTK_ENTRY( prEFontName ) ) );
 #ifdef CONFIG_FREETYPE
-        mplayer( MPLAYER_SET_FONT_TEXTSCALE,gtk_adjustment_get_value(HSFontTextScaleadj),0 );
         mplayer( MPLAYER_SET_FONT_OSDSCALE,gtk_adjustment_get_value(HSFontOSDScaleadj),0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontNoAutoScale ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,0,0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleHeight ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,1,0 );
@@ -441,6 +441,7 @@ static void prButton( GtkButton * button, gpointer user_data )
 #ifdef CONFIG_FREETYPE
         if (subtitle_font_radius != old_subtitle_font_radius) mplayer(MPLAYER_SET_FONT_BLUR, old_subtitle_font_radius / 8.0 * 100.0, 0); // transform 0..8 to 0..100
         if (subtitle_font_thickness != old_subtitle_font_thickness) mplayer(MPLAYER_SET_FONT_OUTLINE, old_subtitle_font_thickness  / 8.0 * 100.0, 0); // transform 0..8 to 0..100
+        if (text_font_scale_factor != old_text_font_scale_factor) mplayer(MPLAYER_SET_FONT_TEXTSCALE, old_text_font_scale_factor, 0);
 #endif
 destroy:
         gtk_widget_destroy( Preferences );
@@ -1054,7 +1055,8 @@ static GtkWidget * CreatePreferences( void )
   label=gtkAddLabelColon( _(MSGTR_GUI_SizeSubtitles),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,4,5,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  HSFontTextScaleadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,0.1,0,0 ) );
+  old_text_font_scale_factor = text_font_scale_factor;
+  HSFontTextScaleadj=GTK_ADJUSTMENT( gtk_adjustment_new( text_font_scale_factor,0,100,0.1,0,0 ) );
   HSFontTextScale=gtkAddHScale( HSFontTextScaleadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSFontTextScale,1,2,4,5,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
@@ -1440,7 +1442,6 @@ void ShowPreferences( void )
  /* font ... */
  if ( font_name ) gtk_entry_set_text( GTK_ENTRY( prEFontName ),font_name );
 #ifdef CONFIG_FREETYPE
- gtk_adjustment_set_value( HSFontTextScaleadj,text_font_scale_factor );
  gtk_adjustment_set_value( HSFontOSDScaleadj,osd_font_scale_factor );
  {
   int i;

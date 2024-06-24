@@ -32,6 +32,7 @@
 #include "mpcommon.h"
 #include "mplayer.h"
 #include "libao2/audio_out.h"
+#include "sub/font_load.h"
 #include "sub/sub.h"
 #include "libvo/video_out.h"
 #include "libvo/x11_common.h"
@@ -219,6 +220,9 @@ static float old_audio_delay;
 static float old_vo_panscan;
 static float old_sub_delay;
 static int old_sub_pos;
+#ifdef CONFIG_FREETYPE
+static float old_subtitle_font_radius;
+#endif
 
 static GtkWidget *AudioConfig;
 static GtkWidget *DXR3Config;
@@ -366,7 +370,6 @@ static void prButton( GtkButton * button, gpointer user_data )
         /* 4th page */
         setdup( &font_name,gtk_entry_get_text( GTK_ENTRY( prEFontName ) ) );
 #ifdef CONFIG_FREETYPE
-        mplayer( MPLAYER_SET_FONT_BLUR,gtk_adjustment_get_value(HSFontBluradj),0 );
         mplayer( MPLAYER_SET_FONT_OUTLINE,gtk_adjustment_get_value(HSFontOutLineadj),0 );
         mplayer( MPLAYER_SET_FONT_TEXTSCALE,gtk_adjustment_get_value(HSFontTextScaleadj),0 );
         mplayer( MPLAYER_SET_FONT_OSDSCALE,gtk_adjustment_get_value(HSFontOSDScaleadj),0 );
@@ -435,6 +438,9 @@ static void prButton( GtkButton * button, gpointer user_data )
         if (vo_panscan != old_vo_panscan) mplayer(MPLAYER_SET_PANSCAN, old_vo_panscan, 0);
         if (sub_delay != old_sub_delay) sub_delay = old_sub_delay;
         if (sub_pos != old_sub_pos) sub_pos = old_sub_pos;
+#ifdef CONFIG_FREETYPE
+        if (subtitle_font_radius != old_subtitle_font_radius) mplayer(MPLAYER_SET_FONT_BLUR, old_subtitle_font_radius / 8.0 * 100.0, 0); // transform 0..8 to 0..100
+#endif
 destroy:
         gtk_widget_destroy( Preferences );
         if ( AudioConfig ) gtk_widget_destroy( AudioConfig );
@@ -1031,7 +1037,8 @@ static GtkWidget * CreatePreferences( void )
   label=gtkAddLabelColon( _(MSGTR_GUI_Blur),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,2,3,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  HSFontBluradj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,0.1,0,0 ) );
+  old_subtitle_font_radius = subtitle_font_radius;
+  HSFontBluradj=GTK_ADJUSTMENT( gtk_adjustment_new( subtitle_font_radius / 8.0 * 100.0,0,100,0.1,0,0 ) ); // transform 0..8 to 0..100
   HSFontBlur=gtkAddHScale( HSFontBluradj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSFontBlur,1,2,2,3,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
@@ -1431,7 +1438,6 @@ void ShowPreferences( void )
  /* font ... */
  if ( font_name ) gtk_entry_set_text( GTK_ENTRY( prEFontName ),font_name );
 #ifdef CONFIG_FREETYPE
- gtk_adjustment_set_value( HSFontBluradj,subtitle_font_radius / 8.0 * 100.0);         // transform 0..8 to 0..100
  gtk_adjustment_set_value( HSFontOutLineadj,subtitle_font_thickness / 8.0 * 100.0);   // transform 0..8 to 0..100
  gtk_adjustment_set_value( HSFontTextScaleadj,text_font_scale_factor );
  gtk_adjustment_set_value( HSFontOSDScaleadj,osd_font_scale_factor );

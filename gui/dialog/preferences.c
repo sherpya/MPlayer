@@ -216,6 +216,7 @@ static int    old_video_driver = 0;
 
 static float old_gtkAOExtraStereoMul;
 static float old_audio_delay;
+static float old_vo_panscan;
 
 static GtkWidget *AudioConfig;
 static GtkWidget *DXR3Config;
@@ -431,6 +432,7 @@ static void prButton( GtkButton * button, gpointer user_data )
    case bCancel:
         if (gtkAOExtraStereoMul != old_gtkAOExtraStereoMul) mplayer(MPLAYER_SET_EXTRA_STEREO, old_gtkAOExtraStereoMul, 0);
         if (audio_delay != old_audio_delay) audio_delay = old_audio_delay;
+        if (vo_panscan != old_vo_panscan) mplayer(MPLAYER_SET_PANSCAN, old_vo_panscan, 0);
 destroy:
         gtk_widget_destroy( Preferences );
         if ( AudioConfig ) gtk_widget_destroy( AudioConfig );
@@ -795,7 +797,8 @@ static GtkWidget * CreatePreferences( void )
   label=gtkAddLabelColon( _(MSGTR_GUI_FrameRate),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  HSPanscanadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,1,0.1,0,0 ) );
+  old_vo_panscan = vo_panscan;
+  HSPanscanadj=GTK_ADJUSTMENT( gtk_adjustment_new( vo_panscan,0,1,0.1,0,0 ) );
   HSPanscan=gtkAddHScale( HSPanscanadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSPanscan,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
@@ -1338,7 +1341,6 @@ void ShowPreferences( void )
 
  if (flip != -1)
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBFlip ),flip );
- gtk_adjustment_set_value( HSPanscanadj,vo_panscan );
 
  {
   int i = 0, c = 0;

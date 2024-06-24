@@ -33,6 +33,7 @@
 
 #if !GTK_CHECK_VERSION(2,14,0)
 #define gtk_widget_get_window(widget) widget->window
+#define gtk_adjustment_set_upper(adjustment, value) adjustment->upper = value
 #endif
 
 #if !GTK_CHECK_VERSION(2,18,0)

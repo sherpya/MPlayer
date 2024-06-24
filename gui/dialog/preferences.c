@@ -1096,8 +1096,7 @@ static GtkWidget * CreatePreferences( void )
 
   gtkAddLabelColon( _(MSGTR_GUI_MaximumUsageSpareCPU),hbox5 );
 
-  if ( guiInfo.sh_video && guiInfo.Playing ) HSPPQualityadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,get_video_quality_max( guiInfo.sh_video ),1,0,0 ) );
-   else HSPPQualityadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,1,0,0 ) );
+  HSPPQualityadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,0,1,0,0 ) );
   HSPPQuality=gtkAddHScale( HSPPQualityadj,hbox5,0 );
 
   vbox602=gtkAddVBox(
@@ -1240,6 +1239,7 @@ static GtkWidget * CreatePreferences( void )
 void ShowPreferences( void )
 {
  GSList *list;
+ gdouble upper = 0, value = 0;
 
  if ( Preferences ) gtkRaise( Preferences );
    else Preferences=CreatePreferences();
@@ -1482,7 +1482,15 @@ void ShowPreferences( void )
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSaveWinPos ),gui_save_pos );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBShowVideoWindow ),!gtkShowVideoWindow );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBStopXScreenSaver ),stop_xscreensaver );
- gtk_adjustment_set_value( HSPPQualityadj,auto_quality );
+
+ if (guiInfo.sh_video && guiInfo.Playing)
+ {
+   upper = get_video_quality_max(guiInfo.sh_video);
+   value = auto_quality;
+ }
+ gtk_adjustment_set_upper(HSPPQualityadj, upper);
+ gtk_adjustment_set_value(HSPPQualityadj, value);
+ gtk_adjustment_value_changed(HSPPQualityadj);
 
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBPlayBar ),gtkEnablePlayBar );
  if ( !guiApp.playbarIsPresent )

@@ -217,6 +217,7 @@ static int    old_video_driver = 0;
 static float old_gtkAOExtraStereoMul;
 static float old_audio_delay;
 static float old_vo_panscan;
+static float old_sub_delay;
 
 static GtkWidget *AudioConfig;
 static GtkWidget *DXR3Config;
@@ -354,7 +355,6 @@ static void prButton( GtkButton * button, gpointer user_data )
         gtkASS.top_margin=gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON( SBASSTopMargin ) );
         gtkASS.bottom_margin=gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON( SBASSBottomMargin ) );
 #endif
-        sub_delay=gtk_adjustment_get_value(HSSubDelayadj);
         sub_fps=gtk_adjustment_get_value(HSSubFPSadj);
         sub_pos=(int)gtk_adjustment_get_value(HSSubPositionadj);
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBOSDNone ) ) ) osd_level=0;
@@ -433,6 +433,7 @@ static void prButton( GtkButton * button, gpointer user_data )
         if (gtkAOExtraStereoMul != old_gtkAOExtraStereoMul) mplayer(MPLAYER_SET_EXTRA_STEREO, old_gtkAOExtraStereoMul, 0);
         if (audio_delay != old_audio_delay) audio_delay = old_audio_delay;
         if (vo_panscan != old_vo_panscan) mplayer(MPLAYER_SET_PANSCAN, old_vo_panscan, 0);
+        if (sub_delay != old_sub_delay) sub_delay = old_sub_delay;
 destroy:
         gtk_widget_destroy( Preferences );
         if ( AudioConfig ) gtk_widget_destroy( AudioConfig );
@@ -861,7 +862,8 @@ static GtkWidget * CreatePreferences( void )
   label=gtkAddLabelColon( _(MSGTR_GUI_Encoding),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,3,4,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( GTK_FILL ),0,0 );
 
-  HSSubDelayadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-10.0,10,0.1,0,0 ) );
+  old_sub_delay = sub_delay;
+  HSSubDelayadj=GTK_ADJUSTMENT( gtk_adjustment_new( sub_delay,-10.0,10,0.1,0,0 ) );
   HSSubDelay=gtkAddHScale( HSSubDelayadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSSubDelay,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
@@ -1392,7 +1394,6 @@ void ShowPreferences( void )
  gtk_widget_set_sensitive( SBASSBottomMargin,FALSE );
 #endif
 
- gtk_adjustment_set_value( HSSubDelayadj,sub_delay );
  gtk_adjustment_set_value( HSSubFPSadj,sub_fps );
  gtk_adjustment_set_value( HSSubPositionadj,sub_pos );
  switch ( osd_level )

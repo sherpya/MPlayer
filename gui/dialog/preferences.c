@@ -225,6 +225,8 @@ static float old_subtitle_font_radius;
 static float old_subtitle_font_thickness;
 static float old_text_font_scale_factor;
 static float old_osd_font_scale_factor;
+#else
+static float old_font_factor;
 #endif
 
 static GtkWidget *AudioConfig;
@@ -377,8 +379,6 @@ static void prButton( GtkButton * button, gpointer user_data )
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleHeight ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,1,0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleWidth ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,2,0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleDiagonal ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,3,0 );
-#else
-        mplayer( MPLAYER_SET_FONT_FACTOR,gtk_adjustment_get_value(HSFontFactoradj),0 );
 #endif
 
         /* -- 5th page */
@@ -443,6 +443,8 @@ static void prButton( GtkButton * button, gpointer user_data )
         if (subtitle_font_thickness != old_subtitle_font_thickness) mplayer(MPLAYER_SET_FONT_OUTLINE, old_subtitle_font_thickness  / 8.0 * 100.0, 0); // transform 0..8 to 0..100
         if (text_font_scale_factor != old_text_font_scale_factor) mplayer(MPLAYER_SET_FONT_TEXTSCALE, old_text_font_scale_factor, 0);
         if (osd_font_scale_factor != old_osd_font_scale_factor) mplayer(MPLAYER_SET_FONT_OSDSCALE, old_osd_font_scale_factor, 0);
+#else
+        if (font_factor != old_font_factor) mplayer(MPLAYER_SET_FONT_FACTOR, old_font_factor, 0);
 #endif
 destroy:
         gtk_widget_destroy( Preferences );
@@ -1071,7 +1073,8 @@ static GtkWidget * CreatePreferences( void )
 #else
   hbox7=gtkAddHBox( vbox603,1 );
   gtkAddLabelColon( _(MSGTR_GUI_Outline),hbox7 );
-  HSFontFactoradj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,10,0.05,0,0 ) );
+  old_font_factor = font_factor;
+  HSFontFactoradj=GTK_ADJUSTMENT( gtk_adjustment_new( font_factor,0,10,0.05,0,0 ) );
   HSFontFactor=gtkAddHScale( HSFontFactoradj,hbox7,2 );
 #endif
 
@@ -1459,8 +1462,6 @@ void ShowPreferences( void )
    case 2: gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleWidth ),TRUE ); break;
    case 3: gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleDiagonal ),TRUE ); break;
   }
-#else
- gtk_adjustment_set_value( HSFontFactoradj,font_factor );
 #endif
 
 /* 5th page */

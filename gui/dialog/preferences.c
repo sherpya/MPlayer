@@ -322,6 +322,7 @@ static void on_framedrop_toggled (GtkToggleButton *button, gpointer user_data)
 static void prButton( GtkButton * button, gpointer user_data )
 {
  static int inform = True;
+ const gchar *prFontName;
 
  (void) button;
 
@@ -373,7 +374,13 @@ static void prButton( GtkButton * button, gpointer user_data )
 
 
         /* 4th page */
-        setdup( &font_name,gtk_entry_get_text( GTK_ENTRY( prEFontName ) ) );
+        prFontName = gtk_entry_get_text(GTK_ENTRY(prEFontName));
+        if (!*prFontName) prFontName = NULL;
+        if (prFontName && (gstrcmp(font_name, prFontName) != 0))
+        {
+          setdup(&font_name, prFontName);
+          mplayer(MPLAYER_LOAD_FONT, 0, 0);
+        }
 #ifdef CONFIG_FREETYPE
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontNoAutoScale ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,0,0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontAutoScaleHeight ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,1,0 );

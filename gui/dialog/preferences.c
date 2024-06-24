@@ -463,6 +463,17 @@ static void prButton( GtkButton * button, gpointer user_data )
   }
 }
 
+static gboolean prDelete (GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+  (void) widget;
+  (void) event;
+  (void) user_data;
+
+  prButton(NULL, GINT_TO_POINTER(bCancel));
+
+  return TRUE;
+}
+
 static void prHScaleChanged (GtkRange *range, gpointer user_data)
 {
  (void) range;
@@ -1170,6 +1181,7 @@ static GtkWidget * CreatePreferences( void )
   gtk_widget_add_accelerator( BOk,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
   gtk_widget_add_accelerator( BCancel,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
 
+  g_signal_connect( G_OBJECT( Preferences ),"delete-event",G_CALLBACK( prDelete ),NULL );
   g_signal_connect( G_OBJECT( Preferences ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Preferences );
 
   g_signal_connect(G_OBJECT(notebook1), "switch-page", G_CALLBACK(notebook_switch_page), CLVDrivers);

@@ -222,6 +222,7 @@ static float old_sub_delay;
 static int old_sub_pos;
 #ifdef CONFIG_FREETYPE
 static float old_subtitle_font_radius;
+static float old_subtitle_font_thickness;
 #endif
 
 static GtkWidget *AudioConfig;
@@ -370,7 +371,6 @@ static void prButton( GtkButton * button, gpointer user_data )
         /* 4th page */
         setdup( &font_name,gtk_entry_get_text( GTK_ENTRY( prEFontName ) ) );
 #ifdef CONFIG_FREETYPE
-        mplayer( MPLAYER_SET_FONT_OUTLINE,gtk_adjustment_get_value(HSFontOutLineadj),0 );
         mplayer( MPLAYER_SET_FONT_TEXTSCALE,gtk_adjustment_get_value(HSFontTextScaleadj),0 );
         mplayer( MPLAYER_SET_FONT_OSDSCALE,gtk_adjustment_get_value(HSFontOSDScaleadj),0 );
         if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( RBFontNoAutoScale ) ) ) mplayer( MPLAYER_SET_FONT_AUTOSCALE,0,0 );
@@ -440,6 +440,7 @@ static void prButton( GtkButton * button, gpointer user_data )
         if (sub_pos != old_sub_pos) sub_pos = old_sub_pos;
 #ifdef CONFIG_FREETYPE
         if (subtitle_font_radius != old_subtitle_font_radius) mplayer(MPLAYER_SET_FONT_BLUR, old_subtitle_font_radius / 8.0 * 100.0, 0); // transform 0..8 to 0..100
+        if (subtitle_font_thickness != old_subtitle_font_thickness) mplayer(MPLAYER_SET_FONT_OUTLINE, old_subtitle_font_thickness  / 8.0 * 100.0, 0); // transform 0..8 to 0..100
 #endif
 destroy:
         gtk_widget_destroy( Preferences );
@@ -1045,7 +1046,8 @@ static GtkWidget * CreatePreferences( void )
   label=gtkAddLabelColon( _(MSGTR_GUI_Outline),NULL );
     gtk_table_attach( GTK_TABLE( table1 ),label,0,1,3,4,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  HSFontOutLineadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,100,0.1,0,0 ) );
+  old_subtitle_font_thickness = subtitle_font_thickness;
+  HSFontOutLineadj=GTK_ADJUSTMENT( gtk_adjustment_new( subtitle_font_thickness / 8.0 * 100.0,0,100,0.1,0,0 ) ); // transform 0..8 to 0..100
   HSFontOutLine=gtkAddHScale( HSFontOutLineadj,NULL,1 );
     gtk_table_attach( GTK_TABLE( table1 ),HSFontOutLine,1,2,3,4,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
@@ -1438,7 +1440,6 @@ void ShowPreferences( void )
  /* font ... */
  if ( font_name ) gtk_entry_set_text( GTK_ENTRY( prEFontName ),font_name );
 #ifdef CONFIG_FREETYPE
- gtk_adjustment_set_value( HSFontOutLineadj,subtitle_font_thickness / 8.0 * 100.0);   // transform 0..8 to 0..100
  gtk_adjustment_set_value( HSFontTextScaleadj,text_font_scale_factor );
  gtk_adjustment_set_value( HSFontOSDScaleadj,osd_font_scale_factor );
  {

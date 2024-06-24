@@ -127,12 +127,11 @@ static void eqSetChannelNames( void )
  gtk_clist_select_row( GTK_CLIST( ChannelsList ),0,0 );
 }
 
-static gboolean eqHScaleMotion( GtkWidget * widget,GdkEventMotion  * event,gpointer user_data )
+static void eqHScaleChanged (GtkRange *range, gpointer user_data)
 {
  equalizer_t eq;
 
- (void) widget;
- (void) event;
+ (void) range;
 
  switch ( GPOINTER_TO_INT(user_data) )
   {
@@ -146,7 +145,7 @@ static gboolean eqHScaleMotion( GtkWidget * widget,GdkEventMotion  * event,gpoin
    case 7: eq.gain=gtk_adjustment_get_value(A4000adj); break;
    case 8: eq.gain=gtk_adjustment_get_value(A8000adj); break;
    case 9: eq.gain=gtk_adjustment_get_value(A16000adj); break;
-   default: return FALSE;
+   default: return;
   }
  eq.gain=-eq.gain;
  eq.band=GPOINTER_TO_INT(user_data);
@@ -156,14 +155,11 @@ static gboolean eqHScaleMotion( GtkWidget * widget,GdkEventMotion  * event,gpoin
    for ( i=0;i<6;i++ )
     { eq.channel=i; mplayer( MPLAYER_SET_EQUALIZER,0,&eq ); }
   } else { eq.channel=Channel; mplayer( MPLAYER_SET_EQUALIZER,0,&eq ); }
-
- return FALSE;
 }
 
-static gboolean eqVScaleMotion( GtkWidget * widget,GdkEventMotion  * event,gpointer user_data )
+static void eqVScaleChanged (GtkRange *range, gpointer user_data)
 {
- (void) widget;
- (void) event;
+ (void) range;
 
  switch( GPOINTER_TO_INT(user_data) )
   {
@@ -172,8 +168,6 @@ static gboolean eqVScaleMotion( GtkWidget * widget,GdkEventMotion  * event,gpoin
    case 3: mplayer( MPLAYER_SET_HUE,gtk_adjustment_get_value(VHueadj),0 );                break;
    case 4: mplayer( MPLAYER_SET_SATURATION,gtk_adjustment_get_value(VSaturationadj),0 );  break;
   }
-
- return FALSE;
 }
 
 static void eqButtonReleased( GtkButton * button,gpointer user_data )
@@ -450,21 +444,21 @@ static GtkWidget * CreateEqualizer( void )
 
   g_signal_connect( G_OBJECT( ChannelsList ),"select-row",G_CALLBACK( eqSelectChannelsListRow ),NULL );
 
-  g_signal_connect( G_OBJECT( A3125 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(0) );
-  g_signal_connect( G_OBJECT( A6250 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(1) );
-  g_signal_connect( G_OBJECT( A125 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(2) );
-  g_signal_connect( G_OBJECT( A250 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(3) );
-  g_signal_connect( G_OBJECT( A500 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(4) );
-  g_signal_connect( G_OBJECT( A1000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(5) );
-  g_signal_connect( G_OBJECT( A2000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(6) );
-  g_signal_connect( G_OBJECT( A4000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(7) );
-  g_signal_connect( G_OBJECT( A8000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(8) );
-  g_signal_connect( G_OBJECT( A16000 ),"motion-notify-event",G_CALLBACK( eqHScaleMotion ),GINT_TO_POINTER(9) );
+  g_signal_connect(G_OBJECT(A3125), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(0));
+  g_signal_connect(G_OBJECT(A6250), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(1));
+  g_signal_connect(G_OBJECT(A125), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(2));
+  g_signal_connect(G_OBJECT(A250), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(3));
+  g_signal_connect(G_OBJECT(A500), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(4));
+  g_signal_connect(G_OBJECT(A1000), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(5));
+  g_signal_connect(G_OBJECT(A2000), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(6));
+  g_signal_connect(G_OBJECT(A4000), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(7));
+  g_signal_connect(G_OBJECT(A8000), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(8));
+  g_signal_connect(G_OBJECT(A16000), "value-changed", G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(9));
 
-  g_signal_connect( G_OBJECT( VContrast ),"motion-notify-event",G_CALLBACK( eqVScaleMotion ),GINT_TO_POINTER(1) );
-  g_signal_connect( G_OBJECT( VBrightness ),"motion-notify-event",G_CALLBACK( eqVScaleMotion ),GINT_TO_POINTER(2) );
-  g_signal_connect( G_OBJECT( VHue ),"motion-notify-event",G_CALLBACK( eqVScaleMotion ),GINT_TO_POINTER(3) );
-  g_signal_connect( G_OBJECT( VSaturation ),"motion-notify-event",G_CALLBACK( eqVScaleMotion ),GINT_TO_POINTER(4) );
+  g_signal_connect(G_OBJECT(VContrast), "value-changed", G_CALLBACK(eqVScaleChanged), GINT_TO_POINTER(1));
+  g_signal_connect(G_OBJECT(VBrightness), "value-changed", G_CALLBACK(eqVScaleChanged), GINT_TO_POINTER(2));
+  g_signal_connect(G_OBJECT(VHue), "value-changed", G_CALLBACK(eqVScaleChanged), GINT_TO_POINTER(3));
+  g_signal_connect(G_OBJECT(VSaturation), "value-changed", G_CALLBACK(eqVScaleChanged), GINT_TO_POINTER(4));
 
   g_signal_connect( G_OBJECT( Ok ),"clicked",G_CALLBACK( eqButtonReleased ),GINT_TO_POINTER(0) );
   g_signal_connect( G_OBJECT( Clear ),"clicked",G_CALLBACK( eqButtonReleased ),GINT_TO_POINTER(1) );

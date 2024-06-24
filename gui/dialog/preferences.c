@@ -214,6 +214,8 @@ static char * ao_driver[3];
 static char * vo_driver[3];
 static int    old_video_driver = 0;
 
+static float old_gtkAOExtraStereoMul;
+
 static GtkWidget *AudioConfig;
 static GtkWidget *DXR3Config;
 
@@ -320,7 +322,6 @@ static void prButton( GtkButton * button, gpointer user_data )
         gtkAOExtraStereo=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBExtraStereo ) );
         gtkAONorm=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBNormalize ) );
         soft_vol=gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ) );
-        mplayer( MPLAYER_SET_EXTRA_STEREO,gtk_adjustment_get_value(HSExtraStereoMuladj),0 );
         audio_delay=gtk_adjustment_get_value(HSAudioDelayadj);
 
         if (ao_driver[0]) listSet(&audio_driver_list, ao_driver[0]);
@@ -425,9 +426,11 @@ static void prButton( GtkButton * button, gpointer user_data )
          }
 
         prNotebookPage = gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook1));
-         // fall through
+        goto destroy;
 
    case bCancel:
+        if (gtkAOExtraStereoMul != old_gtkAOExtraStereoMul) mplayer(MPLAYER_SET_EXTRA_STEREO, old_gtkAOExtraStereoMul, 0);
+destroy:
         gtk_widget_destroy( Preferences );
         if ( AudioConfig ) gtk_widget_destroy( AudioConfig );
 #ifdef CONFIG_DXR3
@@ -729,7 +732,8 @@ static GtkWidget * CreatePreferences( void )
   hbox8=gtkAddHBox( vbox3,1 );
   /*label=*/gtkAddLabelColon( _(MSGTR_GUI_Coefficient),hbox8 );
 //    gtk_misc_set_padding( GTK_MISC( label ),20,0 );
-  HSExtraStereoMuladj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-10,10,0.1,0,0 ) );
+  old_gtkAOExtraStereoMul = gtkAOExtraStereoMul;
+  HSExtraStereoMuladj=GTK_ADJUSTMENT( gtk_adjustment_new( gtkAOExtraStereoMul,-10,10,0.1,0,0 ) );
   HSExtraStereoMul=gtkAddHScale( HSExtraStereoMuladj,hbox8,1 );
   gtkAddHSeparator( vbox3 );
 
@@ -1277,9 +1281,9 @@ void ShowPreferences( void )
  prToggled(NULL, GINT_TO_POINTER(11)); // 11 is CBReplayGain, sets sensitivity of RGbox
  gtk_adjustment_set_value(RGadj, gtkReplayGainAdjustment);
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBExtraStereo ),gtkAOExtraStereo );
+ prToggled(NULL, GINT_TO_POINTER(0)); // 0 is CBExtraStereo, sets sensitivity of HSExtraStereoMul
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBNormalize ),gtkAONorm );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ),soft_vol );
- gtk_adjustment_set_value( HSExtraStereoMuladj,gtkAOExtraStereoMul );
  {
   int    i = 0, c = 0;
   char * tmp[3]; tmp[2]="";

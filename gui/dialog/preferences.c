@@ -1238,11 +1238,28 @@ static GtkWidget * CreatePreferences( void )
 
 void ShowPreferences( void )
 {
+ gboolean preferences;
  GSList *list;
  gdouble upper = 0, value = 0;
 
- if ( Preferences ) gtkRaise( Preferences );
-   else Preferences=CreatePreferences();
+ preferences = (Preferences != NULL);
+
+ if (!preferences) Preferences = CreatePreferences();
+
+ if (guiInfo.sh_video && guiInfo.Playing)
+ {
+   upper = get_video_quality_max(guiInfo.sh_video);
+   value = auto_quality;
+ }
+ gtk_adjustment_set_upper(HSPPQualityadj, upper);
+ gtk_adjustment_set_value(HSPPQualityadj, value);
+ gtk_adjustment_value_changed(HSPPQualityadj);
+
+ if (preferences)
+ {
+   gtkRaise(Preferences);
+   return;
+ }
 
 /* 1st page */
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBAudioEqualizer ),gtkEnableAudioEqualizer );
@@ -1482,15 +1499,6 @@ void ShowPreferences( void )
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSaveWinPos ),gui_save_pos );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBShowVideoWindow ),!gtkShowVideoWindow );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBStopXScreenSaver ),stop_xscreensaver );
-
- if (guiInfo.sh_video && guiInfo.Playing)
- {
-   upper = get_video_quality_max(guiInfo.sh_video);
-   value = auto_quality;
- }
- gtk_adjustment_set_upper(HSPPQualityadj, upper);
- gtk_adjustment_set_value(HSPPQualityadj, value);
- gtk_adjustment_value_changed(HSPPQualityadj);
 
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBPlayBar ),gtkEnablePlayBar );
  if ( !guiApp.playbarIsPresent )

@@ -61,6 +61,8 @@ static GtkAdjustment * A3125adj, * A125adj, * A6250adj, * A250adj, * A500adj, * 
 
 static int Channel = -1;   // the selected channel, or -1 (all channels)
 
+static float old_gtkEquChannels[6][10];
+
 // ---
 
 char * gtkEquChannel1 = NULL;
@@ -252,6 +254,23 @@ static gboolean eqDelete (GtkWidget *widget, GdkEvent *event, gpointer user_data
   (void) event;
   (void) user_data;
 
+  if (memcmp(gtkEquChannels, old_gtkEquChannels, sizeof(gtkEquChannels)) != 0)
+  {
+    unsigned int i, j;
+    equalizer_t eq;
+
+    memcpy(gtkEquChannels, old_gtkEquChannels, sizeof(gtkEquChannels));
+
+    for (i = 0; i < FF_ARRAY_ELEMS(gtkEquChannels); i++)
+      for (j = 0; j < FF_ARRAY_ELEMS(*gtkEquChannels); j++)
+      {
+        eq.channel = i;
+        eq.band = j;
+        eq.gain = gtkEquChannels[i][j];
+        mplayer(MPLAYER_SET_EQUALIZER, 0, &eq);
+      }
+  }
+
   mplayer(MPLAYER_SET_CONTRAST, vo_gamma_contrast, 0);
   mplayer(MPLAYER_SET_BRIGHTNESS, vo_gamma_brightness, 0);
   mplayer(MPLAYER_SET_HUE, vo_gamma_hue, 0);
@@ -310,6 +329,8 @@ static GtkWidget * CreateEqualizer( void )
   gtk_table_set_row_spacings( GTK_TABLE( table1 ),4 );
   gtk_table_set_col_spacings( GTK_TABLE( table1 ),9 );
 
+  memcpy(old_gtkEquChannels, gtkEquChannels, sizeof(gtkEquChannels));
+
   A3125adj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-eqRange,eqRange,0.5,0,0 ) );
   A3125=gtkAddVScale( A3125adj,NULL,-1 );
     gtk_table_attach( GTK_TABLE( table1 ),A3125,0,1,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),0,0 );
@@ -349,6 +370,9 @@ static GtkWidget * CreateEqualizer( void )
   A16000adj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-eqRange,eqRange,0.5,0,0 ) );
   A16000=gtkAddVScale( A16000adj,NULL,-1 );
     gtk_table_attach( GTK_TABLE( table1 ),A16000,9,10,0,1,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),0,0 );
+
+  Channel = -1;
+  eqSetBands(0);
 
   gtk_table_attach( GTK_TABLE( table1 ),
     gtkAddLabel( _(MSGTR_GUI_Frequency0),NULL ),
@@ -507,9 +531,6 @@ void ShowEqualizer( void )
  gtk_widget_set_sensitive(VBrightness, set);
  gtk_widget_set_sensitive(VHue, set);
  gtk_widget_set_sensitive(VSaturation, set);
-
- Channel=-1;
- eqSetBands( 0 );
 
  set = (guiInfo.Playing && gtkEnableAudioEqualizer);
 

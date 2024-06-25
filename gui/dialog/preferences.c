@@ -1341,18 +1341,12 @@ void ShowPreferences( void )
     c++;
     tmp[0]=(char *)info->short_name; tmp[1]=(char *)info->name; gtk_clist_append( GTK_CLIST( CLADrivers ),tmp );
    }
-  if ( old_audio_driver > -1 )
-   {
-    gtk_clist_select_row( GTK_CLIST( CLADrivers ),old_audio_driver,0 );
-    gtk_clist_get_text( GTK_CLIST( CLADrivers ),old_audio_driver,0,&ao_driver );
-    gtk_widget_set_sensitive( AConfig,FALSE );
-    if ( !strncmp( ao_driver,"oss",3 ) ||
-         !strncmp( ao_driver,"alsa",4 ) ||
-         !strncmp( ao_driver,"esd",3 ) ||
-         !strncmp( ao_driver,"sdl",3 ) )
-      gtk_widget_set_sensitive( AConfig,TRUE );
-   }
-  else ao_driver = NULL;
+  if (old_audio_driver > -1) gtk_clist_select_row(GTK_CLIST(CLADrivers), old_audio_driver, 0);
+  else
+  {
+    ao_driver = NULL;
+    gtk_widget_set_sensitive(AConfig, FALSE);
+  }
  }
 
 /* 2nd page */
@@ -1384,13 +1378,12 @@ void ShowPreferences( void )
      tmp[0]=(char *)video_out_drivers[i - 1]->info->short_name; tmp[1]=(char *)video_out_drivers[i - 1]->info->name;
      gtk_clist_append( GTK_CLIST( CLVDrivers ),tmp );
     }
-  vo_driver = NULL;
-  gtk_clist_select_row( GTK_CLIST( CLVDrivers ),old_video_driver,0 );
-  gtk_clist_get_text( GTK_CLIST( CLVDrivers ),old_video_driver,0,&vo_driver );
-  gtk_widget_set_sensitive( VConfig,FALSE );
-#ifdef CONFIG_DXR3
-  if ( !gstrcmp( vo_driver,"dxr3" ) ) gtk_widget_set_sensitive( VConfig,TRUE );
-#endif
+  if (old_video_driver > -1) gtk_clist_select_row(GTK_CLIST(CLVDrivers), old_video_driver, 0);
+  else
+  {
+    vo_driver = NULL;
+    gtk_widget_set_sensitive(VConfig, FALSE);
+  }
  }
 
   gtk_adjustment_set_value( HSFPSadj,force_fps );

@@ -87,19 +87,6 @@ static void eqSetBands( int channel )
  gtk_adjustment_set_value( A4000adj,-gtkEquChannels[channel][7] );
  gtk_adjustment_set_value( A8000adj,-gtkEquChannels[channel][8] );
  gtk_adjustment_set_value( A16000adj,-gtkEquChannels[channel][9] );
-
- if ( guiInfo.sh_video )
-  {
-   get_video_colors( guiInfo.sh_video,"brightness",&vo_gamma_brightness );
-   get_video_colors( guiInfo.sh_video,"contrast",&vo_gamma_contrast );
-   get_video_colors( guiInfo.sh_video,"hue",&vo_gamma_hue );
-   get_video_colors( guiInfo.sh_video,"saturation",&vo_gamma_saturation );
-  }
-
- gtk_adjustment_set_value( VContrastadj,vo_gamma_contrast );
- gtk_adjustment_set_value( VBrightnessadj,vo_gamma_brightness );
- gtk_adjustment_set_value( VHueadj,vo_gamma_hue );
- gtk_adjustment_set_value( VSaturationadj,vo_gamma_saturation );
 }
 
 static void eqSetChannelNames( void )
@@ -176,7 +163,17 @@ static void eqButtonReleased( GtkButton * button,gpointer user_data )
 
  switch( GPOINTER_TO_INT(user_data) )
   {
-   case 0: // must only destroy! (see eqDelete)
+   case 0:
+        if (guiInfo.sh_video)
+         {
+          get_video_colors(guiInfo.sh_video, "brightness", &vo_gamma_brightness);
+          get_video_colors(guiInfo.sh_video, "contrast", &vo_gamma_contrast);
+          get_video_colors(guiInfo.sh_video, "hue", &vo_gamma_hue);
+          get_video_colors(guiInfo.sh_video, "saturation", &vo_gamma_saturation);
+         }
+         // fall through
+
+   case 9:
         gtk_widget_destroy( Equalizer );
         if ( EquConfig ) gtk_widget_destroy( EquConfig );
         break;
@@ -190,11 +187,18 @@ static void eqButtonReleased( GtkButton * button,gpointer user_data )
          else
           {
            if ( !guiInfo.Playing ) break;
+
            mplayer( MPLAYER_SET_CONTRAST,0,0 );
+           gtk_adjustment_set_value(VContrastadj, 0);
+
            mplayer( MPLAYER_SET_BRIGHTNESS,0,0 );
+           gtk_adjustment_set_value(VBrightnessadj, 0);
+
            mplayer( MPLAYER_SET_HUE,0,0 );
+           gtk_adjustment_set_value(VHueadj, 0);
+
            mplayer( MPLAYER_SET_SATURATION,0,0 );
-           eqSetBands( Channel );
+           gtk_adjustment_set_value(VSaturationadj, 0);
           }
         break;
    case 2:
@@ -258,7 +262,12 @@ static gboolean eqDelete (GtkWidget *widget, GdkEvent *event, gpointer user_data
   (void) event;
   (void) user_data;
 
-  eqButtonReleased(NULL, GINT_TO_POINTER(0)); // press ok to destroy windows
+  mplayer(MPLAYER_SET_CONTRAST, vo_gamma_contrast, 0);
+  mplayer(MPLAYER_SET_BRIGHTNESS, vo_gamma_brightness, 0);
+  mplayer(MPLAYER_SET_HUE, vo_gamma_hue, 0);
+  mplayer(MPLAYER_SET_SATURATION, vo_gamma_saturation, 0);
+
+  eqButtonReleased(NULL, GINT_TO_POINTER(9)); // destroy windows
 
   return TRUE;
 }
@@ -414,22 +423,26 @@ static GtkWidget * CreateEqualizer( void )
     gtkAddLabelColon( _(MSGTR_GUI_Saturation),NULL ),
     0,1,3,4,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
-  VContrastadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
+  if (vo_gamma_contrast == 1000) vo_gamma_contrast = 0;
+  VContrastadj=GTK_ADJUSTMENT( gtk_adjustment_new( vo_gamma_contrast,-100,100,1,0,0 ) );
   VContrast=gtkAddHScale( VContrastadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),VContrast,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
     gtk_widget_set_size_request( VContrast,-1,45 );
 
-  VBrightnessadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
+  if (vo_gamma_brightness == 1000) vo_gamma_brightness = 0;
+  VBrightnessadj=GTK_ADJUSTMENT( gtk_adjustment_new( vo_gamma_brightness,-100,100,1,0,0 ) );
   VBrightness=gtkAddHScale( VBrightnessadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),VBrightness,1,2,1,2,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
     gtk_widget_set_size_request( VBrightness,-1,45 );
 
-  VHueadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
+  if (vo_gamma_hue == 1000) vo_gamma_hue = 0;
+  VHueadj=GTK_ADJUSTMENT( gtk_adjustment_new( vo_gamma_hue,-100,100,1,0,0 ) );
   VHue=gtkAddHScale( VHueadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),VHue,1,2,2,3,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
     gtk_widget_set_size_request( VHue,-1,45 );
 
-  VSaturationadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
+  if (vo_gamma_saturation == 1000) vo_gamma_saturation = 0;
+  VSaturationadj=GTK_ADJUSTMENT( gtk_adjustment_new( vo_gamma_saturation,-100,100,1,0,0 ) );
   VSaturation=gtkAddHScale( VSaturationadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),VSaturation,1,2,3,4,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
     gtk_widget_set_size_request( VSaturation,-1,45 );

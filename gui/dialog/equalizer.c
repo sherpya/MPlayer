@@ -113,7 +113,6 @@ static void eqSetChannelNames( void )
    str[0]=gtkEquChannel5; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
    str[0]=gtkEquChannel6; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
   }
- gtk_clist_select_row( GTK_CLIST( ChannelsList ),0,0 );
 }
 
 static void eqHScaleChanged (GtkRange *range, gpointer user_data)

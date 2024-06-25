@@ -210,10 +210,8 @@ static struct
  };
 #endif
 
-static int    old_audio_driver = 0;
 static char * ao_driver[3];
 static char * vo_driver[3];
-static int    old_video_driver = 0;
 
 static float old_gtkAOExtraStereoMul;
 static float old_audio_delay;
@@ -1323,9 +1321,8 @@ void ShowPreferences( void )
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBNormalize ),gtkAONorm );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ),soft_vol );
  {
-  int    i = 0, c = 0;
+  int    i = 0, c = 0, old_audio_driver = -1;
   char * tmp[3]; tmp[2]="";
-  old_audio_driver=-1;
   if ( CLADrivers ) gtk_clist_clear( GTK_CLIST( CLADrivers ) );
   while ( audio_out_drivers[i] )
    {
@@ -1376,9 +1373,8 @@ void ShowPreferences( void )
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBFlip ),flip );
 
  {
-  int i = 0, c = 0;
+  int i = 0, c = 0, old_video_driver = -1;
   char * tmp[3]; tmp[2]="";
-  old_video_driver = -1;
   if ( CLVDrivers ) gtk_clist_clear( GTK_CLIST( CLVDrivers ) );
   while ( video_out_drivers[i] )
    if ( video_out_drivers[i++]->control( VOCTRL_GUISUPPORT,NULL ) == VO_TRUE )

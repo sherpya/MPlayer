@@ -59,7 +59,7 @@ static GtkWidget * Ok, * Clear, * Config;
 static GtkWidget * A3125,  * A125, * A6250, * A250, * A500, * A1000, * A2000, * A4000, * A8000, * A16000;
 static GtkAdjustment * A3125adj, * A125adj, * A6250adj, * A250adj, * A500adj, * A1000adj, * A2000adj, * A4000adj, * A8000adj, * A16000adj;
 
-static int Channel = -1;
+static int Channel = -1;   // the selected channel, or -1 (all channels)
 
 // ---
 

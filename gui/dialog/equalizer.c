@@ -76,45 +76,6 @@ char * gtkEquChannel6 = NULL;
 
 void ShowEquConfig( void );
 
-static void eqSetBands( int channel )
-{
- if ( channel < 0 ) channel=0;
- gtk_adjustment_set_value( A3125adj,-gtkEquChannels[channel][0] );
- gtk_adjustment_set_value( A6250adj,-gtkEquChannels[channel][1] );
- gtk_adjustment_set_value( A125adj,-gtkEquChannels[channel][2] );
- gtk_adjustment_set_value( A250adj,-gtkEquChannels[channel][3] );
- gtk_adjustment_set_value( A500adj,-gtkEquChannels[channel][4] );
- gtk_adjustment_set_value( A1000adj,-gtkEquChannels[channel][5] );
- gtk_adjustment_set_value( A2000adj,-gtkEquChannels[channel][6] );
- gtk_adjustment_set_value( A4000adj,-gtkEquChannels[channel][7] );
- gtk_adjustment_set_value( A8000adj,-gtkEquChannels[channel][8] );
- gtk_adjustment_set_value( A16000adj,-gtkEquChannels[channel][9] );
-}
-
-static void eqSetChannelNames( void )
-{
- gchar * str[2];
- gtk_clist_clear( GTK_CLIST( ChannelsList ) );
- str[1]="";
- str[0]=_(MSGTR_GUI_ChannelAll);
- gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
- if ( guiInfo.AudioChannels > 1 )
-  {
-   str[0]=gtkEquChannel1; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
-   str[0]=gtkEquChannel2; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
-  }
- if ( guiInfo.AudioChannels > 2 )
-  {
-   str[0]=gtkEquChannel3; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
-   str[0]=gtkEquChannel4; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
-  }
- if ( guiInfo.AudioChannels > 4 )
-  {
-   str[0]=gtkEquChannel5; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
-   str[0]=gtkEquChannel6; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
-  }
-}
-
 static void eqHScaleChanged (GtkRange *range, gpointer user_data)
 {
  equalizer_t eq;
@@ -143,6 +104,67 @@ static void eqHScaleChanged (GtkRange *range, gpointer user_data)
    for ( i=0;i<6;i++ )
     { eq.channel=i; mplayer( MPLAYER_SET_EQUALIZER,0,&eq ); }
   } else { eq.channel=Channel; mplayer( MPLAYER_SET_EQUALIZER,0,&eq ); }
+}
+
+static void eqSetBands( int channel )
+{
+ g_signal_handlers_block_by_func(G_OBJECT(A3125), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(0));
+ g_signal_handlers_block_by_func(G_OBJECT(A6250), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(1));
+ g_signal_handlers_block_by_func(G_OBJECT(A125), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(2));
+ g_signal_handlers_block_by_func(G_OBJECT(A250), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(3));
+ g_signal_handlers_block_by_func(G_OBJECT(A500), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(4));
+ g_signal_handlers_block_by_func(G_OBJECT(A1000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(5));
+ g_signal_handlers_block_by_func(G_OBJECT(A2000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(6));
+ g_signal_handlers_block_by_func(G_OBJECT(A4000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(7));
+ g_signal_handlers_block_by_func(G_OBJECT(A8000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(8));
+ g_signal_handlers_block_by_func(G_OBJECT(A16000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(9));
+
+ if ( channel < 0 ) channel=0;
+ gtk_adjustment_set_value( A3125adj,-gtkEquChannels[channel][0] );
+ gtk_adjustment_set_value( A6250adj,-gtkEquChannels[channel][1] );
+ gtk_adjustment_set_value( A125adj,-gtkEquChannels[channel][2] );
+ gtk_adjustment_set_value( A250adj,-gtkEquChannels[channel][3] );
+ gtk_adjustment_set_value( A500adj,-gtkEquChannels[channel][4] );
+ gtk_adjustment_set_value( A1000adj,-gtkEquChannels[channel][5] );
+ gtk_adjustment_set_value( A2000adj,-gtkEquChannels[channel][6] );
+ gtk_adjustment_set_value( A4000adj,-gtkEquChannels[channel][7] );
+ gtk_adjustment_set_value( A8000adj,-gtkEquChannels[channel][8] );
+ gtk_adjustment_set_value( A16000adj,-gtkEquChannels[channel][9] );
+
+ g_signal_handlers_unblock_by_func(G_OBJECT(A16000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(9));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A8000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(8));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A4000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(7));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A2000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(6));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A1000), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(5));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A500), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(4));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A250), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(3));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A125), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(2));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A6250), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(1));
+ g_signal_handlers_unblock_by_func(G_OBJECT(A3125), G_CALLBACK(eqHScaleChanged), GINT_TO_POINTER(0));
+}
+
+static void eqSetChannelNames( void )
+{
+ gchar * str[2];
+ gtk_clist_clear( GTK_CLIST( ChannelsList ) );
+ str[1]="";
+ str[0]=_(MSGTR_GUI_ChannelAll);
+ gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
+ if ( guiInfo.AudioChannels > 1 )
+  {
+   str[0]=gtkEquChannel1; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
+   str[0]=gtkEquChannel2; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
+  }
+ if ( guiInfo.AudioChannels > 2 )
+  {
+   str[0]=gtkEquChannel3; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
+   str[0]=gtkEquChannel4; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
+  }
+ if ( guiInfo.AudioChannels > 4 )
+  {
+   str[0]=gtkEquChannel5; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
+   str[0]=gtkEquChannel6; gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
+  }
 }
 
 static void eqVScaleChanged (GtkRange *range, gpointer user_data)

@@ -176,7 +176,7 @@ static void eqButtonReleased( GtkButton * button,gpointer user_data )
 
  switch( GPOINTER_TO_INT(user_data) )
   {
-   case 0:
+   case 0: // must only destroy! (see eqDelete)
         gtk_widget_destroy( Equalizer );
         if ( EquConfig ) gtk_widget_destroy( EquConfig );
         break;
@@ -250,6 +250,17 @@ static void eqNotebook( GtkNotebook * notebook, gpointer page,
 
     if (EquConfig) gtk_widget_show(EquConfig);
   }
+}
+
+static gboolean eqDelete (GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+  (void) widget;
+  (void) event;
+  (void) user_data;
+
+  eqButtonReleased(NULL, GINT_TO_POINTER(0)); // press ok to destroy windows
+
+  return TRUE;
 }
 
 static GtkWidget * CreateEqualizer( void )
@@ -439,6 +450,7 @@ static GtkWidget * CreateEqualizer( void )
   gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Escape,0,GTK_ACCEL_VISIBLE );
   gtk_widget_add_accelerator( Ok,"clicked",accel_group,GDK_KEY_Return,0,GTK_ACCEL_VISIBLE );
 
+  g_signal_connect( G_OBJECT( Equalizer ),"delete-event",G_CALLBACK( eqDelete ),NULL );
   g_signal_connect( G_OBJECT( Equalizer ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Equalizer );
   g_signal_connect( G_OBJECT( Equalizer ),"focus-in-event",G_CALLBACK( eqFocus ),GINT_TO_POINTER(2) );
 

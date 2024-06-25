@@ -46,7 +46,7 @@
 #include "equalizer.h"
 #include "tools.h"
 
-#define eqRange 15
+#define eqRange 12
 
 GtkWidget * Equalizer = NULL;
 static GtkWidget * EquConfig;

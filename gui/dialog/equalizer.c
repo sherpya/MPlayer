@@ -415,22 +415,22 @@ static GtkWidget * CreateEqualizer( void )
     0,1,3,4,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   VContrastadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
-  VContrast=gtkAddHScale( VContrastadj,NULL,1 );
+  VContrast=gtkAddHScale( VContrastadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),VContrast,1,2,0,1,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
     gtk_widget_set_size_request( VContrast,-1,45 );
 
   VBrightnessadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
-  VBrightness=gtkAddHScale( VBrightnessadj,NULL,1 );
+  VBrightness=gtkAddHScale( VBrightnessadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),VBrightness,1,2,1,2,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
     gtk_widget_set_size_request( VBrightness,-1,45 );
 
   VHueadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
-  VHue=gtkAddHScale( VHueadj,NULL,1 );
+  VHue=gtkAddHScale( VHueadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),VHue,1,2,2,3,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
     gtk_widget_set_size_request( VHue,-1,45 );
 
   VSaturationadj=GTK_ADJUSTMENT( gtk_adjustment_new( 0,-100,100,1,0,0 ) );
-  VSaturation=gtkAddHScale( VSaturationadj,NULL,1 );
+  VSaturation=gtkAddHScale( VSaturationadj,NULL,0 );
     gtk_table_attach( GTK_TABLE( table1 ),VSaturation,1,2,3,4,(GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
     gtk_widget_set_size_request( VSaturation,-1,45 );
 

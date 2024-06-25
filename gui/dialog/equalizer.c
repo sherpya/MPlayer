@@ -207,16 +207,6 @@ static void eqButtonReleased( GtkButton * button,gpointer user_data )
   }
 }
 
-static gboolean eqFocus( GtkWidget * widget,GdkEvent * event,gpointer user_data )
-{
- (void) widget;
- (void) event;
- (void) user_data;
-
- eqSetBands( Channel );
- return FALSE;
-}
-
 static void eqSelectChannelsListRow( GtkCList * clist,gint row,gint column,GdkEvent * event,gpointer user_data )
 {
  (void) clist;
@@ -465,7 +455,6 @@ static GtkWidget * CreateEqualizer( void )
 
   g_signal_connect( G_OBJECT( Equalizer ),"delete-event",G_CALLBACK( eqDelete ),NULL );
   g_signal_connect( G_OBJECT( Equalizer ),"destroy",G_CALLBACK( gtk_widget_destroyed ),&Equalizer );
-  g_signal_connect( G_OBJECT( Equalizer ),"focus-in-event",G_CALLBACK( eqFocus ),GINT_TO_POINTER(2) );
 
   g_signal_connect( G_OBJECT( ChannelsList ),"select-row",G_CALLBACK( eqSelectChannelsListRow ),NULL );
 

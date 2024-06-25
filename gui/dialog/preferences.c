@@ -1321,7 +1321,7 @@ void ShowPreferences( void )
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBNormalize ),gtkAONorm );
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ),soft_vol );
  {
-  int    i = 0, c = 0, old_audio_driver = -1;
+  int    i = 0, c = 0, my_audio_driver = -1;
   char * tmp[3]; tmp[2]="";
   if ( CLADrivers ) gtk_clist_clear( GTK_CLIST( CLADrivers ) );
   while ( audio_out_drivers[i] )
@@ -1335,13 +1335,13 @@ void ShowPreferences( void )
       char * name = gstrdup( audio_driver_list[0] );
       char * sep = gstrchr( name,':' );
       if ( sep ) *sep=0;
-      if ( !gstrcmp( name,info->short_name ) && !audio_driver_list[1] ) old_audio_driver=c;
+      if ( !gstrcmp( name,info->short_name ) && !audio_driver_list[1] ) my_audio_driver=c;
       free( name );
      }
     c++;
     tmp[0]=(char *)info->short_name; tmp[1]=(char *)info->name; gtk_clist_append( GTK_CLIST( CLADrivers ),tmp );
    }
-  if (old_audio_driver > -1) gtk_clist_select_row(GTK_CLIST(CLADrivers), old_audio_driver, 0);
+  if (my_audio_driver > -1) gtk_clist_select_row(GTK_CLIST(CLADrivers), my_audio_driver, 0);
   else
   {
     ao_driver = NULL;
@@ -1367,18 +1367,18 @@ void ShowPreferences( void )
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBFlip ),flip );
 
  {
-  int i = 0, c = 0, old_video_driver = -1;
+  int i = 0, c = 0, my_video_driver = -1;
   char * tmp[3]; tmp[2]="";
   if ( CLVDrivers ) gtk_clist_clear( GTK_CLIST( CLVDrivers ) );
   while ( video_out_drivers[i] )
    if ( video_out_drivers[i++]->control( VOCTRL_GUISUPPORT,NULL ) == VO_TRUE )
     {
-     if ( video_driver_list && !gstrcmp( video_driver_list[0],video_out_drivers[i - 1]->info->short_name ) && !video_driver_list[1] ) old_video_driver=c;
+     if ( video_driver_list && !gstrcmp( video_driver_list[0],video_out_drivers[i - 1]->info->short_name ) && !video_driver_list[1] ) my_video_driver=c;
      c++;
      tmp[0]=(char *)video_out_drivers[i - 1]->info->short_name; tmp[1]=(char *)video_out_drivers[i - 1]->info->name;
      gtk_clist_append( GTK_CLIST( CLVDrivers ),tmp );
     }
-  if (old_video_driver > -1) gtk_clist_select_row(GTK_CLIST(CLVDrivers), old_video_driver, 0);
+  if (my_video_driver > -1) gtk_clist_select_row(GTK_CLIST(CLVDrivers), my_video_driver, 0);
   else
   {
     vo_driver = NULL;

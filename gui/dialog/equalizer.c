@@ -146,9 +146,8 @@ static void eqSetBands( int channel )
 
 static void eqSetChannelNames( void )
 {
- gchar * str[2];
+ gchar *str[1];
  gtk_clist_clear( GTK_CLIST( ChannelsList ) );
- str[1]="";
  str[0]=_(MSGTR_GUI_ChannelAll);
  gtk_clist_append( GTK_CLIST( ChannelsList ) ,str);
  if ( guiInfo.AudioChannels > 1 )

@@ -1322,7 +1322,7 @@ void ShowPreferences( void )
  gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( CBSoftwareMixer ),soft_vol );
  {
   int    i = 0, c = 0, my_audio_driver = -1;
-  char * tmp[3]; tmp[2]="";
+  char *tmp[2];
   if ( CLADrivers ) gtk_clist_clear( GTK_CLIST( CLADrivers ) );
   while ( audio_out_drivers[i] )
    {
@@ -1368,7 +1368,7 @@ void ShowPreferences( void )
 
  {
   int i = 0, c = 0, my_video_driver = -1;
-  char * tmp[3]; tmp[2]="";
+  char *tmp[2];
   if ( CLVDrivers ) gtk_clist_clear( GTK_CLIST( CLVDrivers ) );
   while ( video_out_drivers[i] )
    if ( video_out_drivers[i++]->control( VOCTRL_GUISUPPORT,NULL ) == VO_TRUE )

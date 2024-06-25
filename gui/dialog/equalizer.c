@@ -56,6 +56,7 @@ static GtkWidget * ChannelsList;
 static GtkWidget * VContrast, * VBrightness, * VHue, * VSaturation;
 static GtkAdjustment * VContrastadj, * VBrightnessadj, * VHueadj, * VSaturationadj;
 static GtkWidget * Ok, * Clear, * Config;
+static GtkWidget *Frequency0, *Frequency1, *Frequency2, *Frequency3, *Frequency4, *Frequency5, *Frequency6, *Frequency7, *Frequency8, *Frequency9;
 static GtkWidget * A3125,  * A125, * A6250, * A250, * A500, * A1000, * A2000, * A4000, * A8000, * A16000;
 static GtkAdjustment * A3125adj, * A125adj, * A6250adj, * A250adj, * A500adj, * A1000adj, * A2000adj, * A4000adj, * A8000adj, * A16000adj;
 
@@ -396,43 +397,43 @@ static GtkWidget * CreateEqualizer( void )
   eqSetBands(0);
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency0),NULL ),
+    Frequency0 = gtkAddLabel( _(MSGTR_GUI_Frequency0),NULL ),
     0,1,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency1),NULL ),
+    Frequency1 = gtkAddLabel( _(MSGTR_GUI_Frequency1),NULL ),
     1,2,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency2),NULL ),
+    Frequency2 = gtkAddLabel( _(MSGTR_GUI_Frequency2),NULL ),
     2,3,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency3),NULL ),
+    Frequency3 = gtkAddLabel( _(MSGTR_GUI_Frequency3),NULL ),
     3,4,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency4),NULL ),
+    Frequency4 = gtkAddLabel( _(MSGTR_GUI_Frequency4),NULL ),
     4,5,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency5),NULL ),
+    Frequency5 = gtkAddLabel( _(MSGTR_GUI_Frequency5),NULL ),
     5,6,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency6),NULL ),
+    Frequency6 = gtkAddLabel( _(MSGTR_GUI_Frequency6),NULL ),
     6,7,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency7),NULL ),
+    Frequency7 = gtkAddLabel( _(MSGTR_GUI_Frequency7),NULL ),
     7,8,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency8),NULL ),
+    Frequency8 = gtkAddLabel( _(MSGTR_GUI_Frequency8),NULL ),
     8,9,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_table_attach( GTK_TABLE( table1 ),
-    gtkAddLabel( _(MSGTR_GUI_Frequency9),NULL ),
+    Frequency9 = gtkAddLabel( _(MSGTR_GUI_Frequency9),NULL ),
     9,10,1,2,(GtkAttachOptions)( GTK_FILL ),(GtkAttachOptions)( 0 ),0,0 );
 
   gtk_notebook_set_tab_label( GTK_NOTEBOOK( Notebook ),gtk_notebook_get_nth_page( GTK_NOTEBOOK( Notebook ),0 ),
@@ -566,6 +567,16 @@ void ShowEqualizer( void )
  gtk_widget_set_sensitive(A4000, set);
  gtk_widget_set_sensitive(A8000, set);
  gtk_widget_set_sensitive(A16000, set);
+ gtk_widget_set_sensitive(Frequency0, set);
+ gtk_widget_set_sensitive(Frequency1, set);
+ gtk_widget_set_sensitive(Frequency2, set);
+ gtk_widget_set_sensitive(Frequency3, set);
+ gtk_widget_set_sensitive(Frequency4, set);
+ gtk_widget_set_sensitive(Frequency5, set);
+ gtk_widget_set_sensitive(Frequency6, set);
+ gtk_widget_set_sensitive(Frequency7, set);
+ gtk_widget_set_sensitive(Frequency8, set);
+ gtk_widget_set_sensitive(Frequency9, set);
 
  gtk_widget_show( Equalizer );
 }

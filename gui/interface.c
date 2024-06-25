@@ -904,7 +904,7 @@ int gui(int what, void *data)
         btnSet(evBackward10min, state);
         btnSet(evSetMoviePosition, state);
 
-        if (video_driver_list && !gstrcmp(video_driver_list[0], "dxr3") && (((demuxer_t *)mpctx_get_demuxer(guiInfo.mpcontext))->file_format != DEMUXER_TYPE_MPEG_PS) && !gtkVfLAVC) {
+        if (video_driver_list && !gstrcmp(video_driver_list[0], "dxr3") && (guiInfo.mpcontext->demuxer->file_format != DEMUXER_TYPE_MPEG_PS) && !gtkVfLAVC) {
             gtkMessageBox(MSGBOX_FATAL, _(MSGTR_GUI_MSG_DXR3NeedsLavc));
             return False;
         }

@@ -77,7 +77,7 @@ const m_option_t lavfopts_conf[] = {
 	{NULL, NULL, 0, 0, 0, 0, NULL}
 };
 
-static int mp_write(void *opaque, uint8_t *buf, int size)
+static int mp_write(void *opaque, const uint8_t *buf, int size)
 {
 	muxer_t *muxer = opaque;
 	return stream_write_buffer(muxer->stream, buf, size);

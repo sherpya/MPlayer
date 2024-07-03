@@ -113,7 +113,7 @@ void vo_osx_update_xinerama_info(void)
     [oglv update_screen_info];
 }
 
-void vo_osx_swap_buffers(void)
+void vo_osx_swap_buffers(struct MPGLContext *)
 {
     [oglv->glContext flushBuffer];
 }

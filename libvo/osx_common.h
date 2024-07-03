@@ -19,6 +19,8 @@
 #ifndef MPLAYER_OSX_COMMON_H
 #define MPLAYER_OSX_COMMON_H
 
+struct MPGLContext;
+
 int convert_key(unsigned key, unsigned charcode);
 void change_movie_aspect(float new_aspect);
 void config_movie_aspect(float config_aspect);
@@ -32,6 +34,6 @@ void vo_osx_ontop(void);
 void vo_osx_fullscreen(void);
 int vo_osx_check_events(void);
 void vo_osx_update_xinerama_info(void);
-void vo_osx_swap_buffers(void);
+void vo_osx_swap_buffers(struct MPGLContext *);
 
 #endif /* MPLAYER_OSX_COMMON_H */

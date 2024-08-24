@@ -646,18 +646,7 @@ int gui(int what, void *data)
 
         /* video opts */
 
-        {
-            int i = 0;
-
-            guiInfo.VideoWindow = False;
-
-            while (video_out_drivers[i++]) {
-                if ((video_driver_list && !gstrcmp(video_driver_list[0], video_out_drivers[i - 1]->info->short_name)) && (video_out_drivers[i - 1]->control(VOCTRL_GUISUPPORT, NULL) == VO_TRUE)) {
-                    guiInfo.VideoWindow = True;
-                    break;
-                }
-            }
-        }
+        guiInfo.VideoWindow = False;
 
         if (video_driver_list && !gstrcmp(video_driver_list[0], "dxr3"))
             if (guiInfo.StreamType != STREAMTYPE_DVD && guiInfo.StreamType != STREAMTYPE_VCD)
@@ -903,6 +892,20 @@ int gui(int what, void *data)
         btnSet(evForward10min, state);
         btnSet(evBackward10min, state);
         btnSet(evSetMoviePosition, state);
+
+        if (guiInfo.mpcontext->video_out) {
+            const char *short_name;
+            int i = 0;
+
+            short_name = guiInfo.mpcontext->video_out->info->short_name;
+
+            while (video_out_drivers[i++]) {
+                if (gstrcmp(short_name, video_out_drivers[i - 1]->info->short_name) == 0 && video_out_drivers[i - 1]->control(VOCTRL_GUISUPPORT, NULL) == VO_TRUE) {
+                    guiInfo.VideoWindow = True;
+                    break;
+                }
+            }
+        }
 
         if (video_driver_list && !gstrcmp(video_driver_list[0], "dxr3") && (guiInfo.mpcontext->demuxer->file_format != DEMUXER_TYPE_MPEG_PS) && !gtkVfLAVC) {
             gtkMessageBox(MSGBOX_FATAL, _(MSGTR_GUI_MSG_DXR3NeedsLavc));

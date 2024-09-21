@@ -131,7 +131,7 @@ static int init(sh_audio_t *sh)
     // FORCE USE DTS-HD
     if (lavf_ctx->streams[0]->codecpar->codec_id == AV_CODEC_ID_DTS)
         av_dict_set(&opts, "dtshd_rate", "768000" /* 192000*4 */, 0);
-    if ((res = avformat_write_header(lavf_ctx, opts)) < 0) {
+    if ((res = avformat_write_header(lavf_ctx, &opts)) < 0) {
         av_dict_free(&opts);
         if (res == AVERROR_PATCHWELCOME)
             mp_msg(MSGT_DECAUDIO,MSGL_INFO,

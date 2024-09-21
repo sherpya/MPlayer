@@ -157,7 +157,7 @@ static int demux_film_fill_buffer(demuxer_t *demuxer, demux_stream_t *ds)
         free(buf);
       }
       else {/* for 16bit */
-        unsigned short* tmp = dp->buffer;
+        unsigned short* tmp = (unsigned short *)dp->buffer;
         unsigned short* buf = malloc(film_chunk.chunk_size);
         for(i = 0; i < film_chunk.chunk_size/4; i++) {
           buf[i*2] = tmp[i];

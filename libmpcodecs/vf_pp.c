@@ -142,7 +142,7 @@ static int put_image(struct vf_instance *vf, mp_image_t *mpi, double pts, double
 
     if(vf->priv->pp || !(mpi->flags&MP_IMGFLAG_DIRECT)){
 	// do the postprocessing! (or copy if no DR)
-	pp_postprocess(mpi->planes           ,mpi->stride,
+	pp_postprocess((const uint8_t **)mpi->planes           ,mpi->stride,
 		    vf->dmpi->planes,vf->dmpi->stride,
 		    (mpi->w+7)&(~7),mpi->h,
 		    mpi->qscale, mpi->qstride,

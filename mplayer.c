@@ -3538,7 +3538,7 @@ goto_enable_cache:
                 break;
             if ((mpctx->demuxer->file_format == DEMUXER_TYPE_AVI || mpctx->demuxer->file_format == DEMUXER_TYPE_ASF || mpctx->demuxer->file_format == DEMUXER_TYPE_MOV)
                 && stream_dump_type == 2)
-                stream_write_buffer(os, &in_size, 4);
+                stream_write_buffer(os, (unsigned char *)&in_size, 4);
             if (in_size > 0) {
                 stream_write_buffer(os, start, in_size);
                 stream_dump_progress(in_size, mpctx->stream);

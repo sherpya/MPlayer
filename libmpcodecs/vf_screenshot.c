@@ -60,7 +60,7 @@ static void draw_slice(struct vf_instance *vf, unsigned char** src,
                        int* stride, int w,int h, int x, int y)
 {
     if (vf->priv->store_slices) {
-        sws_scale(vf->priv->ctx, src, stride, y, h, vf->priv->pic->data, vf->priv->pic->linesize);
+        sws_scale(vf->priv->ctx, (const uint8_t *const *)src, stride, y, h, vf->priv->pic->data, vf->priv->pic->linesize);
     }
     vf_next_draw_slice(vf,src,stride,w,h,x,y);
 }
@@ -158,7 +158,7 @@ static void scale_image(struct vf_priv_s* priv, mp_image_t *mpi)
     if (!priv->pic->data[0])
         priv->pic->data[0] = av_malloc(priv->pic->linesize[0]*priv->dh);
 
-    sws_scale(priv->ctx, mpi->planes, mpi->stride, 0, mpi->height, priv->pic->data, priv->pic->linesize);
+    sws_scale(priv->ctx, (const uint8_t *const *)mpi->planes, mpi->stride, 0, mpi->height, priv->pic->data, priv->pic->linesize);
 }
 
 static void start_slice(struct vf_instance *vf, mp_image_t *mpi)

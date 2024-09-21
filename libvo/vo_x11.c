@@ -492,7 +492,7 @@ static int draw_slice(uint8_t * src[], int stride[], int w, int h,
         dst[0] += dstStride[0] * (image_height - 1);
         dstStride[0] = -dstStride[0];
     }
-    sws_scale(swsContext, src, stride, y, h, dst, dstStride);
+    sws_scale(swsContext, (const uint8_t *const *)src, stride, y, h, dst, dstStride);
     return 0;
 }
 

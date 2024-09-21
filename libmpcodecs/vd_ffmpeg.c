@@ -728,7 +728,7 @@ static int get_buffer(AVCodecContext *avctx, AVFrame *pic, int isreference){
     if (ctx->use_vdpau) {
         VdpVideoSurface surface = (VdpVideoSurface)mpi->priv;
         avctx->draw_horiz_band= NULL;
-        mpi->planes[3] = surface;
+        mpi->planes[3] = (char *)surface;
     }
 #endif
 

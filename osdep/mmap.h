@@ -46,7 +46,9 @@
  */
 #define MAP_ANON    0x1000  /* allocated from memory, swap space */
 
-/* MAP_FAILED is defined in config.h */
+#ifndef MAP_FAILED
+#define MAP_FAILED  ((void *) -1)
+#endif
 
 #ifndef _MMAP_DECLARED
 #define _MMAP_DECLARED

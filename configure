@@ -1952,6 +1952,7 @@ if os2 ; then
   test -n "$ld_static" && ld_static='-Wl,-static'
   # OS/2 linker does not support a thin archive. Remove 'T' flag.
   _arflags=$(echo $_arflags | tr -d T)
+  extra_cflags="$extra_cflags -D_EMX_SOURCE"
 fi
 
 if wine ; then

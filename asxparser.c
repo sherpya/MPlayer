@@ -118,6 +118,7 @@ asx_parse_attribs(ASX_Parser_t* parser,char* buffer,char*** _attribs) {
       }
     }
     attrib = malloc(ptr2-ptr1+2);
+    if(!attrib) return -1;
     strncpy(attrib,ptr1,ptr2-ptr1+1);
     attrib[ptr2-ptr1+1] = '\0';
 

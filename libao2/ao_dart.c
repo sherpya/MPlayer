@@ -54,7 +54,7 @@ LIBAO_EXTERN(dart)
 
 #define CHUNK_SIZE  ao_data.outburst
 
-static AVFifoBuffer *m_audioBuf;
+static AVFifo *m_audioBuf;
 
 static int m_nBufSize = 0;
 
@@ -62,22 +62,23 @@ static volatile int m_fQuit = FALSE;
 
 static int write_buffer(unsigned char *data, int len)
 {
-    int nFree = av_fifo_space(m_audioBuf);
+    int nFree = av_fifo_can_write(m_audioBuf);
 
     if (len > nFree)
         len = nFree;
 
-    return av_fifo_generic_write(m_audioBuf, data, len, NULL);
+    av_fifo_write(m_audioBuf, data, len);
+    return len;
 }
 
 static int read_buffer(unsigned char *data, int len)
 {
-    int nBuffered = av_fifo_size(m_audioBuf);
+    int nBuffered = av_fifo_can_read(m_audioBuf);
 
     if (len > nBuffered)
         len = nBuffered;
 
-    av_fifo_generic_read(m_audioBuf, data, len, NULL);
+    av_fifo_read(m_audioBuf, data, len);
     return len;
 }
 
@@ -199,7 +200,7 @@ static int init(int rate, int channels, int format, int flags)
     // and one more chunk plus round up
     m_nBufSize += 2 * CHUNK_SIZE;
 
-    m_audioBuf = av_fifo_alloc(m_nBufSize);
+    m_audioBuf = av_fifo_alloc2(m_nBufSize, 1, 0);
 
     dartPlay();
 
@@ -223,7 +224,7 @@ static void uninit(int immed)
 
     dartClose();
 
-    av_fifo_free(m_audioBuf);
+    av_fifo_freep2(&m_audioBuf);
 }
 
 // stop playing and empty buffers (for seeking/pause)
@@ -232,7 +233,7 @@ static void reset(void)
     dartPause();
 
     // Reset ring-buffer state
-    av_fifo_reset(m_audioBuf);
+    av_fifo_reset2(m_audioBuf);
 
     dartResume();
 }
@@ -252,7 +253,7 @@ static void audio_resume(void)
 // return: how many bytes can be played without blocking
 static int get_space(void)
 {
-    return av_fifo_space(m_audioBuf);
+    return av_fifo_can_write(m_audioBuf);
 }
 
 // plays 'len' bytes of 'data'
@@ -270,7 +271,7 @@ static int play(void *data, int len, int flags)
 // return: delay in seconds between first and last sample in buffer
 static float get_delay(void)
 {
-    int nBuffered = av_fifo_size(m_audioBuf); // could be less
+    int nBuffered = av_fifo_can_read(m_audioBuf); // could be less
 
     return (float)nBuffered / (float)ao_data.bps;
 }

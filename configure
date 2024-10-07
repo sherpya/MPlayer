@@ -1699,6 +1699,15 @@ msvc_filter_flags() {
   done
 }
 
+os2_aout_filter_flags() {
+  for f; do
+    case $f in
+      -Zomf) ;;
+      *) echo -n $f" " ;;
+    esac
+  done
+}
+
 AR_O='$@'
 CC_O='-o $@'
 CC_LINK_O='-o $@'
@@ -2920,7 +2929,11 @@ echocheck "extern symbol prefix"
 cat > $TMPC << EOF
 int ff_extern;
 EOF
+# OS/2 nm does work only with aout format. Remove -Zomf from flags.
+os2 &&
+  { saved_filter_flags=$filter_flags; filter_flags=os2_aout_filter_flags; }
 cc_check -c || die "Symbol mangling check failed."
+os2 && filter_flags=$saved_filter_flags
 sym=$($_nm -P -g $TMPEXE | grep ff_extern)
 extern_prefix=${sym%%ff_extern*}
 def_extern_asm="#define EXTERN_ASM $extern_prefix"

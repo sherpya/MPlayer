@@ -35,6 +35,8 @@
 #include "m_option.h"
 #include "m_struct.h"
 
+#include "libavutil/mathematics.h"
+
 static struct vf_priv_s {
         uint8_t *buf[2];
         float hue;

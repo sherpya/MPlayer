@@ -27,6 +27,7 @@
 #include "mp_msg.h"
 #include "mp_fifo.h"
 #include "libavutil/common.h"
+#include "libavutil/mathematics.h"
 #include "libavutil/avstring.h"
 #include "x11_common.h"
 

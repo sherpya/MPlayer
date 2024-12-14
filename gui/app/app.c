@@ -29,6 +29,7 @@
 #include "gui/util/misc.h"
 
 #include "libavutil/common.h"
+#include "libavutil/mathematics.h"
 
 /**
  * @brief Initialize item counters.

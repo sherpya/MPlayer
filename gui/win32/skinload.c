@@ -35,6 +35,7 @@
 #include "libavutil/attributes.h"
 #include "libavutil/common.h"
 #include "libavutil/imgutils.h"
+#include "libavutil/mathematics.h"
 #include "gui.h"
 #include "gui/util/mem.h"
 #include "gui/util/bitmap.h"

@@ -19,6 +19,7 @@
 #include <math.h>
 #include <string.h>
 #include "libavutil/common.h"
+#include "libavutil/mathematics.h"
 #include "af.h"
 
 /* Convert to gain value from dB. Returns AF_OK if of and AF_ERROR if

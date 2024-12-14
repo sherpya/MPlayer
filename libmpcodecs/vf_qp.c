@@ -33,6 +33,7 @@
 
 #include "libavcodec/avcodec.h"
 #include "libavutil/eval.h"
+#include "libavutil/mathematics.h"
 #include "libavutil/mem.h"
 
 

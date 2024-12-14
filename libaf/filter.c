@@ -22,6 +22,7 @@
 
 #include <string.h>
 #include <math.h>
+#include "libavutil/mathematics.h"
 #include "dsp.h"
 
 /******************************************************************************

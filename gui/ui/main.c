@@ -54,6 +54,7 @@
 #include "mp_core.h"
 #include "libavutil/avstring.h"
 #include "libavutil/common.h"
+#include "libavutil/mathematics.h"
 
 #include "actions.h"
 

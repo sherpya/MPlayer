@@ -28,6 +28,7 @@
 #include <math.h>
 #include <limits.h>
 
+#include "libavutil/mathematics.h"
 #include "mp_msg.h"
 #include "af.h"
 

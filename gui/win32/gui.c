@@ -42,6 +42,7 @@
 #include "stream/stream.h"
 #include "libvo/video_out.h"
 #include "libmpcodecs/vd.h"
+#include "libavutil/mathematics.h"
 #include "gui/interface.h"
 #include "gui/ui/actions.h"
 #include "gui/ui/ui.h"

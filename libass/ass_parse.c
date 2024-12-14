@@ -23,6 +23,8 @@
 #include <string.h>
 #include <math.h>
 
+#include "libavutil/mathematics.h"
+
 #include "ass_render.h"
 #include "ass_parse.h"
 

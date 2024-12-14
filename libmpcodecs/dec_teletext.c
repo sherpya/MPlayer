@@ -105,6 +105,7 @@
 #include "help_mp.h"
 #include "libmpcodecs/img_format.h"
 #include "libavutil/common.h"
+#include "libavutil/mathematics.h"
 #include "input/input.h"
 #include "osdep/timer.h"
 

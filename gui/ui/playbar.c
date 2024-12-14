@@ -48,6 +48,7 @@
 #include "libmpdemux/stheader.h"
 #include "codec-cfg.h"
 #include "libavutil/avstring.h"
+#include "libavutil/mathematics.h"
 
 #include "ui.h"
 #include "actions.h"

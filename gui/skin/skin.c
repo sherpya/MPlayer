@@ -40,6 +40,7 @@
 #include "libavutil/attributes.h"
 #include "libavutil/avstring.h"
 #include "libavutil/common.h"
+#include "libavutil/mathematics.h"
 
 typedef struct {
     const char *name;

@@ -35,6 +35,7 @@
 #include "libavcodec/avcodec.h"
 #include "libavutil/common.h"
 #include "libavutil/eval.h"
+#include "libavutil/mathematics.h"
 
 struct vf_priv_s {
     AVExpr * e[3];

@@ -27,6 +27,7 @@
 
 #include <math.h>
 #include <libavutil/common.h>
+#include <libavutil/mathematics.h>
 
 #include "mp_msg.h"
 #include "af.h"

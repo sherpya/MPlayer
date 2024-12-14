@@ -31,6 +31,7 @@
 #include <math.h>
 
 /* Local headers */
+#include "libavutil/mathematics.h"
 #include "xvid_vbr.h"
 
 /******************************************************************************

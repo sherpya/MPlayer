@@ -429,7 +429,7 @@ static void scale(struct SwsContext *sws1, struct SwsContext *sws2, uint8_t *src
         int i;
         for(i=0; i<256; i++)
             pal2[i]= bswap_32(((uint32_t*)src[1])[i]);
-        src2[1]= pal2;
+        src2[1]= (uint8_t *)pal2;
     }
 #endif
 

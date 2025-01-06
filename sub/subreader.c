@@ -1210,10 +1210,69 @@ static int sub_autodetect (stream_t* st, int *uses_time, int utf16) {
 
 int sub_utf8_prev=0;
 
+#ifdef CONFIG_ENCA
+const char* guess_buffer_cp(unsigned char* buffer, int buflen, const char *preferred_language, const char *fallback)
+{
+    const char **languages;
+    size_t langcnt;
+    EncaAnalyser analyser;
+    EncaEncoding encoding;
+    const char *detected_sub_cp = NULL;
+    int i;
+
+    languages = enca_get_languages(&langcnt);
+    mp_msg(MSGT_SUBREADER, MSGL_V, "ENCA supported languages: ");
+    for (i = 0; i < langcnt; i++) {
+	mp_msg(MSGT_SUBREADER, MSGL_V, "%s ", languages[i]);
+    }
+    mp_msg(MSGT_SUBREADER, MSGL_V, "\n");
+
+    for (i = 0; i < langcnt; i++) {
+	if (av_strcasecmp(languages[i], preferred_language) != 0) continue;
+	analyser = enca_analyser_alloc(languages[i]);
+	encoding = enca_analyse_const(analyser, buffer, buflen);
+	enca_analyser_free(analyser);
+	if (encoding.charset != ENCA_CS_UNKNOWN) {
+	    detected_sub_cp = enca_charset_name(encoding.charset, ENCA_NAME_STYLE_ICONV);
+	    break;
+	}
+    }
+
+    free(languages);
+
+    if (!detected_sub_cp) {
+	detected_sub_cp = fallback;
+	mp_msg(MSGT_SUBREADER, MSGL_INFO, "ENCA detection failed: fallback to %s\n", fallback);
+    }else{
+	mp_msg(MSGT_SUBREADER, MSGL_INFO, "ENCA detected charset: %s\n", detected_sub_cp);
+    }
+
+    return detected_sub_cp;
+}
+
+#define MAX_GUESS_BUFFER_SIZE (256*1024)
+static const char* guess_cp(stream_t *st, const char *preferred_language, const char *fallback)
+{
+    size_t buflen;
+    unsigned char *buffer;
+    const char *detected_sub_cp = NULL;
+
+    buffer = malloc(MAX_GUESS_BUFFER_SIZE);
+    buflen = stream_read(st,buffer, MAX_GUESS_BUFFER_SIZE);
+
+    detected_sub_cp = guess_buffer_cp(buffer, buflen, preferred_language, fallback);
+
+    free(buffer);
+    stream_reset(st);
+    stream_seek(st,0);
+
+    return detected_sub_cp;
+}
+#undef MAX_GUESS_BUFFER_SIZE
+#endif
+
 #ifdef CONFIG_ICONV
 static iconv_t icdsc = (iconv_t)(-1);
-
-static const char* guess_cp(stream_t *st, const char *preferred_language, const char *fallback);
 
 void	subcp_open (stream_t *st)
 {
@@ -1427,67 +1486,6 @@ struct subreader {
     void       (*post)(subtitle *dest);
     const char *name;
 };
-
-#ifdef CONFIG_ENCA
-const char* guess_buffer_cp(unsigned char* buffer, int buflen, const char *preferred_language, const char *fallback)
-{
-    const char **languages;
-    size_t langcnt;
-    EncaAnalyser analyser;
-    EncaEncoding encoding;
-    const char *detected_sub_cp = NULL;
-    int i;
-
-    languages = enca_get_languages(&langcnt);
-    mp_msg(MSGT_SUBREADER, MSGL_V, "ENCA supported languages: ");
-    for (i = 0; i < langcnt; i++) {
-	mp_msg(MSGT_SUBREADER, MSGL_V, "%s ", languages[i]);
-    }
-    mp_msg(MSGT_SUBREADER, MSGL_V, "\n");
-
-    for (i = 0; i < langcnt; i++) {
-	if (av_strcasecmp(languages[i], preferred_language) != 0) continue;
-	analyser = enca_analyser_alloc(languages[i]);
-	encoding = enca_analyse_const(analyser, buffer, buflen);
-	enca_analyser_free(analyser);
-	if (encoding.charset != ENCA_CS_UNKNOWN) {
-	    detected_sub_cp = enca_charset_name(encoding.charset, ENCA_NAME_STYLE_ICONV);
-	    break;
-	}
-    }
-
-    free(languages);
-
-    if (!detected_sub_cp) {
-	detected_sub_cp = fallback;
-	mp_msg(MSGT_SUBREADER, MSGL_INFO, "ENCA detection failed: fallback to %s\n", fallback);
-    }else{
-	mp_msg(MSGT_SUBREADER, MSGL_INFO, "ENCA detected charset: %s\n", detected_sub_cp);
-    }
-
-    return detected_sub_cp;
-}
-
-#define MAX_GUESS_BUFFER_SIZE (256*1024)
-static const char* guess_cp(stream_t *st, const char *preferred_language, const char *fallback)
-{
-    size_t buflen;
-    unsigned char *buffer;
-    const char *detected_sub_cp = NULL;
-
-    buffer = malloc(MAX_GUESS_BUFFER_SIZE);
-    buflen = stream_read(st,buffer, MAX_GUESS_BUFFER_SIZE);
-
-    detected_sub_cp = guess_buffer_cp(buffer, buflen, preferred_language, fallback);
-
-    free(buffer);
-    stream_reset(st);
-    stream_seek(st,0);
-
-    return detected_sub_cp;
-}
-#undef MAX_GUESS_BUFFER_SIZE
-#endif
 
 sub_data* sub_read_file (const char *filename, float fps) {
     int utf16;

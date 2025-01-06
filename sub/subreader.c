@@ -55,7 +55,7 @@
 #include <iconv.h>
 #endif
 char *sub_cp=NULL;
-char *enca_sub_cp=NULL;
+const char *enca_sub_cp=NULL;
 #ifdef CONFIG_FRIBIDI
 #include <fribidi/fribidi.h>
 char *fribidi_charset = NULL;   ///character set that will be passed to FriBiDi

@@ -141,14 +141,14 @@ FilterGraph* FilterGraphCreate()
     This->vt->AddRef               = FilterGraph_AddRef;
     This->vt->Release              = FilterGraph_Release;
 
-    This->vt->AddFilter            = FilterGraph_AddFilter;
-    This->vt->RemoveFilter         = FilterGraph_RemoveFilter;
-    This->vt->EnumFilters          = FilterGraph_EnumFilters;
-    This->vt->FindFilterByName     = FilterGraph_FindFilterByName;
-    This->vt->ConnectDirect        = FilterGraph_ConnectDirect;
-    This->vt->Reconnect            = FilterGraph_Reconnect;
-    This->vt->Disconnect           = FilterGraph_Disconnect;
-    This->vt->SetDefaultSyncSource = FilterGraph_SetDefaultSyncSource;
+    This->vt->AddFilter            = (void *)FilterGraph_AddFilter;
+    This->vt->RemoveFilter         = (void *)FilterGraph_RemoveFilter;
+    This->vt->EnumFilters          = (void *)FilterGraph_EnumFilters;
+    This->vt->FindFilterByName     = (void *)FilterGraph_FindFilterByName;
+    This->vt->ConnectDirect        = (void *)FilterGraph_ConnectDirect;
+    This->vt->Reconnect            = (void *)FilterGraph_Reconnect;
+    This->vt->Disconnect           = (void *)FilterGraph_Disconnect;
+    This->vt->SetDefaultSyncSource = (void *)FilterGraph_SetDefaultSyncSource;
 
     This->interfaces[0] = IID_IUnknown;
     This->interfaces[1] = IID_IFilterGraph;

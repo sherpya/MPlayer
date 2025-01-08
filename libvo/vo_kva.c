@@ -319,8 +319,8 @@ static void imgDisplay(void)
                                dstStride[2], m_int.stride[2]);
             }
         } else {
-            sws_scale(m_int.sws, m_int.planes, m_int.stride, 0, SRC_HEIGHT,
-                      dst, dstStride);
+            sws_scale(m_int.sws, (const uint8_t * const *)m_int.planes,
+                      m_int.stride, 0, SRC_HEIGHT, dst, dstStride);
         }
 
         kvaUnlockBuffer();

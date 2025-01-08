@@ -170,9 +170,9 @@ static int init(int rate, int channels, int format, int flags)
         break;
 
     default:
-        format = AF_FORMAT_S16_LE;
         mp_msg(MSGT_AO, MSGL_V, "DART: format %s not supported defaulting to Signed 16-bit Little-Endian\n",
                af_fmt2str_short(format));
+        format = AF_FORMAT_S16_LE;
         break;
     }
 

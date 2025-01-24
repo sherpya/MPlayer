@@ -1961,7 +1961,10 @@ if os2 ; then
   test -n "$ld_static" && ld_static='-Wl,-static'
   # OS/2 linker does not support a thin archive. Remove 'T' flag.
   _arflags=$(echo $_arflags | tr -d T)
-  extra_cflags="$extra_cflags -D_EMX_SOURCE"
+  # OS/2 iconv() has a different pointer declaration from POSIX. This has no
+  # problems up to GCC13, but since GCC14 this is treated as an errors.
+  # Treat it as warnings not errors.
+  extra_cflags="$extra_cflags -D_EMX_SOURCE -Wno-error=incompatible-pointer-types"
 fi
 
 if wine ; then

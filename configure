@@ -1554,6 +1554,11 @@ if test "$ffmpeg_a" != "no" && ! test -e ffmpeg ; then
     touch ffmpeg/mp_auto_pull
 fi
 
+ffmpeg_filter_struct_name=AVFilter
+if grep -q FFFilter ffmpeg/configure; then
+    ffmpeg_filter_struct_name=FFFilter
+fi
+
 list_subparts() {
   test ! -e ffmpeg/libav${3} && return 1
   pattern="s/^[^#]*${1}.*([^ ,]*, *\([^ ,)]*\).*/\1_${2}/p"
@@ -1577,7 +1582,7 @@ list_cbs_extern() {
 
 list_subparts_filters() {
   test ! -e ffmpeg/libav${1} && return 1
-  pattern="s/^extern AVFilter ff_([avfsinkrc]{2,5})_([a-zA-Z0-9_]+);/\1_\2_filter/p"
+  pattern="s/^extern $ffmpeg_filter_struct_name ff_([avfsinkrc]{2,5})_([a-zA-Z0-9_]+);/\1_\2_filter/p"
   sed -E -n "$pattern" ffmpeg/libav${1} | toupper
   return 0
 }
@@ -9843,7 +9848,7 @@ print_enabled_components libavdevice/outdev_list.c FFOutputFormat outdev_list ""
 print_enabled_components libavformat/demuxer_list.c FFInputFormat demuxer_list $libavdemuxers
 print_enabled_components libavformat/muxer_list.c FFOutputFormat muxer_list $libavmuxers
 print_enabled_components libavformat/protocol_list.c URLProtocol url_protocols $libavprotocols
-print_enabled_filters libavfilter/filter_list.c AVFilter filter_list $libavfilters
+print_enabled_filters libavfilter/filter_list.c "$ffmpeg_filter_struct_name" filter_list $libavfilters
 
 fi
 

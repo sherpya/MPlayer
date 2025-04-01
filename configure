@@ -1531,8 +1531,9 @@ FFBRANCH=master
 test -e FFBRANCH && FFBRANCH=$(cat FFBRANCH)
 
 if test -e ffmpeg/mp_auto_pull ; then
+    cfg_fetch="remote.origin.fetch=+refs/heads/$FFBRANCH:refs/remotes/origin/$FFBRANCH"
     echo "Updating FFmpeg, (re)move ffmpeg/mp_auto_pull to disable"
-    (cd ffmpeg && git checkout $FFBRANCH)
+    (cd ffmpeg && git -c "$cfg_fetch" fetch --depth 1 origin && git -c "$cfg_fetch" checkout $FFBRANCH)
     if ! (cd ffmpeg && git pull --rebase --ff-only) ; then
         echo "git pull failed, (re)move ffmpeg/mp_auto_pull to disable pulling"
         exit 1

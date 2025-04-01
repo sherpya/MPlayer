@@ -1527,7 +1527,7 @@ if test -e ffmpeg/.svn ; then
     exit 1
 fi
 
-FFBRANCH=master
+FFBRANCH="release/7.1"
 test -e FFBRANCH && FFBRANCH=$(cat FFBRANCH)
 
 if test -e ffmpeg/mp_auto_pull ; then

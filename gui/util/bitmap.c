@@ -188,11 +188,10 @@ static int pngRead(const char *fname, guiImage *img, int *pix_fmt)
     }
 
     avcodec_send_packet(avctx, NULL);   // flush the decoder
-    avcodec_close(avctx);
+    avcodec_free_context(&avctx);
 
     av_frame_free(&frame);
     av_packet_free(&pkt);
-    avcodec_free_context(&avctx);
     av_free(data);
 
     return !(decode_ok && img->Bpp);

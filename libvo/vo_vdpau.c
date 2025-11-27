@@ -1223,7 +1223,7 @@ static int query_format(uint32_t format)
         // Note: this will break the current decoder
         // Not all implementations support safely instantiating
         // a second decoder, so this is the "lesser evil"
-        if (create_vdp_decoder(format, 48, 48, 2)) {
+        if (create_vdp_decoder(format, 64, 64, 2)) {
             vdp_decoder_destroy(decoder);
             decoder = VDP_INVALID_HANDLE;
             decoder_max_refs = -1;

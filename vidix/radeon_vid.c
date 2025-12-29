@@ -1194,7 +1194,7 @@ static void probe_fireGL_driver(void) {
       firegl_shift = 0x500000;
       if (!ext_fglrx) {
         mp_msg(MSGT_VO, MSGL_STATUS, ", but DRI seems not to be activated\n");
-        mp_msg(MSGT_VO, MSGL_STATUS, RADEON_MSG" Output may not work correctly, check your DRI configration!");
+        mp_msg(MSGT_VO, MSGL_STATUS, RADEON_MSG" Output may not work correctly, check your DRI configuration!");
       }
       mp_msg(MSGT_VO, MSGL_STATUS, "\n");
     }

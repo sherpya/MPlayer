@@ -2053,13 +2053,13 @@ d	102b2527	MGA G550 AGP	0
 s	102b2527102b0f83	Millennium G550	0
 s	102b2527102b0f84	Millennium G550 Dual Head DDR 32Mb	0
 s	102b2527102b1e41	Millennium G550	0
-d	102b2537	Millenium P650/P750	0
+d	102b2537	Millennium P650/P750	0
 s	102b2537102b1820	Millennium P750 64MB	0
 s	102b2537102b1830	Millennium P650 64MB	0
 s	102b2537102b1c10	QID 128MB	0
 s	102b2537102b2811	Millennium P650 Low-profile PCI 64MB	0
 s	102b2537102b2c11	QID Low-profile PCI	0
-d	102b2538	Millenium P650 PCIe	0
+d	102b2538	Millennium P650 PCIe	0
 s	102b2538102b08c7	Millennium P650 PCIe 128MB	0
 s	102b2538102b0907	Millennium P650 PCIe 64MB	0
 s	102b2538102b1047	Millennium P650 LP PCIe 128MB	0
@@ -4293,8 +4293,8 @@ s	10de006710430c11	A7N8X Mainboard	0
 d	10de0068	nForce2 USB Controller	0
 s	10de006810430c11	A7N8X Mainboard	0
 s	10de0068a0a003b4	UK79G-1394 motherboard	0
-d	10de006a	nForce2 AC97 Audio Controler (MCP)	0
-s	10de006a10438095	nForce2 AC97 Audio Controler (MCP)	0
+d	10de006a	nForce2 AC97 Audio Controller (MCP)	0
+s	10de006a10438095	nForce2 AC97 Audio Controller (MCP)	0
 s	10de006aa0a00304	UK79G-1394 motherboard	0
 d	10de006b	nForce Audio Processing Unit	0
 s	10de006b10de006b	nForce2 MCP Audio Processing Unit	0
@@ -8137,7 +8137,7 @@ d	135c0030	DSC-200/300	0
 d	135c0040	QSC-200/300	0
 d	135c0050	ESC-100D	0
 d	135c0060	ESC-100M	0
-d	135c00f0	MPAC-100 Syncronous Serial Card (Zilog 85230)	0
+d	135c00f0	MPAC-100 Synchronous Serial Card (Zilog 85230)	0
 d	135c0170	QSCLP-100	0
 d	135c0180	DSCLP-100	0
 d	135c0190	SSCLP-100	0

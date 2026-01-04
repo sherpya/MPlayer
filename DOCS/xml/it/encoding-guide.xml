@@ -2381,7 +2381,7 @@ tipi.
   It is safe to use <option>pullup</option> (along with <option>softskip
   </option>) on progressive video, and is usually a good idea unless
   the source has been definitively verified to be entirely progressive.
-  The performace loss is small for most cases. On a bare-minimum encode,
+  The performance loss is small for most cases. On a bare-minimum encode,
   <option>pullup</option> causes <application>MEncoder</application> to
   be 50% slower. Adding sound processing and advanced <option>lavcopts
   </option> overshadows that difference, bringing the performance
